@@ -27,12 +27,22 @@ Consumers never call engine-core directly. The public API is `editorialTheme()` 
 
 ## Virtual modules
 
-| Module ID | Type | Contents |
-|-----------|------|----------|
-| `@portfolio-engine:config` | `ResolvedConfig` | Validated site + navigation + theme + features config |
-| `@portfolio-engine:context` | `BuildContext` | Env, mode, base URL |
-| `@portfolio-engine:routes` | `RouteRecord[]` | All registered public + admin routes |
-| `@portfolio-engine:overrides` | `OverrideMap` | Component override map (component name → downstream path) |
+Implemented via native Vite `resolveId`/`load` plugin hooks. The `\0` prefix on resolved IDs is the Vite convention for virtual modules — it tells Vite not to look for the ID as a real file.
+
+| Module ID | Export | Type | Contents |
+|-----------|--------|------|----------|
+| `@portfolio-engine:config` | `config` | `ResolvedConfig` | Validated site + navigation + theme + features config |
+| `@portfolio-engine:context` | `context` | `BuildContext` | Env, mode, base URL |
+| `@portfolio-engine:routes` | `routes` | `RouteRecord[]` | All registered public + admin routes |
+| `@portfolio-engine:overrides` | `overrides` | `OverrideMap` | Component override map (component name → downstream path) |
+
+Consumer packages (e.g. `editorial-theme`) get full TypeScript types by adding a reference directive:
+
+```typescript
+/// <reference types="@portfolio-engine/engine-core/client" />
+```
+
+The plugin is created with `createVirtualModulesPlugin()` from `@portfolio-engine/engine-core` and passed to `updateConfig({ vite: { plugins: [...] } })` inside the `astro:config:setup` hook.
 
 ## Route registry shape
 

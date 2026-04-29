@@ -4,7 +4,8 @@
   "description": "Route registry, config loader, virtual modules, and override resolution for portfolio-engine",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./client": "./src/client.d.ts"
   },
   "scripts": {
     "build": "echo 'build not yet configured'",
