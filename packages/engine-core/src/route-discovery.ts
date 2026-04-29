@@ -10,9 +10,9 @@ export interface DiscoveredRoute {
   routeRecord: RouteRecord;
 }
 
-// Static metadata for the v1 route surface. Route files discovered on disk
-// are looked up here; unknown files get sensible defaults.
-const ROUTE_METADATA: Record<string, Omit<RouteRecord, 'pattern'>> = {
+// Static metadata for the v1 route surface. resolved is omitted — it is
+// seeded to equal pattern at discovery time and updated by applyRouteOverrides.
+const ROUTE_METADATA: Record<string, Omit<RouteRecord, 'pattern' | 'resolved'>> = {
   '/': {
     label: 'Home',
     section: null,
@@ -96,7 +96,7 @@ export function discoverRoutes(pagesDir: string): DiscoveredRoute[] {
     .filter((f) => f.endsWith('.astro'))
     .map((f) => {
       const pattern = fileToPattern(f);
-      const meta = ROUTE_METADATA[pattern] ?? {
+      const meta: Omit<RouteRecord, 'pattern' | 'resolved'> = ROUTE_METADATA[pattern] ?? {
         label: pattern,
         section: null,
         visibility: 'public' as const,
@@ -106,7 +106,8 @@ export function discoverRoutes(pagesDir: string): DiscoveredRoute[] {
       return {
         pattern,
         entrypoint: join(pagesDir, f),
-        routeRecord: { pattern, ...meta },
+        // resolved starts equal to pattern; applyRouteOverrides may update it
+        routeRecord: { ...meta, pattern, resolved: pattern },
       };
     });
 }

@@ -60,7 +60,7 @@ export function applyRouteOverrides(
       routes.push({
         ...route,
         pattern: override.path,
-        routeRecord: { ...route.routeRecord, pattern: override.path },
+        routeRecord: { ...route.routeRecord, resolved: override.path },
       });
       continue;
     }
