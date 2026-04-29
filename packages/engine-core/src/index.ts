@@ -9,5 +9,8 @@ export type { BuildContext, OverrideMap, RouteRecord } from './types.js';
 export { createEngineIntegration } from './integration.js';
 export type { EngineIntegrationOptions } from './integration.js';
 
+export { applyRouteOverrides } from './route-remap.js';
+export type { RouteOverrides, RouteOverrideEntry, RouteRemapResult } from './route-remap.js';
+
 export { discoverRoutes, resolveThemePagesDir } from './route-discovery.js';
 export type { DiscoveredRoute } from './route-discovery.js';
