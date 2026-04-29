@@ -12,5 +12,8 @@ export type { EngineIntegrationOptions } from './integration.js';
 export { applyRouteOverrides } from './route-remap.js';
 export type { RouteOverrides, RouteOverrideEntry, RouteRemapResult } from './route-remap.js';
 
+export { resolveOverrides } from './override-resolution.js';
+export type { OverrideConfig } from './override-resolution.js';
+
 export { discoverRoutes, resolveThemePagesDir } from './route-discovery.js';
 export type { DiscoveredRoute } from './route-discovery.js';
