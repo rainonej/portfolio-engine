@@ -11,7 +11,7 @@ import {
   type ThemeConfig,
   type FeaturesConfig,
 } from '@portfolio-engine/schema';
-import type { ZodError, ZodTypeAny } from 'zod';
+import type { ZodError, ZodType } from 'zod';
 
 export interface EngineConfig {
   siteConfigPath: string;
@@ -28,12 +28,21 @@ export interface ResolvedConfig {
 }
 
 async function readJson(absolutePath: string): Promise<unknown> {
+  let text: string;
+
   try {
-    const text = await readFile(absolutePath, 'utf-8');
-    return JSON.parse(text);
+    text = await readFile(absolutePath, 'utf-8');
   } catch (err) {
     throw new Error(
       `[portfolio-engine] Cannot read config file "${absolutePath}"\n${String(err)}`,
+    );
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch (err) {
+    throw new Error(
+      `[portfolio-engine] Cannot parse JSON config file "${absolutePath}"\n${String(err)}`,
     );
   }
 }
@@ -46,12 +55,12 @@ function formatZodError(error: ZodError, filePath: string): string {
   return [`[portfolio-engine] Invalid config in "${filePath}":`, ...issues].join('\n');
 }
 
-function validate<T>(schema: ZodTypeAny, raw: unknown, filePath: string): T {
+function validate<T>(schema: ZodType<T>, raw: unknown, filePath: string): T {
   const result = schema.safeParse(raw);
   if (!result.success) {
     throw new Error(formatZodError(result.error as ZodError, filePath));
   }
-  return result.data as T;
+  return result.data;
 }
 
 export async function loadConfig(
@@ -60,25 +69,30 @@ export async function loadConfig(
 ): Promise<ResolvedConfig> {
   const root = fileURLToPath(projectRoot);
 
+  const siteConfigPath = resolve(root, engineConfig.siteConfigPath);
+  const navigationConfigPath = resolve(root, engineConfig.navigationConfigPath);
+  const themeConfigPath = resolve(root, engineConfig.themeConfigPath);
+  const featuresConfigPath = resolve(root, engineConfig.featuresConfigPath);
+
   const [siteRaw, navRaw, themeRaw, featuresRaw] = await Promise.all([
-    readJson(resolve(root, engineConfig.siteConfigPath)),
-    readJson(resolve(root, engineConfig.navigationConfigPath)),
-    readJson(resolve(root, engineConfig.themeConfigPath)),
-    readJson(resolve(root, engineConfig.featuresConfigPath)),
+    readJson(siteConfigPath),
+    readJson(navigationConfigPath),
+    readJson(themeConfigPath),
+    readJson(featuresConfigPath),
   ]);
 
   return {
-    site: validate<SiteConfig>(SiteConfigSchema, siteRaw, engineConfig.siteConfigPath),
+    site: validate<SiteConfig>(SiteConfigSchema, siteRaw, siteConfigPath),
     navigation: validate<NavigationConfig>(
       NavigationConfigSchema,
       navRaw,
-      engineConfig.navigationConfigPath,
+      navigationConfigPath,
     ),
-    theme: validate<ThemeConfig>(ThemeConfigSchema, themeRaw, engineConfig.themeConfigPath),
+    theme: validate<ThemeConfig>(ThemeConfigSchema, themeRaw, themeConfigPath),
     features: validate<FeaturesConfig>(
       FeaturesConfigSchema,
       featuresRaw,
-      engineConfig.featuresConfigPath,
+      featuresConfigPath,
     ),
   };
 }
