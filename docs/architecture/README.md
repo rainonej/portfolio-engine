@@ -26,7 +26,7 @@ portfolio-engine is organised into four layers. Each layer has a single responsi
 │                                                                  │
 │  What lives here: Astro integration, config loader, virtual      │
 │  modules, route registry, override resolution, type injection    │
-│  Depends on: @portfolio-engine/schema, astro-integration-kit     │
+│  Depends on: @portfolio-engine/schema                            │
 └──────────────────────────────────────────────────────────────────┘
            ↓ depends on
 ┌──────────────────────────────────────────────────────────────────┐

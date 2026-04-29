@@ -52,10 +52,6 @@ importers:
         version: 5.9.3
 
   packages/engine-core:
-    dependencies:
-      astro-integration-kit:
-        specifier: ^0.20.0
-        version: 0.20.0(astro@5.18.1(rollup@4.60.2)(typescript@5.9.3))
     devDependencies:
       astro:
         specifier: ^5.18.1
@@ -891,12 +887,6 @@ packages:
     resolution: {integrity: sha512-HGyxoOTYUyCM6stUe6EJgnd4EoewAI7zMdfqO+kGjnlZmBDz/cR5pf8r/cR4Wq60sL/p0IkcjUEEPwS3GFrIyw==}
     engines: {node: '>=8'}
 
-  astro-integration-kit@0.20.0:
-    resolution: {integrity: sha512-VQQs7hS9M3XrJtxSLHVDhvHzgqwZuhot3sMoYImBJSvL7fMnleSVgkZhoEeRJd1+Qh96eb469nRnn5mdjIJJMQ==}
-    deprecated: 'Check the migration guide: https://astro-integration-kit.netlify.app/migration-guide/'
-    peerDependencies:
-      astro: ^4.14.0 || ^5.0.0 || ^6.0.0
-
   astro@5.18.1:
     resolution: {integrity: sha512-m4VWilWZ+Xt6NPoYzC4CgGZim/zQUO7WFL0RHCH0AiEavF1153iC3+me2atDvXpf/yX4PyGUeD8wZLq1cirT3g==}
     engines: {node: 18.20.8 || ^20.3.0 || >=22.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
@@ -1589,9 +1579,6 @@ packages:
   path-type@4.0.0:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
-
-  pathe@2.0.3:
-    resolution: {integrity: sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w==}
 
   piccolore@0.1.3:
     resolution: {integrity: sha512-o8bTeDWjE086iwKrROaDf31K0qC/BENdm15/uH9usSC/uZjJOKb2YGiVHfLY4GhwsERiPI1jmwI2XrA7ACOxVw==}
@@ -2742,11 +2729,6 @@ snapshots:
 
   array-union@2.1.0: {}
 
-  astro-integration-kit@0.20.0(astro@5.18.1(rollup@4.60.2)(typescript@5.9.3)):
-    dependencies:
-      astro: 5.18.1(rollup@4.60.2)(typescript@5.9.3)
-      pathe: 2.0.3
-
   astro@5.18.1(rollup@4.60.2)(typescript@5.9.3):
     dependencies:
       '@astrojs/compiler': 2.13.1
@@ -3760,8 +3742,6 @@ snapshots:
   path-key@3.1.1: {}
 
   path-type@4.0.0: {}
-
-  pathe@2.0.3: {}
 
   piccolore@0.1.3: {}
 

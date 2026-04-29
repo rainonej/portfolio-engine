@@ -17,8 +17,5 @@
   "devDependencies": {
     "astro": "^5.18.1",
     "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "astro-integration-kit": "^0.20.0"
   }
 }
