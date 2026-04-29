@@ -1,0 +1,19 @@
+{
+  "name": "portfolio-engine",
+  "private": true,
+  "description": "Monorepo root for the @portfolio-engine/* packages",
+  "scripts": {
+    "build": "pnpm -r run build",
+    "dev": "pnpm -r run dev",
+    "lint": "pnpm -r run lint",
+    "check": "pnpm -r run check",
+    "release": "changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.0"
+  },
+  "engines": {
+    "node": ">=18",
+    "pnpm": ">=9"
+  }
+}
