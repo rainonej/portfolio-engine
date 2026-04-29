@@ -1,4 +1,2 @@
-// @portfolio-engine/engine-core
-// Route registry, config loader, virtual modules, override resolution.
-// Implementation follows in Epic 3.
-export {};
+export { loadConfig } from './config-loader.js';
+export type { EngineConfig, ResolvedConfig } from './config-loader.js';

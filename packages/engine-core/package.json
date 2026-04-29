@@ -11,6 +11,10 @@
     "dev": "echo 'dev not yet configured'",
     "check": "tsc --noEmit"
   },
+  "dependencies": {
+    "@portfolio-engine/schema": "workspace:*",
+    "zod": "^3.25.76"
+  },
   "peerDependencies": {
     "astro": ">=5.0.0"
   },
