@@ -97,12 +97,30 @@ Provides TypeScript types for all virtual modules so theme and consumer code has
 
 ## Non-goals (v1)
 
-- **Packaged `public/` directory assets** — static assets are managed by the consumer (Task 3.9)
+- **Packaged `public/` directory assets** — static assets are managed by the consumer (see v1 constraints below)
 - **Generic multi-theme support** — engine-core is first-party, built for one theme
 - **Content collection management** — Astro's native content collections handle all content files
 - **Runtime API routes** — out of scope
 - **Arbitrary ecosystem plugin compatibility**
 - **Multi-theme marketplace abstractions**
+
+## v1 Constraints
+
+### No packaged `public/` directory
+
+Theme packages use **imported assets only**. No `public/` directory is shipped inside any package.
+
+| Asset type | Location | How it works |
+|---|---|---|
+| Theme CSS, fonts, inline SVGs | Imported inside theme components | Bundled by Vite at build time |
+| Site media (photos, project images) | `agreni-site/public/media/` | Served by Astro from consumer's public dir |
+| Theme-owned decorative assets | Imported inside theme components | Not placed in any `public/` dir |
+
+**Why:** Packaged `public/` directory merging requires `astro-public` or equivalent hacks. `astro-public` is not an approved dependency. This is a deliberate v1 non-goal.
+
+**Enforced by:** No `public/` directories are allowed inside any `packages/` subdirectory. CI will fail if one is introduced (see `docs/architecture/README.md`).
+
+If this constraint needs to be revisited, open a new issue referencing this decision (Task 3.9 — #208).
 
 ## Implementation
 

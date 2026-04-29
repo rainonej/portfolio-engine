@@ -45,6 +45,6 @@ portfolio-engine is organised into four layers. Each layer has a single responsi
 
 **Two-repo model.** Engine packages live in the public `portfolio-engine` repo. Consumer content and config live in the private `agreni-site` repo. They share no git history.
 
-**No packaged public-dir in v1.** Static assets are managed by the consumer, not the engine. This is a deliberate v1 non-goal.
+**No packaged `public/` directory in v1.** Static assets are managed by the consumer, not the engine. Theme packages use imported assets only (Vite handles them at build time). Packaged `public/` directory merging would require `astro-public`, which is not an approved dependency. This is a deliberate v1 non-goal codified in Task 3.9 (#208). No `public/` directories are permitted inside any `packages/` subdirectory — CI enforces this.
 
 See [dependencies.md](dependencies.md) for the approved and banned package list.
