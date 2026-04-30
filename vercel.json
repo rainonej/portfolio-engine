@@ -1,0 +1,6 @@
+{
+  "buildCommand": "pnpm --filter demo-site build",
+  "outputDirectory": "examples/demo-site/dist",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "framework": null
+}
