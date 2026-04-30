@@ -35,12 +35,12 @@ For small chores you may use only a subset (for example `task:chore` + `area:ci`
 
 **Every task issue must carry exactly one owner label.** This is not optional. The label determines who can pick up the ticket — do not mix owners on a single ticket; split the ticket instead.
 
-| Label              | Who executes                | Concrete meaning                                                                                         |
-| ------------------ | --------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `owner:simple-ai`  | GitHub Copilot coding agent | Fully specced, single-file or mechanical multi-file change. No decisions required.                       |
-| `owner:agentic-ai` | Claude / agentic automation | Multi-file, exploratory, or reasoning-required work. Can be picked up autonomously with `claude-ready`.  |
-| `owner:human-dev`  | Human maintainer (Jordan)   | Requires a human: UI click, credential/access grant, architecture decision, or something outside a shell.|
-| `owner:site-owner` | Site/product owner          | Content entry, approval, or config decision made by the site owner (e.g. Agreni for downstream sites).  |
+| Label              | Who executes                | Concrete meaning                                                                                          |
+| ------------------ | --------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `owner:simple-ai`  | GitHub Copilot coding agent | Fully specced, single-file or mechanical multi-file change. No decisions required.                        |
+| `owner:agentic-ai` | Claude / agentic automation | Multi-file, exploratory, or reasoning-required work. Can be picked up autonomously with `claude-ready`.   |
+| `owner:human-dev`  | Human maintainer (Jordan)   | Requires a human: UI click, credential/access grant, architecture decision, or something outside a shell. |
+| `owner:site-owner` | Site/product owner          | Content entry, approval, or config decision made by the site owner (e.g. Agreni for downstream sites).    |
 
 **Rule of thumb for `owner:human-dev`:** if you cannot complete this ticket entirely from a terminal + editor, it is `human-dev`. Examples: connecting a repo to Vercel in the dashboard, granting GitHub App access, approving a PR, setting a secret in GitHub UI.
 
