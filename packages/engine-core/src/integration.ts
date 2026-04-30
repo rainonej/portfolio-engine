@@ -78,6 +78,15 @@ export function createEngineIntegration(options: EngineIntegrationOptions): Astr
           },
         });
       },
+
+      'astro:config:done': ({ injectTypes }) => {
+        // Inject the virtual module type declarations into the consumer's TS
+        // environment automatically — no manual reference directive needed.
+        injectTypes({
+          filename: 'types/portfolio-engine.d.ts',
+          content: '/// <reference types="@portfolio-engine/engine-core/client" />\n',
+        });
+      },
     },
   };
 }
