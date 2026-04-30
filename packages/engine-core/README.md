@@ -118,7 +118,7 @@ Theme packages use **imported assets only**. No `public/` directory is shipped i
 
 **Why:** Packaged `public/` directory merging requires `astro-public` or equivalent hacks. `astro-public` is not an approved dependency. This is a deliberate v1 non-goal.
 
-**Enforced by:** No `public/` directories are allowed inside any `packages/` subdirectory. CI will fail if one is introduced (see `docs/architecture/README.md`).
+**Enforced by:** No `public/` directories are allowed inside any `packages/` subdirectory. CI fails if one is introduced (see [docs/architecture/README.md](../../docs/architecture/README.md)).
 
 If this constraint needs to be revisited, open a new issue referencing this decision (Task 3.9 — #208).
 
