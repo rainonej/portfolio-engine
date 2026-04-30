@@ -1,6 +1,7 @@
 ---
 import Nav from '../components/Nav.astro';
 import AmbientBackground from '../components/AmbientBackground.astro';
+import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import { config } from '@portfolio-engine:config';
 import { overrides } from '@portfolio-engine:overrides';
@@ -20,11 +21,6 @@ interface Props {
 const { title, description = 'Personal website', ogImage, ogUrl } = Astro.props;
 const base = getBase();
 const site = import.meta.env.SITE ?? config.site.baseUrl;
-const adminOriginEnv =
-  import.meta.env.PUBLIC_ADMIN_ORIGIN?.trim().replace(/\/$/, '') ?? '';
-const adminOrigin =
-  adminOriginEnv || (base !== '' ? config.site.baseUrl : '');
-const adminHref = adminOrigin ? `${adminOrigin}/admin` : `${base}/admin`;
 const canonicalUrl = ogUrl ?? `${site}${Astro.url.pathname}`;
 const imageUrl = ogImage
   ? ogImage.startsWith('http')
@@ -75,17 +71,7 @@ const imageUrl = ogImage
     <main>
       <slot />
     </main>
-    <footer
-      class="mt-24 border-t border-stone-100 px-6 py-10 text-center text-sm text-stone-400"
-    >
-      <p>
-        © {new Date().getFullYear()}
-        {config.site.title} &middot; Made with care &middot; <a
-          href={adminHref}
-          class="transition-colors hover:text-stone-600">Admin</a
-        >
-      </p>
-    </footer>
+    <Footer />
     <script is:inline>
       const observer = new IntersectionObserver(
         (entries) => {

@@ -1,5 +1,7 @@
 # portfolio-engine
 
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://portfolio-engine-demo-site.vercel.app)
+
 A first-party Astro engine for building personal portfolio sites. Opinionated, not generic — the shared backbone for private consumer repos (**[agreni-site](https://github.com/rainonej/agreni-site)** and **jordan-site**), open-sourced so design decisions stay transparent.
 
 ## Four-layer model

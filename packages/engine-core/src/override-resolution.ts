@@ -31,6 +31,7 @@ const SUPPORTED_COMPONENT_SURFACES = new Set<string>([
   'FeaturedWriting',
   'TestimonialSection',
   'CollaborationSection',
+  'Footer',
 ]);
 
 export function resolveOverrides(config: OverrideConfig, projectRootDir: string): OverrideMap {
