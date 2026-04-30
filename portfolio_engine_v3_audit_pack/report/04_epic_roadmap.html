@@ -1,138 +1,272 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Epic roadmap</title><link rel="stylesheet" href="assets/styles.css"></head><body><div class="layout"><aside class="sidebar"><h1>Portfolio Engine v3 Audit</h1><div class="small">Generated 2026-04-30</div><hr><a href="index.html">Overview</a>
-<a href="00_patch_notes.html">Patch notes</a>
-<a href="01_target_architecture.html">Target architecture</a>
-<a href="02_current_repo_audit.html">Current repo audit</a>
-<a href="03_gap_plan.html">Gap plan</a>
-<a href="04_epic_roadmap.html">Epic roadmap</a>
-<a href="05_ticket_backlog.html">Ticket backlog</a><hr><div class="small">Context pack for Claude/GitHub board reconciliation. Issue numbers are placeholders.</div></aside><main><div class="muted">Rewritten epics</div><h1>Rewritten Epic Roadmap</h1>
-<p>---</p>
-<h1>Epic 0: Update label taxonomy for v3 architecture</h1>
-<h2>Labels</h2>
-<p><code>type:epic</code>, <code>source:human</code>, <code>area:docs</code></p>
-<h2>Why</h2>
-<p>The v3 plan adds Python/MCP workflow-kit, consumer registry, safety gates, downstream lifecycle, and patch lifecycle. Existing labels are too narrow.</p>
-<h2>Tickets</h2>
-<h3>T0.1 — Update issue-label docs</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:simple-ai</code>, <code>source:human</code>, <code>area:docs</code></p>
-<ul>
-<li>Add <code>area:workflow-kit</code>, <code>area:consumer-registry</code>, <code>area:safety</code>, <code>area:governance</code>, <code>area:downstream</code>, <code>area:patch-lifecycle</code>, <code>area:admin-tools</code>, <code>area:engine-core</code>, <code>area:schema</code>.</li>
-<li>Preserve owner/source/task conventions.</li>
-</ul>
-<h3>T0.2 — Create missing GitHub labels</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:human-dev</code>, <code>source:human</code>, <code>area:docs</code></p>
-<ul>
-<li>Create labels in GitHub with descriptions.</li>
-</ul>
-<p>---</p>
-<h1>Epic 1: Establish open-source governance and agent contribution protocol</h1>
-<h2>Labels</h2>
-<p><code>type:epic</code>, <code>source:human</code>, <code>area:governance</code>, <code>area:docs</code></p>
-<h2>Why</h2>
-<p>Consumers are potential contributors. The repo needs a contribution protocol for AI-assisted downstream-originated PRs.</p>
-<h2>Tickets</h2>
-<h3>T1.1 — Add root AGENTS.md</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:governance</code>, <code>claude-ready</code></p>
-<ul>
-<li>Explain upstream repo mode.</li>
-<li>Tell agents not to add consumer-specific hacks.</li>
-<li>Link layer-boundary docs.</li>
-<li>Mention Python/MCP workflow-kit as downstream optional tooling.</li>
-</ul>
-<h3>T1.2 — Add CLAUDE.md pointer</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:simple-ai</code>, <code>source:human</code>, <code>area:docs</code></p>
-<h3>T1.3 — Add PR template</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:simple-ai</code>, <code>source:human</code>, <code>area:safety</code></p>
-<ul>
-<li>Ask target layer, downstream origin, private data, AI assistance, changeset need.</li>
-</ul>
-<h3>T1.4 — Add governance docs</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:governance</code>, <code>claude-ready</code></p>
-<ul>
-<li><code>GOVERNANCE.md</code>, <code>AI_USAGE.md</code>, <code>DCO.md</code>, <code>CITATION.cff</code>, <code>SECURITY.md</code>, <code>TRADEMARK.md</code>, <code>NOTICE</code>.</li>
-</ul>
-<h3>T1.5 — Add issue templates</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:governance</code>, <code>claude-ready</code></p>
-<ul>
-<li>upstream feature, upstream bug, downstream-originated PR, temporary patch tracking, human-review request.</li>
-</ul>
-<p>---</p>
-<h1>Epic 2: Define layer boundaries, consumer layout, and state protocol</h1>
-<h2>Labels</h2>
-<p><code>type:epic</code>, <code>source:human</code>, <code>area:docs</code>, <code>area:downstream</code></p>
-<h2>Why</h2>
-<p>This is the central protocol that all runtime packages, MCP tools, demo-site docs, and admin-tools depend on.</p>
-<h2>v3 layer model</h2>
-<p><code>src/config</code>, <code>src/content</code>, <code>src/context</code>, <code>src/registry</code>, <code>src/overrides</code>, <code>src/components</code>, <code>src/pages-local</code>, <code>public</code>, <code>.portfolio-engine</code>.</p>
-<h2>Tickets</h2>
-<h3>T2.1 — Add layer-boundaries doc</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:docs</code>, <code>claude-ready</code></p>
-<ul>
-<li>Explain every layer and registry vs component vs pages-local vs override.</li>
-</ul>
-<h3>T2.2 — Add consumer repo layout doc</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:downstream</code>, <code>claude-ready</code></p>
-<ul>
-<li>Include annotated tree.</li>
-<li>Explain why <code>public/</code> remains top-level.</li>
-</ul>
-<h3>T2.3 — Add folder README templates</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:downstream</code>, <code>claude-ready</code></p>
-<ul>
-<li>Add tiny README templates for every consumer layer folder.</li>
-</ul>
-<h3>T2.4 — Define structured context schemas</h3>
-<p>Labels: <code>task:decision</code>, <code>owner:human-dev</code>, <code>source:human</code>, <code>area:schema</code></p>
-<ul>
-<li>Decide fields for <code>site-owner.json</code> and <code>brand-voice.json</code>.</li>
-</ul>
-<h3>T2.5 — Add Python-native/web-native glossary</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:docs</code>, <code>claude-ready</code></p>
-<p>---</p>
-<h1>Epic 3: Refactor runtime paths, registries, and manifest</h1>
-<h2>Labels</h2>
-<p><code>type:epic</code>, <code>source:human</code>, <code>area:engine-core</code>, <code>area:theme</code></p>
-<h2>Why</h2>
-<p>Runtime must support v3 layout and expose a manifest for workflow-kit tools.</p>
-<h2>Tickets</h2>
-<h3>T3.1 — Decide config path migration strategy</h3>
-<p>Labels: <code>task:decision</code>, <code>owner:human-dev</code>, <code>source:human</code>, <code>area:engine-core</code></p>
-<h3>T3.2 — Add <code>paths</code> option to editorialTheme</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:theme</code>, <code>claude-ready</code></p>
-<h3>T3.3 — Move built-in route metadata to explicit registry</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:theme</code>, <code>claude-ready</code></p>
-<h3>T3.4 — Move override surfaces to explicit registry</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:theme</code>, <code>claude-ready</code></p>
-<h3>T3.5 — Generate <code>.portfolio-engine/manifest.json</code></h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:engine-core</code>, <code>claude-ready</code></p>
-<h3>T3.6 — Ensure manifest does not leak private content</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:safety</code>, <code>claude-ready</code></p>
-<p>---</p>
-<h1>Epic 4: Add consumer extension registry support</h1>
-<h2>Labels</h2>
-<p><code>type:epic</code>, <code>source:human</code>, <code>area:consumer-registry</code>, <code>area:theme</code></p>
-<h2>Why</h2>
-<p>The consumer registry is the middle ground between ordinary local edits and upstream engine changes.</p>
-<h2>Target path</h2>
-<p><code>src/registry/portfolio-engine.registry.ts</code></p>
-<h2>Tickets</h2>
-<h3>T4.1 — Decide registry file format</h3>
-<p>Labels: <code>task:decision</code>, <code>owner:human-dev</code>, <code>source:human</code>, <code>area:consumer-registry</code></p>
-<h3>T4.2 — Add consumer route extensions</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:consumer-registry</code>, <code>claude-ready</code></p>
-<h3>T4.3 — Add consumer embed presets</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:consumer-registry</code>, <code>claude-ready</code></p>
-<h3>T4.4 — Add local component embed support</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:consumer-registry</code>, <code>claude-ready</code></p>
-<h3>T4.5 — Wire registry into admin-tools plan</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:admin-tools</code>, <code>claude-ready</code></p>
-<p>---</p>
-<h1>Epic 5: Build optional Python/MCP workflow-kit</h1>
-<h2>Labels</h2>
-<p><code>type:epic</code>, <code>source:human</code>, <code>area:workflow-kit</code></p>
-<h2>Why</h2>
-<p>Workflow-kit is the tool layer that lets Claude/Copilot inspect, plan, validate, and escalate consumer-site changes.</p>
-<h2>Target shape</h2>
-<pre><code>packages/workflow-kit/
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Epic roadmap</title>
+    <link rel="stylesheet" href="assets/styles.css">
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <h1>Portfolio Engine v3 Audit</h1>
+        <div class="small">Generated 2026-04-30</div>
+        <hr>
+        <a href="index.html">Overview</a>
+        <a href="00_patch_notes.html">Patch notes</a>
+        <a href="01_target_architecture.html">Target architecture</a>
+        <a href="02_current_repo_audit.html">Current repo audit</a>
+        <a href="03_gap_plan.html">Gap plan</a>
+        <a href="04_epic_roadmap.html">Epic roadmap</a>
+        <a href="05_ticket_backlog.html">Ticket backlog</a>
+        <hr>
+        <div class="small">
+          Context pack for Claude/GitHub board reconciliation. Issue numbers are placeholders.
+        </div>
+      </aside>
+      <main>
+        <div class="muted">Rewritten epics</div>
+        <h1>Rewritten Epic Roadmap</h1>
+        <p>---</p>
+        <h1>Epic 0: Update label taxonomy for v3 architecture</h1>
+        <h2>Labels</h2>
+        <p><code>type:epic</code>, <code>source:human</code>, <code>area:docs</code></p>
+        <h2>Why</h2>
+        <p>
+          The v3 plan adds Python/MCP workflow-kit, consumer registry, safety gates, downstream
+          lifecycle, and patch lifecycle. Existing labels are too narrow.
+        </p>
+        <h2>Tickets</h2>
+        <h3>T0.1 — Update issue-label docs</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:simple-ai</code>, <code>source:human</code>,
+          <code>area:docs</code>
+        </p>
+        <ul>
+          <li>
+            Add <code>area:workflow-kit</code>, <code>area:consumer-registry</code>,
+            <code>area:safety</code>, <code>area:governance</code>, <code>area:downstream</code>,
+            <code>area:patch-lifecycle</code>, <code>area:admin-tools</code>,
+            <code>area:engine-core</code>, <code>area:schema</code>.
+          </li>
+          <li>Preserve owner/source/task conventions.</li>
+        </ul>
+        <h3>T0.2 — Create missing GitHub labels</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:human-dev</code>, <code>source:human</code>,
+          <code>area:docs</code>
+        </p>
+        <ul>
+          <li>Create labels in GitHub with descriptions.</li>
+        </ul>
+        <p>---</p>
+        <h1>Epic 1: Establish open-source governance and agent contribution protocol</h1>
+        <h2>Labels</h2>
+        <p>
+          <code>type:epic</code>, <code>source:human</code>, <code>area:governance</code>,
+          <code>area:docs</code>
+        </p>
+        <h2>Why</h2>
+        <p>
+          Consumers are potential contributors. The repo needs a contribution protocol for
+          AI-assisted downstream-originated PRs.
+        </p>
+        <h2>Tickets</h2>
+        <h3>T1.1 — Add root AGENTS.md</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:governance</code>, <code>claude-ready</code>
+        </p>
+        <ul>
+          <li>Explain upstream repo mode.</li>
+          <li>Tell agents not to add consumer-specific hacks.</li>
+          <li>Link layer-boundary docs.</li>
+          <li>Mention Python/MCP workflow-kit as downstream optional tooling.</li>
+        </ul>
+        <h3>T1.2 — Add CLAUDE.md pointer</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:simple-ai</code>, <code>source:human</code>,
+          <code>area:docs</code>
+        </p>
+        <h3>T1.3 — Add PR template</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:simple-ai</code>, <code>source:human</code>,
+          <code>area:safety</code>
+        </p>
+        <ul>
+          <li>Ask target layer, downstream origin, private data, AI assistance, changeset need.</li>
+        </ul>
+        <h3>T1.4 — Add governance docs</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:governance</code>, <code>claude-ready</code>
+        </p>
+        <ul>
+          <li>
+            <code>GOVERNANCE.md</code>, <code>AI_USAGE.md</code>, <code>DCO.md</code>,
+            <code>CITATION.cff</code>, <code>SECURITY.md</code>, <code>TRADEMARK.md</code>,
+            <code>NOTICE</code>.
+          </li>
+        </ul>
+        <h3>T1.5 — Add issue templates</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:governance</code>, <code>claude-ready</code>
+        </p>
+        <ul>
+          <li>
+            upstream feature, upstream bug, downstream-originated PR, temporary patch tracking,
+            human-review request.
+          </li>
+        </ul>
+        <p>---</p>
+        <h1>Epic 2: Define layer boundaries, consumer layout, and state protocol</h1>
+        <h2>Labels</h2>
+        <p>
+          <code>type:epic</code>, <code>source:human</code>, <code>area:docs</code>,
+          <code>area:downstream</code>
+        </p>
+        <h2>Why</h2>
+        <p>
+          This is the central protocol that all runtime packages, MCP tools, demo-site docs, and
+          admin-tools depend on.
+        </p>
+        <h2>v3 layer model</h2>
+        <p>
+          <code>src/config</code>, <code>src/content</code>, <code>src/context</code>,
+          <code>src/registry</code>, <code>src/overrides</code>, <code>src/components</code>,
+          <code>src/pages-local</code>, <code>public</code>, <code>.portfolio-engine</code>.
+        </p>
+        <h2>Tickets</h2>
+        <h3>T2.1 — Add layer-boundaries doc</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:docs</code>, <code>claude-ready</code>
+        </p>
+        <ul>
+          <li>Explain every layer and registry vs component vs pages-local vs override.</li>
+        </ul>
+        <h3>T2.2 — Add consumer repo layout doc</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:downstream</code>, <code>claude-ready</code>
+        </p>
+        <ul>
+          <li>Include annotated tree.</li>
+          <li>Explain why <code>public/</code> remains top-level.</li>
+        </ul>
+        <h3>T2.3 — Add folder README templates</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:downstream</code>, <code>claude-ready</code>
+        </p>
+        <ul>
+          <li>Add tiny README templates for every consumer layer folder.</li>
+        </ul>
+        <h3>T2.4 — Define structured context schemas</h3>
+        <p>
+          Labels: <code>task:decision</code>, <code>owner:human-dev</code>,
+          <code>source:human</code>, <code>area:schema</code>
+        </p>
+        <ul>
+          <li>Decide fields for <code>site-owner.json</code> and <code>brand-voice.json</code>.</li>
+        </ul>
+        <h3>T2.5 — Add Python-native/web-native glossary</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:docs</code>, <code>claude-ready</code>
+        </p>
+        <p>---</p>
+        <h1>Epic 3: Refactor runtime paths, registries, and manifest</h1>
+        <h2>Labels</h2>
+        <p>
+          <code>type:epic</code>, <code>source:human</code>, <code>area:engine-core</code>,
+          <code>area:theme</code>
+        </p>
+        <h2>Why</h2>
+        <p>Runtime must support v3 layout and expose a manifest for workflow-kit tools.</p>
+        <h2>Tickets</h2>
+        <h3>T3.1 — Decide config path migration strategy</h3>
+        <p>
+          Labels: <code>task:decision</code>, <code>owner:human-dev</code>,
+          <code>source:human</code>, <code>area:engine-core</code>
+        </p>
+        <h3>T3.2 — Add <code>paths</code> option to editorialTheme</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:theme</code>, <code>claude-ready</code>
+        </p>
+        <h3>T3.3 — Move built-in route metadata to explicit registry</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:theme</code>, <code>claude-ready</code>
+        </p>
+        <h3>T3.4 — Move override surfaces to explicit registry</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:theme</code>, <code>claude-ready</code>
+        </p>
+        <h3>T3.5 — Generate <code>.portfolio-engine/manifest.json</code></h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:engine-core</code>, <code>claude-ready</code>
+        </p>
+        <h3>T3.6 — Ensure manifest does not leak private content</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:safety</code>, <code>claude-ready</code>
+        </p>
+        <p>---</p>
+        <h1>Epic 4: Add consumer extension registry support</h1>
+        <h2>Labels</h2>
+        <p>
+          <code>type:epic</code>, <code>source:human</code>, <code>area:consumer-registry</code>,
+          <code>area:theme</code>
+        </p>
+        <h2>Why</h2>
+        <p>
+          The consumer registry is the middle ground between ordinary local edits and upstream
+          engine changes.
+        </p>
+        <h2>Target path</h2>
+        <p><code>src/registry/portfolio-engine.registry.ts</code></p>
+        <h2>Tickets</h2>
+        <h3>T4.1 — Decide registry file format</h3>
+        <p>
+          Labels: <code>task:decision</code>, <code>owner:human-dev</code>,
+          <code>source:human</code>, <code>area:consumer-registry</code>
+        </p>
+        <h3>T4.2 — Add consumer route extensions</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:consumer-registry</code>, <code>claude-ready</code>
+        </p>
+        <h3>T4.3 — Add consumer embed presets</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:consumer-registry</code>, <code>claude-ready</code>
+        </p>
+        <h3>T4.4 — Add local component embed support</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:consumer-registry</code>, <code>claude-ready</code>
+        </p>
+        <h3>T4.5 — Wire registry into admin-tools plan</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:admin-tools</code>, <code>claude-ready</code>
+        </p>
+        <p>---</p>
+        <h1>Epic 5: Build optional Python/MCP workflow-kit</h1>
+        <h2>Labels</h2>
+        <p><code>type:epic</code>, <code>source:human</code>, <code>area:workflow-kit</code></p>
+        <h2>Why</h2>
+        <p>
+          Workflow-kit is the tool layer that lets Claude/Copilot inspect, plan, validate, and
+          escalate consumer-site changes.
+        </p>
+        <h2>Target shape</h2>
+        <pre><code>packages/workflow-kit/
   pyproject.toml
   README.md
   tools/
@@ -142,127 +276,258 @@
     plan_upstream.py
     patch_ledger.py
   mcp_server.py</code></pre>
-<h2>Tickets</h2>
-<h3>T5.1 — Replace workflow-kit docs with Python/MCP package docs</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:workflow-kit</code>, <code>claude-ready</code></p>
-<h3>T5.2 — Add pyproject.toml</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:workflow-kit</code>, <code>claude-ready</code></p>
-<h3>T5.3 — Add MCP server skeleton</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:workflow-kit</code>, <code>claude-ready</code></p>
-<h3>T5.4 — Add inspect_site tool</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:workflow-kit</code>, <code>claude-ready</code></p>
-<h3>T5.5 — Add plan_request tool</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:workflow-kit</code>, <code>claude-ready</code></p>
-<h3>T5.6 — Add validate_plan tool</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:workflow-kit</code>, <code>claude-ready</code></p>
-<h3>T5.7 — Add Claude <code>.mcp.json</code> template</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:workflow-kit</code>, <code>claude-ready</code></p>
-<h3>T5.8 — Add Copilot MCP configuration docs</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:workflow-kit</code>, <code>claude-ready</code></p>
-<p>---</p>
-<h1>Epic 6: Define patch and upstream lifecycle</h1>
-<h2>Labels</h2>
-<p><code>type:epic</code>, <code>source:human</code>, <code>area:patch-lifecycle</code>, <code>area:downstream</code></p>
-<h2>Why</h2>
-<p>Consumers become contributors when local levers are insufficient.</p>
-<h2>v3 update</h2>
-<p>Patch and upstream tracking are tool state in <code>.portfolio-engine</code>.</p>
-<h2>Tickets</h2>
-<h3>T6.1 — Document local → upstream escalation ladder</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:patch-lifecycle</code>, <code>claude-ready</code></p>
-<h3>T6.2 — Define patch-ledger schema</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:patch-lifecycle</code>, <code>claude-ready</code></p>
-<h3>T6.3 — Define upstream-tracking schema</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:patch-lifecycle</code>, <code>claude-ready</code></p>
-<h3>T6.4 — Document linked checkout vs package patch</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:patch-lifecycle</code>, <code>claude-ready</code></p>
-<p>---</p>
-<h1>Epic 7: Add contribution safety gates</h1>
-<h2>Labels</h2>
-<p><code>type:epic</code>, <code>source:human</code>, <code>area:safety</code>, <code>area:ci</code></p>
-<h2>Why</h2>
-<p>If consumer agents can contribute upstream, the upstream repo needs safety checks.</p>
-<h2>Tickets</h2>
-<h3>T7.1 — Add layer-boundary PR checklist</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:simple-ai</code>, <code>source:human</code>, <code>area:safety</code></p>
-<h3>T7.2 — Add deterministic layer-boundary guard</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:safety</code>, <code>claude-ready</code></p>
-<h3>T7.3 — Add AI review prompt/check</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:safety</code>, <code>claude-ready</code></p>
-<p>---</p>
-<h1>Epic 8: Turn demo-site into full customization showcase</h1>
-<h2>Labels</h2>
-<p><code>type:epic</code>, <code>source:human</code>, <code>area:demo</code>, <code>area:docs</code></p>
-<h2>Why</h2>
-<p>Demo-site should teach consumers and agents how the whole system works.</p>
-<h2>v3 target</h2>
-<p><code>examples/demo-site/src/config</code>, <code>src/content</code>, <code>src/context</code>, <code>src/registry</code>, <code>src/overrides</code>, <code>src/components</code>, <code>src/pages-local</code>, <code>public</code>, <code>.portfolio-engine</code>.</p>
-<h2>Tickets</h2>
-<h3>T8.1 — Add demo-site layout migration plan</h3>
-<p>Labels: <code>task:decision</code>, <code>owner:human-dev</code>, <code>source:human</code>, <code>area:demo</code></p>
-<h3>T8.2 — Add folder READMEs to demo-site</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:simple-ai</code>, <code>source:human</code>, <code>area:demo</code></p>
-<h3>T8.3 — Add rendered customization index</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:demo</code>, <code>claude-ready</code></p>
-<h3>T8.4 — Add framed YouTube local component example</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:demo</code>, <code>claude-ready</code></p>
-<h3>T8.5 — Add local page example</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:demo</code>, <code>claude-ready</code></p>
-<p>---</p>
-<h1>Epic 9: Port public-safe automation spine</h1>
-<h2>Labels</h2>
-<p><code>type:epic</code>, <code>source:human</code>, <code>area:ci</code>, <code>area:safety</code></p>
-<h2>Why</h2>
-<p>GitHub automation protects the upstream repo; workflow-kit helps consumer agents plan/escalate.</p>
-<h2>Tickets</h2>
-<h3>T9.1 — Reconcile current CI/Copilot issues</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:human-dev</code>, <code>source:human</code>, <code>area:ci</code></p>
-<h3>T9.2 — Add branch-name-check workflow</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:simple-ai</code>, <code>source:human</code>, <code>area:ci</code></p>
-<h3>T9.3 — Add close-on-merge workflow</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:simple-ai</code>, <code>source:human</code>, <code>area:ci</code></p>
-<h3>T9.4 — Add public-safe planner workflow</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:ci</code>, <code>claude-ready</code></p>
-<h3>T9.5 — Add gated Claude workflow</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:ci</code>, <code>claude-ready</code></p>
-<p>---</p>
-<h1>Epic 10: Create clean private agreni-site consumer repo</h1>
-<h2>Labels</h2>
-<p><code>type:epic</code>, <code>source:human</code>, <code>area:downstream</code></p>
-<h2>Why</h2>
-<p>The private consumer repo should use the final consumer layout and optional MCP tools.</p>
-<h2>Tickets</h2>
-<h3>T10.1 — Create/private repo setup</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:human-dev</code>, <code>source:human</code>, <code>area:downstream</code></p>
-<h3>T10.2 — Scaffold Astro consumer using new layout</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:downstream</code>, <code>claude-ready</code></p>
-<h3>T10.3 — Migrate content/config/media</h3>
-<p>Labels: <code>task:content</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:downstream</code>, <code>claude-ready</code></p>
-<h3>T10.4 — Add structured context</h3>
-<p>Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:downstream</code>, <code>claude-ready</code></p>
-<h3>T10.5 — Configure optional MCP tools</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:human-dev</code>, <code>source:human</code>, <code>area:workflow-kit</code></p>
-<h3>T10.6 — Configure Vercel/CMS/admin workflow</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:human-dev</code>, <code>source:human</code>, <code>area:downstream</code></p>
-<p>---</p>
-<h1>Epic 11: Align admin-tools with structured context and consumer layout</h1>
-<h2>Labels</h2>
-<p><code>type:epic</code>, <code>source:human</code>, <code>area:admin-tools</code></p>
-<h2>Why</h2>
-<p>Admin-tools should eventually let nontechnical users edit important site levers without looking at code.</p>
-<h2>Tickets</h2>
-<h3>T11.1 — Update admin-tools docs for v3 layout</h3>
-<p>Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>, <code>area:admin-tools</code>, <code>claude-ready</code></p>
-<h3>T11.2 — Define admin-readable context schema</h3>
-<p>Labels: <code>task:decision</code>, <code>owner:human-dev</code>, <code>source:human</code>, <code>area:admin-tools</code></p>
-<h3>T11.3 — Design admin information architecture</h3>
-<p>Labels: <code>task:design</code>, <code>owner:human-dev</code>, <code>source:human</code>, <code>area:admin-tools</code></p>
-<ul>
-<li>Colors/theme</li>
-<li>Sitemap/routes</li>
-<li>Content collections</li>
-<li>Context/brand voice</li>
-<li>Assets/public files</li>
-<li>Registry/extensions</li>
-<li>Upstream blockers/patches</li>
-</ul></main></div></body></html>
+        <h2>Tickets</h2>
+        <h3>T5.1 — Replace workflow-kit docs with Python/MCP package docs</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:workflow-kit</code>, <code>claude-ready</code>
+        </p>
+        <h3>T5.2 — Add pyproject.toml</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:workflow-kit</code>, <code>claude-ready</code>
+        </p>
+        <h3>T5.3 — Add MCP server skeleton</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:workflow-kit</code>, <code>claude-ready</code>
+        </p>
+        <h3>T5.4 — Add inspect_site tool</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:workflow-kit</code>, <code>claude-ready</code>
+        </p>
+        <h3>T5.5 — Add plan_request tool</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:workflow-kit</code>, <code>claude-ready</code>
+        </p>
+        <h3>T5.6 — Add validate_plan tool</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:workflow-kit</code>, <code>claude-ready</code>
+        </p>
+        <h3>T5.7 — Add Claude <code>.mcp.json</code> template</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:workflow-kit</code>, <code>claude-ready</code>
+        </p>
+        <h3>T5.8 — Add Copilot MCP configuration docs</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:workflow-kit</code>, <code>claude-ready</code>
+        </p>
+        <p>---</p>
+        <h1>Epic 6: Define patch and upstream lifecycle</h1>
+        <h2>Labels</h2>
+        <p>
+          <code>type:epic</code>, <code>source:human</code>, <code>area:patch-lifecycle</code>,
+          <code>area:downstream</code>
+        </p>
+        <h2>Why</h2>
+        <p>Consumers become contributors when local levers are insufficient.</p>
+        <h2>v3 update</h2>
+        <p>Patch and upstream tracking are tool state in <code>.portfolio-engine</code>.</p>
+        <h2>Tickets</h2>
+        <h3>T6.1 — Document local → upstream escalation ladder</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:patch-lifecycle</code>, <code>claude-ready</code>
+        </p>
+        <h3>T6.2 — Define patch-ledger schema</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:patch-lifecycle</code>, <code>claude-ready</code>
+        </p>
+        <h3>T6.3 — Define upstream-tracking schema</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:patch-lifecycle</code>, <code>claude-ready</code>
+        </p>
+        <h3>T6.4 — Document linked checkout vs package patch</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:patch-lifecycle</code>, <code>claude-ready</code>
+        </p>
+        <p>---</p>
+        <h1>Epic 7: Add contribution safety gates</h1>
+        <h2>Labels</h2>
+        <p>
+          <code>type:epic</code>, <code>source:human</code>, <code>area:safety</code>,
+          <code>area:ci</code>
+        </p>
+        <h2>Why</h2>
+        <p>If consumer agents can contribute upstream, the upstream repo needs safety checks.</p>
+        <h2>Tickets</h2>
+        <h3>T7.1 — Add layer-boundary PR checklist</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:simple-ai</code>, <code>source:human</code>,
+          <code>area:safety</code>
+        </p>
+        <h3>T7.2 — Add deterministic layer-boundary guard</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:safety</code>, <code>claude-ready</code>
+        </p>
+        <h3>T7.3 — Add AI review prompt/check</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:safety</code>, <code>claude-ready</code>
+        </p>
+        <p>---</p>
+        <h1>Epic 8: Turn demo-site into full customization showcase</h1>
+        <h2>Labels</h2>
+        <p>
+          <code>type:epic</code>, <code>source:human</code>, <code>area:demo</code>,
+          <code>area:docs</code>
+        </p>
+        <h2>Why</h2>
+        <p>Demo-site should teach consumers and agents how the whole system works.</p>
+        <h2>v3 target</h2>
+        <p>
+          <code>examples/demo-site/src/config</code>, <code>src/content</code>,
+          <code>src/context</code>, <code>src/registry</code>, <code>src/overrides</code>,
+          <code>src/components</code>, <code>src/pages-local</code>, <code>public</code>,
+          <code>.portfolio-engine</code>.
+        </p>
+        <h2>Tickets</h2>
+        <h3>T8.1 — Add demo-site layout migration plan</h3>
+        <p>
+          Labels: <code>task:decision</code>, <code>owner:human-dev</code>,
+          <code>source:human</code>, <code>area:demo</code>
+        </p>
+        <h3>T8.2 — Add folder READMEs to demo-site</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:simple-ai</code>, <code>source:human</code>,
+          <code>area:demo</code>
+        </p>
+        <h3>T8.3 — Add rendered customization index</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:demo</code>, <code>claude-ready</code>
+        </p>
+        <h3>T8.4 — Add framed YouTube local component example</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:demo</code>, <code>claude-ready</code>
+        </p>
+        <h3>T8.5 — Add local page example</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:demo</code>, <code>claude-ready</code>
+        </p>
+        <p>---</p>
+        <h1>Epic 9: Port public-safe automation spine</h1>
+        <h2>Labels</h2>
+        <p>
+          <code>type:epic</code>, <code>source:human</code>, <code>area:ci</code>,
+          <code>area:safety</code>
+        </p>
+        <h2>Why</h2>
+        <p>
+          GitHub automation protects the upstream repo; workflow-kit helps consumer agents
+          plan/escalate.
+        </p>
+        <h2>Tickets</h2>
+        <h3>T9.1 — Reconcile current CI/Copilot issues</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:human-dev</code>, <code>source:human</code>,
+          <code>area:ci</code>
+        </p>
+        <h3>T9.2 — Add branch-name-check workflow</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:simple-ai</code>, <code>source:human</code>,
+          <code>area:ci</code>
+        </p>
+        <h3>T9.3 — Add close-on-merge workflow</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:simple-ai</code>, <code>source:human</code>,
+          <code>area:ci</code>
+        </p>
+        <h3>T9.4 — Add public-safe planner workflow</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:ci</code>, <code>claude-ready</code>
+        </p>
+        <h3>T9.5 — Add gated Claude workflow</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:ci</code>, <code>claude-ready</code>
+        </p>
+        <p>---</p>
+        <h1>Epic 10: Create clean private agreni-site consumer repo</h1>
+        <h2>Labels</h2>
+        <p><code>type:epic</code>, <code>source:human</code>, <code>area:downstream</code></p>
+        <h2>Why</h2>
+        <p>
+          The private consumer repo should use the final consumer layout and optional MCP tools.
+        </p>
+        <h2>Tickets</h2>
+        <h3>T10.1 — Create/private repo setup</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:human-dev</code>, <code>source:human</code>,
+          <code>area:downstream</code>
+        </p>
+        <h3>T10.2 — Scaffold Astro consumer using new layout</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:downstream</code>, <code>claude-ready</code>
+        </p>
+        <h3>T10.3 — Migrate content/config/media</h3>
+        <p>
+          Labels: <code>task:content</code>, <code>owner:agentic-ai</code>,
+          <code>source:human</code>, <code>area:downstream</code>, <code>claude-ready</code>
+        </p>
+        <h3>T10.4 — Add structured context</h3>
+        <p>
+          Labels: <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:downstream</code>, <code>claude-ready</code>
+        </p>
+        <h3>T10.5 — Configure optional MCP tools</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:human-dev</code>, <code>source:human</code>,
+          <code>area:workflow-kit</code>
+        </p>
+        <h3>T10.6 — Configure Vercel/CMS/admin workflow</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:human-dev</code>, <code>source:human</code>,
+          <code>area:downstream</code>
+        </p>
+        <p>---</p>
+        <h1>Epic 11: Align admin-tools with structured context and consumer layout</h1>
+        <h2>Labels</h2>
+        <p><code>type:epic</code>, <code>source:human</code>, <code>area:admin-tools</code></p>
+        <h2>Why</h2>
+        <p>
+          Admin-tools should eventually let nontechnical users edit important site levers without
+          looking at code.
+        </p>
+        <h2>Tickets</h2>
+        <h3>T11.1 — Update admin-tools docs for v3 layout</h3>
+        <p>
+          Labels: <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>source:human</code>,
+          <code>area:admin-tools</code>, <code>claude-ready</code>
+        </p>
+        <h3>T11.2 — Define admin-readable context schema</h3>
+        <p>
+          Labels: <code>task:decision</code>, <code>owner:human-dev</code>,
+          <code>source:human</code>, <code>area:admin-tools</code>
+        </p>
+        <h3>T11.3 — Design admin information architecture</h3>
+        <p>
+          Labels: <code>task:design</code>, <code>owner:human-dev</code>, <code>source:human</code>,
+          <code>area:admin-tools</code>
+        </p>
+        <ul>
+          <li>Colors/theme</li>
+          <li>Sitemap/routes</li>
+          <li>Content collections</li>
+          <li>Context/brand voice</li>
+          <li>Assets/public files</li>
+          <li>Registry/extensions</li>
+          <li>Upstream blockers/patches</li>
+        </ul>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,4 +1,3 @@
-
 # Target Architecture
 
 ## Big picture goals, in priority order

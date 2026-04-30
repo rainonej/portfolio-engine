@@ -1,42 +1,91 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Current repo audit</title><link rel="stylesheet" href="assets/styles.css"></head><body><div class="layout"><aside class="sidebar"><h1>Portfolio Engine v3 Audit</h1><div class="small">Generated 2026-04-30</div><hr><a href="index.html">Overview</a>
-<a href="00_patch_notes.html">Patch notes</a>
-<a href="01_target_architecture.html">Target architecture</a>
-<a href="02_current_repo_audit.html">Current repo audit</a>
-<a href="03_gap_plan.html">Gap plan</a>
-<a href="04_epic_roadmap.html">Epic roadmap</a>
-<a href="05_ticket_backlog.html">Ticket backlog</a><hr><div class="small">Context pack for Claude/GitHub board reconciliation. Issue numbers are placeholders.</div></aside><main><div class="muted">Current repo vs target</div><h1>Current Repo Audit Against Target</h1>
-<h2>Executive summary</h2>
-<p>The current repo already has the correct core runtime idea: npm/TypeScript/Astro packages for schema, engine-core, and editorial-theme; route injection; virtual modules; config loading; demo-site reference consumer; named override configuration; CI and Vercel/demo-site planning.</p>
-<p>It does not yet reflect v3 decisions:</p>
-<ul>
-<li><code>workflow-kit</code> is still documented as reusable GitHub workflows / AI classifier.</li>
-<li>consumer config currently lives at top-level <code>config/*.json</code>.</li>
-<li>consumer context/registry folders do not exist.</li>
-<li><code>.portfolio-engine</code> tool state does not exist.</li>
-<li>consumer registry support does not exist.</li>
-<li>demo-site does not showcase the final customization ladder.</li>
-</ul>
-<h2>Current strengths worth preserving</h2>
-<h3>Four-layer runtime model</h3>
-<p>The root README already explains the core layers. Keep and update this, do not throw it away.</p>
-<h3>Runtime package direction</h3>
-<p>Preserve the current dependency direction:</p>
-<pre><code>editorial-theme depends on engine-core
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Current repo audit</title>
+    <link rel="stylesheet" href="assets/styles.css">
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <h1>Portfolio Engine v3 Audit</h1>
+        <div class="small">Generated 2026-04-30</div>
+        <hr>
+        <a href="index.html">Overview</a>
+        <a href="00_patch_notes.html">Patch notes</a>
+        <a href="01_target_architecture.html">Target architecture</a>
+        <a href="02_current_repo_audit.html">Current repo audit</a>
+        <a href="03_gap_plan.html">Gap plan</a>
+        <a href="04_epic_roadmap.html">Epic roadmap</a>
+        <a href="05_ticket_backlog.html">Ticket backlog</a>
+        <hr>
+        <div class="small">
+          Context pack for Claude/GitHub board reconciliation. Issue numbers are placeholders.
+        </div>
+      </aside>
+      <main>
+        <div class="muted">Current repo vs target</div>
+        <h1>Current Repo Audit Against Target</h1>
+        <h2>Executive summary</h2>
+        <p>
+          The current repo already has the correct core runtime idea: npm/TypeScript/Astro packages
+          for schema, engine-core, and editorial-theme; route injection; virtual modules; config
+          loading; demo-site reference consumer; named override configuration; CI and
+          Vercel/demo-site planning.
+        </p>
+        <p>It does not yet reflect v3 decisions:</p>
+        <ul>
+          <li>
+            <code>workflow-kit</code> is still documented as reusable GitHub workflows / AI
+            classifier.
+          </li>
+          <li>consumer config currently lives at top-level <code>config/*.json</code>.</li>
+          <li>consumer context/registry folders do not exist.</li>
+          <li><code>.portfolio-engine</code> tool state does not exist.</li>
+          <li>consumer registry support does not exist.</li>
+          <li>demo-site does not showcase the final customization ladder.</li>
+        </ul>
+        <h2>Current strengths worth preserving</h2>
+        <h3>Four-layer runtime model</h3>
+        <p>
+          The root README already explains the core layers. Keep and update this, do not throw it
+          away.
+        </p>
+        <h3>Runtime package direction</h3>
+        <p>Preserve the current dependency direction:</p>
+        <pre><code>editorial-theme depends on engine-core
 engine-core depends on schema</code></pre>
-<p>Python workflow-kit should be optional and not required for rendering.</p>
-<h3>Demo-site as reference consumer</h3>
-<p>Keep demo-site as canonical reference, but migrate it to v3 layout when runtime supports it.</p>
-<h3>Existing override config concepts</h3>
-<p>Keep component overrides and style overrides, but clarify that override surface name may not equal upstream implementation filename.</p>
-<h2>Current mismatches</h2>
-<pre><code>| Area | Current | Target |</code></pre>
-<pre><code>|---|---|---|</code></pre>
-<pre><code>| workflow-kit | deferred GitHub workflows / AI classifier | optional Python/MCP package |</code></pre>
-<pre><code>| config | `config/*.json` | `src/config/*.json` |</code></pre>
-<pre><code>| context | absent | `src/context/site-owner.json`, `brand-voice.json`, `agent-rules.md` |</code></pre>
-<pre><code>| registry | absent | `src/registry/portfolio-engine.registry.ts` |</code></pre>
-<pre><code>| tool state | absent | `.portfolio-engine/*.json` |</code></pre>
-<pre><code>| demo-site | basic reference consumer | customization showcase + v3 layout |</code></pre>
-<h2>Things current repo may do better</h2>
-<p>Current layout is easier technically because it already works. The target <code>src/config</code> layout is semantically cleaner but needs a migration/refactor.</p>
-<p>Recommendation: support a compatibility window or explicit migration task rather than breaking demo-site immediately.</p></main></div></body></html>
+        <p>Python workflow-kit should be optional and not required for rendering.</p>
+        <h3>Demo-site as reference consumer</h3>
+        <p>
+          Keep demo-site as canonical reference, but migrate it to v3 layout when runtime supports
+          it.
+        </p>
+        <h3>Existing override config concepts</h3>
+        <p>
+          Keep component overrides and style overrides, but clarify that override surface name may
+          not equal upstream implementation filename.
+        </p>
+        <h2>Current mismatches</h2>
+        <pre><code>| Area | Current | Target |</code></pre>
+        <pre><code>|---|---|---|</code></pre>
+        <pre><code>| workflow-kit | deferred GitHub workflows / AI classifier | optional Python/MCP package |</code></pre>
+        <pre><code>| config | `config/*.json` | `src/config/*.json` |</code></pre>
+        <pre><code>| context | absent | `src/context/site-owner.json`, `brand-voice.json`, `agent-rules.md` |</code></pre>
+        <pre><code>| registry | absent | `src/registry/portfolio-engine.registry.ts` |</code></pre>
+        <pre><code>| tool state | absent | `.portfolio-engine/*.json` |</code></pre>
+        <pre><code>| demo-site | basic reference consumer | customization showcase + v3 layout |</code></pre>
+        <h2>Things current repo may do better</h2>
+        <p>
+          Current layout is easier technically because it already works. The target
+          <code>src/config</code> layout is semantically cleaner but needs a migration/refactor.
+        </p>
+        <p>
+          Recommendation: support a compatibility window or explicit migration task rather than
+          breaking demo-site immediately.
+        </p>
+      </main>
+    </div>
+  </body>
+</html>

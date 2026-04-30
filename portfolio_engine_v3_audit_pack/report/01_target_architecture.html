@@ -1,23 +1,53 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Target architecture</title><link rel="stylesheet" href="assets/styles.css"></head><body><div class="layout"><aside class="sidebar"><h1>Portfolio Engine v3 Audit</h1><div class="small">Generated 2026-04-30</div><hr><a href="index.html">Overview</a>
-<a href="00_patch_notes.html">Patch notes</a>
-<a href="01_target_architecture.html">Target architecture</a>
-<a href="02_current_repo_audit.html">Current repo audit</a>
-<a href="03_gap_plan.html">Gap plan</a>
-<a href="04_epic_roadmap.html">Epic roadmap</a>
-<a href="05_ticket_backlog.html">Ticket backlog</a><hr><div class="small">Context pack for Claude/GitHub board reconciliation. Issue numbers are placeholders.</div></aside><main><div class="muted">Desired end state</div><h1>Target Architecture</h1>
-<h2>Big picture goals, in priority order</h2>
-<h3>Goal 1 — Reusable portfolio-site backbone</h3>
-<p>Build an open-source backbone for multiple personal/portfolio/editorial websites.</p>
-<h3>Goal 2 — Nontechnical and vibe-coder usability</h3>
-<p>A consumer should be able to create and edit a site without understanding Astro internals.</p>
-<h3>Goal 3 — AI-agent-native workflow</h3>
-<p>Claude/Copilot should use MCP tools to inspect, plan, validate, and escalate changes.</p>
-<h3>Goal 4 — Consumer-to-contributor feedback loop</h3>
-<p>Consumers are potential contributors. When local levers are insufficient, their agents can create upstream issues or PRs against the shared engine.</p>
-<h3>Goal 5 — Maintainer-safe open source</h3>
-<p>The project should welcome AI-assisted contributions while preventing private data leaks and consumer-specific hacks.</p>
-<h2>Target upstream repo structure</h2>
-<pre><code>portfolio-engine/
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Target architecture</title>
+    <link rel="stylesheet" href="assets/styles.css">
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <h1>Portfolio Engine v3 Audit</h1>
+        <div class="small">Generated 2026-04-30</div>
+        <hr>
+        <a href="index.html">Overview</a>
+        <a href="00_patch_notes.html">Patch notes</a>
+        <a href="01_target_architecture.html">Target architecture</a>
+        <a href="02_current_repo_audit.html">Current repo audit</a>
+        <a href="03_gap_plan.html">Gap plan</a>
+        <a href="04_epic_roadmap.html">Epic roadmap</a>
+        <a href="05_ticket_backlog.html">Ticket backlog</a>
+        <hr>
+        <div class="small">
+          Context pack for Claude/GitHub board reconciliation. Issue numbers are placeholders.
+        </div>
+      </aside>
+      <main>
+        <div class="muted">Desired end state</div>
+        <h1>Target Architecture</h1>
+        <h2>Big picture goals, in priority order</h2>
+        <h3>Goal 1 — Reusable portfolio-site backbone</h3>
+        <p>Build an open-source backbone for multiple personal/portfolio/editorial websites.</p>
+        <h3>Goal 2 — Nontechnical and vibe-coder usability</h3>
+        <p>
+          A consumer should be able to create and edit a site without understanding Astro internals.
+        </p>
+        <h3>Goal 3 — AI-agent-native workflow</h3>
+        <p>Claude/Copilot should use MCP tools to inspect, plan, validate, and escalate changes.</p>
+        <h3>Goal 4 — Consumer-to-contributor feedback loop</h3>
+        <p>
+          Consumers are potential contributors. When local levers are insufficient, their agents can
+          create upstream issues or PRs against the shared engine.
+        </p>
+        <h3>Goal 5 — Maintainer-safe open source</h3>
+        <p>
+          The project should welcome AI-assisted contributions while preventing private data leaks
+          and consumer-specific hacks.
+        </p>
+        <h2>Target upstream repo structure</h2>
+        <pre><code>portfolio-engine/
   README.md
   CONTRIBUTING.md
   AGENTS.md
@@ -60,8 +90,8 @@
       src/pages-local/
       public/
       .portfolio-engine/</code></pre>
-<h2>Target consumer repo structure</h2>
-<pre><code>agreni-site/
+        <h2>Target consumer repo structure</h2>
+        <pre><code>agreni-site/
   README.md
   AGENTS.md
   .mcp.json
@@ -125,15 +155,19 @@
     state.json
     upstream-tracking.json
     patch-ledger.json</code></pre>
-<h2>Consumer repo folder meanings</h2>
-<ul>
-<li><code>src/config</code>: site-wide settings.</li>
-<li><code>src/content</code>: rendered website content.</li>
-<li><code>src/context</code>: site-owner/brand/agent context.</li>
-<li><code>src/registry</code>: local extension declarations.</li>
-<li><code>src/overrides</code>: supported theme-surface replacements and custom CSS.</li>
-<li><code>src/components</code>: local reusable UI components.</li>
-<li><code>src/pages-local</code>: local pages with their own URLs.</li>
-<li><code>public</code>: public static assets served from site root.</li>
-<li><code>.portfolio-engine</code>: generated/tool state.</li>
-</ul></main></div></body></html>
+        <h2>Consumer repo folder meanings</h2>
+        <ul>
+          <li><code>src/config</code>: site-wide settings.</li>
+          <li><code>src/content</code>: rendered website content.</li>
+          <li><code>src/context</code>: site-owner/brand/agent context.</li>
+          <li><code>src/registry</code>: local extension declarations.</li>
+          <li><code>src/overrides</code>: supported theme-surface replacements and custom CSS.</li>
+          <li><code>src/components</code>: local reusable UI components.</li>
+          <li><code>src/pages-local</code>: local pages with their own URLs.</li>
+          <li><code>public</code>: public static assets served from site root.</li>
+          <li><code>.portfolio-engine</code>: generated/tool state.</li>
+        </ul>
+      </main>
+    </div>
+  </body>
+</html>

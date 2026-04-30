@@ -1,22 +1,66 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Overview</title><link rel="stylesheet" href="assets/styles.css"></head><body><div class="layout"><aside class="sidebar"><h1>Portfolio Engine v3 Audit</h1><div class="small">Generated 2026-04-30</div><hr><a href="index.html">Overview</a>
-<a href="00_patch_notes.html">Patch notes</a>
-<a href="01_target_architecture.html">Target architecture</a>
-<a href="02_current_repo_audit.html">Current repo audit</a>
-<a href="03_gap_plan.html">Gap plan</a>
-<a href="04_epic_roadmap.html">Epic roadmap</a>
-<a href="05_ticket_backlog.html">Ticket backlog</a><hr><div class="small">Context pack for Claude/GitHub board reconciliation. Issue numbers are placeholders.</div></aside><main><div class="muted">Start here</div><h1>Portfolio Engine v3 Audit and Roadmap Pack</h1>
-<p>This pack updates the previous v2 pack after several design decisions.</p>
-<p>&lt;div class=&quot;grid&quot;&gt;</p>
-<p>&lt;div class=&quot;card&quot;&gt;&lt;strong&gt;Runtime stays Astro/npm.&lt;/strong&gt;&lt;br/&gt;<code>schema</code>, <code>engine-core</code>, and <code>editorial-theme</code> remain npm/TypeScript/Astro packages.&lt;/div&gt;</p>
-<p>&lt;div class=&quot;card&quot;&gt;&lt;strong&gt;Workflow-kit becomes Python/MCP.&lt;/strong&gt;&lt;br/&gt;<code>packages/workflow-kit</code> is an optional Python package exposing MCP tools to Claude/Copilot.&lt;/div&gt;</p>
-<p>&lt;div class=&quot;card&quot;&gt;&lt;strong&gt;Consumer layout uses <code>src</code>.&lt;/strong&gt;&lt;br/&gt;Consumer site layers live under <code>src/config</code>, <code>src/content</code>, <code>src/context</code>, <code>src/registry</code>, <code>src/overrides</code>, etc.&lt;/div&gt;</p>
-<p>&lt;div class=&quot;card&quot;&gt;&lt;strong&gt;Tool state moves to <code>.portfolio-engine</code>.&lt;/strong&gt;&lt;br/&gt;Manifest, patch ledger, and upstream tracking are generated/tool state.&lt;/div&gt;</p>
-<p>&lt;/div&gt;</p>
-<h2>How to use this pack</h2>
-<p>1. Read Patch notes.</p>
-<p>2. Read Target architecture.</p>
-<p>3. Read Current repo audit.</p>
-<p>4. Read Gap plan.</p>
-<p>5. Reconcile Epics and Tickets against the live GitHub project board.</p>
-<h2>Instruction for Claude</h2>
-<p>Do not blindly create every issue. Inspect current board, open/closed issues, linked PRs, and existing labels first.</p></main></div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Overview</title>
+    <link rel="stylesheet" href="assets/styles.css">
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <h1>Portfolio Engine v3 Audit</h1>
+        <div class="small">Generated 2026-04-30</div>
+        <hr>
+        <a href="index.html">Overview</a>
+        <a href="00_patch_notes.html">Patch notes</a>
+        <a href="01_target_architecture.html">Target architecture</a>
+        <a href="02_current_repo_audit.html">Current repo audit</a>
+        <a href="03_gap_plan.html">Gap plan</a>
+        <a href="04_epic_roadmap.html">Epic roadmap</a>
+        <a href="05_ticket_backlog.html">Ticket backlog</a>
+        <hr>
+        <div class="small">
+          Context pack for Claude/GitHub board reconciliation. Issue numbers are placeholders.
+        </div>
+      </aside>
+      <main>
+        <div class="muted">Start here</div>
+        <h1>Portfolio Engine v3 Audit and Roadmap Pack</h1>
+        <p>This pack updates the previous v2 pack after several design decisions.</p>
+        <div class="grid">
+          <div class="card">
+            <strong>Runtime stays Astro/npm.</strong><br>
+            <code>schema</code>, <code>engine-core</code>, and <code>editorial-theme</code> remain
+            npm/TypeScript/Astro packages.
+          </div>
+          <div class="card">
+            <strong>Workflow-kit becomes Python/MCP.</strong><br>
+            <code>packages/workflow-kit</code> is an optional Python package exposing MCP tools to
+            Claude/Copilot.
+          </div>
+          <div class="card">
+            <strong>Consumer layout uses <code>src</code>.</strong><br>
+            Consumer site layers live under <code>src/config</code>, <code>src/content</code>,
+            <code>src/context</code>, <code>src/registry</code>, <code>src/overrides</code>, etc.
+          </div>
+          <div class="card">
+            <strong>Tool state moves to <code>.portfolio-engine</code>.</strong><br>
+            Manifest, patch ledger, and upstream tracking are generated/tool state.
+          </div>
+        </div>
+        <h2>How to use this pack</h2>
+        <p>1. Read Patch notes.</p>
+        <p>2. Read Target architecture.</p>
+        <p>3. Read Current repo audit.</p>
+        <p>4. Read Gap plan.</p>
+        <p>5. Reconcile Epics and Tickets against the live GitHub project board.</p>
+        <h2>Instruction for Claude</h2>
+        <p>
+          Do not blindly create every issue. Inspect current board, open/closed issues, linked PRs,
+          and existing labels first.
+        </p>
+      </main>
+    </div>
+  </body>
+</html>

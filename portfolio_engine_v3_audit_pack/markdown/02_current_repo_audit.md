@@ -1,4 +1,3 @@
-
 # Current Repo Audit Against Target
 
 ## Executive summary
@@ -41,14 +40,14 @@ Keep component overrides and style overrides, but clarify that override surface 
 
 ## Current mismatches
 
-| Area | Current | Target |
-|---|---|---|
-| workflow-kit | deferred GitHub workflows / AI classifier | optional Python/MCP package |
-| config | `config/*.json` | `src/config/*.json` |
-| context | absent | `src/context/site-owner.json`, `brand-voice.json`, `agent-rules.md` |
-| registry | absent | `src/registry/portfolio-engine.registry.ts` |
-| tool state | absent | `.portfolio-engine/*.json` |
-| demo-site | basic reference consumer | customization showcase + v3 layout |
+| Area         | Current                                   | Target                                                              |
+| ------------ | ----------------------------------------- | ------------------------------------------------------------------- |
+| workflow-kit | deferred GitHub workflows / AI classifier | optional Python/MCP package                                         |
+| config       | `config/*.json`                           | `src/config/*.json`                                                 |
+| context      | absent                                    | `src/context/site-owner.json`, `brand-voice.json`, `agent-rules.md` |
+| registry     | absent                                    | `src/registry/portfolio-engine.registry.ts`                         |
+| tool state   | absent                                    | `.portfolio-engine/*.json`                                          |
+| demo-site    | basic reference consumer                  | customization showcase + v3 layout                                  |
 
 ## Things current repo may do better
 

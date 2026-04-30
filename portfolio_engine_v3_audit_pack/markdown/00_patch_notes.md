@@ -1,4 +1,3 @@
-
 # Patch Notes Since v2
 
 This v3 pack supersedes the previous v2 context pack where the two disagree.
