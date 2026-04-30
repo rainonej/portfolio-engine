@@ -4,6 +4,7 @@ import { overrides } from '@portfolio-engine:overrides';
 import Reveal from '../Reveal.astro';
 import SectionIntro from '../SectionIntro.astro';
 import FeaturePillars from '../FeaturePillars.astro';
+import { resolveAssetUrl } from '../../lib/utils';
 
 interface Pillar {
   heading: string;
@@ -55,20 +56,33 @@ const Override = overrides.Hero
               Explore my work
             </a>
             {bookingUrl && (
-              <a
-                href={bookingUrl}
-                onclick={`Calendly.initPopupWidget({url:'${bookingUrl}'});return false;`}
-                class="rounded-full border border-[var(--warm-line)] px-8 py-3.5 text-sm font-medium text-[var(--ink)] transition-colors hover:border-[var(--stone-soft)]"
-              >
-                Book a conversation
-              </a>
+              <>
+                <a
+                  href={bookingUrl}
+                  id="hero-booking-calendly"
+                  class="rounded-full border border-[var(--warm-line)] px-8 py-3.5 text-sm font-medium text-[var(--ink)] transition-colors hover:border-[var(--stone-soft)]"
+                >
+                  Book a conversation
+                </a>
+                <script define:vars={{ calendlyUrl: bookingUrl }}>
+                  document.getElementById('hero-booking-calendly')?.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const w = window;
+                    if (typeof w.Calendly !== 'undefined' && calendlyUrl) {
+                      w.Calendly.initPopupWidget({ url: calendlyUrl });
+                    } else {
+                      w.location.href = calendlyUrl;
+                    }
+                  });
+                </script>
+              </>
             )}
           </div>
         </div>
         {person.photo && (
           <div class="hidden md:col-span-2 md:block">
             <img
-              src={person.photo}
+              src={resolveAssetUrl(person.photo, base) ?? person.photo}
               alt={person.name}
               class="aspect-[3/4] w-full rounded-3xl object-cover shadow-xl"
             />

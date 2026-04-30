@@ -3,7 +3,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, getEntry } from 'astro:content';
 import ImageOrFallback from '../../components/ImageOrFallback.astro';
-import { getBase, formatDate, sortByDateDesc } from '../../lib/utils';
+import { getBase, formatDate, resolveAssetUrl, sortByDateDesc } from '../../lib/utils';
 
 const personEntry = await getEntry('profile', 'person');
 const person = personEntry.data;
@@ -44,7 +44,7 @@ const base = getBase();
                 <a href={postUrl} class="block">
                   <div class="mb-5 aspect-[21/9] overflow-hidden rounded-2xl bg-stone-100">
                     <ImageOrFallback
-                      src={p.image ? `${base}${p.image}` : null}
+                      src={p.image ? resolveAssetUrl(p.image, base) : null}
                       alt={p.title}
                       fallbackChar={p.title[0]}
                       class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"

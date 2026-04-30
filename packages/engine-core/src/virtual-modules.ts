@@ -3,13 +3,14 @@ import type { BuildContext, OverrideMap, RouteRecord } from './types.js';
 
 // Minimal subset of the Vite Plugin interface — avoids a direct vite dep
 // while preserving correctness for the hooks engine-core actually uses.
-// `this: any` matches Vite/Rollup's PluginContext expectation so the object
-// is assignable to vite.plugins without a TS error at the call site.
+// `this: any` matches Vite/Rollup's PluginContext without importing rollup types.
+/* eslint-disable @typescript-eslint/no-explicit-any -- structural match to vite.Plugin hooks */
 interface VitePlugin {
   name: string;
   resolveId?(this: any, id: string): string | null | undefined;
   load?(this: any, id: string): string | null | undefined;
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 const VIRTUAL_MODULE_IDS = [
   '@portfolio-engine:config',

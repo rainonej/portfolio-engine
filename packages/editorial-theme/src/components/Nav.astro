@@ -17,11 +17,19 @@ function isNavActive(pathname: string, href: string): boolean {
   return pathname.startsWith(href);
 }
 
+function resolveNavHref(href: string): string {
+  if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) {
+    return href;
+  }
+  if (href.startsWith('/')) return `${base}${href}`;
+  return `${base}/${href}`;
+}
+
 const links = config.navigation.items
   .filter((item) => item.visible !== false)
   .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
   .map(({ href, label }) => ({
-    href: `${base}${href}`,
+    href: resolveNavHref(href),
     label,
   }));
 

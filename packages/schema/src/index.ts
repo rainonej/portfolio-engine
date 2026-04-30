@@ -5,7 +5,7 @@ export const SiteConfigSchema = z.object({
   description: z.string(),
   baseUrl: z.string().url(),
   tagline: z.string(),
-  bookingUrl: z.string().optional(),
+  bookingUrl: z.string().url().optional(),
   contact: z.object({
     heading: z.string(),
     body: z.string(),

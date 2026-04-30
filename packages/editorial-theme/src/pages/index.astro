@@ -9,7 +9,7 @@ import TestimonialSection from '../components/sections/TestimonialSection.astro'
 import CollaborationSection from '../components/sections/CollaborationSection.astro';
 import { getCollection, getEntry } from 'astro:content';
 import { config } from '@portfolio-engine:config';
-import { getBase, sortByDateDesc } from '../lib/utils';
+import { getBase, resolveAssetUrl, sortByDateDesc } from '../lib/utils';
 
 const base = getBase();
 const personEntry = await getEntry('profile', 'person');
@@ -18,7 +18,7 @@ const person = personEntry.data;
 const bookingUrl = config.site.bookingUrl || null;
 const pillars = (config.features.pillars ?? []).map((p) => ({
   ...p,
-  image: p.image ? `${base}${p.image}` : undefined,
+  image: p.image ? (resolveAssetUrl(p.image, base) ?? undefined) : undefined,
 }));
 
 const projects = await getCollection('projects');
@@ -83,7 +83,7 @@ const featuredTestimonials = config.features.testimonials
                     {p.image ? (
                       <div class="mb-5 aspect-[4/3] overflow-hidden rounded-2xl bg-stone-100">
                         <img
-                          src={`${base}${p.image}`}
+                          src={resolveAssetUrl(p.image, base) ?? ''}
                           alt={p.title}
                           class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                           loading="lazy"
@@ -125,7 +125,9 @@ const featuredTestimonials = config.features.testimonials
           title: post.data.title,
           date: post.data.date,
           description: post.data.description,
-          image: post.data.image ? `${base}${post.data.image}` : undefined,
+          image: post.data.image
+            ? (resolveAssetUrl(post.data.image, base) ?? undefined)
+            : undefined,
           href: `${base}/writing/${post.id}`,
         }))}
         base={base}

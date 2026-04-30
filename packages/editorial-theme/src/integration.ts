@@ -1,5 +1,6 @@
 import type { AstroIntegration } from 'astro';
 import { fileURLToPath } from 'node:url';
+import autoprefixer from 'autoprefixer';
 import tailwindcss from 'tailwindcss';
 import { createEngineIntegration } from '@portfolio-engine/engine-core';
 import type { EngineIntegrationOptions } from '@portfolio-engine/engine-core';
@@ -23,9 +24,10 @@ export function editorialTheme(options: EditorialThemeOptions): AstroIntegration
           vite: {
             css: {
               postcss: {
-                // tailwindcss v3's PostCSS plugin type predates PostCSS 8's strict Plugin
-                // type; the runtime contract is correct, so we narrow with `as never`.
-                plugins: [tailwindcss({ config: tailwindConfigPath }) as never],
+                plugins: [
+                  tailwindcss({ config: tailwindConfigPath }),
+                  autoprefixer(),
+                ] as never[],
               },
             },
           },

@@ -3,7 +3,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, getEntry, render } from 'astro:content';
 import ImageOrFallback from '../../components/ImageOrFallback.astro';
-import { getBase } from '../../lib/utils';
+import { getBase, resolveAssetUrl } from '../../lib/utils';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -32,7 +32,7 @@ const base = getBase();
     </a>
     <div class="mb-10 aspect-[16/9] overflow-hidden rounded-2xl bg-stone-100">
       <ImageOrFallback
-        src={p.image ? `${base}${p.image}` : null}
+        src={p.image ? resolveAssetUrl(p.image, base) : null}
         alt={p.title}
         fallbackChar={p.title[0]}
         class="h-full w-full object-cover"
