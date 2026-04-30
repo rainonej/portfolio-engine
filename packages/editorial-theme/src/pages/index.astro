@@ -34,7 +34,7 @@ const featuredTestimonials = config.features.testimonials
 ---
 
 <Layout
-  title={`${person.name} — ${config.site.tagline ?? config.site.description}`}
+  title={`${person.name} — ${config.site.tagline}`}
   description={person.bio}
 >
   {
@@ -64,7 +64,7 @@ const featuredTestimonials = config.features.testimonials
           class="mb-6 font-serif text-4xl font-bold leading-tight text-[var(--ink)] md:text-5xl lg:text-6xl"
         >
           <span class="text-[var(--copper)]">{person.name}</span>
-          {' '}{config.site.tagline ?? config.site.description}
+          {' '}{config.site.tagline}
         </h1>
         <p
           class="mb-10 max-w-2xl text-lg leading-relaxed text-[var(--stone-soft)] md:text-xl"

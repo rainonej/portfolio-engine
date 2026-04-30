@@ -4,14 +4,12 @@ export const SiteConfigSchema = z.object({
   title: z.string(),
   description: z.string(),
   baseUrl: z.string().url(),
-  tagline: z.string().optional(),
+  tagline: z.string(),
   bookingUrl: z.string().optional(),
-  contact: z
-    .object({
-      heading: z.string(),
-      body: z.string(),
-    })
-    .optional(),
+  contact: z.object({
+    heading: z.string(),
+    body: z.string(),
+  }),
   social: z
     .object({
       github: z.string().url().optional(),

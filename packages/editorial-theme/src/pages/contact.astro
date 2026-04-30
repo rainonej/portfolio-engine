@@ -8,10 +8,7 @@ const personEntry = await getEntry('profile', 'person');
 const person = personEntry.data;
 
 const bookingUrl = config.site.bookingUrl || null;
-const contactHeading = config.site.contact?.heading ?? "Let's work together";
-const contactBody =
-  config.site.contact?.body ??
-  'Have a project in mind or just want to say hello?';
+const { heading: contactHeading, body: contactBody } = config.site.contact;
 ---
 
 <Layout title={`Contact — ${person.name}`}>
