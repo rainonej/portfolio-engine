@@ -22,15 +22,58 @@ export function applyRouteOverrides(
   discovered: DiscoveredRoute[],
   overrides: RouteOverrides,
 ): RouteRemapResult {
+  // 1. Reject unknown keys in override entries
   const unsupportedKeys = Object.keys(overrides).flatMap((pattern) => {
     const entry = overrides[pattern];
-    return Object.keys(entry).filter((k) => k !== 'enabled' && k !== 'path').map((k) => `${pattern}.${k}`);
+    return Object.keys(entry)
+      .filter((k) => k !== 'enabled' && k !== 'path')
+      .map((k) => `${pattern}.${k}`);
   });
   if (unsupportedKeys.length > 0) {
     throw new Error(
       `[portfolio-engine] Unsupported route override option(s): ${unsupportedKeys.join(', ')}\n` +
         `  Only "enabled" and "path" are supported in v1.`,
     );
+  }
+
+  // 2. Validate types of enabled/path values
+  for (const [pattern, entry] of Object.entries(overrides)) {
+    if ('enabled' in entry && typeof entry.enabled !== 'boolean') {
+      throw new Error(
+        `[portfolio-engine] Route override "${pattern}.enabled" must be a boolean, got ${typeof entry.enabled}.`,
+      );
+    }
+    if ('path' in entry && typeof entry.path !== 'string') {
+      throw new Error(
+        `[portfolio-engine] Route override "${pattern}.path" must be a string, got ${typeof entry.path}.`,
+      );
+    }
+    if (
+      'path' in entry &&
+      typeof entry.path === 'string' &&
+      !entry.path.startsWith('/')
+    ) {
+      throw new Error(
+        `[portfolio-engine] Route override "${pattern}.path" must start with "/", got "${entry.path}".`,
+      );
+    }
+    if ('enabled' in entry && entry.enabled === false && 'path' in entry) {
+      throw new Error(
+        `[portfolio-engine] Route override "${pattern}" has both enabled: false and path — these are contradictory.`,
+      );
+    }
+  }
+
+  // 3. Reject overrides that target unknown patterns (catches typos)
+  if (discovered.length > 0) {
+    const known = new Set(discovered.map((r) => r.pattern));
+    const unknown = Object.keys(overrides).filter((p) => !known.has(p));
+    if (unknown.length > 0) {
+      throw new Error(
+        `[portfolio-engine] Route override(s) target pattern(s) not in the registry: ${unknown.join(', ')}\n` +
+          `  Available patterns: ${[...known].join(', ')}`,
+      );
+    }
   }
 
   const disabled: string[] = [];
@@ -66,6 +109,19 @@ export function applyRouteOverrides(
     }
 
     routes.push(route);
+  }
+
+  // 4. Detect duplicate injected patterns after applying overrides
+  const seen = new Set<string>();
+  const duplicates: string[] = [];
+  for (const r of routes) {
+    if (seen.has(r.pattern)) duplicates.push(r.pattern);
+    else seen.add(r.pattern);
+  }
+  if (duplicates.length > 0) {
+    throw new Error(
+      `[portfolio-engine] Duplicate route patterns after applying overrides: ${duplicates.join(', ')}`,
+    );
   }
 
   return { routes, disabled, remapped };

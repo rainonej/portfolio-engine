@@ -33,7 +33,7 @@ Implemented via native Vite `resolveId`/`load` plugin hooks. The `\0` prefix on 
 |-----------|--------|------|----------|
 | `@portfolio-engine:config` | `config` | `ResolvedConfig` | Validated site + navigation + theme + features config |
 | `@portfolio-engine:context` | `context` | `BuildContext` | Env, mode, base URL |
-| `@portfolio-engine:routes` | `routes` | `RouteRecord[]` | All registered public + admin routes |
+| `@portfolio-engine:routes` | `routes` | `RouteRecord[]` | Active (post-override) route registry — disabled routes excluded, remapped routes reflected |
 | `@portfolio-engine:overrides` | `overrides` | `OverrideMap` | Component override map (component name → downstream path) |
 
 Consumer packages (e.g. `editorial-theme`) get full TypeScript types by adding a reference directive:
@@ -49,6 +49,7 @@ The plugin is created with `createVirtualModulesPlugin()` from `@portfolio-engin
 ```typescript
 interface RouteRecord {
   pattern: string;           // e.g. /work/[slug]
+  resolved: string;          // actual injected path after any remap (equals pattern when not remapped)
   label: string;             // human-readable
   section: string | null;    // nav group
   visibility: 'public' | 'admin-only' | 'hidden';
