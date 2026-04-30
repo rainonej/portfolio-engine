@@ -1,11 +1,11 @@
 ---
-"@portfolio-engine/schema": minor
-"@portfolio-engine/editorial-theme": minor
+'@portfolio-engine/schema': minor
+'@portfolio-engine/editorial-theme': minor
 ---
 
 Tasks 4.1 + 4.2: port layouts, components, styles, and page routes into editorial-theme
 
-- Extended `SiteConfigSchema` with optional `tagline`, `bookingUrl`, and `contact` fields
+- Extended `SiteConfigSchema` with required `tagline` and `contact`, optional `bookingUrl` (validated as URL when present)
 - Extended `FeaturesConfigSchema` with optional `pillars` array and `ctaBody` string
 - Ported all shared components to `packages/editorial-theme/src/components/` (includes `ImageOrFallback`)
 - Ported `Layout.astro` to `packages/editorial-theme/src/layouts/` — uses `@portfolio-engine:config` for site title and nav, removing all direct JSON imports

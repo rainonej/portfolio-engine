@@ -50,8 +50,9 @@ See that package for the canonical Zod schemas. A minimal set:
   "tagline": "designs for clarity",
   "contact": {
     "heading": "Let's work together",
-    "body": "Reach out and let's find what's possible."
-  }
+    "body": "Reach out and let's find what's possible.",
+  },
+  "bookingUrl": "https://calendly.com/your-handle/30min",
 }
 ```
 
@@ -59,11 +60,11 @@ See that package for the canonical Zod schemas. A minimal set:
 // config/navigation.json
 {
   "items": [
-    { "label": "Work",    "href": "/work",    "order": 1, "visible": true },
+    { "label": "Work", "href": "/work", "order": 1, "visible": true },
     { "label": "Writing", "href": "/writing", "order": 2, "visible": true },
-    { "label": "About",   "href": "/about",   "order": 3, "visible": true },
-    { "label": "Contact", "href": "/contact", "order": 4, "visible": true }
-  ]
+    { "label": "About", "href": "/about", "order": 3, "visible": true },
+    { "label": "Contact", "href": "/contact", "order": 4, "visible": true },
+  ],
 }
 ```
 
@@ -79,10 +80,8 @@ See that package for the canonical Zod schemas. A minimal set:
   "work": true,
   "contact": true,
   "testimonials": true,
-  "pillars": [
-    { "heading": "Product Design", "body": "Thoughtful interfaces." }
-  ],
-  "ctaBody": "Let's talk."
+  "pillars": [{ "heading": "Product Design", "body": "Thoughtful interfaces." }],
+  "ctaBody": "Let's talk.",
 }
 ```
 
@@ -91,12 +90,12 @@ See that package for the canonical Zod schemas. A minimal set:
 Add `src/content.config.ts` with these four collections (the page routes
 expect them):
 
-| Collection     | Type    | Required entries / shape |
-|----------------|---------|--------------------------|
-| `profile`      | `data`  | `person` (name, bio, photo?, email?, linkedin?, instagram?) and `cv` (awards?, education?) |
-| `projects`     | `content` | title, description, featured?, image?, tags?, link?, date |
-| `writing`      | `content` | title, date, description?, image?, draft?, tags? |
-| `testimonials` | `data`  | quote, author, role, featured? |
+| Collection     | Type      | Required entries / shape                                                                   |
+| -------------- | --------- | ------------------------------------------------------------------------------------------ |
+| `profile`      | `data`    | `person` (name, bio, photo?, email?, linkedin?, instagram?) and `cv` (awards?, education?) |
+| `projects`     | `content` | title, description, featured?, image?, tags?, link?, date                                  |
+| `writing`      | `content` | title, date, description?, image?, draft?, tags?                                           |
+| `testimonials` | `data`    | quote, author, role, featured?                                                             |
 
 See [`examples/demo-site/src/content.config.ts`](../../examples/demo-site/src/content.config.ts)
 for a working reference.
@@ -112,12 +111,12 @@ it. Both are configured by passing an `overrides` option to
 Replace one of the four named section blocks with your own Astro
 component:
 
-| Surface               | Page         | Replaces                                | Props received                                  |
-|-----------------------|--------------|-----------------------------------------|-------------------------------------------------|
-| `Hero`                | `/`          | The home-page hero (name, bio, CTAs)    | `{ person, bookingUrl, pillars, base, tagline }` |
-| `FeaturedWriting`     | `/`          | The "Recent Writing" block on the home  | `{ posts, base }`                               |
-| `TestimonialSection`  | `/`          | The testimonials block on the home      | `{ testimonials }`                              |
-| `CollaborationSection`| `/`          | The collaboration CTA at the bottom     | `{ base, ctaBody }`                             |
+| Surface                | Page | Replaces                               | Props received                                   |
+| ---------------------- | ---- | -------------------------------------- | ------------------------------------------------ |
+| `Hero`                 | `/`  | The home-page hero (name, bio, CTAs)   | `{ person, bookingUrl, pillars, base, tagline }` |
+| `FeaturedWriting`      | `/`  | The "Recent Writing" block on the home | `{ posts, base }`                                |
+| `TestimonialSection`   | `/`  | The testimonials block on the home     | `{ testimonials }`                               |
+| `CollaborationSection` | `/`  | The collaboration CTA at the bottom    | `{ base, ctaBody }`                              |
 
 ```js
 editorialTheme({
@@ -127,7 +126,7 @@ editorialTheme({
       Hero: './src/overrides/Hero.astro',
     },
   },
-})
+});
 ```
 
 Paths are resolved relative to the consumer project root. Any surface
@@ -143,7 +142,7 @@ editorialTheme({
   overrides: {
     styles: ['./src/overrides/custom.css'],
   },
-})
+});
 ```
 
 Each file is read at build time and inlined as a global stylesheet on
