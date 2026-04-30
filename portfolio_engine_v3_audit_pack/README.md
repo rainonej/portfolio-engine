@@ -20,13 +20,23 @@ Open:
 report/index.html
 ```
 
-Styles are **inlined** into each HTML file (from `report/assets/styles.css`) so editor and webview previews still apply layout when a plain `<link href="assets/styles.css">` would not resolve. After changing `report/assets/styles.css`, refresh the HTML copies:
+## Build the HTML report
+
+Report pages under `report/` are **generated** from Markdown (see `portfolio_engine_v3_audit_pack/build-report.mjs`): overview and narrative from `markdown/`, epics from `epics/*.md`, tickets from `tickets/tickets_by_epic.md`, decisions from `decisions/ADR-*.md`. Edit those sources, then regenerate:
+
+```bash
+pnpm run build:audit-report
+```
+
+This inlines `report/assets/styles.css` into every HTML file so editor and webview previews still get layout without resolving a separate stylesheet URL.
+
+To refresh CSS only without re-running the full Markdown build:
 
 ```bash
 node portfolio_engine_v3_audit_pack/sync-report-css.mjs
 ```
 
-For a normal browser session you can also serve the folder, for example `cd report && npx --yes serve .`.
+For a normal browser session you can serve the folder, for example `cd report && npx --yes serve .`.
 
 ## Instructions for Claude
 

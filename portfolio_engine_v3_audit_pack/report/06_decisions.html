@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Gap plan</title>
+    <title>Decisions</title>
     <style id="audit-pack-inlined-css">
 /* Inlined from assets/styles.css — edit that file, then pnpm run build:audit-report */
 :root {
@@ -225,123 +225,41 @@ summary {
         <a href="00_patch_notes.html">Patch notes</a>
         <a href="01_target_architecture.html">Target architecture</a>
         <a href="02_current_repo_audit.html">Current repo audit</a>
-        <a href="03_gap_plan.html" aria-current="page">Gap plan</a>
+        <a href="03_gap_plan.html">Gap plan</a>
         <a href="04_epic_roadmap.html">Epic roadmap</a>
         <a href="05_ticket_backlog.html">Ticket backlog</a>
-        <a href="06_decisions.html">Decisions</a>
+        <a href="06_decisions.html" aria-current="page">Decisions</a>
         <hr>
         <div class="small">
           Context pack for Claude/GitHub board reconciliation. Issue numbers are placeholders.
         </div>
       </aside>
       <main>
-        <div class="muted">How to get there</div>
+        <div class="muted">ADRs</div>
 
-        <h1>Gap Plan: Current Repo → Target Architecture</h1>
-        <h2>Current → target map</h2>
-        <table>
-        <thead>
-        <tr>
-        <th>Area</th>
-        <th>Current</th>
-        <th>Target</th>
-        <th>Change type</th>
-        </tr>
-        </thead>
-        <tbody><tr>
-        <td>Runtime packages</td>
-        <td>npm packages</td>
-        <td>same</td>
-        <td>preserve</td>
-        </tr>
-        <tr>
-        <td>Workflow-kit</td>
-        <td>deferred npm-ish docs package</td>
-        <td>Python/MCP package</td>
-        <td>overhaul</td>
-        </tr>
-        <tr>
-        <td>Config path</td>
-        <td><code>config/*.json</code></td>
-        <td><code>src/config/*.json</code></td>
-        <td>refactor/migrate</td>
-        </tr>
-        <tr>
-        <td>Content path</td>
-        <td><code>src/content/**</code></td>
-        <td><code>src/content/**</code></td>
-        <td>preserve</td>
-        </tr>
-        <tr>
-        <td>Context</td>
-        <td>absent</td>
-        <td><code>src/context/*.json/.md</code></td>
-        <td>add</td>
-        </tr>
-        <tr>
-        <td>Registry</td>
-        <td>absent</td>
-        <td><code>src/registry/portfolio-engine.registry.ts</code></td>
-        <td>add</td>
-        </tr>
-        <tr>
-        <td>Overrides</td>
-        <td>supported in config</td>
-        <td><code>src/overrides</code></td>
-        <td>preserve/clarify</td>
-        </tr>
-        <tr>
-        <td>Public assets</td>
-        <td><code>public/**</code></td>
-        <td><code>public/**</code></td>
-        <td>preserve/clarify</td>
-        </tr>
-        <tr>
-        <td>Tool state</td>
-        <td>absent</td>
-        <td><code>.portfolio-engine/*.json</code></td>
-        <td>add</td>
-        </tr>
-        <tr>
-        <td>Demo-site</td>
-        <td>reference consumer</td>
-        <td>reference + showcase</td>
-        <td>expand</td>
-        </tr>
-        </tbody></table>
-        <h2>What needs complete overhaul</h2>
+        <h1>Decisions</h1>
+        <h2>ADR-001: workflow-kit is an optional Python/MCP package</h2>
+        <h2>Decision</h2>
+        <p><code>packages/workflow-kit</code> will be a Python package exposing MCP tools to Claude/Copilot.</p>
+        <h2>Consequences</h2>
         <ul>
-        <li><code>packages/workflow-kit</code></li>
-        <li>workflow-kit docs</li>
-        <li>README workflow-kit section</li>
+        <li>Optional for website rendering.</li>
+        <li>Not a runtime dependency of <code>editorial-theme</code>.</li>
+        <li>Consumers configure <code>.mcp.json</code> if they want Claude tool access.</li>
+        <li>Copilot uses repo-level MCP/custom agent configuration.</li>
         </ul>
-        <h2>What needs medium refactor</h2>
-        <ul>
-        <li>config path loading</li>
-        <li>demo-site layout</li>
-        <li>override rendering bridge</li>
-        <li>manifest generation</li>
-        </ul>
-        <h2>What needs small tweaks</h2>
-        <ul>
-        <li>folder READMEs</li>
-        <li>public README</li>
-        <li>label taxonomy</li>
-        <li>contributor docs and PR templates</li>
-        </ul>
-        <h2>Recommended order</h2>
-        <ol>
-        <li>Record decisions and update docs.</li>
-        <li>Add labels/governance/protocol.</li>
-        <li>Define layer-boundary docs and consumer layout.</li>
-        <li>Refactor config path support.</li>
-        <li>Add runtime registry/manifest contracts.</li>
-        <li>Implement consumer registry extension support.</li>
-        <li>Build Python/MCP workflow-kit read-only/planning tools.</li>
-        <li>Update demo-site.</li>
-        <li>Add contribution safety gates.</li>
-        <li>Migrate private agreni-site.</li>
-        </ol>
+        <hr>
+        <h2>ADR-002: consumer site layers live under <code>src/</code></h2>
+        <h2>Decision</h2>
+        <p>Consumer-owned semantic layers live under <code>src/</code>, while <code>public/</code> remains top-level for static public assets.</p>
+        <h2>Target</h2>
+        <p><code>src/config</code>, <code>src/content</code>, <code>src/context</code>, <code>src/registry</code>, <code>src/overrides</code>, <code>src/components</code>, <code>src/pages-local</code>, <code>public</code>, <code>.portfolio-engine</code>.</p>
+        <hr>
+        <h2>ADR-003: generated/tool state lives in <code>.portfolio-engine</code></h2>
+        <h2>Decision</h2>
+        <p>Tool state is not site-owner context.</p>
+        <p>Use <code>.portfolio-engine/manifest.json</code>, <code>.portfolio-engine/state.json</code>, <code>.portfolio-engine/upstream-tracking.json</code>, <code>.portfolio-engine/patch-ledger.json</code>.</p>
+        <p>Use <code>src/context</code> for <code>site-owner.json</code>, <code>brand-voice.json</code>, and <code>agent-rules.md</code>.</p>
 
       </main>
     </div>

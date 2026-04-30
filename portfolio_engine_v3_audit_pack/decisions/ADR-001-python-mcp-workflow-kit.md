@@ -1,4 +1,4 @@
-# ADR-001: workflow-kit is an optional Python/MCP package
+## ADR-001: workflow-kit is an optional Python/MCP package
 
 ## Decision
 

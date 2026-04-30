@@ -61,6 +61,10 @@ body {
 .sidebar a:hover {
   color: var(--accent);
 }
+.sidebar a[aria-current='page'] {
+  font-weight: 700;
+  color: var(--accent);
+}
 .sidebar hr {
   border: 0;
   border-top: 1px solid var(--border);

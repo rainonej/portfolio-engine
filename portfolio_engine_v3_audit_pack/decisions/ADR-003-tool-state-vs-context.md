@@ -1,4 +1,4 @@
-# ADR-003: generated/tool state lives in `.portfolio-engine`
+## ADR-003: generated/tool state lives in `.portfolio-engine`
 
 ## Decision
 

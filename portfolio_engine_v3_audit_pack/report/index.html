@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Overview</title>
     <style id="audit-pack-inlined-css">
-/* Inlined from assets/styles.css — run: node portfolio_engine_v3_audit_pack/sync-report-css.mjs */
+/* Inlined from assets/styles.css — edit that file, then pnpm run build:audit-report */
 :root {
   --bg: #f8f6f1;
   --card: #fffdf8;
@@ -67,6 +67,10 @@ body {
   font-size: 14px;
 }
 .sidebar a:hover {
+  color: var(--accent);
+}
+.sidebar a[aria-current='page'] {
+  font-weight: 700;
   color: var(--accent);
 }
 .sidebar hr {
@@ -210,20 +214,21 @@ summary {
 }
 
     </style>
-</head>
+  </head>
   <body>
     <div class="layout">
       <aside class="sidebar">
         <h1>Portfolio Engine v3 Audit</h1>
         <div class="small">Generated 2026-04-30</div>
         <hr>
-        <a href="index.html">Overview</a>
+        <a href="index.html" aria-current="page">Overview</a>
         <a href="00_patch_notes.html">Patch notes</a>
         <a href="01_target_architecture.html">Target architecture</a>
         <a href="02_current_repo_audit.html">Current repo audit</a>
         <a href="03_gap_plan.html">Gap plan</a>
         <a href="04_epic_roadmap.html">Epic roadmap</a>
         <a href="05_ticket_backlog.html">Ticket backlog</a>
+        <a href="06_decisions.html">Decisions</a>
         <hr>
         <div class="small">
           Context pack for Claude/GitHub board reconciliation. Issue numbers are placeholders.
@@ -231,6 +236,7 @@ summary {
       </aside>
       <main>
         <div class="muted">Start here</div>
+
         <h1>Portfolio Engine v3 Audit and Roadmap Pack</h1>
         <p>This pack updates the previous v2 pack after several design decisions.</p>
         <div class="grid">
@@ -254,17 +260,18 @@ summary {
             Manifest, patch ledger, and upstream tracking are generated/tool state.
           </div>
         </div>
+
         <h2>How to use this pack</h2>
-        <p>1. Read Patch notes.</p>
-        <p>2. Read Target architecture.</p>
-        <p>3. Read Current repo audit.</p>
-        <p>4. Read Gap plan.</p>
-        <p>5. Reconcile Epics and Tickets against the live GitHub project board.</p>
+        <ol>
+        <li>Read Patch notes.</li>
+        <li>Read Target architecture.</li>
+        <li>Read Current repo audit.</li>
+        <li>Read Gap plan.</li>
+        <li>Reconcile Epics and Tickets against the live GitHub project board.</li>
+        </ol>
         <h2>Instruction for Claude</h2>
-        <p>
-          Do not blindly create every issue. Inspect current board, open/closed issues, linked PRs,
-          and existing labels first.
-        </p>
+        <p>Do not blindly create every issue. Inspect current board, open/closed issues, linked PRs, and existing labels first.</p>
+
       </main>
     </div>
   </body>

@@ -1,4 +1,4 @@
-# ADR-002: consumer site layers live under `src/`
+## ADR-002: consumer site layers live under `src/`
 
 ## Decision
 
