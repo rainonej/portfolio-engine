@@ -25,6 +25,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check no public/ directories in packages
+        run: |
+          if find packages -name 'public' -type d -not -path '*/node_modules/*' | grep -q .; then
+            echo "Error: public/ directory found inside packages/ (violates v1 constraint — see Task 3.9)"
+            find packages -name 'public' -type d -not -path '*/node_modules/*'
+            exit 1
+          fi
+
       - name: Check types
         run: pnpm check
 
