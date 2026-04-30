@@ -5,7 +5,9 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./client": "./src/client.d.ts"
+    "./client": {
+      "types": "./src/client.d.ts"
+    }
   },
   "scripts": {
     "build": "echo 'build not yet configured'",

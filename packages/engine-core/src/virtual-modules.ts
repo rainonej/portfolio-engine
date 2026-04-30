@@ -3,10 +3,12 @@ import type { BuildContext, OverrideMap, RouteRecord } from './types.js';
 
 // Minimal subset of the Vite Plugin interface — avoids a direct vite dep
 // while preserving correctness for the hooks engine-core actually uses.
+// `this: any` matches Vite/Rollup's PluginContext expectation so the object
+// is assignable to vite.plugins without a TS error at the call site.
 interface VitePlugin {
   name: string;
-  resolveId?: (id: string) => string | null | undefined;
-  load?: (id: string) => string | null | undefined;
+  resolveId?(this: any, id: string): string | null | undefined;
+  load?(this: any, id: string): string | null | undefined;
 }
 
 const VIRTUAL_MODULE_IDS = [
@@ -28,7 +30,7 @@ function resolve(id: VirtualModuleId): string {
 }
 
 function unresolve(id: string): VirtualModuleId | undefined {
-  const candidate = id.slice(1); // strip leading \0
+  const candidate = id.startsWith('\0') ? id.slice(1) : id;
   return isVirtualModuleId(candidate) ? candidate : undefined;
 }
 
