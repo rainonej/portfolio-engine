@@ -5,9 +5,11 @@ The first-party Astro theme built on `engine-core`.
 ## Contents
 
 ### Layouts
+
 - `Layout.astro` — base page wrapper
 
 ### Components
+
 - `Nav.astro` — site navigation
 - `SectionIntro.astro` — section header with title and description
 - `FeaturePillars.astro` — services/feature grid
@@ -18,15 +20,16 @@ The first-party Astro theme built on `engine-core`.
 - `Reveal.astro` — scroll reveal wrapper
 
 ### Routes
-| Path | Description |
-|------|-------------|
-| `/` | Home page |
-| `/about` | About page |
-| `/work` | Work index |
-| `/work/[slug]` | Work detail |
-| `/writing` | Writing index |
+
+| Path              | Description    |
+| ----------------- | -------------- |
+| `/`               | Home page      |
+| `/about`          | About page     |
+| `/work`           | Work index     |
+| `/work/[slug]`    | Work detail    |
+| `/writing`        | Writing index  |
 | `/writing/[slug]` | Writing detail |
-| `/contact` | Contact page |
+| `/contact`        | Contact page   |
 
 Admin route handled separately in `@portfolio-engine/admin-tools` (Epic 7).
 

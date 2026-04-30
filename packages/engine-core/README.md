@@ -29,12 +29,12 @@ Engine-core is an implementation detail of the theme. Its internal API is not pu
 
 Reads and validates the consumer's JSON config files against `@portfolio-engine/schema` Zod schemas. Produces a typed `ResolvedConfig` object.
 
-| File | Schema |
-|------|--------|
-| `config/site.json` | `SiteConfigSchema` |
+| File                     | Schema                   |
+| ------------------------ | ------------------------ |
+| `config/site.json`       | `SiteConfigSchema`       |
 | `config/navigation.json` | `NavigationConfigSchema` |
-| `config/theme.json` | `ThemeConfigSchema` |
-| `config/features.json` | `FeaturesConfigSchema` |
+| `config/theme.json`      | `ThemeConfigSchema`      |
+| `config/features.json`   | `FeaturesConfigSchema`   |
 
 Content files (`content/profile/person.json`, blog posts, testimonials, etc.) are **not** read by engine-core. They are handled by Astro's content collections and edited via `@portfolio-engine/admin-tools`.
 
@@ -42,12 +42,12 @@ Content files (`content/profile/person.json`, blog posts, testimonials, etc.) ar
 
 Exposes resolved config and build context to theme components without filesystem coupling. Implemented via native Vite `resolveId`/`load` plugin hooks — no third-party virtual module library is used.
 
-| Module ID | Contents |
-|-----------|----------|
-| `@portfolio-engine:config` | Resolved site + navigation + theme + features config |
-| `@portfolio-engine:context` | Build-time context (env, mode, base URL) |
-| `@portfolio-engine:routes` | Queryable route registry (`RouteRecord[]`) |
-| `@portfolio-engine:overrides` | Resolved override map (component → downstream path) |
+| Module ID                     | Contents                                             |
+| ----------------------------- | ---------------------------------------------------- |
+| `@portfolio-engine:config`    | Resolved site + navigation + theme + features config |
+| `@portfolio-engine:context`   | Build-time context (env, mode, base URL)             |
+| `@portfolio-engine:routes`    | Queryable route registry (`RouteRecord[]`)           |
+| `@portfolio-engine:overrides` | Resolved override map (component → downstream path)  |
 
 ### Route discovery + injection
 
@@ -63,9 +63,9 @@ Typed, queryable list of all registered public + admin routes.
 
 ```typescript
 interface RouteRecord {
-  pattern: string;           // e.g. /work/[slug]
-  label: string;             // human-readable
-  section: string | null;    // nav group
+  pattern: string; // e.g. /work/[slug]
+  label: string; // human-readable
+  section: string | null; // nav group
   visibility: 'public' | 'admin-only' | 'hidden';
   remappable: boolean;
   disableable: boolean;
@@ -74,16 +74,16 @@ interface RouteRecord {
 
 Routes registered in v1:
 
-| Pattern | Label | Visibility |
-|---------|-------|------------|
-| `/` | Home | public |
-| `/about` | About | public |
-| `/work` | Work | public |
-| `/work/[slug]` | Work detail | hidden |
-| `/writing` | Writing | public |
-| `/writing/[slug]` | Writing detail | hidden |
-| `/contact` | Contact | public |
-| `/admin` | Admin | admin-only |
+| Pattern           | Label          | Visibility |
+| ----------------- | -------------- | ---------- |
+| `/`               | Home           | public     |
+| `/about`          | About          | public     |
+| `/work`           | Work           | public     |
+| `/work/[slug]`    | Work detail    | hidden     |
+| `/writing`        | Writing        | public     |
+| `/writing/[slug]` | Writing detail | hidden     |
+| `/contact`        | Contact        | public     |
+| `/admin`          | Admin          | admin-only |
 
 API routes (`/api/auth/*`) are excluded — they are infrastructure, not site routes.
 
@@ -110,11 +110,11 @@ Provides TypeScript types for all virtual modules so theme and consumer code has
 
 Theme packages use **imported assets only**. No `public/` directory is shipped inside any package.
 
-| Asset type | Location | How it works |
-|---|---|---|
-| Theme CSS, fonts, inline SVGs | Imported inside theme components | Bundled by Vite at build time |
-| Site media (photos, project images) | `agreni-site/public/media/` | Served by Astro from consumer's public dir |
-| Theme-owned decorative assets | Imported inside theme components | Not placed in any `public/` dir |
+| Asset type                          | Location                         | How it works                               |
+| ----------------------------------- | -------------------------------- | ------------------------------------------ |
+| Theme CSS, fonts, inline SVGs       | Imported inside theme components | Bundled by Vite at build time              |
+| Site media (photos, project images) | `agreni-site/public/media/`      | Served by Astro from consumer's public dir |
+| Theme-owned decorative assets       | Imported inside theme components | Not placed in any `public/` dir            |
 
 **Why:** Packaged `public/` directory merging requires `astro-public` or equivalent hacks. `astro-public` is not an approved dependency. This is a deliberate v1 non-goal.
 

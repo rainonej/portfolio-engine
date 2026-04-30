@@ -5,6 +5,7 @@ Reusable GitHub Actions workflow templates and AI change classifier for portfoli
 ## Planned capabilities
 
 **Workflow classification contract** — classifies changes in a consumer site into one of:
+
 - `local-content` — content/media edited by the site owner
 - `local-config` — site config changes (nav, features, bookingUrl)
 - `local-override` — overriding a named theme component
@@ -21,5 +22,6 @@ Reusable GitHub Actions workflow templates and AI change classifier for portfoli
 ## Status
 
 Deferred — Epic 8. Requires:
+
 - Epic 3 (route registry — Task 3.6)
 - Epic 4 (override surfaces — Task 4.4)

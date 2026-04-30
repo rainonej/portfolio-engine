@@ -1,8 +1,8 @@
 ---
 name: Feature request
 about: Suggest a new capability for portfolio-engine
-title: "feat: "
-labels: "task:feat"
+title: 'feat: '
+labels: 'task:feat'
 assignees: rainonej
 ---
 

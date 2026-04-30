@@ -1,9 +1,9 @@
 ---
-title: "On Simplicity"
+title: 'On Simplicity'
 date: 2024-05-10
 description: "Simplicity isn't the absence of complexity — it's the result of hard work on behalf of the user."
 draft: false
-tags: ["Design", "Philosophy"]
+tags: ['Design', 'Philosophy']
 ---
 
 The word "simple" gets thrown around a lot in design circles. We want simple products, simple interfaces, simple onboarding. But the way we talk about simplicity often confuses the outcome with the process.

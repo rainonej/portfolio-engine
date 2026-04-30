@@ -15,11 +15,11 @@ See [../../docs/packages/workflow-kit.md](../packages/workflow-kit.md) for the c
 
 ## Workflow triggers (in agreni-site)
 
-| Trigger | Action |
-|---------|--------|
+| Trigger                          | Action                                    |
+| -------------------------------- | ----------------------------------------- |
 | `automation:plan` label on issue | Planner agent shapes the issue into tasks |
-| `claude-ready` label on issue | Claude agent executes the task |
-| `@claude` comment | Claude agent responds to the comment |
+| `claude-ready` label on issue    | Claude agent executes the task            |
+| `@claude` comment                | Claude agent responds to the comment      |
 
 ## Status
 

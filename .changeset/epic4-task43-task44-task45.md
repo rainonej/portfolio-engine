@@ -1,6 +1,6 @@
 ---
-"@portfolio-engine/engine-core": minor
-"@portfolio-engine/editorial-theme": minor
+'@portfolio-engine/engine-core': minor
+'@portfolio-engine/editorial-theme': minor
 ---
 
 Tasks 4.3–4.5: implement the consumer-facing `editorialTheme()` integration, define the override surfaces it exposes, and add a working demo site.

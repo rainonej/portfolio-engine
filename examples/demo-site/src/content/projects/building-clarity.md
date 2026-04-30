@@ -1,9 +1,9 @@
 ---
-title: "Building Clarity"
-description: "A complete redesign of a government benefits portal, reducing task completion time by 40% and cutting support calls in half."
+title: 'Building Clarity'
+description: 'A complete redesign of a government benefits portal, reducing task completion time by 40% and cutting support calls in half.'
 featured: true
 date: 2024-03-15
-tags: ["Product Design", "Research", "Systems"]
+tags: ['Product Design', 'Research', 'Systems']
 ---
 
 ## The challenge

@@ -1,9 +1,9 @@
 ---
-title: "Systems Redesign"
-description: "Built a cross-platform design system from scratch for a 200-person product org, enabling consistent, accessible interfaces across five product lines."
+title: 'Systems Redesign'
+description: 'Built a cross-platform design system from scratch for a 200-person product org, enabling consistent, accessible interfaces across five product lines.'
 featured: false
 date: 2023-09-01
-tags: ["Design Systems", "Engineering", "Accessibility"]
+tags: ['Design Systems', 'Engineering', 'Accessibility']
 ---
 
 ## The challenge
