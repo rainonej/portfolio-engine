@@ -35,6 +35,11 @@ export function resolveOverrides(config: OverrideConfig, projectRootDir: string)
 
   const components = config.components ?? {};
   for (const [surface, relativePath] of Object.entries(components)) {
+    if (typeof relativePath !== 'string' || relativePath.length === 0) {
+      throw new Error(
+        `[portfolio-engine] Component override for "${surface}" must be a non-empty string path, got ${relativePath === null ? 'null' : typeof relativePath}.`,
+      );
+    }
     if (!SUPPORTED_COMPONENT_SURFACES.has(surface)) {
       throw new Error(
         `[portfolio-engine] Unknown component override surface: "${surface}".\n` +
@@ -45,6 +50,14 @@ export function resolveOverrides(config: OverrideConfig, projectRootDir: string)
   }
 
   const styles = config.styles ?? [];
+  for (let i = 0; i < styles.length; i++) {
+    const p = styles[i];
+    if (typeof p !== 'string' || p.length === 0) {
+      throw new Error(
+        `[portfolio-engine] styles[${i}] must be a non-empty string path, got ${p === null ? 'null' : typeof p}.`,
+      );
+    }
+  }
   if (styles.length > 0) {
     // JSON-encoded array — avoids ambiguity since file paths can legally contain ';'.
     overrideMap['__styles__'] = JSON.stringify(styles.map((p) => resolve(projectRootDir, p)));

@@ -87,8 +87,13 @@ function walkAstroFiles(dir: string, base = ''): string[] {
   let entries: Dirent[];
   try {
     entries = readdirSync(dir, { withFileTypes: true });
-  } catch {
-    return [];
+  } catch (error) {
+    const code =
+      typeof error === 'object' && error !== null && 'code' in error
+        ? (error as NodeJS.ErrnoException).code
+        : undefined;
+    if (code === 'ENOENT' || code === 'ENOTDIR') return [];
+    throw error;
   }
   const results: string[] = [];
   entries.sort((a, b) => a.name.localeCompare(b.name));

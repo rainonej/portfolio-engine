@@ -126,15 +126,15 @@ export function applyRouteOverrides(
   // Use routeRecord.resolved (the actual injected path) rather than route.pattern
   // (canonical), since two different canonical routes could remap to the same target.
   const seen = new Set<string>();
-  const duplicates: string[] = [];
+  const duplicates = new Set<string>();
   for (const r of routes) {
     const injected = r.routeRecord.resolved;
-    if (seen.has(injected)) duplicates.push(injected);
+    if (seen.has(injected)) duplicates.add(injected);
     else seen.add(injected);
   }
-  if (duplicates.length > 0) {
+  if (duplicates.size > 0) {
     throw new Error(
-      `[portfolio-engine] Duplicate injected route patterns after applying overrides: ${duplicates.join(', ')}`,
+      `[portfolio-engine] Duplicate injected route patterns after applying overrides: ${[...duplicates].join(', ')}`,
     );
   }
 
