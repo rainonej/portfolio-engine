@@ -1,0 +1,77 @@
+---
+/// <reference types="@portfolio-engine/engine-core/client" />
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, getEntry, render } from 'astro:content';
+import ImageOrFallback from '../../components/ImageOrFallback.astro';
+import { getBase } from '../../lib/utils';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const personEntry = await getEntry('profile', 'person');
+const person = personEntry.data;
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const p = entry.data;
+const base = getBase();
+---
+
+<Layout title={`${p.title} — ${person.name}`} description={p.description}>
+  <article class="mx-auto max-w-3xl px-6 pb-24 pt-40">
+    <a
+      href={`${base}/work`}
+      class="mb-8 inline-block text-sm text-stone-400 transition-colors hover:text-stone-900"
+    >
+      ← Back to Work
+    </a>
+    <div class="mb-10 aspect-[16/9] overflow-hidden rounded-2xl bg-stone-100">
+      <ImageOrFallback
+        src={p.image ? `${base}${p.image}` : null}
+        alt={p.title}
+        fallbackChar={p.title[0]}
+        class="h-full w-full object-cover"
+        loading="lazy"
+      />
+    </div>
+    <div class="mb-4 flex flex-wrap gap-3">
+      {
+        p.tags?.map((tag: string) => (
+          <span class="text-xs font-medium uppercase tracking-widest text-amber-800">
+            {tag}
+          </span>
+        ))
+      }
+    </div>
+    <h1 class="mb-4 font-serif text-4xl font-bold md:text-5xl">{p.title}</h1>
+    {
+      p.description && (
+        <p class="mb-10 text-lg leading-relaxed text-stone-500">
+          {p.description}
+        </p>
+      )
+    }
+    <div class="prose prose-stone max-w-none">
+      <Content />
+    </div>
+    {
+      p.link && (
+        <p class="mt-10">
+          <a
+            href={p.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-sm font-medium text-amber-800 underline underline-offset-4"
+          >
+            View project →
+          </a>
+        </p>
+      )
+    }
+  </article>
+</Layout>

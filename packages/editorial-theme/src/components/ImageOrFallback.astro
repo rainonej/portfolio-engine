@@ -1,0 +1,23 @@
+---
+interface Props {
+  src?: string | null;
+  alt: string;
+  fallbackChar: string;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+}
+
+const { src, alt, fallbackChar, class: className = '', loading } = Astro.props;
+---
+
+{
+  src ? (
+    <img src={src} alt={alt} class={className} loading={loading} />
+  ) : (
+    <div class={`flex items-center justify-center bg-amber-50 ${className}`}>
+      <span class="font-serif text-6xl italic text-amber-200">
+        {fallbackChar}
+      </span>
+    </div>
+  )
+}

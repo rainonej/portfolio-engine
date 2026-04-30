@@ -1,0 +1,78 @@
+---
+/// <reference types="@portfolio-engine/engine-core/client" />
+import Layout from '../layouts/Layout.astro';
+import { getEntry } from 'astro:content';
+import { config } from '@portfolio-engine:config';
+
+const personEntry = await getEntry('profile', 'person');
+const person = personEntry.data;
+
+const bookingUrl = config.site.bookingUrl || null;
+const contactHeading = config.site.contact?.heading ?? "Let's work together";
+const contactBody =
+  config.site.contact?.body ??
+  'Have a project in mind or just want to say hello?';
+---
+
+<Layout title={`Contact — ${person.name}`}>
+  {
+    bookingUrl && (
+      <Fragment slot="head">
+        <link
+          href="https://assets.calendly.com/assets/external/widget.css"
+          rel="stylesheet"
+        />
+        <script
+          is:inline
+          type="text/javascript"
+          src="https://assets.calendly.com/assets/external/widget.js"
+          async
+        />
+      </Fragment>
+    )
+  }
+  <section class="mx-auto max-w-5xl px-6 pb-24 pt-40">
+    <div class="max-w-xl">
+      <p
+        class="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-amber-800"
+      >
+        Get in touch
+      </p>
+      <h1 class="mb-6 font-serif text-5xl font-bold leading-tight md:text-6xl">
+        {contactHeading}
+      </h1>
+      <p class="mb-14 text-lg leading-relaxed text-stone-500">
+        {contactBody}
+      </p>
+
+      {
+        bookingUrl ? (
+          <div
+            class="calendly-inline-widget overflow-hidden rounded-2xl border border-stone-100"
+            data-url={bookingUrl}
+            style="min-width:320px;height:700px;"
+          />
+        ) : (
+          <div class="rounded-2xl border border-stone-100 bg-stone-50 px-8 py-16 text-center text-stone-400">
+            <p class="mb-2 font-medium">Booking coming soon</p>
+            <p class="text-sm">In the meantime, reach out by email below.</p>
+          </div>
+        )
+      }
+
+      {
+        person.email && (
+          <p class="mt-10 text-sm text-stone-400">
+            Prefer email?{' '}
+            <a
+              href={`mailto:${person.email}`}
+              class="text-stone-600 transition-colors hover:text-stone-900"
+            >
+              {person.email}
+            </a>
+          </p>
+        )
+      }
+    </div>
+  </section>
+</Layout>

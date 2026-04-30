@@ -1,4 +1,7 @@
-// @portfolio-engine/editorial-theme
-// Layouts, components, styles, and page routes for the editorial portfolio theme.
-// Implementation follows in Epic 4.
-export {};
+/// <reference types="@portfolio-engine/engine-core/client" />
+
+// Utility exports
+export { getBase, formatDate, sortByDateDesc } from './lib/utils.js';
+
+// editorialTheme() Astro integration — implemented in Task 4.3
+// export { editorialTheme } from './integration.js';

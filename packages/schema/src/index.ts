@@ -4,6 +4,14 @@ export const SiteConfigSchema = z.object({
   title: z.string(),
   description: z.string(),
   baseUrl: z.string().url(),
+  tagline: z.string().optional(),
+  bookingUrl: z.string().optional(),
+  contact: z
+    .object({
+      heading: z.string(),
+      body: z.string(),
+    })
+    .optional(),
   social: z
     .object({
       github: z.string().url().optional(),
@@ -51,6 +59,16 @@ export const FeaturesConfigSchema = z.object({
   testimonials: z.boolean().default(false),
   work: z.boolean().default(true),
   contact: z.boolean().default(true),
+  pillars: z
+    .array(
+      z.object({
+        heading: z.string(),
+        body: z.string(),
+        image: z.string().optional(),
+      }),
+    )
+    .optional(),
+  ctaBody: z.string().optional(),
 });
 
 export type SiteConfig = z.infer<typeof SiteConfigSchema>;

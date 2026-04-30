@@ -1,0 +1,94 @@
+---
+/// <reference types="@portfolio-engine/engine-core/client" />
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, getEntry } from 'astro:content';
+import ImageOrFallback from '../../components/ImageOrFallback.astro';
+import { getBase, formatDate, sortByDateDesc } from '../../lib/utils';
+
+const personEntry = await getEntry('profile', 'person');
+const person = personEntry.data;
+
+const posts = await getCollection('writing', ({ data }) => !data.draft);
+const sorted = sortByDateDesc(posts);
+const base = getBase();
+---
+
+<Layout
+  title={`Writing — ${person.name}`}
+  description="Essays and reflections on curriculum, equity, and teaching."
+>
+  <section class="mx-auto max-w-3xl px-6 pb-24 pt-40">
+    <p
+      class="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-amber-800"
+    >
+      Writing
+    </p>
+    <h1 class="mb-4 font-serif text-5xl font-bold leading-tight md:text-6xl">
+      Essays & Reflections
+    </h1>
+    <p class="mb-16 text-lg leading-relaxed text-stone-500">
+      Thoughts on curriculum design, equitable learning, teacher development,
+      and the practice-to-research bridge.
+    </p>
+
+    {
+      sorted.length === 0 ? (
+        <p class="text-lg text-stone-400">Posts coming soon.</p>
+      ) : (
+        <div class="space-y-12">
+          {sorted.map((post) => {
+            const p = post.data;
+            const postUrl = `${base}/writing/${post.id}`;
+            return (
+              <article class="group">
+                <a href={postUrl} class="block">
+                  <div class="mb-5 aspect-[21/9] overflow-hidden rounded-2xl bg-stone-100">
+                    <ImageOrFallback
+                      src={p.image ? `${base}${p.image}` : null}
+                      alt={p.title}
+                      fallbackChar={p.title[0]}
+                      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
+                </a>
+                <div class="mb-3 flex flex-wrap items-center gap-3">
+                  <time
+                    class="text-xs text-stone-400"
+                    datetime={p.date.toISOString()}
+                  >
+                    {formatDate(p.date)}
+                  </time>
+                  {p.tags?.map((tag: string) => (
+                    <span class="text-xs font-medium uppercase tracking-widest text-amber-800">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <h2 class="mb-3 font-serif text-2xl font-bold leading-snug">
+                  <a
+                    href={postUrl}
+                    class="transition-colors hover:text-amber-800"
+                  >
+                    {p.title}
+                  </a>
+                </h2>
+                {p.description && (
+                  <p class="mb-4 leading-relaxed text-stone-500">
+                    {p.description}
+                  </p>
+                )}
+                <a
+                  href={postUrl}
+                  class="text-sm font-medium underline underline-offset-4 transition-colors hover:text-amber-800"
+                >
+                  Read more →
+                </a>
+              </article>
+            );
+          })}
+        </div>
+      )
+    }
+  </section>
+</Layout>
