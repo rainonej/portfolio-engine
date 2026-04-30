@@ -3,5 +3,5 @@
 // Utility exports
 export { getBase, formatDate, sortByDateDesc } from './lib/utils.js';
 
-// editorialTheme() Astro integration — implemented in Task 4.3
-// export { editorialTheme } from './integration.js';
+export { editorialTheme } from './integration.js';
+export type { EditorialThemeOptions } from './integration.js';
