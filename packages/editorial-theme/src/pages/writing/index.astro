@@ -1,6 +1,7 @@
 ---
 /// <reference types="@portfolio-engine/engine-core/client" />
 import Layout from '../../layouts/Layout.astro';
+import type { CollectionEntry } from 'astro:content';
 import { getCollection, getEntry } from 'astro:content';
 import ImageOrFallback from '../../components/ImageOrFallback.astro';
 import { getBase, formatDate, resolveAssetUrl, sortByDateDesc } from '../../lib/utils';
@@ -8,7 +9,7 @@ import { getBase, formatDate, resolveAssetUrl, sortByDateDesc } from '../../lib/
 const personEntry = await getEntry('profile', 'person');
 const person = personEntry.data;
 
-const posts = await getCollection('writing', ({ data }) => !data.draft);
+const posts = await getCollection('writing', (entry: CollectionEntry<'writing'>) => !entry.data.draft);
 const sorted = sortByDateDesc(posts);
 const base = getBase();
 ---

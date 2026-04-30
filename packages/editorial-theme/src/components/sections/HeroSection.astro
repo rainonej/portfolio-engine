@@ -64,7 +64,7 @@ const Override = overrides.Hero
                 >
                   Book a conversation
                 </a>
-                <script define:vars={{ calendlyUrl: bookingUrl }}>
+                <script is:inline define:vars={{ calendlyUrl: bookingUrl }}>
                   document.getElementById('hero-booking-calendly')?.addEventListener('click', (e) => {
                     e.preventDefault();
                     const w = window;

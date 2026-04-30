@@ -38,6 +38,9 @@ importers:
       '@portfolio-engine/editorial-theme':
         specifier: workspace:*
         version: link:../../packages/editorial-theme
+      '@portfolio-engine/engine-core':
+        specifier: workspace:*
+        version: link:../../packages/engine-core
       '@portfolio-engine/schema':
         specifier: workspace:*
         version: link:../../packages/schema

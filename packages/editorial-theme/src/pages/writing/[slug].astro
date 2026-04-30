@@ -1,13 +1,18 @@
 ---
 /// <reference types="@portfolio-engine/engine-core/client" />
 import Layout from '../../layouts/Layout.astro';
+import type { CollectionEntry } from 'astro:content';
 import { getCollection, getEntry, render } from 'astro:content';
 import ImageOrFallback from '../../components/ImageOrFallback.astro';
 import { getBase, formatDate, resolveAssetUrl } from '../../lib/utils';
 
+type Props = {
+  entry: CollectionEntry<'writing'>;
+};
+
 export async function getStaticPaths() {
-  const posts = await getCollection('writing', ({ data }) => !data.draft);
-  return posts.map((entry) => ({
+  const posts = await getCollection('writing', (entry: CollectionEntry<'writing'>) => !entry.data.draft);
+  return posts.map((entry: CollectionEntry<'writing'>) => ({
     params: { slug: entry.id },
     props: { entry },
   }));
@@ -16,7 +21,7 @@ export async function getStaticPaths() {
 const personEntry = await getEntry('profile', 'person');
 const person = personEntry.data;
 
-const { entry } = Astro.props;
+const { entry }: Props = Astro.props;
 const { Content } = await render(entry);
 const p = entry.data;
 const base = getBase();

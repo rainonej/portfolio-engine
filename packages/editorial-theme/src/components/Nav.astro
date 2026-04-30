@@ -1,7 +1,10 @@
 ---
 /// <reference types="@portfolio-engine/engine-core/client" />
+import type { ResolvedConfig } from '@portfolio-engine/engine-core';
 import { config } from '@portfolio-engine:config';
 import { getBase } from '../lib/utils';
+
+type NavItem = ResolvedConfig['navigation']['items'][number];
 
 const base = getBase();
 
@@ -26,9 +29,9 @@ function resolveNavHref(href: string): string {
 }
 
 const links = config.navigation.items
-  .filter((item) => item.visible !== false)
-  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-  .map(({ href, label }) => ({
+  .filter((item: NavItem) => item.visible !== false)
+  .sort((a: NavItem, b: NavItem) => (a.order ?? 0) - (b.order ?? 0))
+  .map(({ href, label }: NavItem) => ({
     href: resolveNavHref(href),
     label,
   }));

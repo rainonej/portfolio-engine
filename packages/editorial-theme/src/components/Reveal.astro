@@ -1,11 +1,11 @@
 ---
-interface Props {
+type Props = {
   as?: string;
   class?: string;
   delay?: number;
-}
+};
 
-const { as: Tag = 'div', class: className = '', delay = 0 } = Astro.props;
+const { as: Tag = 'div', class: className = '', delay = 0 } = Astro.props as Props;
 ---
 
 <Tag class={`reveal ${className}`.trim()} style={`--reveal-delay:${delay}ms;`}>
