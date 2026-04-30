@@ -1,5 +1,4 @@
 ---
-/// <reference types="@portfolio-engine/engine-core/client" />
 import type { ResolvedConfig } from '@portfolio-engine/engine-core';
 import { config } from '@portfolio-engine:config';
 import { getBase } from '../lib/utils';
@@ -28,7 +27,9 @@ function resolveNavHref(href: string): string {
   return `${base}/${href}`;
 }
 
-const links = config.navigation.items
+type NavLink = { href: string; label: string };
+
+const links: NavLink[] = config.navigation.items
   .filter((item: NavItem) => item.visible !== false)
   .sort((a: NavItem, b: NavItem) => (a.order ?? 0) - (b.order ?? 0))
   .map(({ href, label }: NavItem) => ({
@@ -51,7 +52,7 @@ const { pathname } = Astro.url;
     </a>
     <ul class="flex items-center gap-8">
       {
-        links.map(({ href, label }) => (
+        links.map(({ href, label }: NavLink) => (
           <li>
             <a
               href={href}

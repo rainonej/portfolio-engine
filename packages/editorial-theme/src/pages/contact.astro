@@ -1,11 +1,9 @@
 ---
-/// <reference types="@portfolio-engine/engine-core/client" />
 import Layout from '../layouts/Layout.astro';
-import { getEntry } from 'astro:content';
 import { config } from '@portfolio-engine:config';
+import { loadProfilePerson } from '../lib/load-profile-person';
 
-const personEntry = await getEntry('profile', 'person');
-const person = personEntry.data;
+const person = await loadProfilePerson();
 
 const bookingUrl = config.site.bookingUrl || null;
 const { heading: contactHeading, body: contactBody } = config.site.contact;

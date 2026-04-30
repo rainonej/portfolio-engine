@@ -1,12 +1,11 @@
 ---
-/// <reference types="@portfolio-engine/engine-core/client" />
 import Layout from '../layouts/Layout.astro';
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import ImageOrFallback from '../components/ImageOrFallback.astro';
 import { getBase, resolveAssetUrl, sortByDateDesc } from '../lib/utils';
+import { loadProfilePerson } from '../lib/load-profile-person';
 
-const personEntry = await getEntry('profile', 'person');
-const person = personEntry.data;
+const person = await loadProfilePerson();
 
 const projects = await getCollection('projects');
 const sorted = sortByDateDesc(projects);

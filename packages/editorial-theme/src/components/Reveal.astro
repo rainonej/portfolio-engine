@@ -1,13 +1,23 @@
 ---
-type Props = {
-  as?: string;
+export interface Props {
+  as?: 'div' | 'section';
   class?: string;
   delay?: number;
-};
+}
 
-const { as: Tag = 'div', class: className = '', delay = 0 } = Astro.props as Props;
+const { as: tag = 'div', class: className = '', delay = 0 } = Astro.props;
+const classList = `reveal ${className}`.trim();
+const style = `--reveal-delay:${delay}ms;`;
 ---
 
-<Tag class={`reveal ${className}`.trim()} style={`--reveal-delay:${delay}ms;`}>
-  <slot />
-</Tag>
+{
+  tag === 'section' ? (
+    <section class={classList} style={style}>
+      <slot />
+    </section>
+  ) : (
+    <div class={classList} style={style}>
+      <slot />
+    </div>
+  )
+}

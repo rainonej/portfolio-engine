@@ -1,17 +1,19 @@
 ---
-/// <reference types="@portfolio-engine/engine-core/client" />
 import Layout from '../layouts/Layout.astro';
 import Reveal from '../components/Reveal.astro';
 import SectionIntro from '../components/SectionIntro.astro';
 import ImageOrFallback from '../components/ImageOrFallback.astro';
 import { getEntry } from 'astro:content';
 import { getBase, resolveAssetUrl } from '../lib/utils';
+import { loadProfilePerson } from '../lib/load-profile-person';
 
 const base = getBase();
-const personEntry = await getEntry('profile', 'person');
-const person = personEntry.data;
+const person = await loadProfilePerson();
 
 const cvEntry = await getEntry('profile', 'cv');
+if (!cvEntry) {
+  throw new Error('[editorial-theme] Missing content entry profile/cv');
+}
 
 type CvAward = {
   title: string;

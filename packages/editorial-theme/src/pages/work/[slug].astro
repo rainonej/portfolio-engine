@@ -1,10 +1,10 @@
 ---
-/// <reference types="@portfolio-engine/engine-core/client" />
 import Layout from '../../layouts/Layout.astro';
 import type { CollectionEntry } from 'astro:content';
-import { getCollection, getEntry, render } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import ImageOrFallback from '../../components/ImageOrFallback.astro';
 import { getBase, resolveAssetUrl } from '../../lib/utils';
+import { loadProfilePerson } from '../../lib/load-profile-person';
 
 type Props = {
   entry: CollectionEntry<'projects'>;
@@ -18,8 +18,7 @@ export async function getStaticPaths() {
   }));
 }
 
-const personEntry = await getEntry('profile', 'person');
-const person = personEntry.data;
+const person = await loadProfilePerson();
 
 const { entry }: Props = Astro.props;
 const { Content } = await render(entry);
