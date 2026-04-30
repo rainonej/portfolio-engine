@@ -149,9 +149,8 @@ export function resolveThemePagesDir(projectRootDir: string): string {
     const req = createRequire(join(projectRootDir, 'package.json'));
     const entry = req.resolve('@portfolio-engine/editorial-theme');
     // entry = .../editorial-theme/src/index.ts (or .js)
-    // Walk up to find the directory that contains src/pages.
-    // We go two levels up: index.ts → src/ → package root, then append src/pages.
-    return resolve(entry, '..', '..', '..', 'src', 'pages');
+    // Two levels up: file → src/ → package root, then re-enter src/pages.
+    return resolve(entry, '..', '..', 'src', 'pages');
   } catch {
     return resolve(
       projectRootDir,
