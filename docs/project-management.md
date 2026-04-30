@@ -20,7 +20,7 @@ This repo manages work in **GitHub Issues** and **[Project 2](https://github.com
 - **Epics** (`type:epic`): parent deliverables. Title: describe the outcome. Child tasks are linked via Relationships → Sub-issues.
 - **Tasks**: child issues. Every task issue **must** have exactly one `task:*` label and exactly one `owner:*` label — no exceptions, no omissions.
 - **Narrow scope**: each ticket covers one specific outcome. If completing it requires two distinct decisions or deliverables, split it. A good test: can the entire issue body fit in two sentences?
-- **Owner label defines who executes** — see [issue-labels.md](issue-labels.md) for the full contract. Key rule: `owner:human-dev` means nothing can be automated; a human must act (UI click, decision, access grant). All other owners can be handled without a human.
+- **Owner label defines who executes** — see [issue-labels.md](issue-labels.md) for the full contract. Key rule: `owner:human-dev` means nothing can be automated; a human must act (UI click, decision, access grant). Other owner labels do not necessarily require a maintainer/developer, but some still require human action (for example, `owner:site-owner`); follow `issue-labels.md` for the exact contract.
 - **Blocking:** Relationships → Blocked by / Blocking. Wire these for every dependency. A ticket without a blocker that depends on something unreleased is misconfigured.
 - **Epic linkage:** attach every task to its parent epic via Relationships → Sub-issues. If no epic exists for the work, create one first.
 - **Status:** Inbox → Planned → Blocked/Ready → In Progress → In Review → Done
