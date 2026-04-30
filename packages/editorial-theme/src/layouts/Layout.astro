@@ -26,7 +26,7 @@ const adminOriginEnv =
 const adminOrigin =
   adminOriginEnv || (base !== '' ? config.site.baseUrl : '');
 const adminHref = adminOrigin ? `${adminOrigin}/admin` : `${base}/admin`;
-const canonicalUrl = ogUrl ?? `${site}${base}${Astro.url.pathname}`;
+const canonicalUrl = ogUrl ?? `${site}${Astro.url.pathname}`;
 const imageUrl = ogImage
   ? ogImage.startsWith('http')
     ? ogImage

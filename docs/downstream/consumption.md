@@ -18,7 +18,10 @@ import { editorialTheme } from '@portfolio-engine/editorial-theme';
 export default defineConfig({
   integrations: [
     editorialTheme({
-      config: './config/site.json',
+      siteConfigPath: './config/site.json',
+      navigationConfigPath: './config/navigation.json',
+      themeConfigPath: './config/theme.json',
+      featuresConfigPath: './config/features.json',
     }),
   ],
 });
