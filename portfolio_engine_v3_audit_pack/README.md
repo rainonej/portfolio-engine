@@ -20,6 +20,14 @@ Open:
 report/index.html
 ```
 
+Styles are **inlined** into each HTML file (from `report/assets/styles.css`) so editor and webview previews still apply layout when a plain `<link href="assets/styles.css">` would not resolve. After changing `report/assets/styles.css`, refresh the HTML copies:
+
+```bash
+node portfolio_engine_v3_audit_pack/sync-report-css.mjs
+```
+
+For a normal browser session you can also serve the folder, for example `cd report && npx --yes serve .`.
+
 ## Instructions for Claude
 
 1. Inspect the live GitHub Project board and open/closed issues first.
