@@ -25,6 +25,18 @@ export function applyRouteOverrides(
   // 1. Reject unknown keys in override entries
   const unsupportedKeys = Object.keys(overrides).flatMap((pattern) => {
     const entry = overrides[pattern];
+    if (
+      entry === null ||
+      entry === undefined ||
+      typeof entry !== 'object' ||
+      Array.isArray(entry)
+    ) {
+      const entryType =
+        entry === null ? 'null' : Array.isArray(entry) ? 'array' : typeof entry;
+      throw new Error(
+        `[portfolio-engine] Invalid route override for pattern "${pattern}": expected an object with optional "enabled" and "path" properties, received ${entryType}.`,
+      );
+    }
     return Object.keys(entry)
       .filter((k) => k !== 'enabled' && k !== 'path')
       .map((k) => `${pattern}.${k}`);
@@ -51,10 +63,10 @@ export function applyRouteOverrides(
     if (
       'path' in entry &&
       typeof entry.path === 'string' &&
-      !entry.path.startsWith('/')
+      (entry.path.length === 0 || !entry.path.startsWith('/'))
     ) {
       throw new Error(
-        `[portfolio-engine] Route override "${pattern}.path" must start with "/", got "${entry.path}".`,
+        `[portfolio-engine] Route override "${pattern}.path" must be a non-empty string starting with "/", got "${entry.path}".`,
       );
     }
     if ('enabled' in entry && entry.enabled === false && 'path' in entry) {
@@ -102,7 +114,6 @@ export function applyRouteOverrides(
       remapped[route.pattern] = override.path;
       routes.push({
         ...route,
-        pattern: override.path,
         routeRecord: { ...route.routeRecord, resolved: override.path },
       });
       continue;
@@ -112,15 +123,18 @@ export function applyRouteOverrides(
   }
 
   // 4. Detect duplicate injected patterns after applying overrides
+  // Use routeRecord.resolved (the actual injected path) rather than route.pattern
+  // (canonical), since two different canonical routes could remap to the same target.
   const seen = new Set<string>();
   const duplicates: string[] = [];
   for (const r of routes) {
-    if (seen.has(r.pattern)) duplicates.push(r.pattern);
-    else seen.add(r.pattern);
+    const injected = r.routeRecord.resolved;
+    if (seen.has(injected)) duplicates.push(injected);
+    else seen.add(injected);
   }
   if (duplicates.length > 0) {
     throw new Error(
-      `[portfolio-engine] Duplicate route patterns after applying overrides: ${duplicates.join(', ')}`,
+      `[portfolio-engine] Duplicate injected route patterns after applying overrides: ${duplicates.join(', ')}`,
     );
   }
 

@@ -42,9 +42,12 @@ export function createEngineIntegration(options: EngineIntegrationOptions): Astr
         // 3. Apply route remaps / disables from downstream config
         const { routes: activeRoutes } = applyRouteOverrides(discovered, options.routes ?? {});
 
-        // 4. Inject each active route into the consumer's Astro config
+        // 4. Inject each active route into the consumer's Astro config.
+        // Use routeRecord.resolved (the post-remap injected path) rather than
+        // route.pattern (canonical name), so remapped routes are injected at
+        // their new URL.
         for (const route of activeRoutes) {
-          injectRoute({ pattern: route.pattern, entrypoint: route.entrypoint });
+          injectRoute({ pattern: route.routeRecord.resolved, entrypoint: route.entrypoint });
         }
 
         // 5. Resolve component and style overrides

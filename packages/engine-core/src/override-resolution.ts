@@ -46,7 +46,8 @@ export function resolveOverrides(config: OverrideConfig, projectRootDir: string)
 
   const styles = config.styles ?? [];
   if (styles.length > 0) {
-    overrideMap['__styles__'] = styles.map((p) => resolve(projectRootDir, p)).join(';');
+    // JSON-encoded array — avoids ambiguity since file paths can legally contain ';'.
+    overrideMap['__styles__'] = JSON.stringify(styles.map((p) => resolve(projectRootDir, p)));
   }
 
   return overrideMap;

@@ -91,6 +91,7 @@ function walkAstroFiles(dir: string, base = ''): string[] {
     return [];
   }
   const results: string[] = [];
+  entries.sort((a, b) => a.name.localeCompare(b.name));
   for (const entry of entries) {
     const rel = base ? join(base, entry.name) : entry.name;
     if (entry.isDirectory()) {
