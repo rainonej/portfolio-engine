@@ -1,0 +1,186 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Reveal from '../components/Reveal.astro';
+import SectionIntro from '../components/SectionIntro.astro';
+import ImageOrFallback from '../components/ImageOrFallback.astro';
+import { getEntry } from 'astro:content';
+import { getBase, resolveAssetUrl } from '../lib/utils';
+import { loadProfilePerson } from '../lib/load-profile-person';
+
+const base = getBase();
+const person = await loadProfilePerson();
+
+const cvEntry = await getEntry('profile', 'cv');
+if (!cvEntry) {
+  throw new Error('[editorial-theme] Missing content entry profile/cv');
+}
+
+type CvAward = {
+  title: string;
+  context?: string;
+  description?: string;
+  image?: string;
+};
+
+type CvEducation = {
+  degree: string;
+  institution: string;
+  location?: string;
+  year?: string | number;
+  note?: string;
+};
+
+type CvProfileData = {
+  awards?: CvAward[];
+  education?: CvEducation[];
+};
+
+const cv = cvEntry.data as CvProfileData;
+---
+
+<Layout title={`About — ${person.name}`} description={person.bio}>
+  <section class="mx-auto max-w-5xl px-6 pb-24 pt-40">
+    <div class="grid items-start gap-20 md:grid-cols-2">
+      <!-- Photo -->
+      <div>
+        <ImageOrFallback
+          src={resolveAssetUrl(person.photo, base)}
+          alt={person.name}
+          fallbackChar={person.name[0]}
+          class="aspect-[3/4] w-full rounded-3xl object-cover"
+        />
+      </div>
+
+      <!-- Bio -->
+      <div class="pt-4">
+        <p
+          class="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-amber-800"
+        >
+          About me
+        </p>
+        <h1
+          class="mb-8 font-serif text-4xl font-bold leading-tight md:text-5xl"
+        >
+          {person.name}
+        </h1>
+        <p
+          class="mb-10 whitespace-pre-line text-lg leading-relaxed text-stone-600"
+        >
+          {person.bio}
+        </p>
+        <div class="flex flex-col gap-4 border-t border-stone-100 pt-8">
+          {
+            person.email && (
+              <a
+                href={`mailto:${person.email}`}
+                class="flex items-center gap-3 text-sm font-medium text-stone-600 transition-colors hover:text-stone-900"
+              >
+                <span class="text-base text-amber-700">✉</span>
+                {person.email}
+              </a>
+            )
+          }
+          {
+            person.linkedin && (
+              <a
+                href={person.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center gap-3 text-sm font-medium text-stone-600 transition-colors hover:text-stone-900"
+              >
+                <span class="text-base text-amber-700">↗</span>
+                LinkedIn
+              </a>
+            )
+          }
+          {
+            person.instagram && (
+              <a
+                href={person.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center gap-3 text-sm font-medium text-stone-600 transition-colors hover:text-stone-900"
+              >
+                <span class="text-base text-amber-700">↗</span>
+                Instagram
+              </a>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recognition Section -->
+  {
+    cv.awards && cv.awards.length > 0 && (
+      <Reveal
+        as="section"
+        class="border-t border-[var(--warm-line)] bg-[var(--paper-light)] px-6 py-24"
+      >
+        <div class="mx-auto max-w-5xl">
+          <SectionIntro eyebrow="Recognition" heading="Awards & Honors" />
+          {cv.awards.map((award: CvAward) => (
+            <div class="grid items-center gap-12 md:grid-cols-2">
+              <div class="order-2 md:order-1">
+                <h3 class="mb-4 font-serif text-2xl font-bold">{award.title}</h3>
+                {award.context && (
+                  <p class="mb-4 text-sm font-medium uppercase tracking-widest text-amber-800">
+                    {award.context}
+                  </p>
+                )}
+                {award.description && (
+                  <p class="leading-relaxed text-stone-600">
+                    {award.description}
+                  </p>
+                )}
+              </div>
+              {award.image && (
+                <div class="order-1 md:order-2">
+                  <img
+                    src={resolveAssetUrl(award.image, base)}
+                    alt={`${award.title}${award.context ? ` - ${award.context}` : ''}`}
+                    class="w-full rounded-2xl object-cover shadow-lg"
+                  />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </Reveal>
+    )
+  }
+
+  <!-- Education Section -->
+  {
+    cv.education && cv.education.length > 0 && (
+      <Reveal as="section" class="px-6 py-24">
+        <div class="mx-auto max-w-5xl">
+          <SectionIntro eyebrow="Education" heading="Academic Background" />
+          <div class="grid gap-10 md:grid-cols-2">
+            {cv.education.map((entry: CvEducation) => (
+              <div class="rounded-2xl border border-stone-100 bg-white p-8">
+                <p class="mb-2 text-sm font-medium uppercase tracking-widest text-amber-800">
+                  {entry.degree}
+                </p>
+                <h3 class="mb-3 font-serif text-xl font-bold">
+                  {entry.institution}
+                </h3>
+                <p class="mb-4 text-stone-500">
+                  {entry.location}
+                  {entry.location && entry.year ? ' | ' : ''}
+                  {entry.year}
+                </p>
+                {entry.note && (
+                  <p class="text-sm leading-relaxed text-stone-600">
+                    {entry.note}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </Reveal>
+    )
+  }
+</Layout>

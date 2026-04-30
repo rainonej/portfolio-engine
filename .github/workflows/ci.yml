@@ -1,15 +1,44 @@
+# Order: lint (fast) → typecheck + astro check → build
 name: CI
 
 on:
   pull_request:
-    branches: [main, dev, "epic/*"]
+    branches: [main, dev, 'epic/*']
   push:
     branches: [main, dev]
 
 jobs:
-  build:
-    name: Lint, Check, Build
+  lint:
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint YAML (workflows)
+        run: |
+          pip install yamllint
+          yamllint -d "{extends: default, rules: {line-length: disable}}" .github/workflows/
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: ESLint
+        run: pnpm lint
+
+      - name: Prettier (check)
+        run: pnpm format
+
+  check:
+    runs-on: ubuntu-latest
+    needs: lint
     steps:
       - uses: actions/checkout@v4
 
@@ -28,13 +57,37 @@ jobs:
       - name: Check no public/ directories in packages
         run: |
           if find packages -name 'public' -type d -not -path '*/node_modules/*' | grep -q .; then
-            echo "Error: public/ directory found inside packages/ (violates v1 constraint — see Task 3.9)"
+            echo "Error: public/ directory found inside packages/"
             find packages -name 'public' -type d -not -path '*/node_modules/*'
             exit 1
           fi
 
-      - name: Check types
+      - name: Typecheck (pnpm check)
         run: pnpm check
 
-      - name: Build packages
+      - name: Astro check (demo-site)
+        run: pnpm --filter demo-site run check
+
+  build:
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages (workspace)
         run: pnpm build
+
+      - name: Build demo-site
+        run: pnpm --filter demo-site run build

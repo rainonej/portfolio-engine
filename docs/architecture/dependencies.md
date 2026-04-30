@@ -4,21 +4,21 @@ This document records the approved and banned external dependencies for portfoli
 
 ## Approved
 
-| Package | Used in | Reason |
-|---------|---------|--------|
-| `astro` | all packages (peerDep) | Core framework |
-| `zod` | `@portfolio-engine/schema` | Schema validation and type inference |
+| Package                                            | Used in                         | Reason                                                                                                                                                                         |
+| -------------------------------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `astro`                                            | all packages (peerDep)          | Core framework                                                                                                                                                                 |
+| `zod`                                              | `@portfolio-engine/schema`      | Schema validation and type inference                                                                                                                                           |
 | Native `AstroIntegration` + Vite (virtual modules) | `@portfolio-engine/engine-core` | First-party integration per [Astro Integration Kit migration](https://astro-integration-kit.netlify.app/migration-guide/) — the `astro-integration-kit` package is deprecated. |
-| `@changesets/cli` | workspace root (devDep) | Release automation |
-| `typescript` | all packages (devDep) | Type checking |
+| `@changesets/cli`                                  | workspace root (devDep)         | Release automation                                                                                                                                                             |
+| `typescript`                                       | all packages (devDep)           | Type checking                                                                                                                                                                  |
 
 ## Banned
 
-| Package | Reason |
-|---------|--------|
-| `astro-theme-provider` | Would be a long-term trust dependency we cannot control. engine-core implements its own route injection and virtual modules first-party. |
-| `astro-pages` | Route injection is implemented first-party in engine-core (Task 3.4). A third-party dependency here creates version coupling we cannot absorb. |
-| `astro-public` | Packaged public-dir support is an explicit v1 non-goal (Task 3.9). Consumers manage their own public assets. |
+| Package                | Reason                                                                                                                                         |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `astro-theme-provider` | Would be a long-term trust dependency we cannot control. engine-core implements its own route injection and virtual modules first-party.       |
+| `astro-pages`          | Route injection is implemented first-party in engine-core (Task 3.4). A third-party dependency here creates version coupling we cannot absorb. |
+| `astro-public`         | Packaged public-dir support is an explicit v1 non-goal (Task 3.9). Consumers manage their own public assets.                                   |
 
 ## Adding new dependencies
 

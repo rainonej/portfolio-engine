@@ -13,15 +13,15 @@ portfolio-engine uses [Changesets](https://github.com/changesets/changesets) for
 - `@portfolio-engine/engine-core`
 - `@portfolio-engine/editorial-theme`
 - `@portfolio-engine/schema`
-- `@portfolio-engine/admin-tools` *(when ready — Epic 7)*
-- `@portfolio-engine/workflow-kit` *(when ready — Epic 8)*
+- `@portfolio-engine/admin-tools` _(when ready — Epic 7)_
+- `@portfolio-engine/workflow-kit` _(when ready — Epic 8)_
 
 ## Required secrets
 
-| Secret | Where | Purpose |
-|--------|-------|---------|
-| `NPM_TOKEN` | GitHub repo → Settings → Secrets | Publishing to npm |
-| `GITHUB_TOKEN` | Auto-provided by Actions | Creating version PRs |
+| Secret         | Where                            | Purpose              |
+| -------------- | -------------------------------- | -------------------- |
+| `NPM_TOKEN`    | GitHub repo → Settings → Secrets | Publishing to npm    |
+| `GITHUB_TOKEN` | Auto-provided by Actions         | Creating version PRs |
 
 ## Patch reconciliation
 

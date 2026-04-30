@@ -1,0 +1,5 @@
+{
+  "name": "Ready for Claude",
+  "layout": "table",
+  "filter": "is:open is:issue label:claude-ready label:owner:agentic-ai"
+}

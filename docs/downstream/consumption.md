@@ -12,13 +12,16 @@ pnpm add @portfolio-engine/editorial-theme@0.1.0
 
 ```js
 // astro.config.mjs
-import { defineConfig } from "astro/config";
-import { editorialTheme } from "@portfolio-engine/editorial-theme";
+import { defineConfig } from 'astro/config';
+import { editorialTheme } from '@portfolio-engine/editorial-theme';
 
 export default defineConfig({
   integrations: [
     editorialTheme({
-      config: "./config/site.json",
+      siteConfigPath: './config/site.json',
+      navigationConfigPath: './config/navigation.json',
+      themeConfigPath: './config/theme.json',
+      featuresConfigPath: './config/features.json',
     }),
   ],
 });

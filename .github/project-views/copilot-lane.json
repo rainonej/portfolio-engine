@@ -1,0 +1,5 @@
+{
+  "name": "Copilot lane",
+  "layout": "table",
+  "filter": "is:open is:issue label:owner:simple-ai label:automation:planned"
+}

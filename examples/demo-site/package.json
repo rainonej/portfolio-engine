@@ -11,9 +11,12 @@
   },
   "dependencies": {
     "@portfolio-engine/editorial-theme": "workspace:*",
+    "@portfolio-engine/engine-core": "workspace:*",
     "@portfolio-engine/schema": "workspace:*"
   },
   "devDependencies": {
-    "astro": "^5.18.1"
+    "@astrojs/check": "^0.9.4",
+    "astro": "^5.18.1",
+    "typescript": "^5.7.2"
   }
 }

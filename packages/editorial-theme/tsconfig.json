@@ -1,0 +1,7 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["src", "tailwind.config.ts"],
+  "compilerOptions": {
+    "types": ["astro/client"]
+  }
+}

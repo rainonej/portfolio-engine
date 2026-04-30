@@ -1,0 +1,106 @@
+---
+import { overrides } from '@portfolio-engine:overrides';
+import Reveal from '../Reveal.astro';
+import SectionIntro from '../SectionIntro.astro';
+import FeaturePillars from '../FeaturePillars.astro';
+import { resolveAssetUrl } from '../../lib/utils';
+
+interface Pillar {
+  heading: string;
+  body: string;
+  image?: string;
+}
+
+interface Person {
+  name: string;
+  bio: string;
+  photo?: string;
+}
+
+interface Props {
+  person: Person;
+  bookingUrl: string | null;
+  pillars: Pillar[];
+  base: string;
+  tagline?: string;
+}
+
+const { person, bookingUrl, pillars, base, tagline } = Astro.props;
+
+const Override = overrides.Hero
+  ? ((await import(/* @vite-ignore */ overrides.Hero)) as any).default
+  : null;
+---
+
+{Override ? (
+  <Override person={person} bookingUrl={bookingUrl} pillars={pillars} base={base} tagline={tagline} />
+) : (
+  <>
+    <!-- Hero -->
+    <section class="mx-auto flex min-h-screen max-w-6xl flex-col justify-center px-6 pb-16 pt-24">
+      <div class="grid items-center gap-12 md:grid-cols-5">
+        <div class="md:col-span-3">
+          <h1 class="mb-6 font-serif text-4xl font-bold leading-tight text-[var(--ink)] md:text-5xl lg:text-6xl">
+            <span class="text-[var(--copper)]">{person.name}</span>
+            {tagline && <>{' '}{tagline}</>}
+          </h1>
+          <p class="mb-10 max-w-2xl text-lg leading-relaxed text-[var(--stone-soft)] md:text-xl">
+            {person.bio}
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a
+              href={`${base}/work`}
+              class="rounded-full bg-[var(--ink)] px-8 py-3.5 text-sm font-medium text-white transition-colors hover:bg-[var(--stone-soft)]"
+            >
+              Explore my work
+            </a>
+            {bookingUrl && (
+              <>
+                <a
+                  href={bookingUrl}
+                  id="hero-booking-calendly"
+                  class="rounded-full border border-[var(--warm-line)] px-8 py-3.5 text-sm font-medium text-[var(--ink)] transition-colors hover:border-[var(--stone-soft)]"
+                >
+                  Book a conversation
+                </a>
+                <script is:inline define:vars={{ calendlyUrl: bookingUrl }}>
+                  document.getElementById('hero-booking-calendly')?.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const w = window;
+                    if (typeof w.Calendly !== 'undefined' && calendlyUrl) {
+                      w.Calendly.initPopupWidget({ url: calendlyUrl });
+                    } else {
+                      w.location.href = calendlyUrl;
+                    }
+                  });
+                </script>
+              </>
+            )}
+          </div>
+        </div>
+        {person.photo && (
+          <div class="hidden md:col-span-2 md:block">
+            <img
+              src={resolveAssetUrl(person.photo, base) ?? person.photo}
+              alt={person.name}
+              class="aspect-[3/4] w-full rounded-3xl object-cover shadow-xl"
+            />
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- Thematic pillars -->
+    {pillars.length > 0 && (
+      <Reveal
+        as="section"
+        class="border-t border-[var(--warm-line)] bg-[var(--paper-light)] px-6 py-24"
+      >
+        <div class="mx-auto max-w-5xl">
+          <SectionIntro eyebrow="What I do" heading="Areas of focus" />
+          <FeaturePillars pillars={pillars} />
+        </div>
+      </Reveal>
+    )}
+  </>
+)}

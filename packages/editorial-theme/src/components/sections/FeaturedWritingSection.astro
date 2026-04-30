@@ -1,0 +1,55 @@
+---
+import { overrides } from '@portfolio-engine:overrides';
+import Reveal from '../Reveal.astro';
+import SectionIntro from '../SectionIntro.astro';
+import WritingList from '../WritingList.astro';
+
+interface Post {
+  id: string;
+  title: string;
+  date: Date;
+  description?: string;
+  image?: string;
+  href: string;
+}
+
+interface Props {
+  posts: Post[];
+  base: string;
+}
+
+const { posts, base } = Astro.props;
+
+const Override = overrides.FeaturedWriting
+  ? ((await import(/* @vite-ignore */ overrides.FeaturedWriting)) as any).default
+  : null;
+---
+
+{Override ? (
+  <Override posts={posts} base={base} />
+) : (
+  <Reveal
+    as="section"
+    class="border-t border-[var(--warm-line)] bg-[var(--paper-light)] px-6 py-24"
+    delay={60}
+  >
+    <div class="mx-auto max-w-3xl">
+      <SectionIntro
+        eyebrow="Writing"
+        heading="Recent Writing"
+        allHref={`${base}/writing`}
+        allLabel="All posts →"
+      />
+      <WritingList
+        posts={posts.map((post) => ({
+          id: post.id,
+          title: post.title,
+          date: post.date,
+          description: post.description,
+          image: post.image,
+          href: post.href,
+        }))}
+      />
+    </div>
+  </Reveal>
+)}

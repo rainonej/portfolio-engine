@@ -61,7 +61,7 @@ task/<N>-<slug>  →  epic/<N>-<slug>  →  dev  →  main
 
 - One logical change per PR
 - All PRs must include a changeset (for publishable packages)
-- Check that `pnpm check` and `pnpm build` pass locally before opening a PR
+- Check that `pnpm lint`, `pnpm check`, and `pnpm build` pass locally before opening a PR
 
 ## Versioning policy
 
@@ -69,6 +69,27 @@ task/<N>-<slug>  →  epic/<N>-<slug>  →  dev  →  main
 - `engine-core` and `schema` have stable APIs once v1 is published
 - `admin-tools` and `workflow-kit` are experimental in v1 — minor bumps may include breaking changes
 - We do not accept third-party theme PRs in v1; this project is intentionally first-party
+
+## Lint and format
+
+- **`pnpm lint`** — ESLint on TypeScript sources under `packages/**` and `examples/**` (from repo root).
+- **`pnpm lint:fix`** — Apply ESLint fixes where safe.
+- **`pnpm format`** — Prettier check on Markdown, YAML, JSON, and config files.
+- **`pnpm format:write`** — Write Prettier formatting.
+
+CI **fails** on lint/format violations; it does not auto-commit fixes. Fix locally before pushing.
+
+## GitHub Project and labels
+
+Issue and board conventions (Status field, views, label taxonomy) live in **[docs/github-project-board.md](docs/github-project-board.md)** and **[docs/project-management.md](docs/project-management.md)**. Work is tracked on **[Project 2](https://github.com/users/rainonej/projects/2)**.
+
+## Copilot code review
+
+Automatic **Copilot code review** on pull requests is configured with **repository rulesets** (GitHub **Settings → Rules → Rulesets**): target base branches **`dev`** and **`epic/**`**, rule **Automatically request Copilot code review\*\*. That is a product setting, not a file in this repo. See GitHub’s docs: [Configure automatic code review](https://docs.github.com/copilot/how-tos/use-copilot-agents/request-a-code-review/configure-automatic-review).
+
+Copilot does **not** silently commit every suggestion after a review. Use **Apply suggestion** on the PR, or comment **`@copilot`** on the PR to ask the coding agent to push follow-up commits. When Copilot pushes, GitHub may require **Approve and run workflows** unless you change [Copilot cloud agent / Actions settings](https://docs.github.com/copilot/how-tos/agents/copilot-coding-agent/reviewing-a-pull-request-created-by-copilot).
+
+Repository guidance for Copilot lives in **[`.github/copilot-instructions.md`](.github/copilot-instructions.md)**.
 
 ## Support
 

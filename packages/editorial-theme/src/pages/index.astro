@@ -1,0 +1,158 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Reveal from '../components/Reveal.astro';
+import SectionIntro from '../components/SectionIntro.astro';
+import HeroSection from '../components/sections/HeroSection.astro';
+import FeaturedWritingSection from '../components/sections/FeaturedWritingSection.astro';
+import TestimonialSection from '../components/sections/TestimonialSection.astro';
+import CollaborationSection from '../components/sections/CollaborationSection.astro';
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import type { ResolvedConfig } from '@portfolio-engine/engine-core';
+import { config } from '@portfolio-engine:config';
+import { getBase, resolveAssetUrl, sortByDateDesc } from '../lib/utils';
+import { loadProfilePerson } from '../lib/load-profile-person';
+
+type Pillar = NonNullable<ResolvedConfig['features']['pillars']>[number];
+
+const base = getBase();
+const person = await loadProfilePerson();
+
+const bookingUrl = config.site.bookingUrl || null;
+const pillars = (config.features.pillars ?? []).map((p: Pillar) => ({
+  ...p,
+  image: p.image ? (resolveAssetUrl(p.image, base) ?? undefined) : undefined,
+}));
+
+const projects = await getCollection('projects');
+const featured = sortByDateDesc(
+  projects.filter((p: CollectionEntry<'projects'>) => p.data.featured),
+).slice(0, 3);
+
+const recentPosts = sortByDateDesc(
+  await getCollection('writing', (entry: CollectionEntry<'writing'>) => !entry.data.draft),
+).slice(0, 3);
+
+const featuredTestimonials = config.features.testimonials
+  ? (await getCollection('testimonials'))
+      .filter((t: CollectionEntry<'testimonials'>) => t.data.featured)
+      .slice(0, 2)
+  : [];
+---
+
+<Layout
+  title={`${person.name} — ${config.site.tagline}`}
+  description={person.bio}
+>
+  {
+    bookingUrl && (
+      <Fragment slot="head">
+        <link
+          href="https://assets.calendly.com/assets/external/widget.css"
+          rel="stylesheet"
+        />
+        <script
+          is:inline
+          type="text/javascript"
+          src="https://assets.calendly.com/assets/external/widget.js"
+          async
+        />
+      </Fragment>
+    )
+  }
+
+  <HeroSection
+    person={person}
+    bookingUrl={bookingUrl}
+    pillars={pillars}
+    base={base}
+    tagline={config.site.tagline}
+  />
+
+  <!-- Featured Work (no override surface — consistent across all consumers) -->
+  {
+    featured.length > 0 && (
+      <Reveal as="section" class="px-6 py-24" delay={60}>
+        <div class="mx-auto max-w-5xl">
+          <SectionIntro
+            eyebrow="Work"
+            heading="Featured Work"
+            allHref={`${base}/work`}
+            allLabel="View all →"
+          />
+          <div class="grid gap-10 md:grid-cols-3">
+            {featured.map((project) => {
+              const p = project.data;
+              const detailUrl = `${base}/work/${project.id}`;
+              return (
+                <a href={detailUrl} class="block">
+                  <article class="group">
+                    {p.image ? (
+                      <div class="mb-5 aspect-[4/3] overflow-hidden rounded-2xl bg-stone-100">
+                        <img
+                          src={resolveAssetUrl(p.image, base) ?? ''}
+                          alt={p.title}
+                          class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      </div>
+                    ) : (
+                      <div class="mb-5 flex aspect-[4/3] items-center justify-center rounded-2xl bg-[var(--pale-sand)]">
+                        <span class="font-serif text-5xl italic text-[var(--clay)]">
+                          {p.title[0]}
+                        </span>
+                      </div>
+                    )}
+                    <div class="mb-2 flex flex-wrap gap-3">
+                      {p.tags?.map((tag: string) => (
+                        <span class="text-xs font-semibold uppercase tracking-widest text-[var(--copper)]">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <h3 class="mb-2 font-serif text-xl font-bold">{p.title}</h3>
+                    <p class="text-sm leading-relaxed text-[var(--stone-soft)]">
+                      {p.description}
+                    </p>
+                  </article>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </Reveal>
+    )
+  }
+
+  {
+    recentPosts.length > 0 && (
+      <FeaturedWritingSection
+        posts={recentPosts.map((post) => ({
+          id: post.id,
+          title: post.data.title,
+          date: post.data.date,
+          description: post.data.description,
+          image: post.data.image
+            ? (resolveAssetUrl(post.data.image, base) ?? undefined)
+            : undefined,
+          href: `${base}/writing/${post.id}`,
+        }))}
+        base={base}
+      />
+    )
+  }
+
+  {
+    featuredTestimonials.length > 0 && (
+      <TestimonialSection
+        testimonials={featuredTestimonials.map((t: CollectionEntry<'testimonials'>) => ({
+          quote: t.data.quote,
+          author: t.data.author,
+          role: t.data.role,
+        }))}
+      />
+    )
+  }
+
+  <CollaborationSection base={base} ctaBody={config.features.ctaBody} />
+</Layout>

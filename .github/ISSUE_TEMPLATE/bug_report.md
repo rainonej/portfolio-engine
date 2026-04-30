@@ -1,8 +1,8 @@
 ---
 name: Bug report
 about: Report a defect in a portfolio-engine package
-title: "bug: "
-labels: "task:bug-fix"
+title: 'bug: '
+labels: 'task:bug-fix'
 assignees: rainonej
 ---
 

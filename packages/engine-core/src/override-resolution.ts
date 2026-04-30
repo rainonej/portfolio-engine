@@ -27,7 +27,10 @@ export interface OverrideConfig {
  * Attempting to override a surface not in this list is a build-time error.
  */
 const SUPPORTED_COMPONENT_SURFACES = new Set<string>([
-  // Populated by Task 4.4 (define override points). Empty in v1 until theme exists.
+  'Hero',
+  'FeaturedWriting',
+  'TestimonialSection',
+  'CollaborationSection',
 ]);
 
 export function resolveOverrides(config: OverrideConfig, projectRootDir: string): OverrideMap {

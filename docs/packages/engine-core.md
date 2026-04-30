@@ -29,12 +29,12 @@ Consumers never call engine-core directly. The public API is `editorialTheme()` 
 
 Implemented via native Vite `resolveId`/`load` plugin hooks. The `\0` prefix on resolved IDs is the Vite convention for virtual modules — it tells Vite not to look for the ID as a real file.
 
-| Module ID | Export | Type | Contents |
-|-----------|--------|------|----------|
-| `@portfolio-engine:config` | `config` | `ResolvedConfig` | Validated site + navigation + theme + features config |
-| `@portfolio-engine:context` | `context` | `BuildContext` | Env, mode, base URL |
-| `@portfolio-engine:routes` | `routes` | `RouteRegistry` | Active (post-override) route registry — disabled routes excluded, remapped routes reflected |
-| `@portfolio-engine:overrides` | `overrides` | `OverrideMap` | Component override map (component name → absolute path). Reserved key `__styles__` holds a JSON-encoded `string[]` of absolute CSS paths to append after the theme's global stylesheet. |
+| Module ID                     | Export      | Type             | Contents                                                                                                                                                                                |
+| ----------------------------- | ----------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@portfolio-engine:config`    | `config`    | `ResolvedConfig` | Validated site + navigation + theme + features config                                                                                                                                   |
+| `@portfolio-engine:context`   | `context`   | `BuildContext`   | Env, mode, base URL                                                                                                                                                                     |
+| `@portfolio-engine:routes`    | `routes`    | `RouteRegistry`  | Active (post-override) route registry — disabled routes excluded, remapped routes reflected                                                                                             |
+| `@portfolio-engine:overrides` | `overrides` | `OverrideMap`    | Component override map (component name → absolute path). Reserved key `__styles__` holds a JSON-encoded `string[]` of absolute CSS paths to append after the theme's global stylesheet. |
 
 Consumer packages (e.g. `editorial-theme`) get full TypeScript types automatically — the integration calls Astro's `injectTypes()` hook to inject a reference directive into the consumer's TypeScript environment. No manual setup is needed.
 
@@ -44,10 +44,10 @@ The plugin is created with `createVirtualModulesPlugin()` from `@portfolio-engin
 
 ```typescript
 interface RouteRecord {
-  pattern: string;           // e.g. /work/[slug]
-  resolved: string;          // actual injected path after any remap (equals pattern when not remapped)
-  label: string;             // human-readable
-  section: string | null;    // nav group
+  pattern: string; // e.g. /work/[slug]
+  resolved: string; // actual injected path after any remap (equals pattern when not remapped)
+  label: string; // human-readable
+  section: string | null; // nav group
   visibility: 'public' | 'admin-only' | 'hidden';
   remappable: boolean;
   disableable: boolean;
@@ -58,12 +58,12 @@ interface RouteRecord {
 
 Engine-core reads only `config/*.json` files. Content files (`content/`) are Astro content collections territory — not engine-core's concern.
 
-| File | Schema | Notes |
-|------|--------|-------|
-| `config/site.json` | `SiteConfigSchema` | Title, description, base URL, social links |
-| `config/navigation.json` | `NavigationConfigSchema` | Nav items, order, visibility |
-| `config/theme.json` | `ThemeConfigSchema` | Typography, color, layout preferences |
-| `config/features.json` | `FeaturesConfigSchema` | Feature flags (blog enabled, testimonials enabled, etc.) |
+| File                     | Schema                   | Notes                                                    |
+| ------------------------ | ------------------------ | -------------------------------------------------------- |
+| `config/site.json`       | `SiteConfigSchema`       | Title, description, base URL, social links               |
+| `config/navigation.json` | `NavigationConfigSchema` | Nav items, order, visibility                             |
+| `config/theme.json`      | `ThemeConfigSchema`      | Typography, color, layout preferences                    |
+| `config/features.json`   | `FeaturesConfigSchema`   | Feature flags (blog enabled, testimonials enabled, etc.) |
 
 ## Implementation
 

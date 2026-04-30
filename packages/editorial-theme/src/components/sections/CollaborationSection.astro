@@ -1,0 +1,26 @@
+---
+import { overrides } from '@portfolio-engine:overrides';
+import Reveal from '../Reveal.astro';
+import CollaborationCTA from '../CollaborationCTA.astro';
+
+interface Props {
+  base: string;
+  ctaBody?: string;
+}
+
+const { base, ctaBody } = Astro.props;
+
+const Override = overrides.CollaborationSection
+  ? ((await import(/* @vite-ignore */ overrides.CollaborationSection)) as any).default
+  : null;
+---
+
+{Override ? (
+  <Override base={base} ctaBody={ctaBody} />
+) : (
+  <Reveal as="section" class="px-6 py-32">
+    <div class="mx-auto max-w-5xl">
+      <CollaborationCTA href={`${base}/contact`} body={ctaBody} />
+    </div>
+  </Reveal>
+)}
