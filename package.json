@@ -9,7 +9,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --check \"**/*.{md,json,yml,yaml,mjs}\" --ignore-path .prettierignore",
     "format:write": "prettier --write \"**/*.{md,json,yml,yaml,mjs}\" --ignore-path .prettierignore",
-    "build:audit-report": "node portfolio_engine_v3_audit_pack/build-report.mjs",
+    "build:audit-report-shells": "node portfolio_engine_v3_audit_pack/write-report-shells.mjs",
     "check": "pnpm -r run check",
     "release": "changeset publish"
   },

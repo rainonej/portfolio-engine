@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
-const ROOT=path.resolve('/mnt/data/portfolio_engine_v4_report_pack');
+import { fileURLToPath } from 'node:url';
+const ROOT=path.resolve(fileURLToPath(new URL('..', import.meta.url)));
 let ok=true; const msgs=[];
 try{ JSON.parse(fs.readFileSync(path.join(ROOT,'source/project_model.json'),'utf8')); msgs.push('OK: source/project_model.json parses.'); }catch(e){ ok=false; msgs.push('ERROR: JSON parse failed: '+e.message); }
 const html=fs.readFileSync(path.join(ROOT,'report/index.html'),'utf8');

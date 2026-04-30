@@ -23,13 +23,14 @@ export default tseslint.config(
     },
   },
   {
-    files: ['portfolio_engine_v3_audit_pack/**/*.mjs'],
+    files: ['portfolio_engine_v4_report_pack/scripts/*.mjs'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
       globals: {
         console: 'readonly',
         process: 'readonly',
+        URL: 'readonly',
       },
     },
   },
