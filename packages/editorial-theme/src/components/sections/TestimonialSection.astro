@@ -1,0 +1,38 @@
+---
+/// <reference types="@portfolio-engine/engine-core/client" />
+import { overrides } from '@portfolio-engine:overrides';
+import Reveal from '../Reveal.astro';
+import SectionIntro from '../SectionIntro.astro';
+import TestimonialBlock from '../TestimonialBlock.astro';
+
+interface Testimonial {
+  quote: string;
+  author: string;
+  role: string;
+}
+
+interface Props {
+  testimonials: Testimonial[];
+}
+
+const { testimonials } = Astro.props;
+
+const Override = overrides.TestimonialSection
+  ? ((await import(/* @vite-ignore */ overrides.TestimonialSection)) as any).default
+  : null;
+---
+
+{Override ? (
+  <Override testimonials={testimonials} />
+) : (
+  <Reveal
+    as="section"
+    class="border-t border-[var(--warm-line)] bg-[var(--pale-sand)] px-6 py-24"
+    delay={60}
+  >
+    <div class="mx-auto max-w-3xl">
+      <SectionIntro eyebrow="What people say" heading="Testimonials" />
+      <TestimonialBlock testimonials={testimonials} />
+    </div>
+  </Reveal>
+)}
