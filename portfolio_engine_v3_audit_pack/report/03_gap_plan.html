@@ -1,0 +1,51 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Gap plan</title><link rel="stylesheet" href="assets/styles.css"></head><body><div class="layout"><aside class="sidebar"><h1>Portfolio Engine v3 Audit</h1><div class="small">Generated 2026-04-30</div><hr><a href="index.html">Overview</a>
+<a href="00_patch_notes.html">Patch notes</a>
+<a href="01_target_architecture.html">Target architecture</a>
+<a href="02_current_repo_audit.html">Current repo audit</a>
+<a href="03_gap_plan.html">Gap plan</a>
+<a href="04_epic_roadmap.html">Epic roadmap</a>
+<a href="05_ticket_backlog.html">Ticket backlog</a><hr><div class="small">Context pack for Claude/GitHub board reconciliation. Issue numbers are placeholders.</div></aside><main><div class="muted">How to get there</div><h1>Gap Plan: Current Repo → Target Architecture</h1>
+<h2>Current → target map</h2>
+<pre><code>| Area | Current | Target | Change type |</code></pre>
+<pre><code>|---|---|---|---|</code></pre>
+<pre><code>| Runtime packages | npm packages | same | preserve |</code></pre>
+<pre><code>| Workflow-kit | deferred npm-ish docs package | Python/MCP package | overhaul |</code></pre>
+<pre><code>| Config path | `config/*.json` | `src/config/*.json` | refactor/migrate |</code></pre>
+<pre><code>| Content path | `src/content/**` | `src/content/**` | preserve |</code></pre>
+<pre><code>| Context | absent | `src/context/*.json/.md` | add |</code></pre>
+<pre><code>| Registry | absent | `src/registry/portfolio-engine.registry.ts` | add |</code></pre>
+<pre><code>| Overrides | supported in config | `src/overrides` | preserve/clarify |</code></pre>
+<pre><code>| Public assets | `public/**` | `public/**` | preserve/clarify |</code></pre>
+<pre><code>| Tool state | absent | `.portfolio-engine/*.json` | add |</code></pre>
+<pre><code>| Demo-site | reference consumer | reference + showcase | expand |</code></pre>
+<h2>What needs complete overhaul</h2>
+<ul>
+<li><code>packages/workflow-kit</code></li>
+<li>workflow-kit docs</li>
+<li>README workflow-kit section</li>
+</ul>
+<h2>What needs medium refactor</h2>
+<ul>
+<li>config path loading</li>
+<li>demo-site layout</li>
+<li>override rendering bridge</li>
+<li>manifest generation</li>
+</ul>
+<h2>What needs small tweaks</h2>
+<ul>
+<li>folder READMEs</li>
+<li>public README</li>
+<li>label taxonomy</li>
+<li>contributor docs and PR templates</li>
+</ul>
+<h2>Recommended order</h2>
+<p>1. Record decisions and update docs.</p>
+<p>2. Add labels/governance/protocol.</p>
+<p>3. Define layer-boundary docs and consumer layout.</p>
+<p>4. Refactor config path support.</p>
+<p>5. Add runtime registry/manifest contracts.</p>
+<p>6. Implement consumer registry extension support.</p>
+<p>7. Build Python/MCP workflow-kit read-only/planning tools.</p>
+<p>8. Update demo-site.</p>
+<p>9. Add contribution safety gates.</p>
+<p>10. Migrate private agreni-site.</p></main></div></body></html>
