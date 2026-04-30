@@ -3,7 +3,7 @@
 //   /// <reference types="@portfolio-engine/engine-core/client" />
 
 import type { ResolvedConfig } from './config-loader.js';
-import type { BuildContext, OverrideMap, RouteRecord } from './types.js';
+import type { BuildContext, OverrideMap, RouteRegistry } from './types.js';
 
 declare module '@portfolio-engine:config' {
   export const config: ResolvedConfig;
@@ -14,7 +14,7 @@ declare module '@portfolio-engine:context' {
 }
 
 declare module '@portfolio-engine:routes' {
-  export const routes: RouteRecord[];
+  export const routes: RouteRegistry;
 }
 
 declare module '@portfolio-engine:overrides' {
