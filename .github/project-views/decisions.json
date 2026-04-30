@@ -1,0 +1,5 @@
+{
+  "name": "Decisions",
+  "layout": "table",
+  "filter": "is:open is:issue label:task:decision"
+}

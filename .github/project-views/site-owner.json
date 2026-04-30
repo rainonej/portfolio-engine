@@ -1,0 +1,5 @@
+{
+  "name": "Site owner",
+  "layout": "table",
+  "filter": "is:open is:issue label:owner:site-owner"
+}
