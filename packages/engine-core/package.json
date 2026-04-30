@@ -4,12 +4,19 @@
   "description": "Route registry, config loader, virtual modules, and override resolution for portfolio-engine",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./client": {
+      "types": "./src/client.d.ts"
+    }
   },
   "scripts": {
     "build": "echo 'build not yet configured'",
     "dev": "echo 'dev not yet configured'",
     "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@portfolio-engine/schema": "workspace:*",
+    "zod": "^3.25.76"
   },
   "peerDependencies": {
     "astro": ">=5.0.0"
@@ -17,8 +24,5 @@
   "devDependencies": {
     "astro": "^5.18.1",
     "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "astro-integration-kit": "^0.20.0"
   }
 }

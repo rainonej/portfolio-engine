@@ -8,7 +8,7 @@ This document records the approved and banned external dependencies for portfoli
 |---------|---------|--------|
 | `astro` | all packages (peerDep) | Core framework |
 | `zod` | `@portfolio-engine/schema` | Schema validation and type inference |
-| `@florian-lefebvre/astro-integration-kit` | `@portfolio-engine/engine-core` | Virtual module creation helper; narrow, well-maintained |
+| Native `AstroIntegration` + Vite (virtual modules) | `@portfolio-engine/engine-core` | First-party integration per [Astro Integration Kit migration](https://astro-integration-kit.netlify.app/migration-guide/) — the `astro-integration-kit` package is deprecated. |
 | `@changesets/cli` | workspace root (devDep) | Release automation |
 | `typescript` | all packages (devDep) | Type checking |
 
