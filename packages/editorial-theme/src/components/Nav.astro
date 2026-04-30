@@ -1,0 +1,72 @@
+---
+import type { ResolvedConfig } from '@portfolio-engine/engine-core';
+import { config } from '@portfolio-engine:config';
+import { getBase } from '../lib/utils';
+
+type NavItem = ResolvedConfig['navigation']['items'][number];
+
+const base = getBase();
+
+function isNavActive(pathname: string, href: string): boolean {
+  if (href.startsWith('http://') || href.startsWith('https://')) {
+    try {
+      const path = new URL(href).pathname;
+      return pathname === path || pathname.startsWith(`${path}/`);
+    } catch {
+      return false;
+    }
+  }
+  return pathname.startsWith(href);
+}
+
+function resolveNavHref(href: string): string {
+  if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) {
+    return href;
+  }
+  if (href.startsWith('/')) return `${base}${href}`;
+  return `${base}/${href}`;
+}
+
+type NavLink = { href: string; label: string };
+
+const links: NavLink[] = config.navigation.items
+  .filter((item: NavItem) => item.visible !== false)
+  .sort((a: NavItem, b: NavItem) => (a.order ?? 0) - (b.order ?? 0))
+  .map(({ href, label }: NavItem) => ({
+    href: resolveNavHref(href),
+    label,
+  }));
+
+const { pathname } = Astro.url;
+---
+
+<header
+  class="fixed inset-x-0 top-0 z-50 border-b border-[var(--warm-line)] bg-[var(--paper)]"
+>
+  <nav class="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
+    <a
+      href={`${base}/`}
+      class="font-serif text-xl font-bold tracking-tight transition-opacity hover:opacity-60"
+    >
+      {config.site.title}
+    </a>
+    <ul class="flex items-center gap-8">
+      {
+        links.map(({ href, label }: NavLink) => (
+          <li>
+            <a
+              href={href}
+              class={`text-sm font-medium transition-colors ${
+                isNavActive(pathname, href)
+                  ? 'text-stone-900'
+                  : 'text-[var(--stone-soft)] hover:text-stone-900'
+              }`}
+            >
+              {label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>

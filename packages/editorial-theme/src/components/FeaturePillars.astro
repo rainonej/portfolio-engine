@@ -1,0 +1,39 @@
+---
+interface Pillar {
+  heading: string;
+  body: string;
+  image?: string;
+}
+
+interface Props {
+  pillars: Pillar[];
+}
+
+const { pillars } = Astro.props;
+---
+
+<div class="grid gap-10 md:grid-cols-3">
+  {
+    pillars.map((pillar) => (
+      <div>
+        {pillar.image && (
+          <div class="mb-5 aspect-[4/3] overflow-hidden rounded-xl bg-stone-100">
+            <img
+              src={pillar.image}
+              alt={pillar.heading}
+              class="h-full w-full object-cover"
+              loading="lazy"
+            />
+          </div>
+        )}
+        <div class="mb-5 h-px w-8 bg-[var(--copper)]" />
+        <h3 class="mb-3 font-serif text-lg font-bold leading-snug">
+          {pillar.heading}
+        </h3>
+        <p class="text-sm leading-relaxed text-[var(--stone-soft)]">
+          {pillar.body}
+        </p>
+      </div>
+    ))
+  }
+</div>

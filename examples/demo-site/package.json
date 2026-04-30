@@ -1,0 +1,22 @@
+{
+  "name": "demo-site",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Example Astro site consuming @portfolio-engine/editorial-theme",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@portfolio-engine/editorial-theme": "workspace:*",
+    "@portfolio-engine/engine-core": "workspace:*",
+    "@portfolio-engine/schema": "workspace:*"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "astro": "^5.18.1",
+    "typescript": "^5.7.2"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "title": "Alex Morgan",
+  "description": "Portfolio of Alex Morgan — independent designer and technologist.",
+  "baseUrl": "http://localhost:4321",
+  "tagline": "designs for clarity",
+  "contact": {
+    "heading": "Let's work together",
+    "body": "I'm available for design partnerships, product consulting, and creative collaborations. Reach out and let's find what's possible."
+  }
+}

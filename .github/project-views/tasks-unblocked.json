@@ -1,0 +1,5 @@
+{
+  "name": "Tasks (unblocked)",
+  "layout": "table",
+  "filter": "is:open is:issue -label:type:epic -is:blocked"
+}

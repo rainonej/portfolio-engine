@@ -1,0 +1,9 @@
+# Default owner for everything
+* @rainonej
+
+# Package-level ownership
+/packages/engine-core/    @rainonej
+/packages/editorial-theme/ @rainonej
+/packages/schema/          @rainonej
+/packages/admin-tools/     @rainonej
+/packages/workflow-kit/    @rainonej

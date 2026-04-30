@@ -1,0 +1,27 @@
+{
+  "name": "@portfolio-engine/editorial-theme",
+  "version": "0.0.1",
+  "description": "The first-party Astro theme built on @portfolio-engine/engine-core",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "echo 'build not yet configured'",
+    "dev": "echo 'dev not yet configured'",
+    "check": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "astro": ">=5.0.0"
+  },
+  "dependencies": {
+    "@portfolio-engine/engine-core": "workspace:*",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.0"
+  },
+  "devDependencies": {
+    "astro": "^5.18.1",
+    "typescript": "^5.0.0"
+  }
+}

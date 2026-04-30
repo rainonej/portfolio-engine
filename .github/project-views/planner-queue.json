@@ -1,0 +1,5 @@
+{
+  "name": "Planner queue",
+  "layout": "table",
+  "filter": "is:open is:issue label:automation:plan"
+}
