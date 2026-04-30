@@ -1,0 +1,29 @@
+{
+  "version": "v4",
+  "generated": "2026-04-30",
+  "title": "Portfolio Engine Target Architecture Audit and Roadmap",
+  "packages": [
+    {"name": "@portfolio-engine/schema", "kind": "required runtime", "language": "TypeScript / Zod", "mvp": true, "dependsOn": [], "purpose": "Shared schemas and validation contracts for config, content, context, and future registry data."},
+    {"name": "@portfolio-engine/engine-core", "kind": "required runtime", "language": "TypeScript / Astro integration", "mvp": true, "dependsOn": ["@portfolio-engine/schema"], "purpose": "Config loading, route injection, virtual modules, override resolution, manifests, and generic runtime contracts."},
+    {"name": "@portfolio-engine/editorial-theme", "kind": "required runtime", "language": "Astro / TypeScript / CSS", "mvp": true, "dependsOn": ["@portfolio-engine/engine-core", "@portfolio-engine/schema"], "purpose": "The actual site theme: layouts, routes, components, styles, and public editorialTheme(...) API."},
+    {"name": "@portfolio-engine/admin-tools", "kind": "optional UI package", "language": "Astro / TypeScript", "mvp": false, "dependsOn": ["required runtime packages", "manifest", "schemas"], "purpose": "Rendered admin/reviewer UI so nontechnical consumers can edit content, config, context, assets, and registry entries without looking at code."},
+    {"name": "portfolio-engine-workflow-kit", "kind": "optional AI tooling", "language": "Python / MCP", "mvp": false, "dependsOn": ["consumer layout contract", "manifest"], "purpose": "Local MCP server exposing tools to Claude/Copilot: inspect_site, plan_request, validate_plan, plan_upstream, patch_ledger."}
+  ],
+  "mvpDefinition": "MVP is the stable reusable backbone: schema + engine-core + editorial-theme + demo-site + CI/build/check + README/CONTRIBUTING + basic named overrides if documented. Consumer registry, admin-tools, workflow-kit, and advanced automation are post-MVP.",
+  "currentIssuesToReconcile": [
+    "#16 editorial-theme pnpm check and Astro/editor TypeScript",
+    "#28 staged CI workflow",
+    "#29 astro check and demo-site build",
+    "#30 ESLint/Prettier docs",
+    "#31 Vercel connect",
+    "#32 README and board links",
+    "#33 PostCSS Tailwind",
+    "#34 optional Vercel CLI preview bot",
+    "#35 GitHub Project docs",
+    "#36 Copilot PR review rulesets",
+    "#37 Copilot PR feedback loop",
+    "#38 theme follow-ups",
+    "#40 demo-site baseUrl",
+    "#41 live demo README badge"
+  ]
+}
