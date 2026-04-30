@@ -1,10 +1,14 @@
 // @ts-check
-import { defineConfig } from "astro/config";
-// import { editorialTheme } from "@portfolio-engine/editorial-theme";
-
-// Theme integration wired up in Task 4.5.
-// Placeholder config until Epic 3 (engine-core) and Epic 4 (editorial-theme) complete.
+import { defineConfig } from 'astro/config';
+import { editorialTheme } from '@portfolio-engine/editorial-theme';
 
 export default defineConfig({
-  // integrations: [editorialTheme({ ... })],
+  integrations: [
+    editorialTheme({
+      siteConfigPath: './config/site.json',
+      navigationConfigPath: './config/navigation.json',
+      themeConfigPath: './config/theme.json',
+      featuresConfigPath: './config/features.json',
+    }),
+  ],
 });

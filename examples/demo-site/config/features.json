@@ -1,0 +1,21 @@
+{
+  "blog": true,
+  "work": true,
+  "contact": true,
+  "testimonials": true,
+  "pillars": [
+    {
+      "heading": "Product Design",
+      "body": "Thoughtful interfaces that serve real needs — from first sketch to shipped product."
+    },
+    {
+      "heading": "Engineering",
+      "body": "Clean, maintainable systems built to last. Pragmatic choices over clever ones."
+    },
+    {
+      "heading": "Strategy",
+      "body": "Clarity on what to build and why, before a single pixel moves."
+    }
+  ],
+  "ctaBody": "Whether you need a design partner, an engineering collaborator, or both — let's talk."
+}
