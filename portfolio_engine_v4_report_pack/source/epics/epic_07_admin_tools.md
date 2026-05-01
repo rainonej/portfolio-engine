@@ -6,11 +6,19 @@
 
 ## Summary
 
-Build an optional UI layer for nontechnical users to edit/render content, config, context, assets, and registry state.
+Extract and package the existing admin UI from the profesional_site/agreni-site codebase into the `@portfolio-engine/admin-tools` package. This is not a greenfield build — the admin functionality exists and needs to be moved into a reusable, distributable package.
 
 ## Why this matters
 
-Admin-tools is the direct UI for people who do not want to edit code. It should eventually expose site-owner context and brand voice as structured, editable forms.
+Admin-tools is the intended content editing mechanism for agreni-site (replacing Pages CMS). The architecture decision is locked: content files are Astro content collections edited via admin-tools, not a third-party CMS. The majority of the MVP admin features are already built and just need extraction and packaging.
+
+## Extraction source
+
+The admin UI to extract is in the profesional_site/agreni-site codebase. See:
+- profesional_site #178: Epic 7 — Extract Admin Tools + Generated Site Map
+- profesional_site #223: Task 7.1 — Extract admin/reviewer UI into admin-tools package
+- profesional_site #224: Task 7.2 — Generate site map from route registry
+- profesional_site #225: Task 7.3 — Add content/config inspection panels
 
 ## Tickets
 

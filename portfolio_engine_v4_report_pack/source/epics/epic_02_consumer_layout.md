@@ -27,7 +27,7 @@ Decide whether to immediately migrate from `config/*.json` to `src/config/*.json
 
 ### T2.2 — Add path options to `editorialTheme(...)`
 
-**Labels:** `task:feat`, `owner:agentic-ai`, `area:theme`, `claude-ready`
+**Labels:** `task:feat`, `owner:agentic-ai`, `area:editorial-theme`, `agent:approved`
 
 Support paths for config, content, context, registry, overrides, local components, local pages, and public assets.
 
@@ -40,7 +40,7 @@ Support paths for config, content, context, registry, overrides, local component
 
 ### T2.3 — Add folder README templates
 
-**Labels:** `task:docs`, `owner:agentic-ai`, `area:downstream`, `claude-ready`
+**Labels:** `task:docs`, `owner:agentic-ai`, `area:downstream`, `agent:approved`
 
 Create small README templates for `src/config`, `src/content`, `src/context`, `src/registry`, `src/overrides`, `src/components`, `src/pages-local`, `public`, and `.portfolio-engine`.
 
@@ -64,7 +64,7 @@ Define fields for `site-owner.json` and `brand-voice.json` so admin-tools can re
 
 ### T2.5 — Move tool state to `.portfolio-engine` docs
 
-**Labels:** `task:docs`, `owner:agentic-ai`, `area:docs`, `claude-ready`
+**Labels:** `task:docs`, `owner:agentic-ai`, `area:docs`, `agent:approved`
 
 Document that patch ledger and upstream tracking live in `.portfolio-engine`, not `src/context`.
 

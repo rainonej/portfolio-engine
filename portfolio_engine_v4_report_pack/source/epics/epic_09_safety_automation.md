@@ -27,7 +27,7 @@ Review issues #28, #29, #30, #36, #37 before creating new workflow issues.
 
 ### T9.2 — Add layer-boundary guard
 
-**Labels:** `task:feat`, `owner:agentic-ai`, `area:safety`, `claude-ready`
+**Labels:** `task:feat`, `owner:agentic-ai`, `area:safety`, `agent:approved`
 
 Check PR diffs for private consumer content, media under packages, forbidden imports, and patch files submitted upstream.
 
@@ -38,7 +38,7 @@ Check PR diffs for private consumer content, media under packages, forbidden imp
 
 ### T9.3 — Add AI review prompt/check
 
-**Labels:** `task:chore`, `owner:agentic-ai`, `area:safety`, `claude-ready`
+**Labels:** `task:chore`, `owner:agentic-ai`, `area:safety`, `agent:approved`
 
 Prompt/check should ask whether the PR should have been config/content/context/registry instead of upstream code.
 
@@ -49,11 +49,11 @@ Prompt/check should ask whether the PR should have been config/content/context/r
 
 ### T9.4 — Add public-safe planner/Claude workflows
 
-**Labels:** `task:feat`, `owner:agentic-ai`, `area:ci`, `claude-ready`
+**Labels:** `task:feat`, `owner:agentic-ai`, `area:ci`, `agent:approved`
 
 Automation must be gated and should not run untrusted implementation tasks automatically.
 
 **Acceptance criteria**
 
 - [ ] No untrusted auto-execution.
-- [ ] `claude-ready` or maintainer approval required.
+- [ ] `agent:approved` or maintainer approval required.

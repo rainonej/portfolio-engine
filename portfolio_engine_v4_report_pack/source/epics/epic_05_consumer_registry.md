@@ -2,7 +2,7 @@
 
 **Phase:** Phase 5  
 **MVP relevance:** Post-MVP  
-**Labels:** `type:epic`, `area:consumer-registry`, `area:theme`, `source:human`
+**Labels:** `type:epic`, `area:consumer-registry`, `area:editorial-theme`, `source:human`
 
 ## Summary
 
@@ -27,7 +27,7 @@ Choose TypeScript, JSON, or hybrid for `src/registry/portfolio-engine.registry.*
 
 ### T5.2 — Add local route extension support
 
-**Labels:** `task:feat`, `owner:agentic-ai`, `area:consumer-registry`, `claude-ready`
+**Labels:** `task:feat`, `owner:agentic-ai`, `area:consumer-registry`, `agent:approved`
 
 Allow registry entries to add local pages backed by `src/pages-local`.
 
@@ -39,7 +39,7 @@ Allow registry entries to add local pages backed by `src/pages-local`.
 
 ### T5.3 — Add local component/embed support
 
-**Labels:** `task:feat`, `owner:agentic-ai`, `area:consumer-registry`, `claude-ready`
+**Labels:** `task:feat`, `owner:agentic-ai`, `area:consumer-registry`, `agent:approved`
 
 Allow registry entries to declare local embeds backed by `src/components`.
 
@@ -51,7 +51,7 @@ Allow registry entries to declare local embeds backed by `src/components`.
 
 ### T5.4 — Add framed YouTube example
 
-**Labels:** `task:feat`, `owner:agentic-ai`, `area:demo`, `claude-ready`
+**Labels:** `task:feat`, `owner:agentic-ai`, `area:demo-site`, `agent:approved`
 
 Demonstrate registry + component + content usage for a framed YouTube embed.
 

@@ -2,7 +2,7 @@
 
 **Phase:** Phase 3  
 **MVP relevance:** Post-MVP infrastructure, but useful for admin/workflow tooling  
-**Labels:** `type:epic`, `area:engine-core`, `area:theme`, `source:human`
+**Labels:** `type:epic`, `area:engine-core`, `area:editorial-theme`, `source:human`
 
 ## Summary
 
@@ -16,7 +16,7 @@ Agents and admin UI should not have to inspect arbitrary source code to understa
 
 ### T4.1 — Move route metadata to explicit registry
 
-**Labels:** `task:feat`, `owner:agentic-ai`, `area:theme`, `claude-ready`
+**Labels:** `task:feat`, `owner:agentic-ai`, `area:editorial-theme`, `agent:approved`
 
 Create a built-in route registry with labels, paths, visibility, remappable/disableable flags, and agent/admin metadata.
 
@@ -27,7 +27,7 @@ Create a built-in route registry with labels, paths, visibility, remappable/disa
 
 ### T4.2 — Move override surfaces to explicit registry
 
-**Labels:** `task:feat`, `owner:agentic-ai`, `area:theme`, `claude-ready`
+**Labels:** `task:feat`, `owner:agentic-ai`, `area:editorial-theme`, `agent:approved`
 
 Declare supported surfaces with props, default component, page, docs, and guidance.
 
@@ -38,7 +38,7 @@ Declare supported surfaces with props, default component, page, docs, and guidan
 
 ### T4.3 — Generate `.portfolio-engine/manifest.json`
 
-**Labels:** `task:feat`, `owner:agentic-ai`, `area:engine-core`, `claude-ready`
+**Labels:** `task:feat`, `owner:agentic-ai`, `area:engine-core`, `agent:approved`
 
 Generate consumer-local manifest with paths, active routes, override surfaces, content collections, package versions, and capabilities.
 

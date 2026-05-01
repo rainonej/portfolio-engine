@@ -27,7 +27,7 @@ Decide whether to keep MIT, move to Apache-2.0, or dual-license MIT/Apache-2.0.
 
 ### T0.2 — Add governance and AI contribution docs
 
-**Labels:** `task:chore`, `owner:agentic-ai`, `area:governance`, `claude-ready`
+**Labels:** `task:chore`, `owner:agentic-ai`, `area:governance`, `agent:approved`
 
 Add `GOVERNANCE.md` and `AI_USAGE.md`.
 
@@ -39,7 +39,7 @@ Add `GOVERNANCE.md` and `AI_USAGE.md`.
 
 ### T0.3 — Add citation, security, DCO, trademark, notice files
 
-**Labels:** `task:chore`, `owner:agentic-ai`, `area:governance`, `claude-ready`
+**Labels:** `task:chore`, `owner:agentic-ai`, `area:governance`, `agent:approved`
 
 Add `CITATION.cff`, `SECURITY.md`, `DCO.md`, `TRADEMARK.md`, and `NOTICE` as appropriate.
 
@@ -51,7 +51,7 @@ Add `CITATION.cff`, `SECURITY.md`, `DCO.md`, `TRADEMARK.md`, and `NOTICE` as app
 
 ### T0.4 — Add PR and issue templates
 
-**Labels:** `task:chore`, `owner:agentic-ai`, `area:safety`, `claude-ready`
+**Labels:** `task:chore`, `owner:agentic-ai`, `area:safety`, `agent:approved`
 
 Templates must ask about target layer, downstream origin, AI usage, private data, changeset need, and whether content/config/registry would have sufficed.
 

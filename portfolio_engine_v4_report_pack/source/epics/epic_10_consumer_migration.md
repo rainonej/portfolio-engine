@@ -27,7 +27,7 @@ Create/finalize `agreni-site` and `jordan-site` as private repos.
 
 ### T10.2 — Scaffold target consumer layout
 
-**Labels:** `task:feat`, `owner:agentic-ai`, `area:downstream`, `claude-ready`
+**Labels:** `task:feat`, `owner:agentic-ai`, `area:downstream`, `agent:approved`
 
 Set up `src/config`, `src/content`, `src/context`, `src/overrides`, `public`, `.portfolio-engine`.
 
@@ -38,7 +38,7 @@ Set up `src/config`, `src/content`, `src/context`, `src/overrides`, `public`, `.
 
 ### T10.3 — Migrate private content/config/assets
 
-**Labels:** `task:content`, `owner:agentic-ai`, `area:downstream`, `claude-ready`
+**Labels:** `task:content`, `owner:agentic-ai`, `area:downstream`, `agent:approved`
 
 Move only consumer-owned files from predecessor repos.
 
@@ -49,7 +49,7 @@ Move only consumer-owned files from predecessor repos.
 
 ### T10.4 — Add structured context
 
-**Labels:** `task:feat`, `owner:agentic-ai`, `area:downstream`, `claude-ready`
+**Labels:** `task:feat`, `owner:agentic-ai`, `area:downstream`, `agent:approved`
 
 Create `site-owner.json`, `brand-voice.json`, and `agent-rules.md`.
 
