@@ -1,7 +1,8 @@
-# Epic 9 — Contribution safety and GitHub automation
+# Epic 16 — Contribution safety and GitHub automation
 
-**Phase:** Phase 7  
-**MVP relevance:** Post-MVP / parallel support  
+**Phase:** Phase 11 (parallel with advanced publishing)  
+**MVP relevance:** Phase 0 basics in governance; advanced automation post–Product-MVP  
+**Products touched:** G  
 **Labels:** `type:epic`, `area:safety`, `area:ci`, `source:human`
 
 ## Summary
@@ -14,7 +15,7 @@ The consumer-to-contributor flywheel only works if upstream PRs are generalized,
 
 ## Tickets
 
-### T9.1 — Reconcile existing CI/Copilot issues
+### T16.1 — Reconcile existing CI/Copilot issues
 
 **Labels:** `task:chore`, `owner:human-dev`, `area:ci`
 
@@ -25,7 +26,7 @@ Review issues #28, #29, #30, #36, #37 before creating new workflow issues.
 - [ ] Duplicates avoided.
 - [ ] Existing issues linked or superseded intentionally.
 
-### T9.2 — Add layer-boundary guard
+### T16.2 — Add layer-boundary guard
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:safety`, `agent:approved`
 
@@ -36,7 +37,7 @@ Check PR diffs for private consumer content, media under packages, forbidden imp
 - [ ] Guard runs in CI.
 - [ ] Maintainer override documented.
 
-### T9.3 — Add AI review prompt/check
+### T16.3 — Add AI review prompt/check
 
 **Labels:** `task:chore`, `owner:agentic-ai`, `area:safety`, `agent:approved`
 
@@ -47,7 +48,7 @@ Prompt/check should ask whether the PR should have been config/content/context/r
 - [ ] Prompt exists.
 - [ ] Checklist references consumer-specific hacks and private data leakage.
 
-### T9.4 — Add public-safe planner/Claude workflows
+### T16.4 — Add public-safe planner/Claude workflows
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:ci`, `agent:approved`
 

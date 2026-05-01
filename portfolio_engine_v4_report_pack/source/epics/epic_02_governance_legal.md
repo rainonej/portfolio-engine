@@ -1,7 +1,8 @@
-# Epic 0 — Governance, legal, and open-source contribution foundation
+# Epic 2 — Governance, legal, and open-source contribution foundation
 
 **Phase:** Phase 0  
-**MVP relevance:** Parallel, not required for runtime MVP  
+**MVP relevance:** Parallel — not required for Backbone MVP runtime work  
+**Products touched:** G  
 **Labels:** `type:epic`, `area:governance`, `area:docs`, `source:human`
 
 ## Summary

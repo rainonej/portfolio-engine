@@ -1,12 +1,13 @@
-# Epic 11 — Standardize area and agent labels
+# Epic 1 — Label taxonomy and area/agent standards
 
-**Phase:** Phase 0 / immediately usable (does not block any other phase)
-**MVP relevance:** Required before AI automation workflows can proceed safely
+**Phase:** Phase 0 (immediately usable; does not block other phases)  
+**MVP relevance:** Phase 0 prerequisite — required before AI automation workflows proceed safely  
+**Products touched:** G  
 **Labels:** `type:epic`, `area:governance`, `area:docs`, `source:human`
 
 ## Summary
 
-Standardize the two label groups that are prerequisites for AI-assisted work: `area:*` (package/domain axis) and `agent:*` (approval and automation state). Deprecate the provider-specific `claude-ready` label and replace it with the provider-neutral `agent:approved`.
+Standardize the two label groups that are prerequisites for AI-assisted work: `area:*` (package/domain axis) and `agent:*` (approval and automation state). Deprecate the provider-specific legacy “ready” label and replace it with the provider-neutral `agent:approved`.
 
 The full label taxonomy (source, task-kind, owner, lifecycle, MVP labels) is deferred to a future epic. This epic covers only what is needed now.
 
@@ -14,7 +15,7 @@ The full label taxonomy (source, task-kind, owner, lifecycle, MVP labels) is def
 
 Without consistent `area:*` labels, it is impossible to filter issues by package or domain — critical for any agent or automation that needs to act on a scoped set of issues. Without `agent:*` labels, there is no machine-readable approval gate between human oversight and AI execution.
 
-`claude-ready` is being deprecated because the workflow-kit is provider-neutral Python/MCP tooling that should support Claude, Copilot, OpenHands, and future agents equally.
+The legacy provider-specific ready label is being deprecated because the workflow-kit is provider-neutral Python/MCP tooling that should support Claude, Copilot, OpenHands, and future agents equally.
 
 ## Label groups to standardize
 
@@ -48,24 +49,24 @@ agent:needs-human-review — agent may plan/summarize but must not implement
 agent:blocked           — agent cannot continue without human input
 ```
 
-Deprecate: `claude-ready` (alias to `agent:approved` during transition period, then remove).
+Deprecate: legacy ready label (alias to `agent:approved` during transition period, then remove).
 
 ## Tickets
 
-### T11.1 — Create area and agent labels in GitHub
+### T1.1 — Create area and agent labels in GitHub
 
 **Labels:** `task:chore`, `owner:human-dev`, `area:governance`
 
-Create all `area:*` and `agent:*` labels in the GitHub repo. Mark `claude-ready` as deprecated (rename or add deprecation note to description).
+Create all `area:*` and `agent:*` labels in the GitHub repo. Mark the legacy ready label as deprecated (rename or add deprecation note to description).
 
 **Acceptance criteria**
 
 - [ ] All 15 `area:*` labels exist in GitHub.
 - [ ] `agent:approved`, `agent:needs-human-review`, `agent:blocked` exist in GitHub.
-- [ ] `claude-ready` is deprecated or aliased.
+- [ ] Legacy ready label is deprecated or aliased.
 - [ ] Label colors are consistent within each group.
 
-### T11.2 — Document area and agent label rules
+### T1.2 — Document area and agent label rules
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:docs`, `agent:approved`
 
@@ -76,16 +77,16 @@ Update or create `docs/issue-labels.md` with rules for `area:*` and `agent:*` la
 - [ ] `docs/issue-labels.md` documents all `area:*` labels with meanings.
 - [ ] `docs/issue-labels.md` documents all `agent:*` labels with meanings.
 - [ ] Examples given for each major package area.
-- [ ] `claude-ready` is listed as deprecated with migration path.
+- [ ] Legacy ready label is listed as deprecated with migration path.
 
-### T11.3 — Retag open issues with correct area and agent labels
+### T1.3 — Retag open issues with correct area and agent labels
 
 **Labels:** `task:chore`, `owner:agentic-ai`, `area:governance`, `agent:approved`
 
-Review all open issues. Apply the correct primary `area:*` label to each. Apply `agent:approved` to issues that were previously tagged `claude-ready` and are still scoped for agent execution.
+Review all open issues. Apply the correct primary `area:*` label to each. Apply `agent:approved` to issues that were previously tagged with the legacy ready label and are still scoped for agent execution.
 
 **Acceptance criteria**
 
 - [ ] Every open issue has exactly one primary `area:*` label.
-- [ ] All `claude-ready` labels are replaced with `agent:approved` or another appropriate `agent:*` label.
+- [ ] All legacy ready labels are replaced with `agent:approved` or another appropriate `agent:*` label.
 - [ ] Issues that are not agent-ready have no `agent:*` label or have `agent:needs-human-review`.

@@ -1,8 +1,11 @@
-# MVP Roadmap and Dependency Strategy
+# MVP roadmap and dependency strategy (v5)
 
-## ★ MVP stable backbone
+## Two MVP milestones
 
-The MVP is reached when the required runtime backbone is stable enough to support separate downstream repos, and the consumer layout contract is established so consumers do not need to restructure immediately after starting.
+v5 uses two nested milestones:
+
+1. **★ Backbone MVP** — after **Phase 3**. The runtime backbone is stable: buildable packages, consumer layout contract, override proof (when advertised), and MVP documentation.
+2. **★ Product MVP** — after **Phase 4**. **agreni-site** and **jordan-site** exist as real private consumer repos on the target layout, validating the engine with two distinct products.
 
 ```text
 @portfolio-engine/schema
@@ -11,94 +14,99 @@ The MVP is reached when the required runtime backbone is stable enough to suppor
   ↓
 @portfolio-engine/editorial-theme
   ↓
-examples/demo-site (target consumer layout)
+examples/demo-site (reference consumer)
   ↓
-private consumer repos (agreni-site, jordan-site)
+★ Backbone MVP (Phases 1–3)
+  ↓
+agreni-site + jordan-site (Phase 4)
+  ↓
+★ Product MVP
 ```
 
-MVP requires:
+## Backbone MVP scope
 
-- schema validation;
-- engine-core config loading and route injection;
-- editorial-theme pages/components/styles;
-- consumer layout contract (`src/config`, `src/content`, `src/context`, `src/overrides`, `public`, `.portfolio-engine`);
-- demo-site migrated to target consumer layout;
-- demo-site build/check/deploy reliability;
-- basic named override bridge;
-- clear README and downstream consumption docs;
-- enough stability to create `agreni-site` and `jordan-site` as clean private repos.
+Reached after Phases 1–3:
 
-MVP excludes:
+- Schema validation; engine-core config loading and route injection; editorial-theme pages/components/styles.
+- Consumer layout contract (`src/config`, `src/content`, `src/context`, `src/overrides`, `public`, `.portfolio-engine`).
+- Demo-site on target layout; build/check/deploy reliability.
+- Named override bridge when overrides are advertised in docs; otherwise document the exclusion.
+- README, CONTRIBUTING basics, downstream consumption docs, workspace vs semver modes.
+- **Backbone MVP** allows **workspace-link** development if documentation is clear. **Product MVP** requires **semver/npm** consumption (or an explicit documented exception).
 
-- consumer registry;
-- Python/MCP workflow-kit;
-- admin-tools;
-- explicit registries and manifest;
-- full patch/upstream automation;
-- advanced AI contribution workflows;
-- setup/bootstrap script;
-- demo-site product showcase pages.
+## Product MVP scope
 
-## Phase 0 — Governance and legal
+Reached when Phase 4 completes:
 
-Can be done anytime. Not blocking runtime MVP.
+- **agreni-site** and **jordan-site** are clean private repos consuming published packages (unless an explicit exception is documented).
+- Both build and preview successfully; content/config/context owned in-consumer only.
 
-Includes license, governance, AI_USAGE, PR template, SECURITY, CITATION, DCO/notice decisions.
+## Post–Product-MVP (Phases 5–11)
 
-## Phase 0b — Board reconciliation and project management
+Not required for either MVP:
 
-Runs alongside or immediately after Phase 0. Required before committing effort to any implementation phase.
+- Explicit registries and manifest (Phase 5).
+- Consumer extension registry (Phase 6).
+- Admin-tools extraction (Phase 7).
+- Python/MCP workflow-kit (Phase 8).
+- Consumer bootstrap script (Phase 9).
+- Demo-site product showcase expansion (Phase 10).
+- Contribution safety, advanced preview/publishing (Phase 11).
 
-Audit the live GitHub board, reconcile open issues against report epics, decide which tickets to close/update/create, then update the board to reflect the agreed path forward.
+---
 
-See: `epic_00b_project_mgmt_consolidation.md`
+## Phase 0 — Planning, labels, board, governance, debt register
 
-## Phase 1 — Runtime package reliability
+Includes label taxonomy (Epic 1), governance/legal (Epic 2), board reconciliation (Epic 0), and technical debt visibility. See **Epic 0**, **Epic 1**, **Epic 2**, and section **Board reconciliation**.
 
-Required. Stabilize schema, engine-core, editorial-theme, CI, Vercel docs, and basic overrides.
+## Phase 1 — Runtime backbone buildability
 
-## Phase 2 — Consumer layout contract and demo-site migration
+Stabilize schema, engine-core, editorial-theme, CI, Vercel, and package build scripts. See **Epic 3**.
 
-Required for MVP. Establish the preferred consumer layout shape (`src/config`, `src/content`, `src/context`, `src/overrides`, `public`, `.portfolio-engine`). Migrate demo-site to this layout. Preserve compatibility if needed during transition.
+## Phase 2 — Consumer layout contract
 
-## ★ MVP stable backbone
+Establish the preferred consumer layout; migrate demo-site. See **Epic 5**.
 
-Reached after Phase 1 + Phase 2. See definition above.
+## Phase 3 — Override proof and MVP docs
 
-## Phase 3 — Manifest and explicit registries
+Override bridge (Hero + custom CSS) for **Backbone MVP** when overrides are advertised; **Epic 7** covers README, CONTRIBUTING, downstream docs, two-mode documentation. See **Epic 6** and **Epic 7**.
 
-Add machine-readable route/override/path/capability registries and `.portfolio-engine/manifest.json`. Add default registry folders to `schema`, `engine-core`, and `editorial-theme`.
+## ★ Backbone MVP
 
-See: `epic_12_explicit_registries.md`
+**Engine stable enough to serve real consumer repos** — after Phases 1–3. See product tracks section for matrix.
 
-## Phase 4 — Admin-tools UI
+## Phase 4 — First consumer products (agreni-site + jordan-site)
 
-Post-MVP optional UI for nontechnical editing. Prioritized here because the majority of MVP admin-tools features are already substantially built, and because non-developer consumers (e.g. agreni-site) benefit from this before the more complex extension registry or workflow-kit layers.
+**Epic 8** and **Epic 9**: scaffold layout, migrate or create content/config/context, wire to published packages, verify build and preview.
 
-See: `epic_07_admin_tools.md`
+## ★ Product MVP
 
-## Phase 5 — Consumer extension registry
+**Two real products validate the engine** — after Phase 4.
 
-Post-MVP middle ground. Allows local pages, local embeds, and local components without editing upstream packages.
+## Phase 5 — Registries and manifest
 
-## Phase 6 — Python/MCP workflow-kit
+Machine-readable routes, overrides, manifest. See **Epic 10**.
 
-Post-MVP optional AI tool layer for Claude/Copilot/OpenHands and other agents.
+## Phase 6 — Consumer extension registry
 
-## Phase 7 — Consumer bootstrap/setup script
+Local pages, embeds, components without editing upstream. See **Epic 11**.
 
-Post-MVP onboarding automation. A setup script creates the consumer repo structure, installs runtime packages, and optionally configures AI/MCP tooling and prints Vercel/Git setup steps.
+## Phase 7 — Admin-tools extraction
 
-See: `epic_13_consumer_bootstrap.md`
+Optional UI from existing profesional_site/agreni codepaths. See **Epic 12**.
 
-## Phase 8 — Demo-site as product showcase
+## Phase 8 — Python/MCP workflow-kit
 
-Post-MVP educational showcase. Demo-site adds pages that teach consumers and agents how each layer (config, content, context, overrides, registry, MCP) works, with rendered results alongside source snippets.
+See **Epic 13**.
 
-See: `epic_08_demo_showcase.md` (post-MVP showcase tickets)
+## Phase 9 — Consumer bootstrap / setup script
 
-## Phase 9 — Advanced publishing and preview workflows
+See **Epic 14**.
 
-Post-MVP. Admin-tools exposes preview link reveal, public/preview site concepts, branch promotion guidance, and optional publishing cadence settings.
+## Phase 10 — Demo-site product showcase
 
-See: `epic_14_admin_tools_publishing.md`
+Teaching pages beyond the reference consumer role. See **Epic 15**.
+
+## Phase 11 — Advanced preview, publishing, contribution safety
+
+See **Epic 16** and **Epic 17**.

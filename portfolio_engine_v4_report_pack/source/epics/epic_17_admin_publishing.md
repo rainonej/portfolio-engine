@@ -1,7 +1,8 @@
-# Epic 14 — Admin-tools publishing and preview management
+# Epic 17 — Admin-tools publishing and preview management
 
-**Phase:** Phase 9 (post-MVP)
-**MVP relevance:** Post-MVP — does not block the runtime backbone
+**Phase:** Phase 11  
+**MVP relevance:** Post–Product-MVP — does not block Backbone or Product MVP  
+**Products touched:** C, D, E  
 **Labels:** `type:epic`, `area:admin-tools`, `area:vercel`, `source:human`
 
 ## Summary
@@ -60,7 +61,7 @@ Possible workflows:
 
 ## Tickets
 
-### T14.1 — Design preview/public publishing panel UI
+### T17.1 — Design preview/public publishing panel UI
 
 **Labels:** `task:design`, `owner:human-dev`, `area:admin-tools`, `mvp:post`
 
@@ -70,7 +71,7 @@ Possible workflows:
 - [ ] Preview link reveal behavior is designed (who sees it, how it is shown).
 - [ ] Vercel setup instructions are drafted.
 
-### T14.2 — Implement branch model documentation in admin-tools
+### T17.2 — Implement branch model documentation in admin-tools
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:admin-tools`, `agent:approved`, `mvp:post`
 
@@ -79,7 +80,7 @@ Possible workflows:
 - [ ] Plain-language explanation of dev/main branch model exists in UI or linked docs.
 - [ ] Manual promotion steps are documented.
 
-### T14.3 — Model publishing cadence settings schema
+### T17.3 — Model publishing cadence settings schema
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:admin-tools`, `area:schema`, `agent:approved`, `mvp:post`
 
@@ -90,7 +91,7 @@ Possible workflows:
 - [ ] No auto-publish without explicit opt-in.
 - [ ] Schema documented in `packages/schema`.
 
-### T14.4 — Add Vercel setup guidance docs
+### T17.4 — Add Vercel setup guidance docs
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:docs`, `area:vercel`, `agent:approved`, `mvp:post`
 

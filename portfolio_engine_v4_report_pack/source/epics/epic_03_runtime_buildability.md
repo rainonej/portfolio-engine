@@ -1,12 +1,13 @@
-# Epic 1 — Runtime MVP: schema, engine-core, editorial-theme, demo-site
+# Epic 3 — Runtime buildability: schema, engine-core, editorial-theme, demo-site
 
-**Phase:** Phase 1
-**MVP relevance:** ★ Required for MVP
+**Phase:** Phase 1  
+**MVP relevance:** ★ Required for Backbone MVP  
+**Products touched:** A, B  
 **Labels:** `type:epic`, `area:schema`, `area:engine-core`, `area:editorial-theme`, `area:demo-site`, `area:ci`, `source:human`
 
 ## Summary
 
-Make the required runtime packages stable enough to serve as the reusable backbone for `agreni-site`, `jordan-site`, and future consumer sites. Phase 1 covers the remaining sprint work (the tail of the Epic 4 extraction) plus build infrastructure.
+Make the required runtime packages stable enough to serve as the reusable backbone for `agreni-site`, `jordan-site`, and future consumer sites. Phase 1 covers the remaining sprint work (the tail of the profesional_site Epic 4 extraction) plus build infrastructure.
 
 ## Status note
 
@@ -30,10 +31,10 @@ This is the core product. The optional workflow-kit and admin-tools do not matte
 - portfolio-engine #40: Update demo-site config/site.json baseUrl
 - portfolio-engine #41: Add live demo badge/link to README
 
-**Defer to post-MVP:**
-- portfolio-engine #34: Vercel CLI deploy/preview bot → Phase 9 (Epic 14)
-- portfolio-engine #36: Copilot rulesets for PRs into dev/epic/* → Phase 7 (Epic 9)
-- portfolio-engine #37: Copilot document PR feedback loop → Phase 7 (Epic 9)
+**Defer to post–Product-MVP:**
+- portfolio-engine #34: Vercel CLI deploy/preview bot → Phase 11 (**Epic 17**)
+- portfolio-engine #36: Copilot rulesets for PRs into dev/epic/* → Phase 11 (**Epic 16**)
+- portfolio-engine #37: Copilot document PR feedback loop → Phase 11 (**Epic 16**)
 
 **Verify and close:**
 - portfolio-engine #35: GitHub Project docs ported → likely done, verify and close
@@ -44,7 +45,7 @@ This is the core product. The optional workflow-kit and admin-tools do not matte
 
 ## Tickets
 
-### T1.1 — Reconcile existing runtime and CI issues
+### T3.1 — Reconcile existing runtime and CI issues
 
 **Labels:** `task:chore`, `owner:human-dev`, `area:ci`
 
@@ -57,7 +58,7 @@ Review all open issues per the list above. Apply correct phase labels. Close don
 - [ ] Issue #35 verified and closed if done.
 - [ ] profesional_site #209–#213 and #175 closed with closing comment.
 
-### T1.2 — Fix editorial-theme typecheck/build reliability
+### T3.2 — Fix editorial-theme typecheck/build reliability
 
 **Labels:** `task:bug-fix`, `owner:agentic-ai`, `area:editorial-theme`, `agent:approved`
 
@@ -69,7 +70,7 @@ Resolve TypeScript/Astro check failures and virtual module editor issues. Tracke
 - [ ] Demo-site `astro check` runs non-interactively.
 - [ ] Virtual module imports resolve consistently.
 
-### T1.3 — Verify demo-site build/deploy path
+### T3.3 — Verify demo-site build/deploy path
 
 **Labels:** `task:chore`, `owner:agentic-ai`, `area:demo-site`, `agent:approved`
 
@@ -81,11 +82,11 @@ Ensure demo-site can build locally and deploy via Vercel with documented setting
 - [ ] Vercel output directory and baseUrl are correct.
 - [ ] Demo README is accurate.
 
-### T1.4 — Write real package build scripts
+### T3.4 — Write real package build scripts
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:engine-core`, `area:editorial-theme`, `area:schema`, `agent:approved`
 
-Replace `echo 'build not yet configured'` in all three required packages. See Epic 15 T15.1 for full acceptance criteria. This ticket is the Phase 1 prerequisite; publishing happens in Phase 2.
+Replace `echo 'build not yet configured'` in all three required packages. See Epic 4 T4.1 for full acceptance criteria. This ticket is the Phase 1 prerequisite; publishing happens in Phase 2 (**Epic 4**).
 
 **Acceptance criteria**
 
@@ -93,27 +94,12 @@ Replace `echo 'build not yet configured'` in all three required packages. See Ep
 - [ ] `package.json` exports and types fields are correct.
 - [ ] Changesets workflow can publish from the output.
 
-### T1.5 — Rewrite README around required vs optional packages
+### T3.5 — README pointer (full rewrite in Epic 7)
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:docs`, `agent:approved`
 
-Explain required runtime packages first, then optional admin-tools and workflow-kit.
+Ensure README points readers to **Epic 7** for the full Backbone MVP documentation pass (required vs optional packages, two modes).
 
 **Acceptance criteria**
 
-- [ ] Required runtime packages clearly labeled.
-- [ ] workflow-kit described as optional Python/MCP tooling.
-- [ ] admin-tools described as optional UI.
-- [ ] Two development modes documented (workspace link vs. semver).
-
-### T1.6 — Define MVP marker in project docs
-
-**Labels:** `task:docs`, `owner:agentic-ai`, `area:docs`, `agent:approved`
-
-Add a visible MVP definition so optional features are not confused with the stable backbone.
-
-**Acceptance criteria**
-
-- [ ] MVP definition appears in docs and README.
-- [ ] Post-MVP items are listed explicitly.
-- [ ] Package publishing included in MVP requirements.
+- [ ] Cross-link to Epic 7 / roadmap until Epic 7 completes.

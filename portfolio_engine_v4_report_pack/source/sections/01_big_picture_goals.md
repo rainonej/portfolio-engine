@@ -1,5 +1,7 @@
 # Big Picture Goals
 
+Work is organized into **seven product tracks (A–G)**: the runtime engine (A), demo-site reference (B), **agreni-site** (C) and **jordan-site** (D) as first consumer products, optional **admin-tools** (E) and **workflow-kit** (F), and **governance, labels, and safety** (G). The roadmap uses two gates — **Backbone MVP** after Phase 3 and **Product MVP** after Phase 4 — detailed in the MVP roadmap and product tracks sections.
+
 ## Executive purpose
 
 `portfolio-engine` is meant to become a reusable open-source backbone for personal, portfolio, and editorial websites. It should let Jordan maintain one shared engine while keeping `agreni-site`, `jordan-site`, and future consumer sites cleanly separated.
@@ -26,7 +28,7 @@ examples/demo-site
 CI/build/check/docs
 ```
 
-At MVP, a downstream repo should be able to install or link the theme, provide config/content/assets, build locally, and deploy to Vercel. The consumer extension registry, admin UI, and Python/MCP tools are valuable but not required for that first stable backbone.
+At **Backbone MVP**, a downstream repo should be able to install or link the theme, provide config/content/assets, build locally, and deploy to Vercel. The consumer extension registry, admin UI, and Python/MCP tools are valuable but not required for that first stable backbone.
 
 ## Goal 2 — Clear consumer repo model
 
@@ -93,7 +95,7 @@ This is how the project can crowdsource consumer-agent compute without merging o
 - registry entries;
 - upstream blockers and patches.
 
-It is not needed for MVP, but the data model should be admin-friendly from the beginning.
+It is not needed for Backbone MVP, but the data model should be admin-friendly from the beginning.
 
 ## Goal 6 — Optional Python/MCP workflow-kit
 

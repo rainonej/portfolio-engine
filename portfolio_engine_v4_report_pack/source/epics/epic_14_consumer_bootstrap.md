@@ -1,7 +1,8 @@
-# Epic 13 — Consumer bootstrap/setup script
+# Epic 14 — Consumer bootstrap/setup script
 
-**Phase:** Phase 7 (post-MVP)
-**MVP relevance:** Post-MVP — helpful for adoption, not required for the stable backbone
+**Phase:** Phase 9  
+**MVP relevance:** Post–Product-MVP — helpful for adoption  
+**Products touched:** C, D, F, G  
 **Labels:** `type:epic`, `area:downstream`, `area:workflow-kit`, `area:docs`, `source:human`
 
 ## Summary
@@ -54,7 +55,7 @@ The script cannot complete dashboard steps. It prints human instructions for:
 
 ## Tickets
 
-### T13.1 — Design setup script UX
+### T14.1 — Design setup script UX
 
 **Labels:** `task:design`, `owner:human-dev`, `area:downstream`, `mvp:post`
 
@@ -66,7 +67,7 @@ Decide command name and distribution method, prompts and questions, and non-over
 - [ ] User prompts and questions documented.
 - [ ] Behavior when files already exist is specified.
 
-### T13.2 — Add setup templates
+### T14.2 — Add setup templates
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:downstream`, `agent:approved`, `mvp:post`
 
@@ -78,7 +79,7 @@ Decide command name and distribution method, prompts and questions, and non-over
 - [ ] Template folder READMEs exist.
 - [ ] Placeholder content, config, and context examples exist.
 
-### T13.3 — Add setup script dry-run mode
+### T14.3 — Add setup script dry-run mode
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:workflow-kit`, `agent:approved`, `mvp:post`
 
@@ -87,7 +88,7 @@ Decide command name and distribution method, prompts and questions, and non-over
 - [ ] Dry-run mode prints planned file changes without writing them.
 - [ ] Existing files trigger a warning and are not overwritten without explicit confirmation.
 
-### T13.4 — Add human setup checklist
+### T14.4 — Add human setup checklist
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:docs`, `agent:approved`, `mvp:post`
 

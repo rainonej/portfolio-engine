@@ -1,7 +1,8 @@
-# Epic 2 — Consumer repo layout contract
+# Epic 5 — Consumer repo layout contract
 
 **Phase:** Phase 2  
-**MVP relevance:** ★ Required for clean consumer repos  
+**MVP relevance:** ★ Required for Backbone MVP  
+**Products touched:** A, B, C, D, E, F  
 **Labels:** `type:epic`, `area:downstream`, `area:docs`, `area:engine-core`, `source:human`
 
 ## Summary
@@ -14,7 +15,7 @@ The repo layout is the interface for nontechnical people and AI agents. If the l
 
 ## Tickets
 
-### T2.1 — Decide config path migration strategy
+### T5.1 — Decide config path migration strategy
 
 **Labels:** `task:decision`, `owner:human-dev`, `area:engine-core`
 
@@ -25,7 +26,7 @@ Decide whether to immediately migrate from `config/*.json` to `src/config/*.json
 - [ ] Decision recorded.
 - [ ] Demo-site migration strategy documented.
 
-### T2.2 — Add path options to `editorialTheme(...)`
+### T5.2 — Add path options to `editorialTheme(...)`
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:editorial-theme`, `agent:approved`
 
@@ -38,7 +39,7 @@ Support paths for config, content, context, registry, overrides, local component
 - [ ] `paths.context` accepted.
 - [ ] Existing demo can still build during transition.
 
-### T2.3 — Add folder README templates
+### T5.3 — Add folder README templates
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:downstream`, `agent:approved`
 
@@ -50,7 +51,7 @@ Create small README templates for `src/config`, `src/content`, `src/context`, `s
 - [ ] Each README says what does not belong.
 - [ ] Each README gives a small example.
 
-### T2.4 — Define structured context schemas
+### T5.4 — Define structured context schemas
 
 **Labels:** `task:decision`, `owner:human-dev`, `area:schema`
 
@@ -62,7 +63,7 @@ Define fields for `site-owner.json` and `brand-voice.json` so admin-tools can re
 - [ ] Brand-voice fields drafted.
 - [ ] Privacy expectations documented.
 
-### T2.5 — Move tool state to `.portfolio-engine` docs
+### T5.5 — Move tool state to `.portfolio-engine` docs
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:docs`, `agent:approved`
 

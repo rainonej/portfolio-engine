@@ -1,7 +1,8 @@
-# Epic 15 — Package build scripts and npm publishing
+# Epic 4 — Package build scripts and npm publishing
 
-**Phase:** Phase 1 (build scripts) / Phase 2 (publish + switch agreni-site)
-**MVP relevance:** ★ Required for MVP — packages cannot be consumed by separate consumer repos without real builds and a publishing strategy
+**Phase:** Phase 1 (build scripts) / Phase 2 (publish + switch agreni-site)  
+**MVP relevance:** ★ Required for Backbone MVP (builds + docs); ★ Required for Product MVP (semver publish + consume)  
+**Products touched:** A, C, D  
 **Labels:** `type:epic`, `area:schema`, `area:engine-core`, `area:editorial-theme`, `area:release`, `source:human`
 
 ## Summary
@@ -10,13 +11,13 @@ All three required runtime packages currently have no-op build scripts (`echo 'b
 
 ## Why this matters
 
-The v4 audit report's definition of MVP includes "enough stability to create agreni-site and jordan-site as clean private repos." Without published packages, those repos can only consume via pnpm workspace links — which requires consumers to live inside the portfolio-engine monorepo. That is not the target architecture.
+**Product MVP** requires agreni-site and jordan-site to consume versioned packages unless a documented exception applies. Without published packages, those repos can only consume via pnpm workspace links — acceptable for Backbone MVP only when documentation is explicit.
 
 This epic also documents the two development modes so contributors know which to use.
 
 ## Maps to old Epic 6 (profesional_site)
 
-This epic is the v4 equivalent of profesional_site issues:
+This epic is the v5 equivalent of profesional_site issues:
 - #177: Epic 6 — Publish and Stabilize Package Consumption
 - #219: Task 6.1 — Publish first engine packages to npm
 - #220: Task 6.2 — Switch agreni-site from local paths to semver packages
@@ -35,7 +36,7 @@ Consumer lives in a separate private repo. Packages are installed from npm as ve
 
 ## Tickets
 
-### T15.1 — Write real build scripts for required packages
+### T4.1 — Write real build scripts for required packages
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:engine-core`, `area:editorial-theme`, `area:schema`, `agent:approved`, `mvp:required`
 
@@ -49,7 +50,7 @@ Replace `echo 'build not yet configured'` with working build scripts in all thre
 - [ ] All three packages have correct `exports` and `main`/`types` fields in `package.json`.
 - [ ] Changesets release workflow can publish from `dist/`.
 
-### T15.2 — Document two development modes
+### T4.2 — Document two development modes
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:docs`, `agent:approved`, `mvp:required`
 
@@ -62,7 +63,7 @@ Update `docs/downstream/consumption.md` to clearly describe workspace-link mode 
 - [ ] Switch instructions from one mode to the other are included.
 - [ ] `docs/downstream/consumption.md` is updated.
 
-### T15.3 — Publish first engine packages to npm
+### T4.3 — Publish first engine packages to npm
 
 **Labels:** `task:feat`, `owner:human-dev`, `area:release`, `mvp:required`
 
@@ -74,9 +75,9 @@ Trigger the Changesets release workflow to publish `@portfolio-engine/schema`, `
 - [ ] npm package pages are accessible.
 - [ ] Packages are installable via `npm install @portfolio-engine/editorial-theme`.
 
-**Blocked by:** T15.1 (build scripts must work first)
+**Blocked by:** T4.1 (build scripts must work first)
 
-### T15.4 — Validate agreni-site can consume published packages
+### T4.4 — Validate agreni-site can consume published packages
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:downstream`, `agent:approved`, `mvp:required`
 
@@ -88,9 +89,9 @@ In the agreni-site repo, switch from pnpm workspace links to semver references. 
 - [ ] `pnpm install` and `pnpm build` succeed in agreni-site without the portfolio-engine monorepo present.
 - [ ] Any monorepo-specific paths or assumptions are removed.
 
-**Blocked by:** T15.3 (packages must be published first), agreni-site #1 (secrets/integrations reconnected)
+**Blocked by:** T4.3 (packages must be published first), agreni-site #1 (secrets/integrations reconnected)
 
-### T15.5 — Add basic package upgrade workflow
+### T4.5 — Add basic package upgrade workflow
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:downstream`, `area:docs`, `agent:approved`, `mvp:post`
 

@@ -1,7 +1,8 @@
-# Epic 5 — Consumer extension registry
+# Epic 11 — Consumer extension registry
 
-**Phase:** Phase 5  
-**MVP relevance:** Post-MVP  
+**Phase:** Phase 6  
+**MVP relevance:** Post–Product-MVP  
+**Products touched:** A, B, C, D, E, F  
 **Labels:** `type:epic`, `area:consumer-registry`, `area:editorial-theme`, `source:human`
 
 ## Summary
@@ -14,7 +15,7 @@ Consumers should be able to declare local reusable pages and embeds without edit
 
 ## Tickets
 
-### T5.1 — Decide registry file format
+### T11.1 — Decide registry file format
 
 **Labels:** `task:decision`, `owner:human-dev`, `area:consumer-registry`
 
@@ -25,7 +26,7 @@ Choose TypeScript, JSON, or hybrid for `src/registry/portfolio-engine.registry.*
 - [ ] Decision recorded.
 - [ ] Admin-tools readability considered.
 
-### T5.2 — Add local route extension support
+### T11.2 — Add local route extension support
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:consumer-registry`, `agent:approved`
 
@@ -37,7 +38,7 @@ Allow registry entries to add local pages backed by `src/pages-local`.
 - [ ] Duplicate paths fail clearly.
 - [ ] Manifest includes local route.
 
-### T5.3 — Add local component/embed support
+### T11.3 — Add local component/embed support
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:consumer-registry`, `agent:approved`
 
@@ -49,7 +50,7 @@ Allow registry entries to declare local embeds backed by `src/components`.
 - [ ] Missing component fails clearly.
 - [ ] SnakeGame example possible.
 
-### T5.4 — Add framed YouTube example
+### T11.4 — Add framed YouTube example
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:demo-site`, `agent:approved`
 

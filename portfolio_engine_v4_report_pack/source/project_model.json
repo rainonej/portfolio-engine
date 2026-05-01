@@ -1,5 +1,5 @@
 {
-  "version": "v4",
+  "version": "v5",
   "generated": "2026-04-30",
   "title": "Portfolio Engine Target Architecture Audit and Roadmap",
   "packages": [
@@ -9,7 +9,20 @@
     {"name": "@portfolio-engine/admin-tools", "kind": "optional UI package", "language": "Astro / TypeScript", "mvp": false, "dependsOn": ["required runtime packages", "manifest", "schemas"], "purpose": "Rendered admin/reviewer UI so nontechnical consumers can edit content, config, context, assets, and registry entries without looking at code. Extracted from profesional_site/agreni-site — not a greenfield build."},
     {"name": "portfolio-engine-workflow-kit", "kind": "optional AI tooling", "language": "Python / MCP", "mvp": false, "dependsOn": ["consumer layout contract", "manifest"], "purpose": "Local MCP server exposing tools to Claude/Copilot: inspect_site, plan_request, validate_plan, plan_upstream, patch_ledger."}
   ],
-  "mvpDefinition": "MVP requires Phase 1 (runtime reliability: TypeScript/build/CI clean, package build scripts written) plus Phase 2 (consumer layout contract established: src/config/ migration done, src/context/ layer added, override bridge demonstrated, docs updated, packages published to npm). Consumer registry, admin-tools, workflow-kit, and advanced automation are post-MVP.",
+  "mvpDefinition": "v5 defines Backbone MVP (after Phase 3): runtime buildability, consumer layout contract, override bridge when advertised, MVP documentation; workspace-link allowed if docs are clear. Product MVP (after Phase 4): agreni-site and jordan-site as clean private consumers on semver/npm unless an explicit documented exception applies. Registries, admin-tools, workflow-kit, bootstrap, and advanced automation are post–Product-MVP.",
+  "productTracks": [
+    {"id": "A", "name": "Runtime engine", "summary": "schema, engine-core, editorial-theme"},
+    {"id": "B", "name": "Demo-site", "summary": "reference consumer and teaching surface"},
+    {"id": "C", "name": "agreni-site", "summary": "first real private consumer (nontechnical workflow)"},
+    {"id": "D", "name": "jordan-site", "summary": "second real consumer (different brand/content goals)"},
+    {"id": "E", "name": "admin-tools", "summary": "optional editing UI"},
+    {"id": "F", "name": "workflow-kit", "summary": "optional Python/MCP agent tools"},
+    {"id": "G", "name": "Governance and safety", "summary": "legal, labels, board, contribution safety, docs"}
+  ],
+  "mvpMilestones": {
+    "backboneMvp": "After Phase 3 — engine stable: packages build, layout contract proven, MVP docs complete, override bridge if advertised.",
+    "productMvp": "After Phase 4 — agreni-site and jordan-site exist as clean private repos consuming published packages (or documented exception)."
+  },
   "boardRepos": [
     {
       "repo": "rainonej/portfolio-engine",
@@ -19,7 +32,7 @@
     {
       "repo": "rainonej/agreni-site",
       "openIssues": 7,
-      "description": "Phase 2/10 — consumer repo scaffolding and content migration; blocked until consumer layout contract is finalized"
+      "description": "Phase 4 Product MVP — consumer repo; aligns with report Epics 8 and 4"
     },
     {
       "repo": "rainonej/profesional_site",
@@ -63,24 +76,24 @@
         {"id": "#213", "title": "Task 4.5 — Create examples/demo-site", "disposition": "Done — close with reference to portfolio-engine"}
       ],
       "epicSix_packagePublishing": [
-        {"id": "#177", "title": "Epic 6 — Publish and Stabilize Package Consumption", "reportEpic": "Epic 15", "disposition": "Keep — maps to new Epic 15"},
-        {"id": "#219", "title": "Task 6.1 — Publish first engine packages to npm", "reportEpic": "Epic 15 T15.3", "disposition": "Keep"},
-        {"id": "#220", "title": "Task 6.2 — Switch agreni-site to semver packages", "reportEpic": "Epic 15 T15.4", "disposition": "Keep"},
-        {"id": "#221", "title": "Task 6.3 — Document two development modes", "reportEpic": "Epic 15 T15.2", "disposition": "Keep"},
-        {"id": "#222", "title": "Task 6.4 — Add basic package upgrade workflow", "reportEpic": "Epic 15 T15.5", "disposition": "Keep"}
+        {"id": "#177", "title": "Epic 6 — Publish and Stabilize Package Consumption", "reportEpic": "Epic 4", "disposition": "Keep — maps to Epic 4"},
+        {"id": "#219", "title": "Task 6.1 — Publish first engine packages to npm", "reportEpic": "Epic 4 T4.3", "disposition": "Keep"},
+        {"id": "#220", "title": "Task 6.2 — Switch agreni-site to semver packages", "reportEpic": "Epic 4 T4.4 / Epic 8", "disposition": "Keep"},
+        {"id": "#221", "title": "Task 6.3 — Document two development modes", "reportEpic": "Epic 4 T4.2 / Epic 7", "disposition": "Keep"},
+        {"id": "#222", "title": "Task 6.4 — Add basic package upgrade workflow", "reportEpic": "Epic 4 T4.5 / Epic 8", "disposition": "Keep"}
       ],
       "epicSeven_adminTools": [
-        {"id": "#178", "title": "Epic 7 — Extract Admin Tools + Generated Site Map", "reportEpic": "Epic 7", "disposition": "Keep — maps to report Epic 7"},
-        {"id": "#223", "title": "Task 7.1 — Extract admin/reviewer UI into admin-tools", "reportEpic": "Epic 7 T7.1", "disposition": "Keep — Phase 4"},
-        {"id": "#224", "title": "Task 7.2 — Generate site map from route registry", "reportEpic": "Epic 7", "disposition": "Keep — Phase 3/4"},
-        {"id": "#225", "title": "Task 7.3 — Add content/config inspection panels", "reportEpic": "Epic 7", "disposition": "Keep — Phase 4"}
+        {"id": "#178", "title": "Epic 7 — Extract Admin Tools + Generated Site Map", "reportEpic": "Epic 12", "disposition": "Keep — maps to report Epic 12"},
+        {"id": "#223", "title": "Task 7.1 — Extract admin/reviewer UI into admin-tools", "reportEpic": "Epic 12 T12.1", "disposition": "Keep — Phase 7"},
+        {"id": "#224", "title": "Task 7.2 — Generate site map from route registry", "reportEpic": "Epic 12", "disposition": "Keep — Phase 7"},
+        {"id": "#225", "title": "Task 7.3 — Add content/config inspection panels", "reportEpic": "Epic 12", "disposition": "Keep — Phase 7"}
       ],
       "epicEight_obsolete": [
-        {"id": "#179", "title": "Epic 8 — Build workflow-kit MVP (old GitHub Actions)", "reportEpic": "Epic 6", "disposition": "Re-scope: update to reference ADR-002 and link to Epic 6"},
-        {"id": "#226", "title": "Task 8.1 — Define workflow classification contract", "reportEpic": "Epic 6", "disposition": "Re-scope: rephrase as MCP tool contracts"},
+        {"id": "#179", "title": "Epic 8 — Build workflow-kit MVP (old GitHub Actions)", "reportEpic": "Epic 13", "disposition": "Re-scope: update to reference ADR-002 and link to Epic 13"},
+        {"id": "#226", "title": "Task 8.1 — Define workflow classification contract", "reportEpic": "Epic 13", "disposition": "Re-scope: rephrase as MCP tool contracts"},
         {"id": "#227", "title": "Task 8.2 — Package reusable GitHub workflow templates", "disposition": "Close — old approach, replaced by Python/MCP"},
         {"id": "#228", "title": "Task 8.3 — Add engine-aware classifier", "disposition": "Close — old approach, replaced by inspect_site and plan_request"},
-        {"id": "#229", "title": "Task 8.4 — Add downstream-to-upstream routing contract", "reportEpic": "Epic 6 T6.6", "disposition": "Re-scope: concept valid, implementation is plan_upstream MCP tool"}
+        {"id": "#229", "title": "Task 8.4 — Add downstream-to-upstream routing contract", "reportEpic": "Epic 13 T13.6", "disposition": "Re-scope: concept valid, implementation is plan_upstream MCP tool"}
       ],
       "siteOwnerContent_separateTrack": [
         {"id": "#35", "title": "Site owner: positioning and copy", "disposition": "Separate launch track — blocked on Agreni"},

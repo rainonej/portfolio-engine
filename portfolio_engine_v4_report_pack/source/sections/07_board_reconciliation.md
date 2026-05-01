@@ -1,13 +1,13 @@
 # Board Reconciliation Snapshot
 
-This section is the output of Epic 0b — reconciling the live GitHub project board with the v4 audit report. The board (https://github.com/users/rainonej/projects/2) spans three repos and 282 total items (61 open as of 2026-04-30).
+This section is the output of Epic 0 — reconciling the live GitHub project board with the v5 audit report. The board (https://github.com/users/rainonej/projects/2) spans three repos and 282 total items (61 open as of 2026-04-30).
 
 ## The three-repo structure
 
 | Repo | Open issues | What they represent |
 |---|---|---|
 | `rainonej/portfolio-engine` | 14 | Phase 1 sprint tail — Epic 4 extraction follow-through |
-| `rainonej/agreni-site` | 7 | Phase 2/10 — consumer repo scaffolding and content migration |
+| `rainonej/agreni-site` | 7 | Phase 4 — Product MVP consumer (maps to report Epics 8 + 4) |
 | `rainonej/profesional_site` | 40 | Origin repo: old epics, done tasks, content blockers, governance |
 
 The `profesional_site` repo is the origin monorepo. It predates the portfolio-engine split and contains parent epics (4–10) that generated the work now tracked in `portfolio-engine`. It also holds content-only tasks blocked on the site owner.
@@ -33,7 +33,7 @@ The `profesional_site` repo is the origin monorepo. It predates the portfolio-en
 
 ## agreni-site issues — disposition
 
-All 7 issues map to report Epic 10 (consumer migration). They should wait until the Phase 2 consumer layout contract is established and the packages are published.
+All 7 issues map to report **Epic 8** (agreni-site MVP) and **Epic 4** (package publishing / semver). They align with **Phase 4 Product MVP** after the Backbone MVP (Phases 1–3) and published packages.
 
 | # | Title | Phase | Notes |
 |---|---|---|---|
@@ -60,17 +60,17 @@ All Epic 4 extraction tasks are complete. The editorial-theme package has 13 com
 | #212 | Task 4.4 — Define first-party override points | Done |
 | #213 | Task 4.5 — Create examples/demo-site | Done |
 
-### Epic 6 — Package publishing (CRITICAL GAP, no report equivalent until epic_15)
+### Epic 6 — Package publishing (maps to report Epic 4)
 
 | # | Title | Report epic | Phase |
 |---|---|---|---|
-| #177 | Epic 6 — Publish and Stabilize Package Consumption | Epic 15 | Phase 1/2 ★ |
-| #219 | Task 6.1 — Publish first engine packages to npm | Epic 15 | Phase 1/2 ★ |
-| #220 | Task 6.2 — Switch agreni-site to semver packages | Epic 10/15 | Phase 2 |
-| #221 | Task 6.3 — Document two development modes | Epic 1/15 | Phase 1/2 |
-| #222 | Task 6.4 — Add basic package upgrade workflow | Epic 10/15 | Phase 2 |
+| #177 | Epic 6 — Publish and Stabilize Package Consumption | Epic 4 | Phase 1/2 ★ |
+| #219 | Task 6.1 — Publish first engine packages to npm | Epic 4 | Phase 1/2 ★ |
+| #220 | Task 6.2 — Switch agreni-site to semver packages | Epic 4 / Epic 8 | Phase 4 Product MVP |
+| #221 | Task 6.3 — Document two development modes | Epic 3 / Epic 4 | Phase 1–3 |
+| #222 | Task 6.4 — Add basic package upgrade workflow | Epic 4 / Epic 8 | Phase 4 |
 
-### Epic 7 — Admin-tools extraction (report Epic 7, Phase 4)
+### Epic 7 — Admin-tools extraction (report Epic 12, Phase 7)
 
 Important: admin-tools is an EXTRACTION from the existing profesional_site/agreni-site admin UI, not a greenfield build. The functionality exists; it needs to be packaged.
 
@@ -87,13 +87,13 @@ These tickets describe a GitHub Actions-based workflow classifier. ADR-002 repla
 
 | # | Title | Disposition |
 |---|---|---|
-| #179 | Epic 8 — Build workflow-kit MVP | Re-scope to reference ADR-002 and report Epic 6 |
+| #179 | Epic 8 — Build workflow-kit MVP | Re-scope to reference ADR-002 and report Epic 13 |
 | #226 | Task 8.1 — Define workflow classification contract | Re-scope as MCP tool contracts |
 | #227 | Task 8.2 — Package reusable GitHub workflow templates | Close — old approach |
 | #228 | Task 8.3 — Add engine-aware classifier | Close — old approach |
 | #229 | Task 8.4 — Add downstream-to-upstream routing contract | Re-scope — concept valid, implementation is Python/MCP |
 
-### Epics 9 and 10 — Patch lifecycle (report Epic 9, Phase 7)
+### profesional_site Epics 9 and 10 — Patch lifecycle (report Epic 16, Phase 11)
 
 These remain valid. Note that Task 9.2 (create local patch + upstream PR) was scoped for GitHub Actions; it should now be scoped for Python/MCP tooling instead.
 
@@ -107,7 +107,7 @@ These remain valid. Note that Task 9.2 (create local patch + upstream PR) was sc
 
 | # | Title | Phase | Notes |
 |---|---|---|---|
-| #270 | Epic 1.5 — Provision Repositories, Ownership, Privacy | Phase 0 | Maps to report Epic 0/0b |
+| #270 | Epic 1.5 — Provision Repositories, Ownership, Privacy | Phase 0 | Maps to report Epic 0 |
 | #272 | Task 1.13 — Verify Agreni GitHub account and grant access | Phase 0 | Human required |
 | #282 | Task CI.1 — Expand CI for portfolio-engine monorepo | Phase 1 | Maps to #28/#29 |
 | #78 | Add ANTHROPIC_API_KEY secret to GitHub Actions | Phase 6 | Needed for workflow-kit |
@@ -122,12 +122,12 @@ These are not engineering tasks. They are blocked on the site owner (Agreni) pro
 - profesional_site #40: Provide real booking URL
 - profesional_site #41: Launch content approval
 - profesional_site #238: Mobile home page bug (address during agreni-site migration)
-- profesional_site #153: Wire content editing in /admin (depends on Epic 7 extraction)
+- profesional_site #153: Wire content editing in /admin (depends on Epic 12 admin-tools extraction)
 - profesional_site #82: Screenshots for CONTRIBUTING.md (low priority docs)
 
 ## Missing from both board and report (must create tickets)
 
-All Phase 2 work has no board representation. These tickets need to be created:
+Several roadmap items may still need explicit board tickets. Track or create as needed:
 
 1. Config path migration: `config/*.json` → `src/config/*.json`
 2. Add `src/context/` layer with schemas and demo placeholder files
@@ -135,6 +135,6 @@ All Phase 2 work has no board representation. These tickets need to be created:
 4. Formalize consumer layout contract in docs
 5. Migrate demo-site to full target layout
 6. Write real package build scripts (currently all no-ops)
-7. Publish packages to npm (or document workspace-link-only as the MVP mode)
-8. Create GitHub milestones for Phase 1 and Phase 2
-9. Create `area:*` and `agent:*` labels (rename `area:theme` → `area:editorial-theme`, `area:demo` → `area:demo-site`, deprecate `claude-ready`)
+7. Publish packages to npm (Backbone MVP allows workspace-link if documented; Product MVP targets semver)
+8. Create GitHub milestones aligned to Phase 0–11
+9. Complete **Epic 1** label migration (standard `area:*` / `agent:*`; deprecate legacy ready label)

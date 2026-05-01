@@ -26,9 +26,9 @@ All three required packages have `"build": "echo 'build not yet configured'"`. T
 
 - The Changesets release workflow cannot publish built artifacts.
 - Consumer repos cannot install packages from npm — they must live inside the monorepo.
-- The MVP definition ("stable backbone for separate consumer repos") cannot be met without this.
+- The Backbone/Product MVP definitions cannot be met without this.
 
-**This is the highest-priority untracked gap.** See Epic 15 for the plan.
+**This is the highest-priority untracked gap.** See **Epic 4** for the plan.
 
 Steps required:
 
@@ -70,13 +70,13 @@ Target adds `src/context/site-owner.json`, `src/context/brand-voice.json`, `src/
 
 ### Manifest generation
 
-No current `.portfolio-engine/manifest.json`. Target requires a generated manifest for tools, admin-tools, and the future consumer registry. This is post-MVP and depends on Phase 3 (explicit registries).
+No current `.portfolio-engine/manifest.json`. Target requires a generated manifest for tools, admin-tools, and the future consumer registry. This is post–Product-MVP and depends on Phase 5 (**Epic 10**).
 
 ## Named technical debt
 
 ### Hardcoded route metadata
 
-`packages/engine-core/src/route-discovery.ts` hardcodes 9 routes as a static array. This works but is not machine-readable or extensible. Phase 3 (Epic 12) replaces this with file-based registries.
+`packages/engine-core/src/route-discovery.ts` hardcodes 9 routes as a static array. This works but is not machine-readable or extensible. Phase 5 (**Epic 10**) replaces this with file-based registries.
 
 ### Hardcoded override surfaces
 
@@ -94,7 +94,7 @@ Explain that `public/` is served from site root and everything inside is publicl
 
 ### Issue label migration
 
-Rename `area:theme` → `area:editorial-theme` and `area:demo` → `area:demo-site` in GitHub. Add `area:*` and `agent:*` labels per Epic 11. Deprecate `claude-ready`.
+Rename legacy narrow `area:*` labels to the standard taxonomy (`area:editorial-theme`, `area:demo-site`, etc.) in GitHub. Add `area:*` and `agent:*` labels per **Epic 1**. Deprecate the legacy provider-specific ready label in favor of `agent:approved`.
 
 ### Acknowledged gap: no test suite
 

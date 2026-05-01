@@ -1,7 +1,8 @@
-# Epic 7 — Optional admin-tools UI
+# Epic 12 — Optional admin-tools UI
 
-**Phase:** Phase 4  
-**MVP relevance:** Post-MVP  
+**Phase:** Phase 7  
+**MVP relevance:** Post–Product-MVP  
+**Products touched:** C, E  
 **Labels:** `type:epic`, `area:admin-tools`, `source:human`
 
 ## Summary
@@ -22,7 +23,7 @@ The admin UI to extract is in the profesional_site/agreni-site codebase. See:
 
 ## Tickets
 
-### T7.1 — Update admin-tools docs for target layout
+### T12.1 — Update admin-tools docs for target layout
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:admin-tools`, `agent:approved`
 
@@ -33,7 +34,7 @@ Document how admin-tools will read `src/config`, `src/content`, `src/context`, `
 - [ ] Docs distinguish admin-tools from workflow-kit.
 - [ ] Docs identify admin-editable vs tool-state files.
 
-### T7.2 — Design admin information architecture
+### T12.2 — Design admin information architecture
 
 **Labels:** `task:design`, `owner:human-dev`, `area:admin-tools`
 
@@ -44,7 +45,7 @@ Design admin sections for theme/config, sitemap/routes, content, context, assets
 - [ ] IA sketch documented.
 - [ ] MVP admin scope separated from future scope.
 
-### T7.3 — Define admin-editable context fields
+### T12.3 — Define admin-editable context fields
 
 **Labels:** `task:decision`, `owner:human-dev`, `area:admin-tools`
 
@@ -91,4 +92,4 @@ These are not part of the initial admin-tools build. They clarify where the UI i
 
 Future settings for manual, scheduled, or auto-approved publishing workflows.
 
-See also: `epic_14_admin_tools_publishing.md` for the publishing/preview management epic.
+See also: `epic_17_admin_publishing.md` for the publishing/preview management epic.

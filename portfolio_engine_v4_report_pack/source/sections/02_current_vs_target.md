@@ -59,7 +59,7 @@ None of these exist anywhere in the current repo. The schema package does not ye
 
 ### Mismatch 4 — override bridge is wired but not demonstrated
 
-`override-resolution.ts` validates component override names against `SUPPORTED_COMPONENT_SURFACES` (hardcoded: Hero, FeaturedWriting, TestimonialSection, CollaborationSection). However, there is no demo override example in demo-site, and it is not confirmed whether the editorial-theme's page components actually consume the override map at render time. Both gaps need to close before MVP is declared.
+`override-resolution.ts` validates component override names against `SUPPORTED_COMPONENT_SURFACES` (hardcoded: Hero, FeaturedWriting, TestimonialSection, CollaborationSection). However, there is no demo override example in demo-site, and it is not confirmed whether the editorial-theme's page components actually consume the override map at render time. Both gaps need to close before **Backbone MVP** is declared (or override scope explicitly excluded in docs).
 
 ### Mismatch 5 — no consumer registry yet
 
@@ -82,25 +82,25 @@ Target adds (post-MVP):
 .portfolio-engine/patch-ledger.json
 ```
 
-None of these exist. This is post-MVP and depends on Phase 3 (explicit registries).
+None of these exist. This is post–Product-MVP and depends on Phase 5 (**Epic 10**).
 
 ## Named technical debt (not yet in any ticket)
 
 ### Hardcoded ROUTE_METADATA
 
-`packages/engine-core/src/route-discovery.ts` lines 17–74 hardcode 9 routes with full metadata as a static array. This is the concrete technical debt that Epic 12 (explicit registries) is meant to fix. The routes work, but they cannot be inspected by tools or extended by consumers without editing this file.
+`packages/engine-core/src/route-discovery.ts` lines 17–74 hardcode 9 routes with full metadata as a static array. This is the concrete technical debt that **Epic 10** (explicit registries) is meant to fix. The routes work, but they cannot be inspected by tools or extended by consumers without editing this file.
 
 ### Hardcoded SUPPORTED_COMPONENT_SURFACES
 
-`packages/engine-core/src/override-resolution.ts` hardcodes 4 override surface names as a `Set<string>`. Same issue, same fix (Epic 12). The override list is correct for now but cannot be machine-read or dynamically extended.
+`packages/engine-core/src/override-resolution.ts` hardcodes 4 override surface names as a `Set<string>`. Same issue, same fix (**Epic 10**). The override list is correct for now but cannot be machine-read or dynamically extended.
 
 ### No package build scripts
 
-All three required packages have `"build": "echo 'build not yet configured'"`. The Changesets release workflow cannot publish without real build output. This is a Phase 1 blocker for the separate-consumer-repo model (Epic 15).
+All three required packages have `"build": "echo 'build not yet configured'"`. The Changesets release workflow cannot publish without real build output. This is a Phase 1 blocker for the separate-consumer-repo model (**Epic 4**).
 
 ### No test suite
 
-There are zero unit or integration tests across all packages. The project relies on `tsc --noEmit`, `astro check`, and CI build as quality gates. This is a known gap. At minimum, the MVP definition should acknowledge it explicitly.
+There are zero unit or integration tests across all packages. The project relies on `tsc --noEmit`, `astro check`, and CI build as quality gates. This is a known gap. At minimum, the **Backbone MVP** / debt register should acknowledge it explicitly.
 
 ## Where the current repo is already solid
 
