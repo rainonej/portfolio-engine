@@ -306,14 +306,14 @@ src/context/agent-rules.md</code></pre>
 .portfolio-engine/state.json
 .portfolio-engine/upstream-tracking.json
 .portfolio-engine/patch-ledger.json</code></pre>
-<p>None of these exist. This is post–Product-MVP and depends on Phase 5 (<strong>Epic 10</strong>).</p>
+<p>None of these exist. This is post–Product-MVP and depends on Phase 5 (<a href="#epic-registries-manifest">Registries / manifest</a>).</p>
 <h2>Named technical debt (not yet in any ticket)</h2>
 <h3>Hardcoded ROUTE_METADATA</h3>
-<p><code>packages/engine-core/src/route-discovery.ts</code> lines 17–74 hardcode 9 routes with full metadata as a static array. This is the concrete technical debt that <strong>Epic 10</strong> (explicit registries) is meant to fix. The routes work, but they cannot be inspected by tools or extended by consumers without editing this file.</p>
+<p><code>packages/engine-core/src/route-discovery.ts</code> lines 17–74 hardcode 9 routes with full metadata as a static array. This is the concrete technical debt that <a href="#epic-registries-manifest">Registries / manifest</a> (explicit registries) is meant to fix. The routes work, but they cannot be inspected by tools or extended by consumers without editing this file.</p>
 <h3>Hardcoded SUPPORTED_COMPONENT_SURFACES</h3>
-<p><code>packages/engine-core/src/override-resolution.ts</code> hardcodes 4 override surface names as a <code>Set&lt;string&gt;</code>. Same issue, same fix (<strong>Epic 10</strong>). The override list is correct for now but cannot be machine-read or dynamically extended.</p>
+<p><code>packages/engine-core/src/override-resolution.ts</code> hardcodes 4 override surface names as a <code>Set&lt;string&gt;</code>. Same issue, same fix (<a href="#epic-registries-manifest">Registries / manifest</a>). The override list is correct for now but cannot be machine-read or dynamically extended.</p>
 <h3>No package build scripts</h3>
-<p>All three required packages have <code>&quot;build&quot;: &quot;echo 'build not yet configured'&quot;</code>. The Changesets release workflow cannot publish without real build output. This is a Phase 1 blocker for the separate-consumer-repo model (<strong>Epic 4</strong>).</p>
+<p>All three required packages have <code>&quot;build&quot;: &quot;echo 'build not yet configured'&quot;</code>. The Changesets release workflow cannot publish without real build output. This is a Phase 1 blocker for the separate-consumer-repo model (<a href="#epic-package-publishing">Package publishing</a>).</p>
 <h3>No test suite</h3>
 <p>There are zero unit or integration tests across all packages. The project relies on <code>tsc --noEmit</code>, <code>astro check</code>, and CI build as quality gates. This is a known gap. At minimum, the <strong>Backbone MVP</strong> / debt register should acknowledge it explicitly.</p>
 <h2>Where the current repo is already solid</h2>
@@ -357,72 +357,50 @@ agreni-site + jordan-site (Phase 4)
 <li><strong>agreni-site</strong> and <strong>jordan-site</strong> are clean private repos consuming published packages (unless an explicit exception is documented).</li>
 <li>Both build and preview successfully; content/config/context owned in-consumer only.</li>
 </ul>
-<h2>Post–Product-MVP (Phases 5–11)</h2>
-<p>Not required for either MVP:</p>
-<ul>
-<li>Explicit registries and manifest (Phase 5).</li>
-<li>Consumer extension registry (Phase 6).</li>
-<li>Admin-tools extraction (Phase 7).</li>
-<li>Python/MCP workflow-kit (Phase 8).</li>
-<li>Consumer bootstrap script (Phase 9).</li>
-<li>Demo-site product showcase expansion (Phase 10).</li>
-<li>Contribution safety, advanced preview/publishing (Phase 11).</li>
-</ul>
-<p>---</p>
-<h2>Phase 0 — Planning, labels, board, governance, debt register</h2>
-<p>Includes label taxonomy (Epic 1), governance/legal (Epic 2), board reconciliation (Epic 0), and technical debt visibility. See <strong>Epic 0</strong>, <strong>Epic 1</strong>, <strong>Epic 2</strong>, and section <strong>Board reconciliation</strong>.</p>
-<h2>Phase 1 — Runtime backbone buildability</h2>
-<p>Stabilize schema, engine-core, editorial-theme, CI, Vercel, and package build scripts. See <strong>Epic 3</strong>.</p>
-<h2>Phase 2 — Consumer layout contract</h2>
-<p>Establish the preferred consumer layout; migrate demo-site. See <strong>Epic 5</strong>.</p>
-<h2>Phase 3 — Override proof and MVP docs</h2>
-<p>Override bridge (Hero + custom CSS) for <strong>Backbone MVP</strong> when overrides are advertised; <strong>Epic 7</strong> covers README, CONTRIBUTING, downstream docs, two-mode documentation. See <strong>Epic 6</strong> and <strong>Epic 7</strong>.</p>
-<h2>★ Backbone MVP</h2>
-<p><strong>Engine stable enough to serve real consumer repos</strong> — after Phases 1–3. See product tracks section for matrix.</p>
-<h2>Phase 4 — First consumer products (agreni-site + jordan-site)</h2>
-<p><strong>Epic 8</strong> and <strong>Epic 9</strong>: scaffold layout, migrate or create content/config/context, wire to published packages, verify build and preview.</p>
-<h2>★ Product MVP</h2>
-<p><strong>Two real products validate the engine</strong> — after Phase 4.</p>
-<h2>Phase 5 — Registries and manifest</h2>
-<p>Machine-readable routes, overrides, manifest. See <strong>Epic 10</strong>.</p>
-<h2>Phase 6 — Consumer extension registry</h2>
-<p>Local pages, embeds, components without editing upstream. See <strong>Epic 11</strong>.</p>
-<h2>Phase 7 — Admin-tools extraction</h2>
-<p>Optional UI from existing profesional_site/agreni codepaths. See <strong>Epic 12</strong>.</p>
-<h2>Phase 8 — Python/MCP workflow-kit</h2>
-<p>See <strong>Epic 13</strong>.</p>
-<h2>Phase 9 — Consumer bootstrap / setup script</h2>
-<p>See <strong>Epic 14</strong>.</p>
-<h2>Phase 10 — Demo-site product showcase</h2>
-<p>Teaching pages beyond the reference consumer role. See <strong>Epic 15</strong>.</p>
-<h2>Phase 11 — Advanced preview, publishing, contribution safety</h2>
-<p>See <strong>Epic 16</strong> and <strong>Epic 17</strong>.</p></section><section id="board" class="panel"><h1>Board Reconciliation Snapshot</h1>
-<p>This section is the output of Epic 0 — reconciling the live GitHub project board with the v5 audit report. The board (https://github.com/users/rainonej/projects/2) spans three repos and 282 total items (61 open as of 2026-04-30).</p>
+<h2>Phase timeline</h2>
+<p>The collapsible timeline below is generated from <code>source/project_model.json</code> (<code>phases[]</code>) plus each epic's frontmatter. Click a phase to inspect its description, motivation, products, owners, areas, and the epics scoped to it. Epic links jump to the corresponding card in the <strong>Epics and Atomic Tickets</strong> section.</p>
+<div class="phase-timeline">
+<details class="phase" open><summary><span class="phase-number">Phase 0</span> <span class="phase-title">Planning, governance, and debt visibility</span></summary><div class="phase-body"><p class="phase-description">Coordinate the v5 audit framing, reconcile the live GitHub board, set the legal and contribution foundation, and standardize the <code>area:*</code> and <code>agent:*</code> labels that gate AI-assisted work.</p><p class="phase-motivation"><em>Why now:</em> Without an agreed path, a license, governance docs, and machine-readable labels, downstream work duplicates effort and AI contributions become risky. Phase 0 is the prerequisite that lets every other phase proceed with confidence.</p><div class="phase-meta"><div><strong>Products:</strong> <span class="badge badge-product">G</span></div><div><strong>Owners:</strong> <span class="badge badge-owner">human-dev</span> <span class="badge badge-owner">agentic-ai</span></div><div><strong>Areas:</strong> <span class="badge badge-area">governance</span> <span class="badge badge-area">docs</span> <span class="badge badge-area">safety</span></div></div><div class="phase-epics"><strong>Epics in this phase:</strong><ul><li><a href="#epic-meta-roadmap">v5 meta roadmap, board reconciliation, and technical debt</a></li><li><a href="#epic-label-taxonomy">Label taxonomy and area/agent standards</a></li><li><a href="#epic-governance-legal">Governance, legal, and open-source contribution foundation</a></li></ul></div></div></details>
+<details class="phase" open><summary><span class="phase-number">Phase 1</span> <span class="phase-title">Runtime backbone buildability</span></summary><div class="phase-body"><p class="phase-description">Stabilize schema, engine-core, editorial-theme, CI, and Vercel; replace no-op build scripts with real ones so the required packages are actually buildable.</p><p class="phase-motivation"><em>Why now:</em> The runtime is the core product. Without a buildable, type-checked, CI-verified backbone, no consumer can use the engine and no later phase has solid ground.</p><div class="phase-meta"><div><strong>Products:</strong> <span class="badge badge-product">A</span> <span class="badge badge-product">B</span></div><div><strong>Owners:</strong> <span class="badge badge-owner">agentic-ai</span> <span class="badge badge-owner">human-dev</span></div><div><strong>Areas:</strong> <span class="badge badge-area">schema</span> <span class="badge badge-area">engine-core</span> <span class="badge badge-area">editorial-theme</span> <span class="badge badge-area">demo-site</span> <span class="badge badge-area">ci</span> <span class="badge badge-area">release</span></div></div><div class="phase-epics"><strong>Epics in this phase:</strong><ul><li><a href="#epic-runtime-buildability">Runtime buildability: schema, engine-core, editorial-theme, demo-site</a></li><li><a href="#epic-package-publishing">Package build scripts and npm publishing</a> <span class="phase-epic-scope">(build scripts only)</span></li></ul></div></div></details>
+<details class="phase" open><summary><span class="phase-number">Phase 2</span> <span class="phase-title">Consumer layout contract, publish, demo migration</span></summary><div class="phase-body"><p class="phase-description">Define the preferred consumer layout (<code>src/config</code>, <code>src/content</code>, <code>src/context</code>, <code>src/overrides</code>, <code>public</code>, <code>.portfolio-engine</code>), migrate demo-site to it, and publish the first engine packages so agreni-site can consume them via semver.</p><p class="phase-motivation"><em>Why now:</em> The repo layout is the contract for nontechnical site-owners and AI agents. Publishing locks in the boundary between upstream packages and consumer repos so Product MVP can consume real versioned dependencies.</p><div class="phase-meta"><div><strong>Products:</strong> <span class="badge badge-product">A</span> <span class="badge badge-product">B</span> <span class="badge badge-product">C</span> <span class="badge badge-product">D</span> <span class="badge badge-product">E</span> <span class="badge badge-product">F</span></div><div><strong>Owners:</strong> <span class="badge badge-owner">agentic-ai</span> <span class="badge badge-owner">human-dev</span> <span class="badge badge-owner">simple-ai</span></div><div><strong>Areas:</strong> <span class="badge badge-area">downstream</span> <span class="badge badge-area">docs</span> <span class="badge badge-area">engine-core</span> <span class="badge badge-area">schema</span> <span class="badge badge-area">demo-site</span> <span class="badge badge-area">release</span></div></div><div class="phase-epics"><strong>Epics in this phase:</strong><ul><li><a href="#epic-consumer-layout">Consumer repo layout contract</a></li><li><a href="#epic-package-publishing">Package build scripts and npm publishing</a> <span class="phase-epic-scope">(publish + agreni semver wiring)</span></li><li><a href="#epic-demo-showcase">Demo-site as reference and showcase</a> <span class="phase-epic-scope">(migrate demo-site + folder READMEs)</span></li></ul></div></div></details>
+<details class="phase" open><summary><span class="phase-number">Phase 3</span> <span class="phase-title">Override proof and MVP documentation</span></summary><div class="phase-body"><p class="phase-description">Land the named override bridge end-to-end (Hero + custom CSS) when overrides are advertised, and ship MVP-level documentation: README, downstream consumption, two-mode docs (workspace vs semver), CONTRIBUTING basics.</p><p class="phase-motivation"><em>Why now:</em> Backbone MVP is both code-stable and documentation-complete. Without override proof and clear consumption docs, consumers cannot adopt the engine and Product MVP cannot be validated.</p><div class="phase-meta"><div><strong>Products:</strong> <span class="badge badge-product">A</span> <span class="badge badge-product">B</span> <span class="badge badge-product">C</span> <span class="badge badge-product">D</span> <span class="badge badge-product">G</span></div><div><strong>Owners:</strong> <span class="badge badge-owner">agentic-ai</span></div><div><strong>Areas:</strong> <span class="badge badge-area">editorial-theme</span> <span class="badge badge-area">engine-core</span> <span class="badge badge-area">demo-site</span> <span class="badge badge-area">docs</span></div></div><div class="phase-epics"><strong>Epics in this phase:</strong><ul><li><a href="#epic-override-bridge">Named override bridge and style override implementation</a></li><li><a href="#epic-mvp-docs">MVP documentation (README, CONTRIBUTING, downstream)</a></li></ul></div></div></details>
+<div class="milestone-banner"><span class="milestone-star">★</span><div><div class="milestone-title">Backbone MVP <span class="milestone-after">after Phase 3</span></div><div class="milestone-summary">Engine stable enough to serve real consumer repos. Packages build, layout contract proven, override bridge demonstrated when advertised, MVP docs complete.</div></div></div>
+<details class="phase" open><summary><span class="phase-number">Phase 4</span> <span class="phase-title">First consumer products: agreni-site and jordan-site</span></summary><div class="phase-body"><p class="phase-description">Deliver agreni-site and jordan-site as clean private consumer repos on the target layout, consuming published packages (or documented exception). Migrate or author content/config/context, verify build and preview.</p><p class="phase-motivation"><em>Why now:</em> Two distinct real products at MVP reduce the risk that the backbone only works for one site. Success proves the engine works outside the monorepo.</p><div class="phase-meta"><div><strong>Products:</strong> <span class="badge badge-product">C</span> <span class="badge badge-product">D</span></div><div><strong>Owners:</strong> <span class="badge badge-owner">agentic-ai</span> <span class="badge badge-owner">human-dev</span></div><div><strong>Areas:</strong> <span class="badge badge-area">downstream</span> <span class="badge badge-area">workflow-kit</span></div></div><div class="phase-epics"><strong>Epics in this phase:</strong><ul><li><a href="#epic-agreni-site-mvp">agreni-site Product MVP</a></li><li><a href="#epic-jordan-site-mvp">jordan-site Product MVP</a></li></ul></div></div></details>
+<div class="milestone-banner"><span class="milestone-star">★</span><div><div class="milestone-title">Product MVP <span class="milestone-after">after Phase 4</span></div><div class="milestone-summary">Two real products (agreni-site + jordan-site) validate the engine end-to-end against the consumer layout contract and published packages.</div></div></div>
+<details class="phase" open><summary><span class="phase-number">Phase 5</span> <span class="phase-title">Registries and manifest</span></summary><div class="phase-body"><p class="phase-description">Move route metadata and supported override surfaces into explicit registries; generate <code>.portfolio-engine/manifest.json</code>; ship default registries inside <code>schema</code>, <code>engine-core</code>, and <code>editorial-theme</code>.</p><p class="phase-motivation"><em>Why now:</em> Capabilities are currently implicit (hardcoded route lists, component trees). Explicit registries are machine-readable contracts for agents, admin-tools, and workflow-kit.</p><div class="phase-meta"><div><strong>Products:</strong> <span class="badge badge-product">A</span> <span class="badge badge-product">B</span> <span class="badge badge-product">E</span> <span class="badge badge-product">F</span></div><div><strong>Owners:</strong> <span class="badge badge-owner">agentic-ai</span> <span class="badge badge-owner">human-dev</span></div><div><strong>Areas:</strong> <span class="badge badge-area">schema</span> <span class="badge badge-area">engine-core</span> <span class="badge badge-area">editorial-theme</span> <span class="badge badge-area">safety</span></div></div><div class="phase-epics"><strong>Epics in this phase:</strong><ul><li><a href="#epic-registries-manifest">Registries, manifest, and runtime package defaults</a></li></ul></div></div></details>
+<details class="phase" open><summary><span class="phase-number">Phase 6</span> <span class="phase-title">Admin-tools extraction</span></summary><div class="phase-body"><p class="phase-description">Extract the existing admin UI from the profesional_site/agreni-site codebase into the <code>@portfolio-engine/admin-tools</code> package. Not a greenfield build — most MVP admin features already exist and just need packaging.</p><p class="phase-motivation"><em>Why now:</em> Admin-tools is the intended content editing path for agreni-site (replacing Pages CMS). Extracting first reduces risk of building on top of an unfinished foundation.</p><div class="phase-meta"><div><strong>Products:</strong> <span class="badge badge-product">C</span> <span class="badge badge-product">E</span></div><div><strong>Owners:</strong> <span class="badge badge-owner">agentic-ai</span> <span class="badge badge-owner">human-dev</span></div><div><strong>Areas:</strong> <span class="badge badge-area">admin-tools</span></div></div><div class="phase-epics"><strong>Epics in this phase:</strong><ul><li><a href="#epic-admin-tools">Optional admin-tools UI</a></li></ul></div></div></details>
+<details class="phase" open><summary><span class="phase-number">Phase 7</span> <span class="phase-title">Consumer extension registry</span></summary><div class="phase-body"><p class="phase-description">Add the consumer-owned registry as the middle ground between content/config and upstream changes; allow local pages, embeds, and components without editing package internals.</p><p class="phase-motivation"><em>Why now:</em> Consumers should declare local reusable pages and embeds without editing upstream packages or paying the upstream review cost.</p><div class="phase-meta"><div><strong>Products:</strong> <span class="badge badge-product">A</span> <span class="badge badge-product">B</span> <span class="badge badge-product">C</span> <span class="badge badge-product">D</span> <span class="badge badge-product">E</span> <span class="badge badge-product">F</span></div><div><strong>Owners:</strong> <span class="badge badge-owner">agentic-ai</span> <span class="badge badge-owner">human-dev</span></div><div><strong>Areas:</strong> <span class="badge badge-area">consumer-registry</span> <span class="badge badge-area">editorial-theme</span> <span class="badge badge-area">demo-site</span></div></div><div class="phase-epics"><strong>Epics in this phase:</strong><ul><li><a href="#epic-consumer-registry">Consumer extension registry</a></li></ul></div></div></details>
+<details class="phase" open><summary><span class="phase-number">Phase 8</span> <span class="phase-title">Python/MCP workflow-kit</span></summary><div class="phase-body"><p class="phase-description">Build the optional Python package exposing MCP tools to Claude/Copilot: <code>inspect_site</code>, <code>plan_request</code>, <code>validate_plan</code>, <code>plan_upstream</code>, <code>patch_ledger</code>.</p><p class="phase-motivation"><em>Why now:</em> Consumer agents should not manually run terminal commands or guess repo structure. They should call provider-neutral tools through MCP.</p><div class="phase-meta"><div><strong>Products:</strong> <span class="badge badge-product">C</span> <span class="badge badge-product">D</span> <span class="badge badge-product">F</span> <span class="badge badge-product">G</span></div><div><strong>Owners:</strong> <span class="badge badge-owner">agentic-ai</span></div><div><strong>Areas:</strong> <span class="badge badge-area">workflow-kit</span></div></div><div class="phase-epics"><strong>Epics in this phase:</strong><ul><li><a href="#epic-workflow-kit">Optional Python/MCP workflow-kit</a></li></ul></div></div></details>
+<details class="phase" open><summary><span class="phase-number">Phase 9</span> <span class="phase-title">Consumer bootstrap and setup</span></summary><div class="phase-body"><p class="phase-description">Ship a setup script that bootstraps a consumer repo from scratch — required runtime files, optional MCP setup, printed Vercel/GitHub guidance, dry-run support.</p><p class="phase-motivation"><em>Why now:</em> Nontechnical adopters should not have to manually wire a multi-language project. A bootstrap script reduces the barrier to adoption and ensures the layout contract is followed from day one.</p><div class="phase-meta"><div><strong>Products:</strong> <span class="badge badge-product">C</span> <span class="badge badge-product">D</span> <span class="badge badge-product">F</span> <span class="badge badge-product">G</span></div><div><strong>Owners:</strong> <span class="badge badge-owner">agentic-ai</span> <span class="badge badge-owner">human-dev</span></div><div><strong>Areas:</strong> <span class="badge badge-area">downstream</span> <span class="badge badge-area">workflow-kit</span> <span class="badge badge-area">docs</span></div></div><div class="phase-epics"><strong>Epics in this phase:</strong><ul><li><a href="#epic-consumer-bootstrap">Consumer bootstrap/setup script</a></li></ul></div></div></details>
+<details class="phase" open><summary><span class="phase-number">Phase 10</span> <span class="phase-title">Demo-site product showcase expansion</span></summary><div class="phase-body"><p class="phase-description">Build teaching pages on the demo-site that show how config, content, context, overrides, registry, and the MCP workflow-kit work, with rendered result and source snippets side by side.</p><p class="phase-motivation"><em>Why now:</em> Demo-site teaches consumers and agents how to use every layer. Conflating this with the Backbone MVP CI role caused scope creep, so showcase work is deferred until after Product MVP.</p><div class="phase-meta"><div><strong>Products:</strong> <span class="badge badge-product">B</span></div><div><strong>Owners:</strong> <span class="badge badge-owner">agentic-ai</span></div><div><strong>Areas:</strong> <span class="badge badge-area">demo-site</span> <span class="badge badge-area">workflow-kit</span> <span class="badge badge-area">docs</span></div></div><div class="phase-epics"><strong>Epics in this phase:</strong><ul><li><a href="#epic-demo-showcase">Demo-site as reference and showcase</a> <span class="phase-epic-scope">(post-MVP showcase tickets only)</span></li></ul></div></div></details>
+<details class="phase" open><summary><span class="phase-number">Phase 11</span> <span class="phase-title">Contribution safety and admin publishing</span></summary><div class="phase-body"><p class="phase-description">Add layer-boundary guards, AI review prompts, and public-safe planner workflows for consumer-originated PRs; expose preview/public publishing concepts in admin-tools (branch model, Vercel setup, optional cadence schema).</p><p class="phase-motivation"><em>Why now:</em> Once consumers and their agents start contributing upstream, PRs need to be safe and reviewable. Nontechnical site-owners need clear preview vs production semantics so they don't accidentally publish.</p><div class="phase-meta"><div><strong>Products:</strong> <span class="badge badge-product">C</span> <span class="badge badge-product">D</span> <span class="badge badge-product">E</span> <span class="badge badge-product">G</span></div><div><strong>Owners:</strong> <span class="badge badge-owner">agentic-ai</span> <span class="badge badge-owner">human-dev</span></div><div><strong>Areas:</strong> <span class="badge badge-area">safety</span> <span class="badge badge-area">ci</span> <span class="badge badge-area">admin-tools</span> <span class="badge badge-area">vercel</span> <span class="badge badge-area">docs</span> <span class="badge badge-area">schema</span></div></div><div class="phase-epics"><strong>Epics in this phase:</strong><ul><li><a href="#epic-contribution-safety">Contribution safety and GitHub automation</a></li><li><a href="#epic-admin-publishing">Admin-tools publishing and preview management</a></li></ul></div></div></details>
+</div></section><section id="board" class="panel"><h1>Board Reconciliation Snapshot</h1>
+<p>This section is the output of the <a href="#epic-meta-roadmap">Meta roadmap</a> epic — reconciling the live GitHub project board with the v5 audit report. The board (<a href="https://github.com/users/rainonej/projects/2">rainonej/projects/2</a>) spans three repos and 282 total items (61 open as of 2026-04-30).</p>
 <h2>The three-repo structure</h2>
-<table class="md-table"><thead><tr><th>Repo</th><th>Open issues</th><th>What they represent</th></tr></thead><tbody><tr><td><code>rainonej/portfolio-engine</code></td><td>14</td><td>Phase 1 sprint tail — Epic 4 extraction follow-through</td></tr><tr><td><code>rainonej/agreni-site</code></td><td>7</td><td>Phase 4 — Product MVP consumer (maps to report Epics 8 + 4)</td></tr><tr><td><code>rainonej/profesional_site</code></td><td>40</td><td>Origin repo: old epics, done tasks, content blockers, governance</td></tr></tbody></table>
+<table class="md-table"><thead><tr><th>Repo</th><th>Open issues</th><th>What they represent</th></tr></thead><tbody><tr><td><code>rainonej/portfolio-engine</code></td><td>14</td><td>Phase 1 sprint tail — runtime buildability + package publishing follow-through</td></tr><tr><td><code>rainonej/agreni-site</code></td><td>7</td><td>Phase 4 — Product MVP consumer (maps to <a href="#epic-agreni-site-mvp">agreni-site MVP</a> + <a href="#epic-package-publishing">Package publishing</a>)</td></tr><tr><td><code>rainonej/profesional_site</code></td><td>40</td><td>Origin repo: old epics, done tasks, content blockers, governance</td></tr></tbody></table>
 <p>The <code>profesional_site</code> repo is the origin monorepo. It predates the portfolio-engine split and contains parent epics (4–10) that generated the work now tracked in <code>portfolio-engine</code>. It also holds content-only tasks blocked on the site owner.</p>
 <h2>portfolio-engine issues — disposition</h2>
 <table class="md-table"><thead><tr><th>#</th><th>Title</th><th>Phase</th><th>Disposition</th></tr></thead><tbody><tr><td>#16</td><td>Fix editorial-theme pnpm check + TypeScript</td><td>Phase 1 ★</td><td>Keep — critical blocker</td></tr><tr><td>#28</td><td>CI: Staged workflow lint → check → build</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#29</td><td>CI: astro check + demo-site build in pipeline</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#30</td><td>ESLint + Prettier + lint:fix docs</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#31</td><td>Vercel: Connect portfolio-engine repo</td><td>Phase 1 ★</td><td>Keep — human required</td></tr><tr><td>#32</td><td>Docs: Root README + board links</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#33</td><td>editorial-theme: PostCSS Tailwind migration</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#34</td><td>Vercel: Optional CLI deploy / preview bot</td><td>Phase 9</td><td>Defer — add mvp:post</td></tr><tr><td>#35</td><td>Docs: GitHub Project docs + project-views ported</td><td>Phase 0</td><td>Verify done → close</td></tr><tr><td>#36</td><td>Copilot: Rulesets for PRs into dev and epic/*</td><td>Phase 7</td><td>Defer — add mvp:post</td></tr><tr><td>#37</td><td>Copilot: Document PR feedback loop</td><td>Phase 7</td><td>Defer — add mvp:post</td></tr><tr><td>#38</td><td>theme: PR #17 follow-ups (base URL + schema)</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#40</td><td>Vercel: Update demo-site config/site.json baseUrl</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#41</td><td>Docs: Add live demo badge/link to README</td><td>Phase 1 ★</td><td>Keep</td></tr></tbody></table>
 <h2>agreni-site issues — disposition</h2>
-<p>All 7 issues map to report <strong>Epic 8</strong> (agreni-site MVP) and <strong>Epic 4</strong> (package publishing / semver). They align with <strong>Phase 4 Product MVP</strong> after the Backbone MVP (Phases 1–3) and published packages.</p>
+<p>All 7 issues map to report <a href="#epic-agreni-site-mvp">agreni-site MVP</a> (agreni-site MVP) and <a href="#epic-package-publishing">Package publishing</a> (package publishing / semver). They align with <strong>Phase 4 Product MVP</strong> after the Backbone MVP (Phases 1–3) and published packages.</p>
 <table class="md-table"><thead><tr><th>#</th><th>Title</th><th>Phase</th><th>Notes</th></tr></thead><tbody><tr><td>#2</td><td>Epic 5 — Scaffold and Populate agreni-site</td><td>Phase 2+</td><td>Parent epic</td></tr><tr><td>#1</td><td>Task 5.5 — Reconnect secrets and deployments</td><td>Phase 2+</td><td>Human required (Vercel/GitHub secrets)</td></tr><tr><td>#3</td><td>Task 5.3 — Wire to local workspace/path packages</td><td>Phase 2+</td><td>—</td></tr><tr><td>#4</td><td>Task 5.1 — Scaffold agreni-site repo structure</td><td>Phase 2+</td><td>—</td></tr><tr><td>#5</td><td>Task 5.6 — Post-split parity verification</td><td>Phase 2+</td><td>—</td></tr><tr><td>#6</td><td>Task 5.4 — Preserve preview/auth/admin behavior</td><td>Phase 2+</td><td>—</td></tr><tr><td>#7</td><td>Task 5.2 — Migrate all Agreni content/config/media</td><td>Phase 2+</td><td>Depends on consumer layout finalized</td></tr></tbody></table>
 <h2>profesional_site issues — old epic mapping</h2>
 <h3>Epic 4 tasks — DONE, should close</h3>
 <p>All Epic 4 extraction tasks are complete. The editorial-theme package has 13 components, 5 page types, layouts, and CSS. The demo-site builds and deploys. These should be closed with a comment linking to the portfolio-engine repo.</p>
 <table class="md-table"><thead><tr><th>#</th><th>Title</th><th>Status</th></tr></thead><tbody><tr><td>#175</td><td>Epic 4 — Extract editorial-theme</td><td>Done — close or archive</td></tr><tr><td>#209</td><td>Task 4.1 — Port layouts/components/styles</td><td>Done</td></tr><tr><td>#210</td><td>Task 4.2 — Port page routes</td><td>Done</td></tr><tr><td>#211</td><td>Task 4.3 — Theme consumes engine-core</td><td>Done</td></tr><tr><td>#212</td><td>Task 4.4 — Define first-party override points</td><td>Done</td></tr><tr><td>#213</td><td>Task 4.5 — Create examples/demo-site</td><td>Done</td></tr></tbody></table>
-<h3>Epic 6 — Package publishing (maps to report Epic 4)</h3>
-<table class="md-table"><thead><tr><th>#</th><th>Title</th><th>Report epic</th><th>Phase</th></tr></thead><tbody><tr><td>#177</td><td>Epic 6 — Publish and Stabilize Package Consumption</td><td>Epic 4</td><td>Phase 1/2 ★</td></tr><tr><td>#219</td><td>Task 6.1 — Publish first engine packages to npm</td><td>Epic 4</td><td>Phase 1/2 ★</td></tr><tr><td>#220</td><td>Task 6.2 — Switch agreni-site to semver packages</td><td>Epic 4 / Epic 8</td><td>Phase 4 Product MVP</td></tr><tr><td>#221</td><td>Task 6.3 — Document two development modes</td><td>Epic 3 / Epic 4</td><td>Phase 1–3</td></tr><tr><td>#222</td><td>Task 6.4 — Add basic package upgrade workflow</td><td>Epic 4 / Epic 8</td><td>Phase 4</td></tr></tbody></table>
-<h3>Epic 7 — Admin-tools extraction (report Epic 12, Phase 7)</h3>
+<h3>Epic 6 — Package publishing (maps to <a href="#epic-package-publishing">Package publishing</a>)</h3>
+<table class="md-table"><thead><tr><th>#</th><th>Title</th><th>Report epic</th><th>Phase</th></tr></thead><tbody><tr><td>#177</td><td>Epic 6 — Publish and Stabilize Package Consumption</td><td><a href="#epic-package-publishing">Package publishing</a></td><td>Phase 1/2 ★</td></tr><tr><td>#219</td><td>Task 6.1 — Publish first engine packages to npm</td><td><a href="#epic-package-publishing">Package publishing</a></td><td>Phase 1/2 ★</td></tr><tr><td>#220</td><td>Task 6.2 — Switch agreni-site to semver packages</td><td><a href="#epic-package-publishing">Package publishing</a> / <a href="#epic-agreni-site-mvp">agreni-site MVP</a></td><td>Phase 4 Product MVP</td></tr><tr><td>#221</td><td>Task 6.3 — Document two development modes</td><td><a href="#epic-runtime-buildability">Runtime buildability</a> / <a href="#epic-package-publishing">Package publishing</a></td><td>Phase 1–3</td></tr><tr><td>#222</td><td>Task 6.4 — Add basic package upgrade workflow</td><td><a href="#epic-package-publishing">Package publishing</a> / <a href="#epic-agreni-site-mvp">agreni-site MVP</a></td><td>Phase 4</td></tr></tbody></table>
+<h3>Epic 7 — Admin-tools extraction (maps to <a href="#epic-admin-tools">Admin-tools</a>, Phase 6)</h3>
 <p>Important: admin-tools is an EXTRACTION from the existing profesional_site/agreni-site admin UI, not a greenfield build. The functionality exists; it needs to be packaged.</p>
 <table class="md-table"><thead><tr><th>#</th><th>Title</th><th>Phase</th></tr></thead><tbody><tr><td>#178</td><td>Epic 7 — Extract Admin Tools + Generated Site Map</td><td>Phase 4</td></tr><tr><td>#223</td><td>Task 7.1 — Extract admin/reviewer UI into admin-tools package</td><td>Phase 4</td></tr><tr><td>#224</td><td>Task 7.2 — Generate site map from route registry</td><td>Phase 3/4</td></tr><tr><td>#225</td><td>Task 7.3 — Add content/config inspection panels</td><td>Phase 4</td></tr></tbody></table>
 <h3>Epic 8 — Old workflow-kit (OBSOLETE — must re-scope)</h3>
 <p>These tickets describe a GitHub Actions-based workflow classifier. ADR-002 replaced this approach with Python/MCP. Tasks #227 and #228 should be closed. Tasks #226 and #229 should be re-scoped to reference the Python/MCP approach.</p>
-<table class="md-table"><thead><tr><th>#</th><th>Title</th><th>Disposition</th></tr></thead><tbody><tr><td>#179</td><td>Epic 8 — Build workflow-kit MVP</td><td>Re-scope to reference ADR-002 and report Epic 13</td></tr><tr><td>#226</td><td>Task 8.1 — Define workflow classification contract</td><td>Re-scope as MCP tool contracts</td></tr><tr><td>#227</td><td>Task 8.2 — Package reusable GitHub workflow templates</td><td>Close — old approach</td></tr><tr><td>#228</td><td>Task 8.3 — Add engine-aware classifier</td><td>Close — old approach</td></tr><tr><td>#229</td><td>Task 8.4 — Add downstream-to-upstream routing contract</td><td>Re-scope — concept valid, implementation is Python/MCP</td></tr></tbody></table>
-<h3>profesional_site Epics 9 and 10 — Patch lifecycle (report Epic 16, Phase 11)</h3>
+<table class="md-table"><thead><tr><th>#</th><th>Title</th><th>Disposition</th></tr></thead><tbody><tr><td>#179</td><td>Epic 8 — Build workflow-kit MVP</td><td>Re-scope to reference ADR-002 and <a href="#epic-workflow-kit">Workflow-kit</a></td></tr><tr><td>#226</td><td>Task 8.1 — Define workflow classification contract</td><td>Re-scope as MCP tool contracts</td></tr><tr><td>#227</td><td>Task 8.2 — Package reusable GitHub workflow templates</td><td>Close — old approach</td></tr><tr><td>#228</td><td>Task 8.3 — Add engine-aware classifier</td><td>Close — old approach</td></tr><tr><td>#229</td><td>Task 8.4 — Add downstream-to-upstream routing contract</td><td>Re-scope — concept valid, implementation is Python/MCP</td></tr></tbody></table>
+<h3>profesional_site Epics 9 and 10 — Patch lifecycle (maps to <a href="#epic-contribution-safety">Contribution safety</a>, Phase 11)</h3>
 <p>These remain valid. Note that Task 9.2 (create local patch + upstream PR) was scoped for GitHub Actions; it should now be scoped for Python/MCP tooling instead.</p>
 <table class="md-table"><thead><tr><th>#</th><th>Title</th><th>Phase</th></tr></thead><tbody><tr><td>#180</td><td>Epic 9 — Local Patch + Upstream PR Lifecycle</td><td>Phase 7</td></tr><tr><td>#181</td><td>Epic 10 — Release Reconciliation / Patch Cleanup</td><td>Phase 7</td></tr><tr><td>#230–#235</td><td>Tasks 9.1–10.3</td><td>Phase 7</td></tr></tbody></table>
 <h3>Governance and provisioning</h3>
-<table class="md-table"><thead><tr><th>#</th><th>Title</th><th>Phase</th><th>Notes</th></tr></thead><tbody><tr><td>#270</td><td>Epic 1.5 — Provision Repositories, Ownership, Privacy</td><td>Phase 0</td><td>Maps to report Epic 0</td></tr><tr><td>#272</td><td>Task 1.13 — Verify Agreni GitHub account and grant access</td><td>Phase 0</td><td>Human required</td></tr><tr><td>#282</td><td>Task CI.1 — Expand CI for portfolio-engine monorepo</td><td>Phase 1</td><td>Maps to #28/#29</td></tr><tr><td>#78</td><td>Add ANTHROPIC_API_KEY secret to GitHub Actions</td><td>Phase 6</td><td>Needed for workflow-kit</td></tr></tbody></table>
+<table class="md-table"><thead><tr><th>#</th><th>Title</th><th>Phase</th><th>Notes</th></tr></thead><tbody><tr><td>#270</td><td>Epic 1.5 — Provision Repositories, Ownership, Privacy</td><td>Phase 0</td><td>Maps to <a href="#epic-meta-roadmap">Meta roadmap</a></td></tr><tr><td>#272</td><td>Task 1.13 — Verify Agreni GitHub account and grant access</td><td>Phase 0</td><td>Human required</td></tr><tr><td>#282</td><td>Task CI.1 — Expand CI for portfolio-engine monorepo</td><td>Phase 1</td><td>Maps to #28/#29</td></tr><tr><td>#78</td><td>Add ANTHROPIC_API_KEY secret to GitHub Actions</td><td>Phase 6</td><td>Needed for workflow-kit</td></tr></tbody></table>
 <h3>Site owner content — separate launch track</h3>
 <p>These are not engineering tasks. They are blocked on the site owner (Agreni) providing real copy and a booking URL. They should be tracked separately from the engineering roadmap.</p>
 <ul>
@@ -432,7 +410,7 @@ agreni-site + jordan-site (Phase 4)
 <li>profesional_site #40: Provide real booking URL</li>
 <li>profesional_site #41: Launch content approval</li>
 <li>profesional_site #238: Mobile home page bug (address during agreni-site migration)</li>
-<li>profesional_site #153: Wire content editing in /admin (depends on Epic 12 admin-tools extraction)</li>
+<li>profesional_site #153: Wire content editing in /admin (depends on <a href="#epic-admin-tools">Admin-tools</a> extraction)</li>
 <li>profesional_site #82: Screenshots for CONTRIBUTING.md (low priority docs)</li>
 </ul>
 <h2>Missing from both board and report (must create tickets)</h2>
@@ -445,7 +423,7 @@ agreni-site + jordan-site (Phase 4)
 <p>6. Write real package build scripts (currently all no-ops)</p>
 <p>7. Publish packages to npm (Backbone MVP allows workspace-link if documented; Product MVP targets semver)</p>
 <p>8. Create GitHub milestones aligned to Phase 0–11</p>
-<p>9. Complete <strong>Epic 1</strong> label migration (standard <code>area:*</code> / <code>agent:*</code>; deprecate legacy ready label)</p></section><section id="products" class="panel"><h1>Product tracks, MVP milestones, and epic coverage</h1>
+<p>9. Complete <a href="#epic-label-taxonomy">Label taxonomy</a> label migration (standard <code>area:*</code> / <code>agent:*</code>; deprecate legacy ready label)</p></section><section id="products" class="panel"><h1>Product tracks, MVP milestones, and epic coverage</h1>
 <h2>Seven product tracks (A–G)</h2>
 <table class="md-table"><thead><tr><th>Track</th><th>Product</th><th>Purpose</th><th>Role at MVP</th></tr></thead><tbody><tr><td><strong>A</strong></td><td>Runtime engine</td><td><code>schema</code>, <code>engine-core</code>, <code>editorial-theme</code> — the shared Astro/npm backbone</td><td><strong>Backbone MVP:</strong> stable builds, path contracts, override bridge (if advertised), publishable packages</td></tr><tr><td><strong>B</strong></td><td>Demo-site</td><td>Reference consumer in-repo; CI and teaching surface</td><td><strong>Backbone MVP:</strong> proves layout + build; <strong>post–Product-MVP:</strong> full showcase pages</td></tr><tr><td><strong>C</strong></td><td>agreni-site</td><td>Real private consumer; nontechnical site-owner workflow</td><td><strong>Product MVP:</strong> clean repo consuming published packages</td></tr><tr><td><strong>D</strong></td><td>jordan-site</td><td>Second real consumer; different content/brand goals</td><td><strong>Product MVP:</strong> validates engine is not overfit to one site</td></tr><tr><td><strong>E</strong></td><td>admin-tools</td><td>Optional UI for editing content/config/context/registry</td><td>Post–Product-MVP extraction and polish</td></tr><tr><td><strong>F</strong></td><td>workflow-kit</td><td>Optional Python/MCP tools for agents</td><td>Post–Product-MVP</td></tr><tr><td><strong>G</strong></td><td>Governance, labels, safety, docs</td><td>Legal, board, contribution safety, taxonomy</td><td>Phase 0+; enables confident execution</td></tr></tbody></table>
 <h2>Backbone MVP vs Product MVP</h2>
@@ -461,18 +439,19 @@ agreni-site + jordan-site (Phase 4)
 <li><strong>agreni-site</strong> (Product C) and <strong>jordan-site</strong> (Product D) are scaffolded on the target layout, wired to <strong>published</strong> packages (semver) or an explicit documented exception, build and preview successfully.</li>
 </ul>
 <h2>Product × Epic matrix (v5)</h2>
-<table class="md-table"><thead><tr><th>Epic</th><th>Phase</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>MVP role</th></tr></thead><tbody><tr><td>0 — v5 meta</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>Required before confident execution</td></tr><tr><td>1 — Labels</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>Phase 0 prerequisite</td></tr><tr><td>2 — Governance</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>Phase 0 parallel</td></tr><tr><td>3 — Runtime buildability</td><td>1</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>★ Backbone MVP</td></tr><tr><td>4 — Package publishing</td><td>1/2</td><td>✓</td><td>—</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>★ Backbone (builds); ★ Product (publish+consume)</td></tr><tr><td>5 — Consumer layout</td><td>2</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>★ Backbone MVP</td></tr><tr><td>6 — Override bridge</td><td>3</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>★ Backbone MVP (if overrides advertised)</td></tr><tr><td>7 — MVP docs</td><td>3</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>✓</td><td>★ Backbone MVP</td></tr><tr><td>8 — agreni-site</td><td>4</td><td>—</td><td>—</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td><td>★ Product MVP</td></tr><tr><td>9 — jordan-site</td><td>4</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>★ Product MVP</td></tr><tr><td>10 — Registries / manifest</td><td>5</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>✓</td><td>✓</td><td>—</td><td>post–Product-MVP</td></tr><tr><td>11 — Consumer registry</td><td>6</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>post–Product-MVP</td></tr><tr><td>12 — Admin-tools</td><td>7</td><td>—</td><td>—</td><td>✓</td><td>—</td><td>✓</td><td>—</td><td>—</td><td>post–Product-MVP</td></tr><tr><td>13 — Workflow-kit</td><td>8</td><td>—</td><td>—</td><td>✓</td><td>✓</td><td>—</td><td>✓</td><td>✓</td><td>post–Product-MVP</td></tr><tr><td>14 — Bootstrap</td><td>9</td><td>—</td><td>—</td><td>✓</td><td>✓</td><td>—</td><td>✓</td><td>✓</td><td>post–Product-MVP</td></tr><tr><td>15 — Demo showcase</td><td>10</td><td>—</td><td>✓</td><td>—</td><td>—</td><td>✓</td><td>✓</td><td>—</td><td>post–Product-MVP</td></tr><tr><td>16 — Safety / automation</td><td>11</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>Phase 0 basics; advanced post-MVP</td></tr><tr><td>17 — Admin publishing</td><td>11</td><td>—</td><td>—</td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>post–Product-MVP</td></tr></tbody></table>
+<table class="md-table"><thead><tr><th>Epic</th><th>Phase</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>MVP role</th></tr></thead><tbody><tr><td><a href="#epic-meta-roadmap">Meta roadmap</a></td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>Required before confident execution</td></tr><tr><td><a href="#epic-label-taxonomy">Label taxonomy</a></td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>Phase 0 prerequisite</td></tr><tr><td><a href="#epic-governance-legal">Governance, legal</a></td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>Phase 0 parallel</td></tr><tr><td><a href="#epic-runtime-buildability">Runtime buildability</a></td><td>1</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>★ Backbone MVP</td></tr><tr><td><a href="#epic-package-publishing">Package publishing</a></td><td>1/2</td><td>✓</td><td>—</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>★ Backbone (builds); ★ Product (publish+consume)</td></tr><tr><td><a href="#epic-consumer-layout">Consumer layout</a></td><td>2</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>★ Backbone MVP</td></tr><tr><td><a href="#epic-override-bridge">Override bridge</a></td><td>3</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>★ Backbone MVP (if overrides advertised)</td></tr><tr><td><a href="#epic-mvp-docs">MVP docs</a></td><td>3</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>✓</td><td>★ Backbone MVP</td></tr><tr><td><a href="#epic-agreni-site-mvp">agreni-site MVP</a></td><td>4</td><td>—</td><td>—</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td><td>★ Product MVP</td></tr><tr><td><a href="#epic-jordan-site-mvp">jordan-site MVP</a></td><td>4</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>★ Product MVP</td></tr><tr><td><a href="#epic-registries-manifest">Registries / manifest</a></td><td>5</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>✓</td><td>✓</td><td>—</td><td>post–Product-MVP</td></tr><tr><td><a href="#epic-admin-tools">Admin-tools</a></td><td>6</td><td>—</td><td>—</td><td>✓</td><td>—</td><td>✓</td><td>—</td><td>—</td><td>post–Product-MVP</td></tr><tr><td><a href="#epic-consumer-registry">Consumer registry</a></td><td>7</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>post–Product-MVP</td></tr><tr><td><a href="#epic-workflow-kit">Workflow-kit</a></td><td>8</td><td>—</td><td>—</td><td>✓</td><td>✓</td><td>—</td><td>✓</td><td>✓</td><td>post–Product-MVP</td></tr><tr><td><a href="#epic-consumer-bootstrap">Consumer bootstrap</a></td><td>9</td><td>—</td><td>—</td><td>✓</td><td>✓</td><td>—</td><td>✓</td><td>✓</td><td>post–Product-MVP</td></tr><tr><td><a href="#epic-demo-showcase">Demo showcase</a></td><td>10</td><td>—</td><td>✓</td><td>—</td><td>—</td><td>✓</td><td>✓</td><td>—</td><td>post–Product-MVP</td></tr><tr><td><a href="#epic-contribution-safety">Contribution safety</a></td><td>11</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>Phase 0 basics; advanced post-MVP</td></tr><tr><td><a href="#epic-admin-publishing">Admin publishing</a></td><td>11</td><td>—</td><td>—</td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>post–Product-MVP</td></tr></tbody></table>
 <h2>How agreni-site and jordan-site evolve (Phases 5–11)</h2>
 <p>After <strong>Product MVP</strong>, both sites continue as first-class consumers:</p>
 <ul>
-<li><strong>Phase 5–6 (registries, consumer registry):</strong> richer manifest and local extensions; both sites benefit from declared routes and embeds without upstream forks.</li>
-<li><strong>Phase 7 (admin-tools):</strong> Product C and E — editing flows for agreni-site; jordan-site may adopt selectively.</li>
+<li><strong>Phase 5 (registries / manifest):</strong> richer manifest and registry-driven contracts; both sites benefit from declared routes and surfaces without upstream forks.</li>
+<li><strong>Phase 6 (admin-tools):</strong> Product C and E — editing flows for agreni-site; jordan-site may adopt selectively.</li>
+<li><strong>Phase 7 (consumer registry):</strong> local pages and embeds without editing upstream; C, D, E, F all benefit.</li>
 <li><strong>Phase 8 (workflow-kit):</strong> agent tooling across Products C, D, F, G.</li>
 <li><strong>Phase 9 (bootstrap):</strong> onboarding for new consumers; C and D validate real-world templates.</li>
 <li><strong>Phase 10 (demo showcase):</strong> Product B teaches patterns; admin + workflow surfaces align.</li>
 <li><strong>Phase 11 (safety, admin publishing):</strong> contribution guardrails (G); preview/publishing automation for C, D, E.</li>
 </ul>
-<p>Maps to board issues: agreni-site #1–#7 and profesional_site #219 (switch to semver) align with Epics 4, 8, and 17 as the program matures.</p></section><section id="gap" class="panel"><h1>Gap Plan: Where We Are vs Where We Need To Be</h1>
+<p>Maps to board issues: agreni-site #1–#7 and profesional_site #219 (switch to semver) align with <a href="#epic-package-publishing">Package publishing</a>, <a href="#epic-agreni-site-mvp">agreni-site MVP</a>, and <a href="#epic-admin-publishing">Admin publishing</a> as the program matures.</p></section><section id="gap" class="panel"><h1>Gap Plan: Where We Are vs Where We Need To Be</h1>
 <h2>Complete overhauls</h2>
 <h3>workflow-kit (description and package)</h3>
 <p>Current docs and stub comment describe workflow-kit as reusable GitHub Actions workflows plus an AI classifier. That is the old approach from before ADR-002. The target is an optional Python/MCP package.</p>
@@ -493,7 +472,7 @@ agreni-site + jordan-site (Phase 4)
 <li>Consumer repos cannot install packages from npm — they must live inside the monorepo.</li>
 <li>The Backbone/Product MVP definitions cannot be met without this.</li>
 </ul>
-<p><strong>This is the highest-priority untracked gap.</strong> See <strong>Epic 4</strong> for the plan.</p>
+<p><strong>This is the highest-priority untracked gap.</strong> See <a href="#epic-package-publishing">Package publishing</a> for the plan.</p>
 <p>Steps required:</p>
 <p>1. Write real <code>tsc</code>-based build scripts for <code>@portfolio-engine/schema</code> and <code>@portfolio-engine/engine-core</code>.</p>
 <p>2. Determine the right build output for <code>@portfolio-engine/editorial-theme</code> (Astro integration + components).</p>
@@ -521,21 +500,23 @@ agreni-site + jordan-site (Phase 4)
 <p>2. Add a working override example to demo-site (<code>src/overrides/Hero.astro</code> or similar).</p>
 <p>3. Confirm the demo-site build uses the override.</p>
 <h3>Manifest generation</h3>
-<p>No current <code>.portfolio-engine/manifest.json</code>. Target requires a generated manifest for tools, admin-tools, and the future consumer registry. This is post–Product-MVP and depends on Phase 5 (<strong>Epic 10</strong>).</p>
+<p>No current <code>.portfolio-engine/manifest.json</code>. Target requires a generated manifest for tools, admin-tools, and the future consumer registry. This is post–Product-MVP and depends on Phase 5 (<a href="#epic-registries-manifest">Registries / manifest</a>).</p>
 <h2>Named technical debt</h2>
-<h3>Hardcoded route metadata</h3>
-<p><code>packages/engine-core/src/route-discovery.ts</code> hardcodes 9 routes as a static array. This works but is not machine-readable or extensible. Phase 5 (<strong>Epic 10</strong>) replaces this with file-based registries.</p>
-<h3>Hardcoded override surfaces</h3>
-<p><code>packages/engine-core/src/override-resolution.ts</code> hardcodes 4 component surface names. Same issue, same fix in Phase 3.</p>
-<h2>Small tweaks</h2>
-<h3>Folder READMEs</h3>
-<p>Add small README files under consumer-owned demo-site folders (<code>src/config</code>, <code>src/content</code>, etc.) explaining what belongs and what does not.</p>
-<h3>Public asset docs</h3>
-<p>Explain that <code>public/</code> is served from site root and everything inside is publicly accessible.</p>
-<h3>Issue label migration</h3>
-<p>Rename legacy narrow <code>area:*</code> labels to the standard taxonomy (<code>area:editorial-theme</code>, <code>area:demo-site</code>, etc.) in GitHub. Add <code>area:*</code> and <code>agent:*</code> labels per <strong>Epic 1</strong>. Deprecate the legacy provider-specific ready label in favor of <code>agent:approved</code>.</p>
-<h3>Acknowledged gap: no test suite</h3>
-<p>There are zero unit or integration tests across all packages. The project relies on TypeScript type-checking and Astro check as proxy quality gates. This is a known gap. It does not block MVP declaration if the type-check + build pipeline is clean, but it should be acknowledged and eventually addressed post-MVP.</p>
+<p>The full debt register with <code>Tracked by</code> links lives inside the <a href="#epic-meta-roadmap">Meta roadmap epic</a>. Headlines:</p>
+<ul>
+<li>Hardcoded route metadata in <code>packages/engine-core/src/route-discovery.ts</code> → tracked by <a href="#epic-registries-manifest__move-route-metadata-to-explicit-registry">Move route metadata to explicit registry</a> (Phase 5).</li>
+<li>Hardcoded supported component surfaces in <code>packages/engine-core/src/override-resolution.ts</code> → tracked by <a href="#epic-registries-manifest__move-override-surfaces-to-explicit-registry">Move override surfaces to explicit registry</a> (Phase 5).</li>
+<li>Override bridge end-to-end not verified → tracked by the override-bridge epic (Phase 3).</li>
+<li>No <code>.portfolio-engine/manifest.json</code> generation → tracked by the registries-manifest epic (Phase 5).</li>
+</ul>
+<h2>Small tweaks (now explicitly ticketed)</h2>
+<ul>
+<li>Folder READMEs in consumer-owned dirs → <a href="#epic-consumer-layout__add-folder-readme-templates">Add folder README templates</a> and <a href="#epic-demo-showcase__add-folder-readmes-to-demo-site">Add folder READMEs to demo-site</a>.</li>
+<li><code>public/</code> asset semantics → <a href="#epic-consumer-layout__document-public-semantics">Document <code>public/</code> semantics</a>.</li>
+<li>Issue label migration → <a href="#epic-label-taxonomy__create-area-and-agent-labels-in-github">Create area and agent labels in GitHub</a> and <a href="#epic-label-taxonomy__retag-open-issues-with-correct-area-and-agent-labels">Retag open issues</a>.</li>
+</ul>
+<h2>Acknowledged gap: no test suite</h2>
+<p>There are zero unit or integration tests across all packages. The project relies on TypeScript type-checking and Astro check as proxy quality gates. This is <strong>debt-only</strong>, intentionally not promoted to a ticket: it does not block MVP declaration if the type-check + build pipeline is clean. Promote to a ticket post-Product-MVP if regressions appear.</p>
 <h2>Preserve</h2>
 <ul>
 <li>Core package split and dependency direction (schema → engine-core → editorial-theme).</li>
@@ -545,56 +526,53 @@ agreni-site + jordan-site (Phase 4)
 <li>Vercel deployment for demo-site.</li>
 <li>Changesets release workflow.</li>
 <li>docs/ governance files (issue-labels.md, architecture docs, downstream docs).</li>
-</ul></section><section id="epics" class="panel"><h1>Epics and Atomic Tickets</h1><p>Generated from <code>source/epics/*.md</code>. Do not blindly create all issues. Reconcile against the live GitHub board first.</p><input id="epicSearch" type="text" class="search" aria-label="Filter epics and tickets" oninput="filterEpics()" placeholder="Filter epics/tickets..."><details class="epic-card mvp" open><summary>Epic 0 — v5 meta roadmap, board reconciliation, and technical debt <span>★ MVP milestone</span></summary><div class="source-link">Source: <code>source/epics/epic_00_meta_roadmap_v5.md</code></div><h1>Epic 0 — v5 meta roadmap, board reconciliation, and technical debt</h1>
+</ul></section><section id="epics" class="panel"><h1>Epics and Atomic Tickets</h1><p>Generated from <code>source/epics/*.md</code>. Sorted by phase, then filename. Do not blindly create all issues. Reconcile against the live GitHub board first.</p><input id="epicSearch" type="text" class="search" aria-label="Filter epics and tickets" oninput="filterEpics()" placeholder="Filter epics/tickets..."><details class="epic-card post" id="epic-governance-legal" open><summary>Governance, legal, and open-source contribution foundation <span>post-MVP / support</span></summary><div class="source-link">Source: <code>source/epics/epic_governance_legal.md</code></div><h1>Governance, legal, and open-source contribution foundation</h1>
 <p><strong>Phase:</strong> Phase 0  </p>
-<p><strong>MVP relevance:</strong> Required prerequisite — single agreed path before implementation  </p>
+<p><strong>MVP relevance:</strong> Parallel — not required for Backbone MVP runtime work  </p>
 <p><strong>Products touched:</strong> G  </p>
-<p><strong>Labels:</strong> <code>type:epic</code>, <code>area:governance</code>, <code>source:human</code></p>
+<p><strong>Labels:</strong> <code>type:epic</code>, <code>area:governance</code>, <code>area:docs</code>, <code>source:human</code></p>
 <h2>Summary</h2>
-<p>Coordinate the v5 audit framing (Backbone MVP vs Product MVP, product tracks A–G, phases 0–11), reconcile the live GitHub board with this report, and maintain a visible technical debt register so scope stays honest.</p>
-<h2>v5 audit notes (why v5 differs from v4)</h2>
-<ul>
-<li><strong>Two MVP milestones:</strong> Backbone MVP after Phase 3; Product MVP after Phase 4 (agreni-site + jordan-site as real products).</li>
-<li><strong>Product tracks A–G</strong> map every epic to concrete products; see <code>source/sections/08_product_tracks_and_mvp.md</code>.</li>
-<li><strong>Epic renumbering:</strong> 18 epics (00–17) follow phase order; filenames sort to render order in the HTML report.</li>
-<li><strong>Consumer sites promoted:</strong> agreni-site and jordan-site are Phase 4 ★ Product MVP, not “after MVP” migration only.</li>
-</ul>
-<h2>Technical debt register (known)</h2>
-<table class="md-table"><thead><tr><th>Item</th><th>Notes</th></tr></thead><tbody><tr><td>Hardcoded route metadata</td><td>Should move toward explicit registries (<strong>Epic 10</strong>).</td></tr><tr><td>Hardcoded supported component surfaces</td><td>Same — registry-driven override surfaces.</td></tr><tr><td>No real package build scripts</td><td><strong>Epic 3</strong> / <strong>Epic 4</strong> — replace no-op builds.</td></tr><tr><td>Sparse automated tests</td><td>Add over time; not blocking audit narrative.</td></tr></tbody></table>
+<p>Set the legal and contribution foundation for a real open-source project that welcomes AI-assisted and vibe-coded contributions while preserving maintainer control and upstream quality.</p>
 <h2>Why this matters</h2>
-<p>The live board and the report must not diverge. Acting on either alone risks duplicate or contradictory work.</p>
+<p>The project is explicitly open source. Consumers may become contributors. That means the repo needs a license, AI contribution policy, security policy, PR template, and issue templates before outside contributions become noisy or risky.</p>
 <h2>Tickets</h2>
-<h3>T0.1 — Create v5 branch and audit artifacts</h3>
-<p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:human-dev</code>, <code>area:governance</code></p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] Work proceeds on <code>feat/v5-audit-update</code> (or successor) from the agreed base branch.</li>
-<li>[ ] Report pack sources updated; <code>node scripts/build_report.mjs</code> regenerates HTML.</li>
-</ul>
-<h3>T0.2 — Audit live GitHub board (was T0b.2 scope)</h3>
-<p><strong>Labels:</strong> <code>task:research</code>, <code>owner:human-dev</code>, <code>area:governance</code></p>
-<p>List open issues; map to report epics; flag orphans, duplicates, gaps.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] Each issue mapped or flagged.</li>
-<li>[ ] Gaps documented.</li>
-</ul>
-<h3>T0.3 — Reconcile and update board (was T0b.3 scope)</h3>
+<h3 id="epic-governance-legal__decide-license-strategy">Decide license strategy</h3>
 <p><strong>Labels:</strong> <code>task:decision</code>, <code>owner:human-dev</code>, <code>area:governance</code></p>
-<p>Close stale issues, update labels/milestones, create missing tickets per agreed path.</p>
+<p>Decide whether to keep MIT, move to Apache-2.0, or dual-license MIT/Apache-2.0.</p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
-<li>[ ] Dispositions recorded.</li>
-<li>[ ] Phase ordering reflected on the board.</li>
+<li>[ ] Decision recorded.</li>
+<li>[ ] LICENSE/package metadata follow-up created if needed.</li>
 </ul>
-<h3>T0.4 — Technical debt register visibility</h3>
-<p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:docs</code>, <code>agent:approved</code></p>
-<p>Keep debt register synced with reality (README or <code>docs/</code> pointer).</p>
+<h3 id="epic-governance-legal__add-governance-and-ai-contribution-docs">Add governance and AI contribution docs</h3>
+<p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>area:governance</code>, <code>agent:approved</code></p>
+<p>Add <code>GOVERNANCE.md</code> and <code>AI_USAGE.md</code>.</p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
-<li>[ ] Debt items above tracked or superseded with rationale.</li>
+<li>[ ] Maintainer authority is clear.</li>
+<li>[ ] AI-assisted contributions are allowed but must be reviewed.</li>
+<li>[ ] Consumer-originated contributions are explicitly supported.</li>
+</ul>
+<h3 id="epic-governance-legal__add-citation-security-dco-trademark-notice-files">Add citation, security, DCO, trademark, notice files</h3>
+<p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>area:governance</code>, <code>agent:approved</code></p>
+<p>Add <code>CITATION.cff</code>, <code>SECURITY.md</code>, <code>DCO.md</code>, <code>TRADEMARK.md</code>, and <code>NOTICE</code> as appropriate.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] Security reports do not go through public issues.</li>
+<li>[ ] Citation metadata is valid.</li>
+<li>[ ] DCO/sign-off expectations are documented.</li>
+</ul>
+<h3 id="epic-governance-legal__add-pr-and-issue-templates">Add PR and issue templates</h3>
+<p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>area:safety</code>, <code>agent:approved</code></p>
+<p>Templates must ask about target layer, downstream origin, AI usage, private data, changeset need, and whether content/config/registry would have sufficed.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] PR template exists.</li>
+<li>[ ] Upstream feature request template exists.</li>
+<li>[ ] Temporary patch tracking template exists.</li>
+<li>[ ] Downstream-originated PR template exists.</li>
 </ul></details>
-<details class="epic-card post" open><summary>Epic 1 — Label taxonomy and area/agent standards <span>post-MVP / support</span></summary><div class="source-link">Source: <code>source/epics/epic_01_label_taxonomy.md</code></div><h1>Epic 1 — Label taxonomy and area/agent standards</h1>
+<details class="epic-card post" id="epic-label-taxonomy" open><summary>Label taxonomy and area/agent standards <span>post-MVP / support</span></summary><div class="source-link">Source: <code>source/epics/epic_label_taxonomy.md</code></div><h1>Label taxonomy and area/agent standards</h1>
 <p><strong>Phase:</strong> Phase 0 (immediately usable; does not block other phases)  </p>
 <p><strong>MVP relevance:</strong> Phase 0 prerequisite — required before AI automation workflows proceed safely  </p>
 <p><strong>Products touched:</strong> G  </p>
@@ -606,7 +584,7 @@ agreni-site + jordan-site (Phase 4)
 <p>Without consistent <code>area:*</code> labels, it is impossible to filter issues by package or domain — critical for any agent or automation that needs to act on a scoped set of issues. Without <code>agent:*</code> labels, there is no machine-readable approval gate between human oversight and AI execution.</p>
 <p>The legacy provider-specific ready label is being deprecated because the workflow-kit is provider-neutral Python/MCP tooling that should support Claude, Copilot, OpenHands, and future agents equally.</p>
 <h2>Label groups to standardize</h2>
-<h3>area labels</h3>
+<h3 id="epic-label-taxonomy__area-labels">area labels</h3>
 <p>One primary <code>area:*</code> label per issue. Epics may carry multiple if genuinely cross-cutting.</p>
 <pre><code>area:schema
 area:engine-core
@@ -623,13 +601,13 @@ area:ci
 area:release
 area:downstream
 area:vercel</code></pre>
-<h3>agent labels</h3>
+<h3 id="epic-label-taxonomy__agent-labels">agent labels</h3>
 <pre><code>agent:approved          — human has approved an AI agent to act on this issue
 agent:needs-human-review — agent may plan/summarize but must not implement
 agent:blocked           — agent cannot continue without human input</code></pre>
 <p>Deprecate: legacy ready label (alias to <code>agent:approved</code> during transition period, then remove).</p>
 <h2>Tickets</h2>
-<h3>T1.1 — Create area and agent labels in GitHub</h3>
+<h3 id="epic-label-taxonomy__create-area-and-agent-labels-in-github">Create area and agent labels in GitHub</h3>
 <p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:human-dev</code>, <code>area:governance</code></p>
 <p>Create all <code>area:*</code> and <code>agent:*</code> labels in the GitHub repo. Mark the legacy ready label as deprecated (rename or add deprecation note to description).</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -639,7 +617,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Legacy ready label is deprecated or aliased.</li>
 <li>[ ] Label colors are consistent within each group.</li>
 </ul>
-<h3>T1.2 — Document area and agent label rules</h3>
+<h3 id="epic-label-taxonomy__document-area-and-agent-label-rules">Document area and agent label rules</h3>
 <p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:docs</code>, <code>agent:approved</code></p>
 <p>Update or create <code>docs/issue-labels.md</code> with rules for <code>area:*</code> and <code>agent:*</code> labels. Include examples for runtime, workflow-kit, admin-tools, consumer-registry, and downstream issues.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -649,7 +627,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Examples given for each major package area.</li>
 <li>[ ] Legacy ready label is listed as deprecated with migration path.</li>
 </ul>
-<h3>T1.3 — Retag open issues with correct area and agent labels</h3>
+<h3 id="epic-label-taxonomy__retag-open-issues-with-correct-area-and-agent-labels">Retag open issues with correct area and agent labels</h3>
 <p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>area:governance</code>, <code>agent:approved</code></p>
 <p>Review all open issues. Apply the correct primary <code>area:*</code> label to each. Apply <code>agent:approved</code> to issues that were previously tagged with the legacy ready label and are still scoped for agent execution.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -658,53 +636,132 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] All legacy ready labels are replaced with <code>agent:approved</code> or another appropriate <code>agent:*</code> label.</li>
 <li>[ ] Issues that are not agent-ready have no <code>agent:*</code> label or have <code>agent:needs-human-review</code>.</li>
 </ul></details>
-<details class="epic-card post" open><summary>Epic 2 — Governance, legal, and open-source contribution foundation <span>post-MVP / support</span></summary><div class="source-link">Source: <code>source/epics/epic_02_governance_legal.md</code></div><h1>Epic 2 — Governance, legal, and open-source contribution foundation</h1>
+<details class="epic-card mvp" id="epic-meta-roadmap" open><summary>v5 meta roadmap, board reconciliation, and technical debt <span>★ MVP milestone</span></summary><div class="source-link">Source: <code>source/epics/epic_meta_roadmap.md</code></div><h1>v5 meta roadmap, board reconciliation, and technical debt</h1>
 <p><strong>Phase:</strong> Phase 0  </p>
-<p><strong>MVP relevance:</strong> Parallel — not required for Backbone MVP runtime work  </p>
+<p><strong>MVP relevance:</strong> Required prerequisite — single agreed path before implementation  </p>
 <p><strong>Products touched:</strong> G  </p>
-<p><strong>Labels:</strong> <code>type:epic</code>, <code>area:governance</code>, <code>area:docs</code>, <code>source:human</code></p>
+<p><strong>Labels:</strong> <code>type:epic</code>, <code>area:governance</code>, <code>source:human</code></p>
 <h2>Summary</h2>
-<p>Set the legal and contribution foundation for a real open-source project that welcomes AI-assisted and vibe-coded contributions while preserving maintainer control and upstream quality.</p>
+<p>Coordinate the v5 audit framing (Backbone MVP vs Product MVP, product tracks A–G, phases 0–11), reconcile the live GitHub board with this report, and maintain a visible technical debt register so scope stays honest.</p>
+<h2>v5 audit framing</h2>
+<ul>
+<li><strong>Two MVP milestones:</strong> Backbone MVP after Phase 3; Product MVP after Phase 4 (agreni-site + jordan-site as real products).</li>
+<li><strong>Product tracks A–G</strong> map every epic to concrete products; see <a href="#products">Product tracks and MVP coverage</a>.</li>
+<li><strong>Phase-ordered epics:</strong> 18 epic files; filenames have no numeric prefix. Render order is driven by each epic's <code>Phase</code> frontmatter, then filename.</li>
+<li><strong>Consumer sites promoted:</strong> agreni-site and jordan-site are Phase 4 ★ Product MVP, not &quot;after MVP&quot; migration only.</li>
+</ul>
+<h2>Technical debt register</h2>
+<p>Each row points to the ticket that closes the debt. &quot;Debt-only&quot; rows are accepted technical debt with no current ticket; if the cost shifts, promote them to tickets in the appropriate phase.</p>
+<table class="md-table"><thead><tr><th>Item</th><th>Where it lives</th><th>Tracked by</th></tr></thead><tbody><tr><td>Hardcoded route metadata</td><td><code>packages/engine-core/src/route-discovery.ts</code> (<code>ROUTE_METADATA</code>)</td><td><a href="#epic-registries-manifest__move-route-metadata-to-explicit-registry">Move route metadata to explicit registry</a></td></tr><tr><td>Hardcoded supported component surfaces</td><td><code>packages/engine-core/src/override-resolution.ts</code> (<code>SUPPORTED_COMPONENT_SURFACES</code>)</td><td><a href="#epic-registries-manifest__move-override-surfaces-to-explicit-registry">Move override surfaces to explicit registry</a></td></tr><tr><td>No real package build scripts</td><td>All required packages have <code>echo 'build not yet configured'</code></td><td><a href="#epic-runtime-buildability__write-real-package-build-scripts">Write real package build scripts</a> and <a href="#epic-package-publishing__write-real-build-scripts-for-required-packages">Write real build scripts for required packages</a></td></tr><tr><td>Override bridge end-to-end not verified</td><td><code>engine-core</code> validates names but render path not confirmed</td><td><a href="#epic-override-bridge__audit-current-override-rendering-path">Audit current override rendering path</a>, <a href="#epic-override-bridge__implement-component-override-bridge">Implement component override bridge</a>, <a href="#epic-override-bridge__add-demo-override-example">Add demo override example</a></td></tr><tr><td>No <code>.portfolio-engine/manifest.json</code> generation</td><td>Engine-core has no manifest writer</td><td><a href="#epic-registries-manifest__generate-portfolio-engine-manifest-json">Generate <code>.portfolio-engine/manifest.json</code></a></td></tr><tr><td>Issue label migration (legacy <code>area:*</code>, provider-specific ready label)</td><td>GitHub repo labels</td><td><a href="#epic-label-taxonomy__create-area-and-agent-labels-in-github">Create area and agent labels in GitHub</a>, <a href="#epic-label-taxonomy__retag-open-issues-with-correct-area-and-agent-labels">Retag open issues</a></td></tr><tr><td>Folder READMEs missing in consumer-owned dirs</td><td><code>src/config</code>, <code>src/content</code>, etc. (demo-site + scaffolds)</td><td><a href="#epic-consumer-layout__add-folder-readme-templates">Add folder README templates</a>, <a href="#epic-demo-showcase__add-folder-readmes-to-demo-site">Add folder READMEs to demo-site</a></td></tr><tr><td><code>public/</code> semantics undocumented</td><td><code>docs/downstream/consumption.md</code> and folder READMEs</td><td><a href="#epic-consumer-layout__document-public-semantics">Document <code>public/</code> semantics</a></td></tr><tr><td>Config path migration (<code>config/*.json</code> → <code>src/config/*.json</code>)</td><td>Demo-site + engine-core config loader</td><td><a href="#epic-consumer-layout__decide-config-path-migration-strategy">Decide config path migration strategy</a>, <a href="#epic-consumer-layout__add-path-options-to-editorialtheme">Add path options to <code>editorialTheme(...)</code></a></td></tr><tr><td>Sparse automated tests</td><td>All packages</td><td>Debt-only — TypeScript + Astro check act as proxy quality gates; revisit post-Product-MVP if regressions appear.</td></tr></tbody></table>
 <h2>Why this matters</h2>
-<p>The project is explicitly open source. Consumers may become contributors. That means the repo needs a license, AI contribution policy, security policy, PR template, and issue templates before outside contributions become noisy or risky.</p>
+<p>The live board and the report must not diverge. Acting on either alone risks duplicate or contradictory work.</p>
 <h2>Tickets</h2>
-<h3>T0.1 — Decide license strategy</h3>
+<h3 id="epic-meta-roadmap__create-v5-branch-and-audit-artifacts">Create v5 branch and audit artifacts</h3>
+<p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:human-dev</code>, <code>area:governance</code></p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] Work proceeds on <code>feat/v5-audit-update</code> (or successor) from the agreed base branch.</li>
+<li>[ ] Report pack sources updated; <code>node scripts/build_report.mjs</code> regenerates HTML.</li>
+</ul>
+<h3 id="epic-meta-roadmap__audit-live-github-board-was-t0b-2-scope">Audit live GitHub board (was T0b.2 scope)</h3>
+<p><strong>Labels:</strong> <code>task:research</code>, <code>owner:human-dev</code>, <code>area:governance</code></p>
+<p>List open issues; map to report epics; flag orphans, duplicates, gaps.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] Each issue mapped or flagged.</li>
+<li>[ ] Gaps documented.</li>
+</ul>
+<h3 id="epic-meta-roadmap__reconcile-and-update-board-was-t0b-3-scope">Reconcile and update board (was T0b.3 scope)</h3>
 <p><strong>Labels:</strong> <code>task:decision</code>, <code>owner:human-dev</code>, <code>area:governance</code></p>
-<p>Decide whether to keep MIT, move to Apache-2.0, or dual-license MIT/Apache-2.0.</p>
+<p>Close stale issues, update labels/milestones, create missing tickets per agreed path.</p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
-<li>[ ] Decision recorded.</li>
-<li>[ ] LICENSE/package metadata follow-up created if needed.</li>
+<li>[ ] Dispositions recorded.</li>
+<li>[ ] Phase ordering reflected on the board.</li>
 </ul>
-<h3>T0.2 — Add governance and AI contribution docs</h3>
-<p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>area:governance</code>, <code>agent:approved</code></p>
-<p>Add <code>GOVERNANCE.md</code> and <code>AI_USAGE.md</code>.</p>
+<h3 id="epic-meta-roadmap__technical-debt-register-visibility">Technical debt register visibility</h3>
+<p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:docs</code>, <code>agent:approved</code></p>
+<p>Keep debt register synced with reality (README or <code>docs/</code> pointer).</p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
-<li>[ ] Maintainer authority is clear.</li>
-<li>[ ] AI-assisted contributions are allowed but must be reviewed.</li>
-<li>[ ] Consumer-originated contributions are explicitly supported.</li>
-</ul>
-<h3>T0.3 — Add citation, security, DCO, trademark, notice files</h3>
-<p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>area:governance</code>, <code>agent:approved</code></p>
-<p>Add <code>CITATION.cff</code>, <code>SECURITY.md</code>, <code>DCO.md</code>, <code>TRADEMARK.md</code>, and <code>NOTICE</code> as appropriate.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] Security reports do not go through public issues.</li>
-<li>[ ] Citation metadata is valid.</li>
-<li>[ ] DCO/sign-off expectations are documented.</li>
-</ul>
-<h3>T0.4 — Add PR and issue templates</h3>
-<p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>area:safety</code>, <code>agent:approved</code></p>
-<p>Templates must ask about target layer, downstream origin, AI usage, private data, changeset need, and whether content/config/registry would have sufficed.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] PR template exists.</li>
-<li>[ ] Upstream feature request template exists.</li>
-<li>[ ] Temporary patch tracking template exists.</li>
-<li>[ ] Downstream-originated PR template exists.</li>
+<li>[ ] Debt items above tracked or superseded with rationale.</li>
 </ul></details>
-<details class="epic-card mvp" open><summary>Epic 3 — Runtime buildability: schema, engine-core, editorial-theme, demo-site <span>★ MVP milestone</span></summary><div class="source-link">Source: <code>source/epics/epic_03_runtime_buildability.md</code></div><h1>Epic 3 — Runtime buildability: schema, engine-core, editorial-theme, demo-site</h1>
+<details class="epic-card mvp" id="epic-package-publishing" open><summary>Package build scripts and npm publishing <span>★ MVP milestone</span></summary><div class="source-link">Source: <code>source/epics/epic_package_publishing.md</code></div><h1>Package build scripts and npm publishing</h1>
+<p><strong>Phase:</strong> Phase 1 (build scripts) / Phase 2 (publish + switch agreni-site)  </p>
+<p><strong>MVP relevance:</strong> ★ Required for Backbone MVP (builds + docs); ★ Required for Product MVP (semver publish + consume)  </p>
+<p><strong>Products touched:</strong> A, C, D  </p>
+<p><strong>Labels:</strong> <code>type:epic</code>, <code>area:schema</code>, <code>area:engine-core</code>, <code>area:editorial-theme</code>, <code>area:release</code>, <code>source:human</code></p>
+<h2>Summary</h2>
+<p>All three required runtime packages currently have no-op build scripts (<code>echo 'build not yet configured'</code>). Before the packages can be consumed by truly separate consumer repos (agreni-site, jordan-site), they need real build scripts and a publishing strategy. This epic covers two distinct phases: getting builds working, then publishing and validating consumption.</p>
+<h2>Why this matters</h2>
+<p><strong>Product MVP</strong> requires agreni-site and jordan-site to consume versioned packages unless a documented exception applies. Without published packages, those repos can only consume via pnpm workspace links — acceptable for Backbone MVP only when documentation is explicit.</p>
+<p>This epic also documents the two development modes so contributors know which to use.</p>
+<h2>Maps to old Epic 6 (profesional_site)</h2>
+<p>This epic is the v5 equivalent of profesional_site issues:</p>
+<ul>
+<li>#177: Epic 6 — Publish and Stabilize Package Consumption</li>
+<li>#219: Task 6.1 — Publish first engine packages to npm</li>
+<li>#220: Task 6.2 — Switch agreni-site from local paths to semver packages</li>
+<li>#221: Task 6.3 — Document the two development modes</li>
+<li>#222: Task 6.4 — Add basic package upgrade workflow in agreni-site</li>
+</ul>
+<h2>Two development modes</h2>
+<h3 id="epic-package-publishing__mode-a-workspace-link-development-monorepo-contributor">Mode A: workspace link (development / monorepo contributor)</h3>
+<p>Consumer lives inside the portfolio-engine monorepo workspace. Packages are consumed via pnpm workspace protocol (<code>workspace:*</code>). No publishing required. Used for active engine development.</p>
+<h3 id="epic-package-publishing__mode-b-semver-packages-production-separate-consumer-repo">Mode B: semver packages (production / separate consumer repo)</h3>
+<p>Consumer lives in a separate private repo. Packages are installed from npm as versioned dependencies. This is the target architecture for agreni-site and jordan-site.</p>
+<h2>Tickets</h2>
+<h3 id="epic-package-publishing__write-real-build-scripts-for-required-packages">Write real build scripts for required packages</h3>
+<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:engine-core</code>, <code>area:editorial-theme</code>, <code>area:schema</code>, <code>agent:approved</code>, <code>mvp:required</code></p>
+<p>Replace <code>echo 'build not yet configured'</code> with working build scripts in all three required packages. Use <code>tsc</code> for schema and engine-core; use the Astro build or a dedicated bundler for editorial-theme.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] <code>pnpm --filter @portfolio-engine/schema build</code> succeeds and emits <code>dist/</code>.</li>
+<li>[ ] <code>pnpm --filter @portfolio-engine/engine-core build</code> succeeds and emits <code>dist/</code>.</li>
+<li>[ ] <code>pnpm --filter @portfolio-engine/editorial-theme build</code> succeeds and emits distributable output.</li>
+<li>[ ] All three packages have correct <code>exports</code> and <code>main</code>/<code>types</code> fields in <code>package.json</code>.</li>
+<li>[ ] Changesets release workflow can publish from <code>dist/</code>.</li>
+</ul>
+<h3 id="epic-package-publishing__document-two-development-modes">Document two development modes</h3>
+<p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:docs</code>, <code>agent:approved</code>, <code>mvp:required</code></p>
+<p>Update <code>docs/downstream/consumption.md</code> to clearly describe workspace-link mode vs. semver mode. Include when to use each and how to switch.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] Workspace-link mode (monorepo contributor) is documented.</li>
+<li>[ ] Semver mode (separate consumer repo) is documented.</li>
+<li>[ ] Switch instructions from one mode to the other are included.</li>
+<li>[ ] <code>docs/downstream/consumption.md</code> is updated.</li>
+</ul>
+<h3 id="epic-package-publishing__publish-first-engine-packages-to-npm">Publish first engine packages to npm</h3>
+<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:human-dev</code>, <code>area:release</code>, <code>mvp:required</code></p>
+<p>Trigger the Changesets release workflow to publish <code>@portfolio-engine/schema</code>, <code>@portfolio-engine/engine-core</code>, and <code>@portfolio-engine/editorial-theme</code> to the npm registry.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] All three required packages are published at a stable version (at minimum <code>0.1.0</code>).</li>
+<li>[ ] npm package pages are accessible.</li>
+<li>[ ] Packages are installable via <code>npm install @portfolio-engine/editorial-theme</code>.</li>
+</ul>
+<p><strong>Blocked by:</strong> <a href="#epic-package-publishing__write-real-build-scripts-for-required-packages">Write real build scripts for required packages</a> (build scripts must work first)</p>
+<h3 id="epic-package-publishing__validate-agreni-site-can-consume-published-packages">Validate agreni-site can consume published packages</h3>
+<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:downstream</code>, <code>agent:approved</code>, <code>mvp:required</code></p>
+<p>In the agreni-site repo, switch from pnpm workspace links to semver references. Confirm the site builds with the published packages.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] <code>package.json</code> in agreni-site references published semver versions (not <code>workspace:*</code>).</li>
+<li>[ ] <code>pnpm install</code> and <code>pnpm build</code> succeed in agreni-site without the portfolio-engine monorepo present.</li>
+<li>[ ] Any monorepo-specific paths or assumptions are removed.</li>
+</ul>
+<p><strong>Blocked by:</strong> <a href="#epic-package-publishing__publish-first-engine-packages-to-npm">Publish first engine packages to npm</a> (packages must be published first), agreni-site #1 (secrets/integrations reconnected)</p>
+<h3 id="epic-package-publishing__add-basic-package-upgrade-workflow">Add basic package upgrade workflow</h3>
+<p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:downstream</code>, <code>area:docs</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
+<p>Document the process for updating portfolio-engine package versions in a consumer repo. Include how to read the changelog, when to update, and how to handle breaking changes.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] Upgrade process documented in <code>docs/downstream/upgrade-path.md</code>.</li>
+<li>[ ] Changelog reading and semver expectations explained.</li>
+<li>[ ] Breaking change handling noted.</li>
+</ul></details>
+<details class="epic-card mvp" id="epic-runtime-buildability" open><summary>Runtime buildability: schema, engine-core, editorial-theme, demo-site <span>★ MVP milestone</span></summary><div class="source-link">Source: <code>source/epics/epic_runtime_buildability.md</code></div><h1>Runtime buildability: schema, engine-core, editorial-theme, demo-site</h1>
 <p><strong>Phase:</strong> Phase 1  </p>
 <p><strong>MVP relevance:</strong> ★ Required for Backbone MVP  </p>
 <p><strong>Products touched:</strong> A, B  </p>
@@ -731,9 +788,9 @@ agent:blocked           — agent cannot continue without human input</code></pr
 </ul>
 <p><strong>Defer to post–Product-MVP:</strong></p>
 <ul>
-<li>portfolio-engine #34: Vercel CLI deploy/preview bot → Phase 11 (<strong>Epic 17</strong>)</li>
-<li>portfolio-engine #36: Copilot rulesets for PRs into dev/epic/* → Phase 11 (<strong>Epic 16</strong>)</li>
-<li>portfolio-engine #37: Copilot document PR feedback loop → Phase 11 (<strong>Epic 16</strong>)</li>
+<li>portfolio-engine #34: Vercel CLI deploy/preview bot → Phase 11 (<a href="#epic-admin-publishing">Admin publishing</a>)</li>
+<li>portfolio-engine #36: Copilot rulesets for PRs into dev/epic/* → Phase 11 (<a href="#epic-contribution-safety">Contribution safety</a>)</li>
+<li>portfolio-engine #37: Copilot document PR feedback loop → Phase 11 (<a href="#epic-contribution-safety">Contribution safety</a>)</li>
 </ul>
 <p><strong>Verify and close:</strong></p>
 <ul>
@@ -745,7 +802,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>profesional_site #175: Parent Epic 4 — close or archive</li>
 </ul>
 <h2>Tickets</h2>
-<h3>T3.1 — Reconcile existing runtime and CI issues</h3>
+<h3 id="epic-runtime-buildability__reconcile-existing-runtime-and-ci-issues">Reconcile existing runtime and CI issues</h3>
 <p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:human-dev</code>, <code>area:ci</code></p>
 <p>Review all open issues per the list above. Apply correct phase labels. Close done items. Defer post-MVP items.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -755,7 +812,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Issue #35 verified and closed if done.</li>
 <li>[ ] profesional_site #209–#213 and #175 closed with closing comment.</li>
 </ul>
-<h3>T3.2 — Fix editorial-theme typecheck/build reliability</h3>
+<h3 id="epic-runtime-buildability__fix-editorial-theme-typecheck-build-reliability">Fix editorial-theme typecheck/build reliability</h3>
 <p><strong>Labels:</strong> <code>task:bug-fix</code>, <code>owner:agentic-ai</code>, <code>area:editorial-theme</code>, <code>agent:approved</code></p>
 <p>Resolve TypeScript/Astro check failures and virtual module editor issues. Tracked by portfolio-engine #16.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -764,7 +821,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Demo-site <code>astro check</code> runs non-interactively.</li>
 <li>[ ] Virtual module imports resolve consistently.</li>
 </ul>
-<h3>T3.3 — Verify demo-site build/deploy path</h3>
+<h3 id="epic-runtime-buildability__verify-demo-site-build-deploy-path">Verify demo-site build/deploy path</h3>
 <p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code></p>
 <p>Ensure demo-site can build locally and deploy via Vercel with documented settings. Tracked by #31, #40.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -773,98 +830,23 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Vercel output directory and baseUrl are correct.</li>
 <li>[ ] Demo README is accurate.</li>
 </ul>
-<h3>T3.4 — Write real package build scripts</h3>
+<h3 id="epic-runtime-buildability__write-real-package-build-scripts">Write real package build scripts</h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:engine-core</code>, <code>area:editorial-theme</code>, <code>area:schema</code>, <code>agent:approved</code></p>
-<p>Replace <code>echo 'build not yet configured'</code> in all three required packages. See Epic 4 T4.1 for full acceptance criteria. This ticket is the Phase 1 prerequisite; publishing happens in Phase 2 (<strong>Epic 4</strong>).</p>
+<p>Replace <code>echo 'build not yet configured'</code> in all three required packages. See <a href="#epic-package-publishing__write-real-build-scripts-for-required-packages">Package publishing — Write real build scripts for required packages</a> for full acceptance criteria. This ticket is the Phase 1 prerequisite; publishing happens in Phase 2 under the same epic.</p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
 <li>[ ] All three packages emit distributable output when <code>pnpm build</code> is run.</li>
 <li>[ ] <code>package.json</code> exports and types fields are correct.</li>
 <li>[ ] Changesets workflow can publish from the output.</li>
 </ul>
-<h3>T3.5 — README pointer (full rewrite in Epic 7)</h3>
+<h3 id="epic-runtime-buildability__readme-pointer-full-rewrite-in-mvp-docs-epic">README pointer (full rewrite in MVP docs epic)</h3>
 <p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:docs</code>, <code>agent:approved</code></p>
-<p>Ensure README points readers to <strong>Epic 7</strong> for the full Backbone MVP documentation pass (required vs optional packages, two modes).</p>
+<p>Ensure README points readers to <a href="#epic-mvp-docs">MVP docs</a> for the full Backbone MVP documentation pass (required vs optional packages, two modes).</p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
-<li>[ ] Cross-link to Epic 7 / roadmap until Epic 7 completes.</li>
+<li>[ ] Cross-link to <a href="#epic-mvp-docs">MVP docs</a> / roadmap until that epic completes.</li>
 </ul></details>
-<details class="epic-card mvp" open><summary>Epic 4 — Package build scripts and npm publishing <span>★ MVP milestone</span></summary><div class="source-link">Source: <code>source/epics/epic_04_package_publishing.md</code></div><h1>Epic 4 — Package build scripts and npm publishing</h1>
-<p><strong>Phase:</strong> Phase 1 (build scripts) / Phase 2 (publish + switch agreni-site)  </p>
-<p><strong>MVP relevance:</strong> ★ Required for Backbone MVP (builds + docs); ★ Required for Product MVP (semver publish + consume)  </p>
-<p><strong>Products touched:</strong> A, C, D  </p>
-<p><strong>Labels:</strong> <code>type:epic</code>, <code>area:schema</code>, <code>area:engine-core</code>, <code>area:editorial-theme</code>, <code>area:release</code>, <code>source:human</code></p>
-<h2>Summary</h2>
-<p>All three required runtime packages currently have no-op build scripts (<code>echo 'build not yet configured'</code>). Before the packages can be consumed by truly separate consumer repos (agreni-site, jordan-site), they need real build scripts and a publishing strategy. This epic covers two distinct phases: getting builds working, then publishing and validating consumption.</p>
-<h2>Why this matters</h2>
-<p><strong>Product MVP</strong> requires agreni-site and jordan-site to consume versioned packages unless a documented exception applies. Without published packages, those repos can only consume via pnpm workspace links — acceptable for Backbone MVP only when documentation is explicit.</p>
-<p>This epic also documents the two development modes so contributors know which to use.</p>
-<h2>Maps to old Epic 6 (profesional_site)</h2>
-<p>This epic is the v5 equivalent of profesional_site issues:</p>
-<ul>
-<li>#177: Epic 6 — Publish and Stabilize Package Consumption</li>
-<li>#219: Task 6.1 — Publish first engine packages to npm</li>
-<li>#220: Task 6.2 — Switch agreni-site from local paths to semver packages</li>
-<li>#221: Task 6.3 — Document the two development modes</li>
-<li>#222: Task 6.4 — Add basic package upgrade workflow in agreni-site</li>
-</ul>
-<h2>Two development modes</h2>
-<h3>Mode A: workspace link (development / monorepo contributor)</h3>
-<p>Consumer lives inside the portfolio-engine monorepo workspace. Packages are consumed via pnpm workspace protocol (<code>workspace:*</code>). No publishing required. Used for active engine development.</p>
-<h3>Mode B: semver packages (production / separate consumer repo)</h3>
-<p>Consumer lives in a separate private repo. Packages are installed from npm as versioned dependencies. This is the target architecture for agreni-site and jordan-site.</p>
-<h2>Tickets</h2>
-<h3>T4.1 — Write real build scripts for required packages</h3>
-<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:engine-core</code>, <code>area:editorial-theme</code>, <code>area:schema</code>, <code>agent:approved</code>, <code>mvp:required</code></p>
-<p>Replace <code>echo 'build not yet configured'</code> with working build scripts in all three required packages. Use <code>tsc</code> for schema and engine-core; use the Astro build or a dedicated bundler for editorial-theme.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] <code>pnpm --filter @portfolio-engine/schema build</code> succeeds and emits <code>dist/</code>.</li>
-<li>[ ] <code>pnpm --filter @portfolio-engine/engine-core build</code> succeeds and emits <code>dist/</code>.</li>
-<li>[ ] <code>pnpm --filter @portfolio-engine/editorial-theme build</code> succeeds and emits distributable output.</li>
-<li>[ ] All three packages have correct <code>exports</code> and <code>main</code>/<code>types</code> fields in <code>package.json</code>.</li>
-<li>[ ] Changesets release workflow can publish from <code>dist/</code>.</li>
-</ul>
-<h3>T4.2 — Document two development modes</h3>
-<p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:docs</code>, <code>agent:approved</code>, <code>mvp:required</code></p>
-<p>Update <code>docs/downstream/consumption.md</code> to clearly describe workspace-link mode vs. semver mode. Include when to use each and how to switch.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] Workspace-link mode (monorepo contributor) is documented.</li>
-<li>[ ] Semver mode (separate consumer repo) is documented.</li>
-<li>[ ] Switch instructions from one mode to the other are included.</li>
-<li>[ ] <code>docs/downstream/consumption.md</code> is updated.</li>
-</ul>
-<h3>T4.3 — Publish first engine packages to npm</h3>
-<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:human-dev</code>, <code>area:release</code>, <code>mvp:required</code></p>
-<p>Trigger the Changesets release workflow to publish <code>@portfolio-engine/schema</code>, <code>@portfolio-engine/engine-core</code>, and <code>@portfolio-engine/editorial-theme</code> to the npm registry.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] All three required packages are published at a stable version (at minimum <code>0.1.0</code>).</li>
-<li>[ ] npm package pages are accessible.</li>
-<li>[ ] Packages are installable via <code>npm install @portfolio-engine/editorial-theme</code>.</li>
-</ul>
-<p><strong>Blocked by:</strong> T4.1 (build scripts must work first)</p>
-<h3>T4.4 — Validate agreni-site can consume published packages</h3>
-<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:downstream</code>, <code>agent:approved</code>, <code>mvp:required</code></p>
-<p>In the agreni-site repo, switch from pnpm workspace links to semver references. Confirm the site builds with the published packages.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] <code>package.json</code> in agreni-site references published semver versions (not <code>workspace:*</code>).</li>
-<li>[ ] <code>pnpm install</code> and <code>pnpm build</code> succeed in agreni-site without the portfolio-engine monorepo present.</li>
-<li>[ ] Any monorepo-specific paths or assumptions are removed.</li>
-</ul>
-<p><strong>Blocked by:</strong> T4.3 (packages must be published first), agreni-site #1 (secrets/integrations reconnected)</p>
-<h3>T4.5 — Add basic package upgrade workflow</h3>
-<p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:downstream</code>, <code>area:docs</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
-<p>Document the process for updating portfolio-engine package versions in a consumer repo. Include how to read the changelog, when to update, and how to handle breaking changes.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] Upgrade process documented in <code>docs/downstream/upgrade-path.md</code>.</li>
-<li>[ ] Changelog reading and semver expectations explained.</li>
-<li>[ ] Breaking change handling noted.</li>
-</ul></details>
-<details class="epic-card mvp" open><summary>Epic 5 — Consumer repo layout contract <span>★ MVP milestone</span></summary><div class="source-link">Source: <code>source/epics/epic_05_consumer_layout.md</code></div><h1>Epic 5 — Consumer repo layout contract</h1>
+<details class="epic-card mvp" id="epic-consumer-layout" open><summary>Consumer repo layout contract <span>★ MVP milestone</span></summary><div class="source-link">Source: <code>source/epics/epic_consumer_layout.md</code></div><h1>Consumer repo layout contract</h1>
 <p><strong>Phase:</strong> Phase 2  </p>
 <p><strong>MVP relevance:</strong> ★ Required for Backbone MVP  </p>
 <p><strong>Products touched:</strong> A, B, C, D, E, F  </p>
@@ -874,7 +856,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <h2>Why this matters</h2>
 <p>The repo layout is the interface for nontechnical people and AI agents. If the layout is confusing, the whole vibe-coder workflow becomes fragile.</p>
 <h2>Tickets</h2>
-<h3>T5.1 — Decide config path migration strategy</h3>
+<h3 id="epic-consumer-layout__decide-config-path-migration-strategy">Decide config path migration strategy</h3>
 <p><strong>Labels:</strong> <code>task:decision</code>, <code>owner:human-dev</code>, <code>area:engine-core</code></p>
 <p>Decide whether to immediately migrate from <code>config/*.json</code> to <code>src/config/*.json</code>, or support both during a compatibility window.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -882,7 +864,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Decision recorded.</li>
 <li>[ ] Demo-site migration strategy documented.</li>
 </ul>
-<h3>T5.2 — Add path options to <code>editorialTheme(...)</code></h3>
+<h3 id="epic-consumer-layout__add-path-options-to-editorialtheme">Add path options to <code>editorialTheme(...)</code></h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:editorial-theme</code>, <code>agent:approved</code></p>
 <p>Support paths for config, content, context, registry, overrides, local components, local pages, and public assets.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -892,7 +874,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] <code>paths.context</code> accepted.</li>
 <li>[ ] Existing demo can still build during transition.</li>
 </ul>
-<h3>T5.3 — Add folder README templates</h3>
+<h3 id="epic-consumer-layout__add-folder-readme-templates">Add folder README templates</h3>
 <p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:downstream</code>, <code>agent:approved</code></p>
 <p>Create small README templates for <code>src/config</code>, <code>src/content</code>, <code>src/context</code>, <code>src/registry</code>, <code>src/overrides</code>, <code>src/components</code>, <code>src/pages-local</code>, <code>public</code>, and <code>.portfolio-engine</code>.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -901,7 +883,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Each README says what does not belong.</li>
 <li>[ ] Each README gives a small example.</li>
 </ul>
-<h3>T5.4 — Define structured context schemas</h3>
+<h3 id="epic-consumer-layout__define-structured-context-schemas">Define structured context schemas</h3>
 <p><strong>Labels:</strong> <code>task:decision</code>, <code>owner:human-dev</code>, <code>area:schema</code></p>
 <p>Define fields for <code>site-owner.json</code> and <code>brand-voice.json</code> so admin-tools can render/edit them later.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -910,60 +892,91 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Brand-voice fields drafted.</li>
 <li>[ ] Privacy expectations documented.</li>
 </ul>
-<h3>T5.5 — Move tool state to <code>.portfolio-engine</code> docs</h3>
+<h3 id="epic-consumer-layout__move-tool-state-to-portfolio-engine-docs">Move tool state to <code>.portfolio-engine</code> docs</h3>
 <p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:docs</code>, <code>agent:approved</code></p>
 <p>Document that patch ledger and upstream tracking live in <code>.portfolio-engine</code>, not <code>src/context</code>.</p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
 <li>[ ] <code>src/context</code> docs exclude tool state.</li>
 <li>[ ] <code>.portfolio-engine</code> docs include manifest, patch ledger, upstream tracking.</li>
+</ul>
+<h3 id="epic-consumer-layout__document-public-semantics">Document <code>public/</code> semantics</h3>
+<p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:docs</code>, <code>area:downstream</code>, <code>agent:approved</code></p>
+<p>Add a short docs page (or section in <code>docs/downstream/consumption.md</code>) explaining that the consumer's top-level <code>public/</code> folder is served from the site root and that everything inside it is publicly accessible — so private assets, drafts, and tool state must live elsewhere.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] Docs explain that <code>public/</code> contents are served at the site root URL.</li>
+<li>[ ] Docs list what does not belong in <code>public/</code> (private assets, drafts, tool state, secrets).</li>
+<li>[ ] Docs cross-reference the <code>.portfolio-engine</code> and <code>src/content</code> paths for non-public material.</li>
+<li>[ ] Folder README template for <code>public/</code> (from &quot;Add folder README templates&quot; above) cites this doc.</li>
 </ul></details>
-<details class="epic-card mvp" open><summary>Epic 6 — Named override bridge and style override implementation <span>★ MVP milestone</span></summary><div class="source-link">Source: <code>source/epics/epic_06_override_bridge.md</code></div><h1>Epic 6 — Named override bridge and style override implementation</h1>
-<p><strong>Phase:</strong> Phase 3  </p>
-<p><strong>MVP relevance:</strong> ★ Required for Backbone MVP if overrides are advertised in v0.1 docs; otherwise document exclusion explicitly  </p>
-<p><strong>Products touched:</strong> A, B  </p>
-<p><strong>Labels:</strong> <code>type:epic</code>, <code>area:editorial-theme</code>, <code>area:engine-core</code>, <code>source:human</code></p>
+<details class="epic-card mvp" id="epic-demo-showcase" open><summary>Demo-site as reference and showcase <span>★ MVP milestone</span></summary><div class="source-link">Source: <code>source/epics/epic_demo_showcase.md</code></div><h1>Demo-site as reference and showcase</h1>
+<p><strong>Phase:</strong> Phase 2 (Backbone MVP reference) + Phase 10 (showcase expansion)  </p>
+<p><strong>MVP relevance:</strong> ★ Reference consumer required for Backbone MVP; full product showcase is post–Product-MVP  </p>
+<p><strong>Products touched:</strong> B  </p>
+<p><strong>Labels:</strong> <code>type:epic</code>, <code>area:demo-site</code>, <code>area:docs</code>, <code>source:human</code></p>
 <h2>Summary</h2>
-<p>Make sure documented and validated override surfaces actually render consumer-provided components/styles at build time.</p>
+<p>Demo-site has two distinct roles that should be staged separately:</p>
+<p>1. <strong>Backbone MVP checker</strong> — proves the runtime did not break; build/check/deploy reference consumer.</p>
+<p>2. <strong>Product showcase</strong> — teaches consumers and agents how to use every layer of the system.</p>
 <h2>Why this matters</h2>
-<p>The current engine-core has override resolution and supported surface validation. The theme must use the resolved override map when rendering sections. Otherwise overrides are documented but not functionally complete.</p>
+<p>The demo-site should prove the package works and teach consumers/agents how to use it. Conflating the Backbone MVP CI role with the full showcase role leads to scope creep during the critical runtime stabilization phase.</p>
 <h2>Tickets</h2>
-<h3>T6.1 — Audit current override rendering path</h3>
-<p><strong>Labels:</strong> <code>task:research</code>, <code>owner:agentic-ai</code>, <code>area:editorial-theme</code>, <code>agent:approved</code></p>
-<p>Inspect whether <code>@portfolio-engine:overrides</code> is used in theme pages/components or whether default components are imported directly.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] Audit notes cite relevant files.</li>
-<li>[ ] Missing bridge points are listed.</li>
-</ul>
-<h3>T6.2 — Implement component override bridge</h3>
-<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:editorial-theme</code>, <code>agent:approved</code></p>
-<p>For each supported surface, render the consumer override if present; otherwise render the default component.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] <code>Hero</code> override works.</li>
-<li>[ ] <code>FeaturedWriting</code> override works.</li>
-<li>[ ] <code>TestimonialSection</code> override works.</li>
-<li>[ ] <code>CollaborationSection</code> override works.</li>
-</ul>
-<h3>T6.3 — Document surface names vs implementation files</h3>
-<p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:docs</code>, <code>agent:approved</code></p>
-<p>Explain that <code>Hero</code> is an override surface name and may map to an upstream implementation such as <code>HeroSection.astro</code>; <code>src/overrides/Hero.astro</code> replaces the surface, not necessarily a literal upstream file.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] Surface semantics are clear.</li>
-<li>[ ] Props for each surface are documented.</li>
-<li>[ ] <code>custom.css</code> append behavior is explained.</li>
-</ul>
-<h3>T6.4 — Add demo override example</h3>
+<h3 id="epic-demo-showcase__migrate-demo-site-to-target-consumer-layout">Migrate demo-site to target consumer layout</h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code></p>
-<p>Add a small demo-site Hero override and custom.css example.</p>
+<p>Move demo-site toward <code>src/config</code>, <code>src/content</code>, <code>src/context</code>, <code>src/overrides</code>, <code>public</code>, and <code>.portfolio-engine</code> once runtime supports paths.</p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
-<li>[ ] Rendered result visible.</li>
-<li>[ ] Source files linked in demo docs.</li>
+<li>[ ] Demo build still passes.</li>
+<li>[ ] Vercel docs updated.</li>
+<li>[ ] Existing config path issue references updated.</li>
+</ul>
+<h3 id="epic-demo-showcase__add-folder-readmes-to-demo-site">Add folder READMEs to demo-site</h3>
+<p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:simple-ai</code>, <code>area:demo-site</code></p>
+<p>Add small explanatory README files under each consumer-owned demo folder.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] READMEs exist.</li>
+<li>[ ] READMEs explain what belongs and what does not.</li>
+</ul>
+<h3 id="epic-demo-showcase__add-rendered-customization-index">Add rendered customization index</h3>
+<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code></p>
+<p>Create a rendered page explaining config/content/context/overrides/registry/public/.portfolio-engine.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] Page renders.</li>
+<li>[ ] Links rendered result to source files.</li>
+</ul>
+<h3 id="epic-demo-showcase__add-source-code-explanation-panels">Add source-code explanation panels</h3>
+<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code></p>
+<p>Each demo customization page should show what file/folder drives the rendered result.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] Rendered and source views exist.</li>
+<li>[ ] Snippets are copy-pasteable.</li>
+</ul>
+<h2>Post–Product-MVP showcase tickets (Phase 10)</h2>
+<p>These are deferred until after <strong>Product MVP</strong>.</p>
+<h3 id="epic-demo-showcase__add-how-config-works-showcase-page">Add &quot;How config works&quot; showcase page</h3>
+<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
+<h3 id="epic-demo-showcase__add-how-content-works-showcase-page">Add &quot;How content works&quot; showcase page</h3>
+<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
+<h3 id="epic-demo-showcase__add-how-context-works-showcase-page">Add &quot;How context works&quot; showcase page</h3>
+<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
+<h3 id="epic-demo-showcase__add-how-overrides-work-showcase-page">Add &quot;How overrides work&quot; showcase page</h3>
+<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
+<h3 id="epic-demo-showcase__add-how-registry-works-showcase-page">Add &quot;How registry works&quot; showcase page</h3>
+<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
+<h3 id="epic-demo-showcase__add-how-mcp-workflow-kit-helps-showcase-page">Add &quot;How MCP workflow-kit helps&quot; showcase page</h3>
+<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>area:workflow-kit</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
+<p><strong>Acceptance criteria (all showcase tickets)</strong></p>
+<ul>
+<li>[ ] Page renders.</li>
+<li>[ ] Rendered result and source snippet shown side by side.</li>
+<li>[ ] Links to relevant upstream source files.</li>
+<li>[ ] MCP/workflow-kit demo deferred until workflow-kit exists.</li>
 </ul></details>
-<details class="epic-card mvp" open><summary>Epic 7 — MVP documentation (README, CONTRIBUTING, downstream) <span>★ MVP milestone</span></summary><div class="source-link">Source: <code>source/epics/epic_07_mvp_docs.md</code></div><h1>Epic 7 — MVP documentation (README, CONTRIBUTING, downstream)</h1>
+<details class="epic-card mvp" id="epic-mvp-docs" open><summary>MVP documentation (README, CONTRIBUTING, downstream) <span>★ MVP milestone</span></summary><div class="source-link">Source: <code>source/epics/epic_mvp_docs.md</code></div><h1>MVP documentation (README, CONTRIBUTING, downstream)</h1>
 <p><strong>Phase:</strong> Phase 3  </p>
 <p><strong>MVP relevance:</strong> ★ Required for Backbone MVP  </p>
 <p><strong>Products touched:</strong> A, B, C, D, G  </p>
@@ -973,35 +986,80 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <h2>Why this matters</h2>
 <p>Backbone MVP is not only code — it is an understandable contract. Without aligned README and consumption docs, workspace-only workflows get confused with production semver consumption, and Product MVP (Phase 4) cannot be validated.</p>
 <h2>Tickets</h2>
-<h3>T7.1 — README rewrite: required vs optional</h3>
+<h3 id="epic-mvp-docs__readme-rewrite-required-vs-optional">README rewrite: required vs optional</h3>
 <p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:docs</code>, <code>agent:approved</code></p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
 <li>[ ] Required runtime packages listed first; optional admin-tools and workflow-kit clearly separated.</li>
 <li>[ ] Backbone MVP vs Product MVP pointers link to roadmap/product tracks sections.</li>
 </ul>
-<h3>T7.2 — Downstream consumption documentation</h3>
+<h3 id="epic-mvp-docs__downstream-consumption-documentation">Downstream consumption documentation</h3>
 <p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:docs</code>, <code>agent:approved</code></p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
 <li>[ ] <code>docs/downstream/consumption.md</code> (or equivalent) describes install, layout, and package wiring for separate repos.</li>
 <li>[ ] Product MVP expectation: semver/npm unless a documented exception applies.</li>
 </ul>
-<h3>T7.3 — Two-mode documentation (workspace vs semver)</h3>
+<h3 id="epic-mvp-docs__two-mode-documentation-workspace-vs-semver">Two-mode documentation (workspace vs semver)</h3>
 <p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:docs</code>, <code>agent:approved</code></p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
 <li>[ ] Workspace-link mode documented for monorepo contributors (allowed for Backbone MVP when docs are explicit).</li>
 <li>[ ] Semver mode documented as the target for agreni-site and jordan-site at Product MVP.</li>
 </ul>
-<h3>T7.4 — CONTRIBUTING basics</h3>
+<h3 id="epic-mvp-docs__contributing-basics">CONTRIBUTING basics</h3>
 <p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:docs</code>, <code>agent:approved</code></p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
 <li>[ ] Branch/PR expectations and AI-assisted contribution pointers align with governance docs.</li>
 <li>[ ] Where to file consumer vs upstream issues is clear.</li>
 </ul></details>
-<details class="epic-card mvp" open><summary>Epic 8 — agreni-site Product MVP <span>★ MVP milestone</span></summary><div class="source-link">Source: <code>source/epics/epic_08_agreni_site_mvp.md</code></div><h1>Epic 8 — agreni-site Product MVP</h1>
+<details class="epic-card mvp" id="epic-override-bridge" open><summary>Named override bridge and style override implementation <span>★ MVP milestone</span></summary><div class="source-link">Source: <code>source/epics/epic_override_bridge.md</code></div><h1>Named override bridge and style override implementation</h1>
+<p><strong>Phase:</strong> Phase 3  </p>
+<p><strong>MVP relevance:</strong> ★ Required for Backbone MVP if overrides are advertised in v0.1 docs; otherwise document exclusion explicitly  </p>
+<p><strong>Products touched:</strong> A, B  </p>
+<p><strong>Labels:</strong> <code>type:epic</code>, <code>area:editorial-theme</code>, <code>area:engine-core</code>, <code>source:human</code></p>
+<h2>Summary</h2>
+<p>Make sure documented and validated override surfaces actually render consumer-provided components/styles at build time.</p>
+<h2>Why this matters</h2>
+<p>The current engine-core has override resolution and supported surface validation. The theme must use the resolved override map when rendering sections. Otherwise overrides are documented but not functionally complete.</p>
+<h2>Tickets</h2>
+<h3 id="epic-override-bridge__audit-current-override-rendering-path">Audit current override rendering path</h3>
+<p><strong>Labels:</strong> <code>task:research</code>, <code>owner:agentic-ai</code>, <code>area:editorial-theme</code>, <code>agent:approved</code></p>
+<p>Inspect whether <code>@portfolio-engine:overrides</code> is used in theme pages/components or whether default components are imported directly.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] Audit notes cite relevant files.</li>
+<li>[ ] Missing bridge points are listed.</li>
+</ul>
+<h3 id="epic-override-bridge__implement-component-override-bridge">Implement component override bridge</h3>
+<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:editorial-theme</code>, <code>agent:approved</code></p>
+<p>For each supported surface, render the consumer override if present; otherwise render the default component.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] <code>Hero</code> override works.</li>
+<li>[ ] <code>FeaturedWriting</code> override works.</li>
+<li>[ ] <code>TestimonialSection</code> override works.</li>
+<li>[ ] <code>CollaborationSection</code> override works.</li>
+</ul>
+<h3 id="epic-override-bridge__document-surface-names-vs-implementation-files">Document surface names vs implementation files</h3>
+<p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:docs</code>, <code>agent:approved</code></p>
+<p>Explain that <code>Hero</code> is an override surface name and may map to an upstream implementation such as <code>HeroSection.astro</code>; <code>src/overrides/Hero.astro</code> replaces the surface, not necessarily a literal upstream file.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] Surface semantics are clear.</li>
+<li>[ ] Props for each surface are documented.</li>
+<li>[ ] <code>custom.css</code> append behavior is explained.</li>
+</ul>
+<h3 id="epic-override-bridge__add-demo-override-example">Add demo override example</h3>
+<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code></p>
+<p>Add a small demo-site Hero override and custom.css example.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] Rendered result visible.</li>
+<li>[ ] Source files linked in demo docs.</li>
+</ul></details>
+<details class="epic-card mvp" id="epic-agreni-site-mvp" open><summary>agreni-site Product MVP <span>★ MVP milestone</span></summary><div class="source-link">Source: <code>source/epics/epic_agreni_site_mvp.md</code></div><h1>agreni-site Product MVP</h1>
 <p><strong>Phase:</strong> Phase 4  </p>
 <p><strong>MVP relevance:</strong> ★ Required for Product MVP  </p>
 <p><strong>Products touched:</strong> C  </p>
@@ -1013,10 +1071,10 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <h2>Board mapping</h2>
 <ul>
 <li>agreni-site GitHub issues #1–#7  </li>
-<li>profesional_site #219 (switch to semver packages) — coordinates with <strong>Epic 4</strong></li>
+<li>profesional_site #219 (switch to semver packages) — coordinates with <a href="#epic-package-publishing">Package publishing</a></li>
 </ul>
 <h2>Tickets</h2>
-<h3>T8.1 — Scaffold consumer layout</h3>
+<h3 id="epic-agreni-site-mvp__scaffold-consumer-layout">Scaffold consumer layout</h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:downstream</code>, <code>agent:approved</code></p>
 <p>Set up <code>src/config</code>, <code>src/content</code>, <code>src/context</code>, <code>src/overrides</code>, <code>public</code>, <code>.portfolio-engine</code>.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -1024,7 +1082,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] No upstream package source copied into the consumer repo.</li>
 <li>[ ] Site builds using installed packages (semver) or documented interim workspace exception.</li>
 </ul>
-<h3>T8.2 — Migrate content, config, and assets</h3>
+<h3 id="epic-agreni-site-mvp__migrate-content-config-and-assets">Migrate content, config, and assets</h3>
 <p><strong>Labels:</strong> <code>task:content</code>, <code>owner:agentic-ai</code>, <code>area:downstream</code>, <code>agent:approved</code></p>
 <p>Move only consumer-owned files from predecessor repos.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -1032,7 +1090,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] No private data enters upstream portfolio-engine.</li>
 <li>[ ] Content renders correctly.</li>
 </ul>
-<h3>T8.3 — Add structured context layer</h3>
+<h3 id="epic-agreni-site-mvp__add-structured-context-layer">Add structured context layer</h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:downstream</code>, <code>agent:approved</code></p>
 <p>Create <code>site-owner.json</code>, <code>brand-voice.json</code>, and <code>agent-rules.md</code> as appropriate.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -1040,28 +1098,28 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Context is structured and admin-ready.</li>
 <li>[ ] Agent rules are thin and repo-specific.</li>
 </ul>
-<h3>T8.4 — Wire to published packages</h3>
+<h3 id="epic-agreni-site-mvp__wire-to-published-packages">Wire to published packages</h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:downstream</code>, <code>agent:approved</code></p>
-<p>Align <code>package.json</code> with <strong>Epic 4</strong> publishing; target semver consumption for Product MVP.</p>
+<p>Align <code>package.json</code> with <a href="#epic-package-publishing">Package publishing</a> publishing; target semver consumption for Product MVP.</p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
 <li>[ ] Dependencies reference published versions unless an explicit documented exception exists.</li>
 </ul>
-<h3>T8.5 — Verify build and preview</h3>
+<h3 id="epic-agreni-site-mvp__verify-build-and-preview">Verify build and preview</h3>
 <p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>area:downstream</code>, <code>agent:approved</code></p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
 <li>[ ] Local build and preview succeed.</li>
 <li>[ ] Parity checklist vs pre-split behavior (preview/auth/admin) tracked.</li>
 </ul>
-<h3>T8.6 — Reconnect secrets and deployments (human)</h3>
+<h3 id="epic-agreni-site-mvp__reconnect-secrets-and-deployments-human">Reconnect secrets and deployments (human)</h3>
 <p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:human-dev</code>, <code>area:downstream</code></p>
 <p>Vercel/GitHub secrets and integrations — human-operated task.</p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
 <li>[ ] Deployments and integrations documented as restored or intentionally deferred.</li>
 </ul></details>
-<details class="epic-card mvp" open><summary>Epic 9 — jordan-site Product MVP <span>★ MVP milestone</span></summary><div class="source-link">Source: <code>source/epics/epic_09_jordan_site_mvp.md</code></div><h1>Epic 9 — jordan-site Product MVP</h1>
+<details class="epic-card mvp" id="epic-jordan-site-mvp" open><summary>jordan-site Product MVP <span>★ MVP milestone</span></summary><div class="source-link">Source: <code>source/epics/epic_jordan_site_mvp.md</code></div><h1>jordan-site Product MVP</h1>
 <p><strong>Phase:</strong> Phase 4  </p>
 <p><strong>MVP relevance:</strong> ★ Required for Product MVP  </p>
 <p><strong>Products touched:</strong> D  </p>
@@ -1071,7 +1129,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <h2>Why this matters</h2>
 <p>Two distinct products at Product MVP reduce the risk that the backbone only works for one site shape or content model.</p>
 <h2>Tickets</h2>
-<h3>T9.1 — Scaffold consumer layout</h3>
+<h3 id="epic-jordan-site-mvp__scaffold-consumer-layout">Scaffold consumer layout</h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:downstream</code>, <code>agent:approved</code></p>
 <p>Set up <code>src/config</code>, <code>src/content</code>, <code>src/context</code>, <code>src/overrides</code>, <code>public</code>, <code>.portfolio-engine</code>.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -1079,7 +1137,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] No upstream package source copied.</li>
 <li>[ ] Site builds using installed packages (semver) or documented interim exception.</li>
 </ul>
-<h3>T9.2 — Create content, config, and context</h3>
+<h3 id="epic-jordan-site-mvp__create-content-config-and-context">Create content, config, and context</h3>
 <p><strong>Labels:</strong> <code>task:content</code>, <code>owner:agentic-ai</code>, <code>area:downstream</code>, <code>agent:approved</code></p>
 <p>Author consumer-owned files distinct from agreni-site’s migration path.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -1087,26 +1145,26 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Brand and editorial goals reflected without copying private Agreni-specific assets inappropriately.</li>
 <li>[ ] Content renders correctly.</li>
 </ul>
-<h3>T9.3 — Wire to published packages</h3>
+<h3 id="epic-jordan-site-mvp__wire-to-published-packages">Wire to published packages</h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:downstream</code>, <code>agent:approved</code></p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
-<li>[ ] <code>package.json</code> uses semver dependencies for engine packages at Product MVP, consistent with <strong>Epic 4</strong>.</li>
+<li>[ ] <code>package.json</code> uses semver dependencies for engine packages at Product MVP, consistent with <a href="#epic-package-publishing">Package publishing</a>.</li>
 </ul>
-<h3>T9.4 — Verify build and preview</h3>
+<h3 id="epic-jordan-site-mvp__verify-build-and-preview">Verify build and preview</h3>
 <p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>area:downstream</code>, <code>agent:approved</code></p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
 <li>[ ] Local build and preview succeed.</li>
 </ul>
-<h3>T9.5 — Optional MCP setup (post–workflow-kit)</h3>
+<h3 id="epic-jordan-site-mvp__optional-mcp-setup-post-workflow-kit">Optional MCP setup (post–workflow-kit)</h3>
 <p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:human-dev</code>, <code>area:workflow-kit</code>, <code>mvp:post</code></p>
 <p>Add <code>.mcp.json</code> when workflow-kit is available.</p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
 <li>[ ] Documented optional path; not blocking Product MVP.</li>
 </ul></details>
-<details class="epic-card post" open><summary>Epic 10 — Registries, manifest, and runtime package defaults <span>post-MVP / support</span></summary><div class="source-link">Source: <code>source/epics/epic_10_registries_manifest.md</code></div><h1>Epic 10 — Registries, manifest, and runtime package defaults</h1>
+<details class="epic-card post" id="epic-registries-manifest" open><summary>Registries, manifest, and runtime package defaults <span>post-MVP / support</span></summary><div class="source-link">Source: <code>source/epics/epic_registries_manifest.md</code></div><h1>Registries, manifest, and runtime package defaults</h1>
 <p><strong>Phase:</strong> Phase 5  </p>
 <p><strong>MVP relevance:</strong> Post–Product-MVP — full manifest and consumer extension support  </p>
 <p><strong>Products touched:</strong> A, B, E, F  </p>
@@ -1116,7 +1174,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <h2>Why this matters</h2>
 <p>Capabilities are currently implicit (hardcoded route lists, component trees). Explicit registries are the single source of truth for what the engine exposes. Dependency direction stays <code>schema → engine-core → editorial-theme</code>; engine-core must not import editorial-theme.</p>
 <h2>Target structure (runtime packages)</h2>
-<h3>packages/schema/src/registry/</h3>
+<h3 id="epic-registries-manifest__packages-schema-src-registry">packages/schema/src/registry/</h3>
 <p>Type and schema definitions for registry entries.</p>
 <pre><code>packages/schema/src/
   registry/
@@ -1125,7 +1183,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
     embed-services.ts
     consumer-extensions.ts
     manifest.ts</code></pre>
-<h3>packages/engine-core/src/registry/</h3>
+<h3 id="epic-registries-manifest__packages-engine-core-src-registry">packages/engine-core/src/registry/</h3>
 <p>Generic registry merging, validation, runtime utilities, manifest generation.</p>
 <pre><code>packages/engine-core/src/
   registry/
@@ -1133,7 +1191,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
     validate.ts
     merge.ts
     manifest.ts</code></pre>
-<h3>packages/editorial-theme/src/registry/</h3>
+<h3 id="epic-registries-manifest__packages-editorial-theme-src-registry">packages/editorial-theme/src/registry/</h3>
 <p>Default routes, pages, components, override surfaces shipped by the theme.</p>
 <pre><code>packages/editorial-theme/src/
   registry/
@@ -1144,23 +1202,27 @@ agent:blocked           — agent cannot continue without human input</code></pr
     embed-services.ts
     default-config.ts</code></pre>
 <h2>Tickets</h2>
-<h3>T10.1 — Move route metadata to explicit registry</h3>
+<h3 id="epic-registries-manifest__move-route-metadata-to-explicit-registry">Move route metadata to explicit registry</h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:editorial-theme</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
-<p>Create a built-in route registry with labels, paths, visibility, remappable/disableable flags, and agent/admin metadata.</p>
+<p>Create a built-in route registry with labels, paths, visibility, remappable/disableable flags, and agent/admin metadata. Replaces the hardcoded <code>ROUTE_METADATA</code> array currently in <code>packages/engine-core/src/route-discovery.ts</code>.</p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
-<li>[ ] Routes still inject correctly.</li>
-<li>[ ] Registry exported to manifest.</li>
+<li>[ ] The static <code>ROUTE_METADATA</code> array in <code>packages/engine-core/src/route-discovery.ts</code> is removed.</li>
+<li>[ ] Route metadata is loaded from the editorial-theme registry (<code>packages/editorial-theme/src/registry/routes.ts</code>) via the engine-core registry utilities.</li>
+<li>[ ] Routes still inject correctly in the demo-site build (no regressions).</li>
+<li>[ ] Registry is exported to <code>.portfolio-engine/manifest.json</code>.</li>
 </ul>
-<h3>T10.2 — Move override surfaces to explicit registry</h3>
+<h3 id="epic-registries-manifest__move-override-surfaces-to-explicit-registry">Move override surfaces to explicit registry</h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:editorial-theme</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
-<p>Declare supported surfaces with props, default component, page, docs, and guidance.</p>
+<p>Declare supported surfaces with props, default component, page, docs, and guidance. Replaces the hardcoded <code>SUPPORTED_COMPONENT_SURFACES</code> array currently in <code>packages/engine-core/src/override-resolution.ts</code>.</p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
-<li>[ ] Override validation uses registry.</li>
-<li>[ ] Registry includes docs/guidance fields.</li>
+<li>[ ] The static <code>SUPPORTED_COMPONENT_SURFACES</code> array in <code>packages/engine-core/src/override-resolution.ts</code> is removed.</li>
+<li>[ ] Override validation reads supported surfaces from the editorial-theme registry (<code>packages/editorial-theme/src/registry/override-surfaces.ts</code>).</li>
+<li>[ ] Registry entries include props, default component path, host page, docs URL, and agent/admin guidance fields.</li>
+<li>[ ] Override resolution still rejects unknown surface names with the existing error contract.</li>
 </ul>
-<h3>T10.3 — Generate <code>.portfolio-engine/manifest.json</code></h3>
+<h3 id="epic-registries-manifest__generate-portfolio-engine-manifest-json">Generate <code>.portfolio-engine/manifest.json</code></h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:engine-core</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
 <p>Generate consumer-local manifest with paths, active routes, override surfaces, content collections, package versions, and capabilities.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -1169,7 +1231,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Manifest includes paths/capabilities.</li>
 <li>[ ] Manifest does not include private content bodies.</li>
 </ul>
-<h3>T10.4 — Define manifest privacy policy</h3>
+<h3 id="epic-registries-manifest__define-manifest-privacy-policy">Define manifest privacy policy</h3>
 <p><strong>Labels:</strong> <code>task:decision</code>, <code>owner:human-dev</code>, <code>area:safety</code>, <code>mvp:post</code></p>
 <p>Decide exactly what the manifest may include and what it must not include.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -1177,7 +1239,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Privacy policy documented.</li>
 <li>[ ] Workflow-kit/admin-tools implications considered.</li>
 </ul>
-<h3>T10.5 — Define registry schema contracts</h3>
+<h3 id="epic-registries-manifest__define-registry-schema-contracts">Define registry schema contracts</h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:schema</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
@@ -1187,7 +1249,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Manifest schema type exists.</li>
 <li>[ ] No imports from engine-core or editorial-theme.</li>
 </ul>
-<h3>T10.6 — Add engine-core registry utilities</h3>
+<h3 id="epic-registries-manifest__add-engine-core-registry-utilities">Add engine-core registry utilities</h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:engine-core</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
@@ -1195,7 +1257,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] No imports from editorial-theme.</li>
 <li>[ ] Errors are agent-readable (structured, not just thrown strings).</li>
 </ul>
-<h3>T10.7 — Add editorial-theme default registries</h3>
+<h3 id="epic-registries-manifest__add-editorial-theme-default-registries">Add editorial-theme default registries</h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:editorial-theme</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
@@ -1205,52 +1267,8 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Existing routes still render (no regressions).</li>
 <li>[ ] Dependency direction maintained.</li>
 </ul></details>
-<details class="epic-card post" open><summary>Epic 11 — Consumer extension registry <span>post-MVP / support</span></summary><div class="source-link">Source: <code>source/epics/epic_11_consumer_registry.md</code></div><h1>Epic 11 — Consumer extension registry</h1>
+<details class="epic-card post" id="epic-admin-tools" open><summary>Optional admin-tools UI <span>post-MVP / support</span></summary><div class="source-link">Source: <code>source/epics/epic_admin_tools.md</code></div><h1>Optional admin-tools UI</h1>
 <p><strong>Phase:</strong> Phase 6  </p>
-<p><strong>MVP relevance:</strong> Post–Product-MVP  </p>
-<p><strong>Products touched:</strong> A, B, C, D, E, F  </p>
-<p><strong>Labels:</strong> <code>type:epic</code>, <code>area:consumer-registry</code>, <code>area:editorial-theme</code>, <code>source:human</code></p>
-<h2>Summary</h2>
-<p>Add the consumer-owned registry as the middle ground between config/content changes and upstream engine changes.</p>
-<h2>Why this matters</h2>
-<p>Consumers should be able to declare local reusable pages and embeds without editing package internals.</p>
-<h2>Tickets</h2>
-<h3>T11.1 — Decide registry file format</h3>
-<p><strong>Labels:</strong> <code>task:decision</code>, <code>owner:human-dev</code>, <code>area:consumer-registry</code></p>
-<p>Choose TypeScript, JSON, or hybrid for <code>src/registry/portfolio-engine.registry.*</code>.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] Decision recorded.</li>
-<li>[ ] Admin-tools readability considered.</li>
-</ul>
-<h3>T11.2 — Add local route extension support</h3>
-<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:consumer-registry</code>, <code>agent:approved</code></p>
-<p>Allow registry entries to add local pages backed by <code>src/pages-local</code>.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] Local route renders.</li>
-<li>[ ] Duplicate paths fail clearly.</li>
-<li>[ ] Manifest includes local route.</li>
-</ul>
-<h3>T11.3 — Add local component/embed support</h3>
-<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:consumer-registry</code>, <code>agent:approved</code></p>
-<p>Allow registry entries to declare local embeds backed by <code>src/components</code>.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] Content can reference registered embed.</li>
-<li>[ ] Missing component fails clearly.</li>
-<li>[ ] SnakeGame example possible.</li>
-</ul>
-<h3>T11.4 — Add framed YouTube example</h3>
-<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code></p>
-<p>Demonstrate registry + component + content usage for a framed YouTube embed.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] Rendered demo exists.</li>
-<li>[ ] Source explanation exists.</li>
-</ul></details>
-<details class="epic-card post" open><summary>Epic 12 — Optional admin-tools UI <span>post-MVP / support</span></summary><div class="source-link">Source: <code>source/epics/epic_12_admin_tools.md</code></div><h1>Epic 12 — Optional admin-tools UI</h1>
-<p><strong>Phase:</strong> Phase 7  </p>
 <p><strong>MVP relevance:</strong> Post–Product-MVP  </p>
 <p><strong>Products touched:</strong> C, E  </p>
 <p><strong>Labels:</strong> <code>type:epic</code>, <code>area:admin-tools</code>, <code>source:human</code></p>
@@ -1267,7 +1285,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>profesional_site #225: Task 7.3 — Add content/config inspection panels</li>
 </ul>
 <h2>Tickets</h2>
-<h3>T12.1 — Update admin-tools docs for target layout</h3>
+<h3 id="epic-admin-tools__update-admin-tools-docs-for-target-layout">Update admin-tools docs for target layout</h3>
 <p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:admin-tools</code>, <code>agent:approved</code></p>
 <p>Document how admin-tools will read <code>src/config</code>, <code>src/content</code>, <code>src/context</code>, <code>src/registry</code>, <code>public</code>, and <code>.portfolio-engine/manifest.json</code>.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -1275,7 +1293,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Docs distinguish admin-tools from workflow-kit.</li>
 <li>[ ] Docs identify admin-editable vs tool-state files.</li>
 </ul>
-<h3>T12.2 — Design admin information architecture</h3>
+<h3 id="epic-admin-tools__design-admin-information-architecture">Design admin information architecture</h3>
 <p><strong>Labels:</strong> <code>task:design</code>, <code>owner:human-dev</code>, <code>area:admin-tools</code></p>
 <p>Design admin sections for theme/config, sitemap/routes, content, context, assets, registry, and upstream blockers.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -1283,7 +1301,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] IA sketch documented.</li>
 <li>[ ] MVP admin scope separated from future scope.</li>
 </ul>
-<h3>T12.3 — Define admin-editable context fields</h3>
+<h3 id="epic-admin-tools__define-admin-editable-context-fields">Define admin-editable context fields</h3>
 <p><strong>Labels:</strong> <code>task:decision</code>, <code>owner:human-dev</code>, <code>area:admin-tools</code></p>
 <p>Finalize which <code>site-owner.json</code> and <code>brand-voice.json</code> fields admin-tools should render/edit.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -1293,27 +1311,27 @@ agent:blocked           — agent cannot continue without human input</code></pr
 </ul>
 <h2>Future admin-tools modules (post-MVP)</h2>
 <p>These are not part of the initial admin-tools build. They clarify where the UI is headed.</p>
-<h3>Site overview</h3>
+<h3 id="epic-admin-tools__site-overview">Site overview</h3>
 <ul>
 <li>Site title, current public URL, preview URL, build/deploy status, package versions.</li>
 </ul>
-<h3>Content editor</h3>
+<h3 id="epic-admin-tools__content-editor">Content editor</h3>
 <ul>
 <li>Profile, CV, writing, projects, testimonials, assets.</li>
 </ul>
-<h3>Brand/context editor</h3>
+<h3 id="epic-admin-tools__brand-context-editor">Brand/context editor</h3>
 <ul>
 <li>Site owner, brand voice, audience, goals, tone settings.</li>
 </ul>
-<h3>Theme/config editor</h3>
+<h3 id="epic-admin-tools__theme-config-editor">Theme/config editor</h3>
 <ul>
 <li>Colors, fonts, navigation, features, booking/contact links.</li>
 </ul>
-<h3>Registry/extensions viewer</h3>
+<h3 id="epic-admin-tools__registry-extensions-viewer">Registry/extensions viewer</h3>
 <ul>
 <li>Local pages, local embeds, local components, unsupported upstream requests.</li>
 </ul>
-<h3>Preview/public publishing panel</h3>
+<h3 id="epic-admin-tools__preview-public-publishing-panel">Preview/public publishing panel</h3>
 <ul>
 <li>Show public production site URL and dev/preview site URL.</li>
 <li>Reveal obfuscated Vercel preview link.</li>
@@ -1321,10 +1339,54 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>Create instructions for Vercel project setup.</li>
 <li>Optionally trigger or guide dev→main promotion.</li>
 </ul>
-<h3>Publishing cadence</h3>
+<h3 id="epic-admin-tools__publishing-cadence">Publishing cadence</h3>
 <p>Future settings for manual, scheduled, or auto-approved publishing workflows.</p>
-<p>See also: <code>epic_17_admin_publishing.md</code> for the publishing/preview management epic.</p></details>
-<details class="epic-card post" open><summary>Epic 13 — Optional Python/MCP workflow-kit <span>post-MVP / support</span></summary><div class="source-link">Source: <code>source/epics/epic_13_workflow_kit.md</code></div><h1>Epic 13 — Optional Python/MCP workflow-kit</h1>
+<p>See also: <a href="#epic-admin-publishing">Admin publishing</a> for the publishing/preview management epic.</p></details>
+<details class="epic-card post" id="epic-consumer-registry" open><summary>Consumer extension registry <span>post-MVP / support</span></summary><div class="source-link">Source: <code>source/epics/epic_consumer_registry.md</code></div><h1>Consumer extension registry</h1>
+<p><strong>Phase:</strong> Phase 7  </p>
+<p><strong>MVP relevance:</strong> Post–Product-MVP  </p>
+<p><strong>Products touched:</strong> A, B, C, D, E, F  </p>
+<p><strong>Labels:</strong> <code>type:epic</code>, <code>area:consumer-registry</code>, <code>area:editorial-theme</code>, <code>source:human</code></p>
+<h2>Summary</h2>
+<p>Add the consumer-owned registry as the middle ground between config/content changes and upstream engine changes.</p>
+<h2>Why this matters</h2>
+<p>Consumers should be able to declare local reusable pages and embeds without editing package internals.</p>
+<h2>Tickets</h2>
+<h3 id="epic-consumer-registry__decide-registry-file-format">Decide registry file format</h3>
+<p><strong>Labels:</strong> <code>task:decision</code>, <code>owner:human-dev</code>, <code>area:consumer-registry</code></p>
+<p>Choose TypeScript, JSON, or hybrid for <code>src/registry/portfolio-engine.registry.*</code>.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] Decision recorded.</li>
+<li>[ ] Admin-tools readability considered.</li>
+</ul>
+<h3 id="epic-consumer-registry__add-local-route-extension-support">Add local route extension support</h3>
+<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:consumer-registry</code>, <code>agent:approved</code></p>
+<p>Allow registry entries to add local pages backed by <code>src/pages-local</code>.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] Local route renders.</li>
+<li>[ ] Duplicate paths fail clearly.</li>
+<li>[ ] Manifest includes local route.</li>
+</ul>
+<h3 id="epic-consumer-registry__add-local-component-embed-support">Add local component/embed support</h3>
+<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:consumer-registry</code>, <code>agent:approved</code></p>
+<p>Allow registry entries to declare local embeds backed by <code>src/components</code>.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] Content can reference registered embed.</li>
+<li>[ ] Missing component fails clearly.</li>
+<li>[ ] SnakeGame example possible.</li>
+</ul>
+<h3 id="epic-consumer-registry__add-framed-youtube-example">Add framed YouTube example</h3>
+<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code></p>
+<p>Demonstrate registry + component + content usage for a framed YouTube embed.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] Rendered demo exists.</li>
+<li>[ ] Source explanation exists.</li>
+</ul></details>
+<details class="epic-card post" id="epic-workflow-kit" open><summary>Optional Python/MCP workflow-kit <span>post-MVP / support</span></summary><div class="source-link">Source: <code>source/epics/epic_workflow_kit.md</code></div><h1>Optional Python/MCP workflow-kit</h1>
 <p><strong>Phase:</strong> Phase 8  </p>
 <p><strong>MVP relevance:</strong> Post–Product-MVP — highly recommended for AI-native workflow  </p>
 <p><strong>Products touched:</strong> C, D, F, G  </p>
@@ -1336,7 +1398,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <h2>Replaces old profesional_site workflow epic (historical)</h2>
 <p>This epic replaces <code>profesional_site #179</code> (obsolete GitHub Actions workflow-kit MVP) and related tasks. ADR-002: workflow-kit is a Python/MCP package, not a GitHub Actions suite.</p>
 <p><strong>Disposition of old tasks:</strong></p>
-<table class="md-table"><thead><tr><th>Issue</th><th>Title</th><th>Action</th></tr></thead><tbody><tr><td>profesional_site #179</td><td>Old workflow-kit MVP</td><td>Re-scope: reference ADR-002 and <strong>Epic 13</strong></td></tr><tr><td>profesional_site #226</td><td>Task 8.1 — Define workflow classification contract</td><td>Re-scope: MCP tool contracts</td></tr><tr><td>profesional_site #227</td><td>Task 8.2 — Package reusable GitHub workflow templates</td><td><strong>Close</strong></td></tr><tr><td>profesional_site #228</td><td>Task 8.3 — Add engine-aware classifier</td><td><strong>Close</strong></td></tr><tr><td>profesional_site #229</td><td>Task 8.4 — Downstream-to-upstream routing</td><td>Re-scope: <code>plan_upstream</code> MCP tool</td></tr></tbody></table>
+<table class="md-table"><thead><tr><th>Issue</th><th>Title</th><th>Action</th></tr></thead><tbody><tr><td>profesional_site #179</td><td>Old workflow-kit MVP</td><td>Re-scope: reference ADR-002 and <a href="#epic-workflow-kit">Workflow-kit</a></td></tr><tr><td>profesional_site #226</td><td>Task 8.1 — Define workflow classification contract</td><td>Re-scope: MCP tool contracts</td></tr><tr><td>profesional_site #227</td><td>Task 8.2 — Package reusable GitHub workflow templates</td><td><strong>Close</strong></td></tr><tr><td>profesional_site #228</td><td>Task 8.3 — Add engine-aware classifier</td><td><strong>Close</strong></td></tr><tr><td>profesional_site #229</td><td>Task 8.4 — Downstream-to-upstream routing</td><td>Re-scope: <code>plan_upstream</code> MCP tool</td></tr></tbody></table>
 <h2>Target package shape</h2>
 <pre><code>packages/workflow-kit/
   pyproject.toml
@@ -1349,7 +1411,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
     patch_ledger.py
   mcp_server.py</code></pre>
 <h2>Tickets</h2>
-<h3>T13.1 — Rewrite workflow-kit docs as Python/MCP package</h3>
+<h3 id="epic-workflow-kit__rewrite-workflow-kit-docs-as-python-mcp-package">Rewrite workflow-kit docs as Python/MCP package</h3>
 <p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:workflow-kit</code>, <code>agent:approved</code></p>
 <p>Replace the current reusable-GitHub-workflows description.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -1358,7 +1420,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Docs explain local MCP server.</li>
 <li>[ ] Docs explain Claude and Copilot access.</li>
 </ul>
-<h3>T13.2 — Add Python package skeleton</h3>
+<h3 id="epic-workflow-kit__add-python-package-skeleton">Add Python package skeleton</h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:workflow-kit</code>, <code>agent:approved</code></p>
 <p>Add <code>pyproject.toml</code>, <code>tools/</code>, and <code>mcp_server.py</code>.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -1367,7 +1429,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] MCP server entrypoint defined.</li>
 <li>[ ] No website-rendering dependency on Python.</li>
 </ul>
-<h3>T13.3 — Implement <code>inspect_site</code></h3>
+<h3 id="epic-workflow-kit__implement-inspectsite">Implement <code>inspect_site</code></h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:workflow-kit</code>, <code>agent:approved</code></p>
 <p>Read repo layout and manifest, return editable layers, capabilities, forbidden paths, warnings.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -1376,7 +1438,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Understands target <code>src/*</code> layout.</li>
 <li>[ ] Returns structured data.</li>
 </ul>
-<h3>T13.4 — Implement <code>plan_request</code></h3>
+<h3 id="epic-workflow-kit__implement-planrequest">Implement <code>plan_request</code></h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:workflow-kit</code>, <code>agent:approved</code></p>
 <p>Break a site-owner request into layer-specific tasks.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -1384,7 +1446,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Targets include local-content, local-config, local-context, local-registry, upstream-feature, human-review.</li>
 <li>[ ] Can mark blockers.</li>
 </ul>
-<h3>T13.5 — Implement <code>validate_plan</code></h3>
+<h3 id="epic-workflow-kit__implement-validateplan">Implement <code>validate_plan</code></h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:workflow-kit</code>, <code>agent:approved</code></p>
 <p>Validate a plan before edits.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -1392,7 +1454,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Rejects forbidden paths such as node_modules.</li>
 <li>[ ] Warns on upstream-specific hacks.</li>
 </ul>
-<h3>T13.6 — Implement <code>plan_upstream</code></h3>
+<h3 id="epic-workflow-kit__implement-planupstream">Implement <code>plan_upstream</code></h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:workflow-kit</code>, <code>agent:approved</code></p>
 <p>Generate generalized upstream issue/PR proposal from downstream request.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -1401,7 +1463,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] Includes missing capability.</li>
 <li>[ ] Includes non-goals and privacy note.</li>
 </ul>
-<h3>T13.7 — Add Claude/Copilot MCP setup docs</h3>
+<h3 id="epic-workflow-kit__add-claude-copilot-mcp-setup-docs">Add Claude/Copilot MCP setup docs</h3>
 <p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:workflow-kit</code>, <code>agent:approved</code></p>
 <p>Document <code>.mcp.json</code> for Claude and repository MCP configuration/custom agent setup for Copilot.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -1409,7 +1471,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <li>[ ] No online hosting required.</li>
 <li>[ ] Read/planning tools recommended first.</li>
 </ul></details>
-<details class="epic-card post" open><summary>Epic 14 — Consumer bootstrap/setup script <span>post-MVP / support</span></summary><div class="source-link">Source: <code>source/epics/epic_14_consumer_bootstrap.md</code></div><h1>Epic 14 — Consumer bootstrap/setup script</h1>
+<details class="epic-card post" id="epic-consumer-bootstrap" open><summary>Consumer bootstrap/setup script <span>post-MVP / support</span></summary><div class="source-link">Source: <code>source/epics/epic_consumer_bootstrap.md</code></div><h1>Consumer bootstrap/setup script</h1>
 <p><strong>Phase:</strong> Phase 9  </p>
 <p><strong>MVP relevance:</strong> Post–Product-MVP — helpful for adoption  </p>
 <p><strong>Products touched:</strong> C, D, F, G  </p>
@@ -1423,7 +1485,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 packages/workflow-kit/tools/init_consumer_repo.py
 templates/consumer/</code></pre>
 <h2>What the script does</h2>
-<h3>Required runtime setup</h3>
+<h3 id="epic-consumer-bootstrap__required-runtime-setup">Required runtime setup</h3>
 <ul>
 <li>Create <code>package.json</code> if missing.</li>
 <li>Install <code>astro</code> and <code>@portfolio-engine/editorial-theme</code>.</li>
@@ -1435,14 +1497,14 @@ templates/consumer/</code></pre>
 <li>Add placeholder/example JSON and content files.</li>
 <li>Create <code>.gitignore</code>.</li>
 </ul>
-<h3>Optional MCP setup</h3>
+<h3 id="epic-consumer-bootstrap__optional-mcp-setup">Optional MCP setup</h3>
 <ul>
 <li>Install or document Python workflow-kit.</li>
 <li>Create <code>.mcp.json</code> if the user opts in.</li>
 <li>Create or patch <code>AGENTS.md</code>.</li>
 <li>Explain Claude/Copilot MCP setup.</li>
 </ul>
-<h3>Optional Git/Vercel guidance (printed steps only)</h3>
+<h3 id="epic-consumer-bootstrap__optional-git-vercel-guidance-printed-steps-only">Optional Git/Vercel guidance (printed steps only)</h3>
 <p>The script cannot complete dashboard steps. It prints human instructions for:</p>
 <ul>
 <li>Creating and connecting a GitHub repo.</li>
@@ -1453,7 +1515,7 @@ templates/consumer/</code></pre>
 <li>Configuring environment variables/secrets if needed.</li>
 </ul>
 <h2>Tickets</h2>
-<h3>T14.1 — Design setup script UX</h3>
+<h3 id="epic-consumer-bootstrap__design-setup-script-ux">Design setup script UX</h3>
 <p><strong>Labels:</strong> <code>task:design</code>, <code>owner:human-dev</code>, <code>area:downstream</code>, <code>mvp:post</code></p>
 <p>Decide command name and distribution method, prompts and questions, and non-overwrite behavior.</p>
 <p><strong>Acceptance criteria</strong></p>
@@ -1462,7 +1524,7 @@ templates/consumer/</code></pre>
 <li>[ ] User prompts and questions documented.</li>
 <li>[ ] Behavior when files already exist is specified.</li>
 </ul>
-<h3>T14.2 — Add setup templates</h3>
+<h3 id="epic-consumer-bootstrap__add-setup-templates">Add setup templates</h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:downstream</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
@@ -1472,14 +1534,14 @@ templates/consumer/</code></pre>
 <li>[ ] Template folder READMEs exist.</li>
 <li>[ ] Placeholder content, config, and context examples exist.</li>
 </ul>
-<h3>T14.3 — Add setup script dry-run mode</h3>
+<h3 id="epic-consumer-bootstrap__add-setup-script-dry-run-mode">Add setup script dry-run mode</h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:workflow-kit</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
 <li>[ ] Dry-run mode prints planned file changes without writing them.</li>
 <li>[ ] Existing files trigger a warning and are not overwritten without explicit confirmation.</li>
 </ul>
-<h3>T14.4 — Add human setup checklist</h3>
+<h3 id="epic-consumer-bootstrap__add-human-setup-checklist">Add human setup checklist</h3>
 <p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:docs</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
@@ -1488,115 +1550,7 @@ templates/consumer/</code></pre>
 <li>[ ] Domain configuration guidance documented.</li>
 <li>[ ] Preview/production branch guidance documented.</li>
 </ul></details>
-<details class="epic-card mvp" open><summary>Epic 15 — Demo-site as reference and showcase <span>★ MVP milestone</span></summary><div class="source-link">Source: <code>source/epics/epic_15_demo_showcase.md</code></div><h1>Epic 15 — Demo-site as reference and showcase</h1>
-<p><strong>Phase:</strong> Phase 2 (Backbone MVP reference) + Phase 10 (showcase expansion)  </p>
-<p><strong>MVP relevance:</strong> ★ Reference consumer required for Backbone MVP; full product showcase is post–Product-MVP  </p>
-<p><strong>Products touched:</strong> B  </p>
-<p><strong>Labels:</strong> <code>type:epic</code>, <code>area:demo-site</code>, <code>area:docs</code>, <code>source:human</code></p>
-<h2>Summary</h2>
-<p>Demo-site has two distinct roles that should be staged separately:</p>
-<p>1. <strong>Backbone MVP checker</strong> — proves the runtime did not break; build/check/deploy reference consumer.</p>
-<p>2. <strong>Product showcase</strong> — teaches consumers and agents how to use every layer of the system.</p>
-<h2>Why this matters</h2>
-<p>The demo-site should prove the package works and teach consumers/agents how to use it. Conflating the Backbone MVP CI role with the full showcase role leads to scope creep during the critical runtime stabilization phase.</p>
-<h2>Tickets</h2>
-<h3>T15.1 — Migrate demo-site to target consumer layout</h3>
-<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code></p>
-<p>Move demo-site toward <code>src/config</code>, <code>src/content</code>, <code>src/context</code>, <code>src/overrides</code>, <code>public</code>, and <code>.portfolio-engine</code> once runtime supports paths.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] Demo build still passes.</li>
-<li>[ ] Vercel docs updated.</li>
-<li>[ ] Existing config path issue references updated.</li>
-</ul>
-<h3>T15.2 — Add folder READMEs to demo-site</h3>
-<p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:simple-ai</code>, <code>area:demo-site</code></p>
-<p>Add small explanatory README files under each consumer-owned demo folder.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] READMEs exist.</li>
-<li>[ ] READMEs explain what belongs and what does not.</li>
-</ul>
-<h3>T15.3 — Add rendered customization index</h3>
-<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code></p>
-<p>Create a rendered page explaining config/content/context/overrides/registry/public/.portfolio-engine.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] Page renders.</li>
-<li>[ ] Links rendered result to source files.</li>
-</ul>
-<h3>T15.4 — Add source-code explanation panels</h3>
-<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code></p>
-<p>Each demo customization page should show what file/folder drives the rendered result.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] Rendered and source views exist.</li>
-<li>[ ] Snippets are copy-pasteable.</li>
-</ul>
-<h2>Post–Product-MVP showcase tickets (Phase 10)</h2>
-<p>These are deferred until after <strong>Product MVP</strong>.</p>
-<h3>T15.5 — Add &quot;How config works&quot; showcase page</h3>
-<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
-<h3>T15.6 — Add &quot;How content works&quot; showcase page</h3>
-<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
-<h3>T15.7 — Add &quot;How context works&quot; showcase page</h3>
-<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
-<h3>T15.8 — Add &quot;How overrides work&quot; showcase page</h3>
-<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
-<h3>T15.9 — Add &quot;How registry works&quot; showcase page</h3>
-<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
-<h3>T15.10 — Add &quot;How MCP workflow-kit helps&quot; showcase page</h3>
-<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:demo-site</code>, <code>area:workflow-kit</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
-<p><strong>Acceptance criteria (all showcase tickets)</strong></p>
-<ul>
-<li>[ ] Page renders.</li>
-<li>[ ] Rendered result and source snippet shown side by side.</li>
-<li>[ ] Links to relevant upstream source files.</li>
-<li>[ ] MCP/workflow-kit demo deferred until workflow-kit exists.</li>
-</ul></details>
-<details class="epic-card post" open><summary>Epic 16 — Contribution safety and GitHub automation <span>post-MVP / support</span></summary><div class="source-link">Source: <code>source/epics/epic_16_contribution_safety.md</code></div><h1>Epic 16 — Contribution safety and GitHub automation</h1>
-<p><strong>Phase:</strong> Phase 11 (parallel with advanced publishing)  </p>
-<p><strong>MVP relevance:</strong> Phase 0 basics in governance; advanced automation post–Product-MVP  </p>
-<p><strong>Products touched:</strong> G  </p>
-<p><strong>Labels:</strong> <code>type:epic</code>, <code>area:safety</code>, <code>area:ci</code>, <code>source:human</code></p>
-<h2>Summary</h2>
-<p>Protect the upstream repo once consumers and their agents start contributing.</p>
-<h2>Why this matters</h2>
-<p>The consumer-to-contributor flywheel only works if upstream PRs are generalized, safe, and reviewable.</p>
-<h2>Tickets</h2>
-<h3>T16.1 — Reconcile existing CI/Copilot issues</h3>
-<p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:human-dev</code>, <code>area:ci</code></p>
-<p>Review issues #28, #29, #30, #36, #37 before creating new workflow issues.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] Duplicates avoided.</li>
-<li>[ ] Existing issues linked or superseded intentionally.</li>
-</ul>
-<h3>T16.2 — Add layer-boundary guard</h3>
-<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:safety</code>, <code>agent:approved</code></p>
-<p>Check PR diffs for private consumer content, media under packages, forbidden imports, and patch files submitted upstream.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] Guard runs in CI.</li>
-<li>[ ] Maintainer override documented.</li>
-</ul>
-<h3>T16.3 — Add AI review prompt/check</h3>
-<p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>area:safety</code>, <code>agent:approved</code></p>
-<p>Prompt/check should ask whether the PR should have been config/content/context/registry instead of upstream code.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] Prompt exists.</li>
-<li>[ ] Checklist references consumer-specific hacks and private data leakage.</li>
-</ul>
-<h3>T16.4 — Add public-safe planner/Claude workflows</h3>
-<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:ci</code>, <code>agent:approved</code></p>
-<p>Automation must be gated and should not run untrusted implementation tasks automatically.</p>
-<p><strong>Acceptance criteria</strong></p>
-<ul>
-<li>[ ] No untrusted auto-execution.</li>
-<li>[ ] <code>agent:approved</code> or maintainer approval required.</li>
-</ul></details>
-<details class="epic-card post" open><summary>Epic 17 — Admin-tools publishing and preview management <span>post-MVP / support</span></summary><div class="source-link">Source: <code>source/epics/epic_17_admin_publishing.md</code></div><h1>Epic 17 — Admin-tools publishing and preview management</h1>
+<details class="epic-card post" id="epic-admin-publishing" open><summary>Admin-tools publishing and preview management <span>post-MVP / support</span></summary><div class="source-link">Source: <code>source/epics/epic_admin_publishing.md</code></div><h1>Admin-tools publishing and preview management</h1>
 <p><strong>Phase:</strong> Phase 11  </p>
 <p><strong>MVP relevance:</strong> Post–Product-MVP — does not block Backbone or Product MVP  </p>
 <p><strong>Products touched:</strong> C, D, E  </p>
@@ -1606,7 +1560,7 @@ templates/consumer/</code></pre>
 <h2>Why this matters</h2>
 <p>Nontechnical users currently cannot distinguish between their preview site (on the <code>dev</code> branch) and their public production site (on the <code>main</code> branch). Admin-tools can make this boundary explicit, reducing accidental public publishing and clarifying when/how to promote changes.</p>
 <h2>Target modules</h2>
-<h3>Preview/public publishing panel</h3>
+<h3 id="epic-admin-publishing__preview-public-publishing-panel">Preview/public publishing panel</h3>
 <ul>
 <li>Show current public production URL.</li>
 <li>Show dev/preview site URL.</li>
@@ -1615,7 +1569,7 @@ templates/consumer/</code></pre>
 <li>Provide Vercel project setup instructions.</li>
 <li>Optionally trigger or guide dev→main promotion.</li>
 </ul>
-<h3>Branch model documentation</h3>
+<h3 id="epic-admin-publishing__branch-model-documentation">Branch model documentation</h3>
 <p>Explain to nontechnical users what the branch model means in plain language:</p>
 <ul>
 <li>What the <code>dev</code> branch is and who sees it.</li>
@@ -1623,7 +1577,7 @@ templates/consumer/</code></pre>
 <li>How to promote from <code>dev</code> to <code>main</code> safely.</li>
 <li>Why auto-publish without approval is disabled by default.</li>
 </ul>
-<h3>Publishing cadence settings</h3>
+<h3 id="epic-admin-publishing__publishing-cadence-settings">Publishing cadence settings</h3>
 <p>Future settings (disabled by default):</p>
 <pre><code>{
   &quot;publishing&quot;: {
@@ -1645,7 +1599,7 @@ templates/consumer/</code></pre>
 <li>Never auto-publish without explicit opt-in.</li>
 </ul>
 <h2>Tickets</h2>
-<h3>T17.1 — Design preview/public publishing panel UI</h3>
+<h3 id="epic-admin-publishing__design-preview-public-publishing-panel-ui">Design preview/public publishing panel UI</h3>
 <p><strong>Labels:</strong> <code>task:design</code>, <code>owner:human-dev</code>, <code>area:admin-tools</code>, <code>mvp:post</code></p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
@@ -1653,14 +1607,14 @@ templates/consumer/</code></pre>
 <li>[ ] Preview link reveal behavior is designed (who sees it, how it is shown).</li>
 <li>[ ] Vercel setup instructions are drafted.</li>
 </ul>
-<h3>T17.2 — Implement branch model documentation in admin-tools</h3>
+<h3 id="epic-admin-publishing__implement-branch-model-documentation-in-admin-tools">Implement branch model documentation in admin-tools</h3>
 <p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:admin-tools</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
 <li>[ ] Plain-language explanation of dev/main branch model exists in UI or linked docs.</li>
 <li>[ ] Manual promotion steps are documented.</li>
 </ul>
-<h3>T17.3 — Model publishing cadence settings schema</h3>
+<h3 id="epic-admin-publishing__model-publishing-cadence-settings-schema">Model publishing cadence settings schema</h3>
 <p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:admin-tools</code>, <code>area:schema</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
@@ -1669,7 +1623,7 @@ templates/consumer/</code></pre>
 <li>[ ] No auto-publish without explicit opt-in.</li>
 <li>[ ] Schema documented in <code>packages/schema</code>.</li>
 </ul>
-<h3>T17.4 — Add Vercel setup guidance docs</h3>
+<h3 id="epic-admin-publishing__add-vercel-setup-guidance-docs">Add Vercel setup guidance docs</h3>
 <p><strong>Labels:</strong> <code>task:docs</code>, <code>owner:agentic-ai</code>, <code>area:docs</code>, <code>area:vercel</code>, <code>agent:approved</code>, <code>mvp:post</code></p>
 <p><strong>Acceptance criteria</strong></p>
 <ul>
@@ -1677,28 +1631,70 @@ templates/consumer/</code></pre>
 <li>[ ] Branch-to-URL mapping explained.</li>
 <li>[ ] Preview link access and obfuscation explained.</li>
 <li>[ ] Domain configuration guidance included.</li>
+</ul></details>
+<details class="epic-card post" id="epic-contribution-safety" open><summary>Contribution safety and GitHub automation <span>post-MVP / support</span></summary><div class="source-link">Source: <code>source/epics/epic_contribution_safety.md</code></div><h1>Contribution safety and GitHub automation</h1>
+<p><strong>Phase:</strong> Phase 11 (parallel with advanced publishing)  </p>
+<p><strong>MVP relevance:</strong> Phase 0 basics in governance; advanced automation post–Product-MVP  </p>
+<p><strong>Products touched:</strong> G  </p>
+<p><strong>Labels:</strong> <code>type:epic</code>, <code>area:safety</code>, <code>area:ci</code>, <code>source:human</code></p>
+<h2>Summary</h2>
+<p>Protect the upstream repo once consumers and their agents start contributing.</p>
+<h2>Why this matters</h2>
+<p>The consumer-to-contributor flywheel only works if upstream PRs are generalized, safe, and reviewable.</p>
+<h2>Tickets</h2>
+<h3 id="epic-contribution-safety__reconcile-existing-ci-copilot-issues">Reconcile existing CI/Copilot issues</h3>
+<p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:human-dev</code>, <code>area:ci</code></p>
+<p>Review issues #28, #29, #30, #36, #37 before creating new workflow issues.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] Duplicates avoided.</li>
+<li>[ ] Existing issues linked or superseded intentionally.</li>
+</ul>
+<h3 id="epic-contribution-safety__add-layer-boundary-guard">Add layer-boundary guard</h3>
+<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:safety</code>, <code>agent:approved</code></p>
+<p>Check PR diffs for private consumer content, media under packages, forbidden imports, and patch files submitted upstream.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] Guard runs in CI.</li>
+<li>[ ] Maintainer override documented.</li>
+</ul>
+<h3 id="epic-contribution-safety__add-ai-review-prompt-check">Add AI review prompt/check</h3>
+<p><strong>Labels:</strong> <code>task:chore</code>, <code>owner:agentic-ai</code>, <code>area:safety</code>, <code>agent:approved</code></p>
+<p>Prompt/check should ask whether the PR should have been config/content/context/registry instead of upstream code.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] Prompt exists.</li>
+<li>[ ] Checklist references consumer-specific hacks and private data leakage.</li>
+</ul>
+<h3 id="epic-contribution-safety__add-public-safe-planner-claude-workflows">Add public-safe planner/Claude workflows</h3>
+<p><strong>Labels:</strong> <code>task:feat</code>, <code>owner:agentic-ai</code>, <code>area:ci</code>, <code>agent:approved</code></p>
+<p>Automation must be gated and should not run untrusted implementation tasks automatically.</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>[ ] No untrusted auto-execution.</li>
+<li>[ ] <code>agent:approved</code> or maintainer approval required.</li>
 </ul></details></section><section id="sources" class="panel"><h1>Canonical Source Files</h1><p>The report is generated from these files. Edit <code>source/</code>, then rerun <code>node scripts/build_report.mjs</code>.</p><ul><li><code>source\decisions\ADR-001-required-vs-optional-packages.md</code></li>
 <li><code>source\decisions\ADR-002-python-mcp-workflow-kit.md</code></li>
 <li><code>source\decisions\ADR-003-consumer-layout-src-public.md</code></li>
 <li><code>source\decisions\ADR-004-tool-state-vs-context.md</code></li>
-<li><code>source\epics\epic_00_meta_roadmap_v5.md</code></li>
-<li><code>source\epics\epic_01_label_taxonomy.md</code></li>
-<li><code>source\epics\epic_02_governance_legal.md</code></li>
-<li><code>source\epics\epic_03_runtime_buildability.md</code></li>
-<li><code>source\epics\epic_04_package_publishing.md</code></li>
-<li><code>source\epics\epic_05_consumer_layout.md</code></li>
-<li><code>source\epics\epic_06_override_bridge.md</code></li>
-<li><code>source\epics\epic_07_mvp_docs.md</code></li>
-<li><code>source\epics\epic_08_agreni_site_mvp.md</code></li>
-<li><code>source\epics\epic_09_jordan_site_mvp.md</code></li>
-<li><code>source\epics\epic_10_registries_manifest.md</code></li>
-<li><code>source\epics\epic_11_consumer_registry.md</code></li>
-<li><code>source\epics\epic_12_admin_tools.md</code></li>
-<li><code>source\epics\epic_13_workflow_kit.md</code></li>
-<li><code>source\epics\epic_14_consumer_bootstrap.md</code></li>
-<li><code>source\epics\epic_15_demo_showcase.md</code></li>
-<li><code>source\epics\epic_16_contribution_safety.md</code></li>
-<li><code>source\epics\epic_17_admin_publishing.md</code></li>
+<li><code>source\epics\epic_admin_publishing.md</code></li>
+<li><code>source\epics\epic_admin_tools.md</code></li>
+<li><code>source\epics\epic_agreni_site_mvp.md</code></li>
+<li><code>source\epics\epic_consumer_bootstrap.md</code></li>
+<li><code>source\epics\epic_consumer_layout.md</code></li>
+<li><code>source\epics\epic_consumer_registry.md</code></li>
+<li><code>source\epics\epic_contribution_safety.md</code></li>
+<li><code>source\epics\epic_demo_showcase.md</code></li>
+<li><code>source\epics\epic_governance_legal.md</code></li>
+<li><code>source\epics\epic_jordan_site_mvp.md</code></li>
+<li><code>source\epics\epic_label_taxonomy.md</code></li>
+<li><code>source\epics\epic_meta_roadmap.md</code></li>
+<li><code>source\epics\epic_mvp_docs.md</code></li>
+<li><code>source\epics\epic_override_bridge.md</code></li>
+<li><code>source\epics\epic_package_publishing.md</code></li>
+<li><code>source\epics\epic_registries_manifest.md</code></li>
+<li><code>source\epics\epic_runtime_buildability.md</code></li>
+<li><code>source\epics\epic_workflow_kit.md</code></li>
 <li><code>source\project_model.json</code></li>
 <li><code>source\sections\01_big_picture_goals.md</code></li>
 <li><code>source\sections\02_current_vs_target.md</code></li>

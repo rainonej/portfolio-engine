@@ -1,4 +1,4 @@
-# Epic 9 — jordan-site Product MVP
+# jordan-site Product MVP
 
 **Phase:** Phase 4  
 **MVP relevance:** ★ Required for Product MVP  
@@ -15,7 +15,7 @@ Two distinct products at Product MVP reduce the risk that the backbone only work
 
 ## Tickets
 
-### T9.1 — Scaffold consumer layout
+### Scaffold consumer layout
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:downstream`, `agent:approved`
 
@@ -26,7 +26,7 @@ Set up `src/config`, `src/content`, `src/context`, `src/overrides`, `public`, `.
 - [ ] No upstream package source copied.
 - [ ] Site builds using installed packages (semver) or documented interim exception.
 
-### T9.2 — Create content, config, and context
+### Create content, config, and context
 
 **Labels:** `task:content`, `owner:agentic-ai`, `area:downstream`, `agent:approved`
 
@@ -37,15 +37,15 @@ Author consumer-owned files distinct from agreni-site’s migration path.
 - [ ] Brand and editorial goals reflected without copying private Agreni-specific assets inappropriately.
 - [ ] Content renders correctly.
 
-### T9.3 — Wire to published packages
+### Wire to published packages
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:downstream`, `agent:approved`
 
 **Acceptance criteria**
 
-- [ ] `package.json` uses semver dependencies for engine packages at Product MVP, consistent with **Epic 4**.
+- [ ] `package.json` uses semver dependencies for engine packages at Product MVP, consistent with [Package publishing](#epic-package-publishing).
 
-### T9.4 — Verify build and preview
+### Verify build and preview
 
 **Labels:** `task:chore`, `owner:agentic-ai`, `area:downstream`, `agent:approved`
 
@@ -53,7 +53,7 @@ Author consumer-owned files distinct from agreni-site’s migration path.
 
 - [ ] Local build and preview succeed.
 
-### T9.5 — Optional MCP setup (post–workflow-kit)
+### Optional MCP setup (post–workflow-kit)
 
 **Labels:** `task:chore`, `owner:human-dev`, `area:workflow-kit`, `mvp:post`
 

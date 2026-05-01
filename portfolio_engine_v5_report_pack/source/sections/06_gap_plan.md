@@ -28,7 +28,7 @@ All three required packages have `"build": "echo 'build not yet configured'"`. T
 - Consumer repos cannot install packages from npm — they must live inside the monorepo.
 - The Backbone/Product MVP definitions cannot be met without this.
 
-**This is the highest-priority untracked gap.** See **Epic 4** for the plan.
+**This is the highest-priority untracked gap.** See [Package publishing](#epic-package-publishing) for the plan.
 
 Steps required:
 
@@ -70,35 +70,26 @@ Target adds `src/context/site-owner.json`, `src/context/brand-voice.json`, `src/
 
 ### Manifest generation
 
-No current `.portfolio-engine/manifest.json`. Target requires a generated manifest for tools, admin-tools, and the future consumer registry. This is post–Product-MVP and depends on Phase 5 (**Epic 10**).
+No current `.portfolio-engine/manifest.json`. Target requires a generated manifest for tools, admin-tools, and the future consumer registry. This is post–Product-MVP and depends on Phase 5 ([Registries / manifest](#epic-registries-manifest)).
 
 ## Named technical debt
 
-### Hardcoded route metadata
+The full debt register with `Tracked by` links lives inside the [Meta roadmap epic](#epic-meta-roadmap). Headlines:
 
-`packages/engine-core/src/route-discovery.ts` hardcodes 9 routes as a static array. This works but is not machine-readable or extensible. Phase 5 (**Epic 10**) replaces this with file-based registries.
+- Hardcoded route metadata in `packages/engine-core/src/route-discovery.ts` → tracked by [Move route metadata to explicit registry](#epic-registries-manifest__move-route-metadata-to-explicit-registry) (Phase 5).
+- Hardcoded supported component surfaces in `packages/engine-core/src/override-resolution.ts` → tracked by [Move override surfaces to explicit registry](#epic-registries-manifest__move-override-surfaces-to-explicit-registry) (Phase 5).
+- Override bridge end-to-end not verified → tracked by the override-bridge epic (Phase 3).
+- No `.portfolio-engine/manifest.json` generation → tracked by the registries-manifest epic (Phase 5).
 
-### Hardcoded override surfaces
+## Small tweaks (now explicitly ticketed)
 
-`packages/engine-core/src/override-resolution.ts` hardcodes 4 component surface names. Same issue, same fix in Phase 3.
+- Folder READMEs in consumer-owned dirs → [Add folder README templates](#epic-consumer-layout__add-folder-readme-templates) and [Add folder READMEs to demo-site](#epic-demo-showcase__add-folder-readmes-to-demo-site).
+- `public/` asset semantics → [Document `public/` semantics](#epic-consumer-layout__document-public-semantics).
+- Issue label migration → [Create area and agent labels in GitHub](#epic-label-taxonomy__create-area-and-agent-labels-in-github) and [Retag open issues](#epic-label-taxonomy__retag-open-issues-with-correct-area-and-agent-labels).
 
-## Small tweaks
+## Acknowledged gap: no test suite
 
-### Folder READMEs
-
-Add small README files under consumer-owned demo-site folders (`src/config`, `src/content`, etc.) explaining what belongs and what does not.
-
-### Public asset docs
-
-Explain that `public/` is served from site root and everything inside is publicly accessible.
-
-### Issue label migration
-
-Rename legacy narrow `area:*` labels to the standard taxonomy (`area:editorial-theme`, `area:demo-site`, etc.) in GitHub. Add `area:*` and `agent:*` labels per **Epic 1**. Deprecate the legacy provider-specific ready label in favor of `agent:approved`.
-
-### Acknowledged gap: no test suite
-
-There are zero unit or integration tests across all packages. The project relies on TypeScript type-checking and Astro check as proxy quality gates. This is a known gap. It does not block MVP declaration if the type-check + build pipeline is clean, but it should be acknowledged and eventually addressed post-MVP.
+There are zero unit or integration tests across all packages. The project relies on TypeScript type-checking and Astro check as proxy quality gates. This is **debt-only**, intentionally not promoted to a ticket: it does not block MVP declaration if the type-check + build pipeline is clean. Promote to a ticket post-Product-MVP if regressions appear.
 
 ## Preserve
 

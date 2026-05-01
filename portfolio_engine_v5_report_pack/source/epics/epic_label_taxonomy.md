@@ -1,4 +1,4 @@
-# Epic 1 — Label taxonomy and area/agent standards
+# Label taxonomy and area/agent standards
 
 **Phase:** Phase 0 (immediately usable; does not block other phases)  
 **MVP relevance:** Phase 0 prerequisite — required before AI automation workflows proceed safely  
@@ -53,7 +53,7 @@ Deprecate: legacy ready label (alias to `agent:approved` during transition perio
 
 ## Tickets
 
-### T1.1 — Create area and agent labels in GitHub
+### Create area and agent labels in GitHub
 
 **Labels:** `task:chore`, `owner:human-dev`, `area:governance`
 
@@ -66,7 +66,7 @@ Create all `area:*` and `agent:*` labels in the GitHub repo. Mark the legacy rea
 - [ ] Legacy ready label is deprecated or aliased.
 - [ ] Label colors are consistent within each group.
 
-### T1.2 — Document area and agent label rules
+### Document area and agent label rules
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:docs`, `agent:approved`
 
@@ -79,7 +79,7 @@ Update or create `docs/issue-labels.md` with rules for `area:*` and `agent:*` la
 - [ ] Examples given for each major package area.
 - [ ] Legacy ready label is listed as deprecated with migration path.
 
-### T1.3 — Retag open issues with correct area and agent labels
+### Retag open issues with correct area and agent labels
 
 **Labels:** `task:chore`, `owner:agentic-ai`, `area:governance`, `agent:approved`
 

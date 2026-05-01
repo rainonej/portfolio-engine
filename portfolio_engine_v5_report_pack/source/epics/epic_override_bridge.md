@@ -1,4 +1,4 @@
-# Epic 6 — Named override bridge and style override implementation
+# Named override bridge and style override implementation
 
 **Phase:** Phase 3  
 **MVP relevance:** ★ Required for Backbone MVP if overrides are advertised in v0.1 docs; otherwise document exclusion explicitly  
@@ -15,7 +15,7 @@ The current engine-core has override resolution and supported surface validation
 
 ## Tickets
 
-### T6.1 — Audit current override rendering path
+### Audit current override rendering path
 
 **Labels:** `task:research`, `owner:agentic-ai`, `area:editorial-theme`, `agent:approved`
 
@@ -26,7 +26,7 @@ Inspect whether `@portfolio-engine:overrides` is used in theme pages/components 
 - [ ] Audit notes cite relevant files.
 - [ ] Missing bridge points are listed.
 
-### T6.2 — Implement component override bridge
+### Implement component override bridge
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:editorial-theme`, `agent:approved`
 
@@ -39,7 +39,7 @@ For each supported surface, render the consumer override if present; otherwise r
 - [ ] `TestimonialSection` override works.
 - [ ] `CollaborationSection` override works.
 
-### T6.3 — Document surface names vs implementation files
+### Document surface names vs implementation files
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:docs`, `agent:approved`
 
@@ -51,7 +51,7 @@ Explain that `Hero` is an override surface name and may map to an upstream imple
 - [ ] Props for each surface are documented.
 - [ ] `custom.css` append behavior is explained.
 
-### T6.4 — Add demo override example
+### Add demo override example
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:demo-site`, `agent:approved`
 

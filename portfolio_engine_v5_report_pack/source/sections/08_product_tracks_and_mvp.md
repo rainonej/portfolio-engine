@@ -29,34 +29,35 @@
 
 | Epic | Phase | A | B | C | D | E | F | G | MVP role |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 0 — v5 meta | 0 | — | — | — | — | — | — | ✓ | Required before confident execution |
-| 1 — Labels | 0 | — | — | — | — | — | — | ✓ | Phase 0 prerequisite |
-| 2 — Governance | 0 | — | — | — | — | — | — | ✓ | Phase 0 parallel |
-| 3 — Runtime buildability | 1 | ✓ | ✓ | — | — | — | — | — | ★ Backbone MVP |
-| 4 — Package publishing | 1/2 | ✓ | — | ✓ | ✓ | — | — | — | ★ Backbone (builds); ★ Product (publish+consume) |
-| 5 — Consumer layout | 2 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | ★ Backbone MVP |
-| 6 — Override bridge | 3 | ✓ | ✓ | — | — | — | — | — | ★ Backbone MVP (if overrides advertised) |
-| 7 — MVP docs | 3 | ✓ | ✓ | ✓ | ✓ | — | — | ✓ | ★ Backbone MVP |
-| 8 — agreni-site | 4 | — | — | ✓ | — | — | — | — | ★ Product MVP |
-| 9 — jordan-site | 4 | — | — | — | ✓ | — | — | — | ★ Product MVP |
-| 10 — Registries / manifest | 5 | ✓ | ✓ | — | — | ✓ | ✓ | — | post–Product-MVP |
-| 11 — Consumer registry | 6 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | post–Product-MVP |
-| 12 — Admin-tools | 7 | — | — | ✓ | — | ✓ | — | — | post–Product-MVP |
-| 13 — Workflow-kit | 8 | — | — | ✓ | ✓ | — | ✓ | ✓ | post–Product-MVP |
-| 14 — Bootstrap | 9 | — | — | ✓ | ✓ | — | ✓ | ✓ | post–Product-MVP |
-| 15 — Demo showcase | 10 | — | ✓ | — | — | ✓ | ✓ | — | post–Product-MVP |
-| 16 — Safety / automation | 11 | — | — | — | — | — | — | ✓ | Phase 0 basics; advanced post-MVP |
-| 17 — Admin publishing | 11 | — | — | ✓ | ✓ | ✓ | — | — | post–Product-MVP |
+| [Meta roadmap](#epic-meta-roadmap) | 0 | — | — | — | — | — | — | ✓ | Required before confident execution |
+| [Label taxonomy](#epic-label-taxonomy) | 0 | — | — | — | — | — | — | ✓ | Phase 0 prerequisite |
+| [Governance, legal](#epic-governance-legal) | 0 | — | — | — | — | — | — | ✓ | Phase 0 parallel |
+| [Runtime buildability](#epic-runtime-buildability) | 1 | ✓ | ✓ | — | — | — | — | — | ★ Backbone MVP |
+| [Package publishing](#epic-package-publishing) | 1/2 | ✓ | — | ✓ | ✓ | — | — | — | ★ Backbone (builds); ★ Product (publish+consume) |
+| [Consumer layout](#epic-consumer-layout) | 2 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | ★ Backbone MVP |
+| [Override bridge](#epic-override-bridge) | 3 | ✓ | ✓ | — | — | — | — | — | ★ Backbone MVP (if overrides advertised) |
+| [MVP docs](#epic-mvp-docs) | 3 | ✓ | ✓ | ✓ | ✓ | — | — | ✓ | ★ Backbone MVP |
+| [agreni-site MVP](#epic-agreni-site-mvp) | 4 | — | — | ✓ | — | — | — | — | ★ Product MVP |
+| [jordan-site MVP](#epic-jordan-site-mvp) | 4 | — | — | — | ✓ | — | — | — | ★ Product MVP |
+| [Registries / manifest](#epic-registries-manifest) | 5 | ✓ | ✓ | — | — | ✓ | ✓ | — | post–Product-MVP |
+| [Admin-tools](#epic-admin-tools) | 6 | — | — | ✓ | — | ✓ | — | — | post–Product-MVP |
+| [Consumer registry](#epic-consumer-registry) | 7 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | post–Product-MVP |
+| [Workflow-kit](#epic-workflow-kit) | 8 | — | — | ✓ | ✓ | — | ✓ | ✓ | post–Product-MVP |
+| [Consumer bootstrap](#epic-consumer-bootstrap) | 9 | — | — | ✓ | ✓ | — | ✓ | ✓ | post–Product-MVP |
+| [Demo showcase](#epic-demo-showcase) | 10 | — | ✓ | — | — | ✓ | ✓ | — | post–Product-MVP |
+| [Contribution safety](#epic-contribution-safety) | 11 | — | — | — | — | — | — | ✓ | Phase 0 basics; advanced post-MVP |
+| [Admin publishing](#epic-admin-publishing) | 11 | — | — | ✓ | ✓ | ✓ | — | — | post–Product-MVP |
 
 ## How agreni-site and jordan-site evolve (Phases 5–11)
 
 After **Product MVP**, both sites continue as first-class consumers:
 
-- **Phase 5–6 (registries, consumer registry):** richer manifest and local extensions; both sites benefit from declared routes and embeds without upstream forks.
-- **Phase 7 (admin-tools):** Product C and E — editing flows for agreni-site; jordan-site may adopt selectively.
+- **Phase 5 (registries / manifest):** richer manifest and registry-driven contracts; both sites benefit from declared routes and surfaces without upstream forks.
+- **Phase 6 (admin-tools):** Product C and E — editing flows for agreni-site; jordan-site may adopt selectively.
+- **Phase 7 (consumer registry):** local pages and embeds without editing upstream; C, D, E, F all benefit.
 - **Phase 8 (workflow-kit):** agent tooling across Products C, D, F, G.
 - **Phase 9 (bootstrap):** onboarding for new consumers; C and D validate real-world templates.
 - **Phase 10 (demo showcase):** Product B teaches patterns; admin + workflow surfaces align.
 - **Phase 11 (safety, admin publishing):** contribution guardrails (G); preview/publishing automation for C, D, E.
 
-Maps to board issues: agreni-site #1–#7 and profesional_site #219 (switch to semver) align with Epics 4, 8, and 17 as the program matures.
+Maps to board issues: agreni-site #1–#7 and profesional_site #219 (switch to semver) align with [Package publishing](#epic-package-publishing), [agreni-site MVP](#epic-agreni-site-mvp), and [Admin publishing](#epic-admin-publishing) as the program matures.

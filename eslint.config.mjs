@@ -23,7 +23,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['portfolio_engine_v4_report_pack/scripts/*.mjs'],
+    files: ['portfolio_engine_v5_report_pack/scripts/*.mjs'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',

@@ -1,4 +1,4 @@
-# Epic 13 — Optional Python/MCP workflow-kit
+# Optional Python/MCP workflow-kit
 
 **Phase:** Phase 8  
 **MVP relevance:** Post–Product-MVP — highly recommended for AI-native workflow  
@@ -21,7 +21,7 @@ This epic replaces `profesional_site #179` (obsolete GitHub Actions workflow-kit
 
 | Issue | Title | Action |
 |---|---|---|
-| profesional_site #179 | Old workflow-kit MVP | Re-scope: reference ADR-002 and **Epic 13** |
+| profesional_site #179 | Old workflow-kit MVP | Re-scope: reference ADR-002 and [Workflow-kit](#epic-workflow-kit) |
 | profesional_site #226 | Task 8.1 — Define workflow classification contract | Re-scope: MCP tool contracts |
 | profesional_site #227 | Task 8.2 — Package reusable GitHub workflow templates | **Close** |
 | profesional_site #228 | Task 8.3 — Add engine-aware classifier | **Close** |
@@ -44,7 +44,7 @@ packages/workflow-kit/
 
 ## Tickets
 
-### T13.1 — Rewrite workflow-kit docs as Python/MCP package
+### Rewrite workflow-kit docs as Python/MCP package
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:workflow-kit`, `agent:approved`
 
@@ -56,7 +56,7 @@ Replace the current reusable-GitHub-workflows description.
 - [ ] Docs explain local MCP server.
 - [ ] Docs explain Claude and Copilot access.
 
-### T13.2 — Add Python package skeleton
+### Add Python package skeleton
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:workflow-kit`, `agent:approved`
 
@@ -68,7 +68,7 @@ Add `pyproject.toml`, `tools/`, and `mcp_server.py`.
 - [ ] MCP server entrypoint defined.
 - [ ] No website-rendering dependency on Python.
 
-### T13.3 — Implement `inspect_site`
+### Implement `inspect_site`
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:workflow-kit`, `agent:approved`
 
@@ -80,7 +80,7 @@ Read repo layout and manifest, return editable layers, capabilities, forbidden p
 - [ ] Understands target `src/*` layout.
 - [ ] Returns structured data.
 
-### T13.4 — Implement `plan_request`
+### Implement `plan_request`
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:workflow-kit`, `agent:approved`
 
@@ -91,7 +91,7 @@ Break a site-owner request into layer-specific tasks.
 - [ ] Targets include local-content, local-config, local-context, local-registry, upstream-feature, human-review.
 - [ ] Can mark blockers.
 
-### T13.5 — Implement `validate_plan`
+### Implement `validate_plan`
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:workflow-kit`, `agent:approved`
 
@@ -102,7 +102,7 @@ Validate a plan before edits.
 - [ ] Rejects forbidden paths such as node_modules.
 - [ ] Warns on upstream-specific hacks.
 
-### T13.6 — Implement `plan_upstream`
+### Implement `plan_upstream`
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:workflow-kit`, `agent:approved`
 
@@ -114,7 +114,7 @@ Generate generalized upstream issue/PR proposal from downstream request.
 - [ ] Includes missing capability.
 - [ ] Includes non-goals and privacy note.
 
-### T13.7 — Add Claude/Copilot MCP setup docs
+### Add Claude/Copilot MCP setup docs
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:workflow-kit`, `agent:approved`
 

@@ -1,8 +1,6 @@
 # Portfolio Engine v5 Report Pack
 
-Source-driven HTML audit for the portfolio-engine roadmap (v5: product tracks A–G, Backbone MVP, Product MVP, epics 00–17).
-
-This pack replaces the rejected v3 report. The on-disk folder name still contains `v4` for historical continuity; the **content and generated HTML are v5** (`project_model.json` version, `<title>`, sidebar).
+Source-driven HTML audit for the portfolio-engine roadmap: product tracks A–G, Backbone MVP, Product MVP, eighteen epics organised across phases 0–11.
 
 ## Start here
 
@@ -28,8 +26,6 @@ node scripts/build_report.mjs
 
 Do not edit `report/index.html` directly unless you are intentionally patching the rendered artifact.
 
-The `scripts/build_report.py` script is **unmaintained** (old section filenames and v4-era shell). Use **`build_report.mjs`** only.
-
 ## Validation
 
 Run:
@@ -46,7 +42,8 @@ validation/validation_log.txt
 
 ## What v5 includes
 
-- Phases 0–11 with ★ Backbone MVP and ★ Product MVP gates.
+- Phases 0–11 with ★ Backbone MVP and ★ Product MVP gates rendered as a collapsible timeline.
 - Product tracks A–G and product × epic matrix (`source/sections/08_product_tracks_and_mvp.md`).
-- Board reconciliation and gap sections wired into the HTML report.
-- Eighteen epics (`epic_00` … `epic_17`) with filename order matching render order.
+- Board reconciliation, gap plan, and product-tracks sections wired into the HTML report.
+- Eighteen epics under `source/epics/`, named without numeric prefixes; render order is driven by each epic's `Phase` frontmatter, then filename.
+- Slug-based anchor IDs on epic cards and ticket headings so cross-references are clickable.

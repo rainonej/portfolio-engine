@@ -1,4 +1,4 @@
-# Epic 4 — Package build scripts and npm publishing
+# Package build scripts and npm publishing
 
 **Phase:** Phase 1 (build scripts) / Phase 2 (publish + switch agreni-site)  
 **MVP relevance:** ★ Required for Backbone MVP (builds + docs); ★ Required for Product MVP (semver publish + consume)  
@@ -36,7 +36,7 @@ Consumer lives in a separate private repo. Packages are installed from npm as ve
 
 ## Tickets
 
-### T4.1 — Write real build scripts for required packages
+### Write real build scripts for required packages
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:engine-core`, `area:editorial-theme`, `area:schema`, `agent:approved`, `mvp:required`
 
@@ -50,7 +50,7 @@ Replace `echo 'build not yet configured'` with working build scripts in all thre
 - [ ] All three packages have correct `exports` and `main`/`types` fields in `package.json`.
 - [ ] Changesets release workflow can publish from `dist/`.
 
-### T4.2 — Document two development modes
+### Document two development modes
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:docs`, `agent:approved`, `mvp:required`
 
@@ -63,7 +63,7 @@ Update `docs/downstream/consumption.md` to clearly describe workspace-link mode 
 - [ ] Switch instructions from one mode to the other are included.
 - [ ] `docs/downstream/consumption.md` is updated.
 
-### T4.3 — Publish first engine packages to npm
+### Publish first engine packages to npm
 
 **Labels:** `task:feat`, `owner:human-dev`, `area:release`, `mvp:required`
 
@@ -75,9 +75,9 @@ Trigger the Changesets release workflow to publish `@portfolio-engine/schema`, `
 - [ ] npm package pages are accessible.
 - [ ] Packages are installable via `npm install @portfolio-engine/editorial-theme`.
 
-**Blocked by:** T4.1 (build scripts must work first)
+**Blocked by:** [Write real build scripts for required packages](#epic-package-publishing__write-real-build-scripts-for-required-packages) (build scripts must work first)
 
-### T4.4 — Validate agreni-site can consume published packages
+### Validate agreni-site can consume published packages
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:downstream`, `agent:approved`, `mvp:required`
 
@@ -89,9 +89,9 @@ In the agreni-site repo, switch from pnpm workspace links to semver references. 
 - [ ] `pnpm install` and `pnpm build` succeed in agreni-site without the portfolio-engine monorepo present.
 - [ ] Any monorepo-specific paths or assumptions are removed.
 
-**Blocked by:** T4.3 (packages must be published first), agreni-site #1 (secrets/integrations reconnected)
+**Blocked by:** [Publish first engine packages to npm](#epic-package-publishing__publish-first-engine-packages-to-npm) (packages must be published first), agreni-site #1 (secrets/integrations reconnected)
 
-### T4.5 — Add basic package upgrade workflow
+### Add basic package upgrade workflow
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:downstream`, `area:docs`, `agent:approved`, `mvp:post`
 

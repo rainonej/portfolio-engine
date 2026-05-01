@@ -1,4 +1,4 @@
-# Epic 8 — agreni-site Product MVP
+# agreni-site Product MVP
 
 **Phase:** Phase 4  
 **MVP relevance:** ★ Required for Product MVP  
@@ -16,11 +16,11 @@ Product MVP is defined by two real products; agreni-site is the first. Success p
 ## Board mapping
 
 - agreni-site GitHub issues #1–#7  
-- profesional_site #219 (switch to semver packages) — coordinates with **Epic 4**
+- profesional_site #219 (switch to semver packages) — coordinates with [Package publishing](#epic-package-publishing)
 
 ## Tickets
 
-### T8.1 — Scaffold consumer layout
+### Scaffold consumer layout
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:downstream`, `agent:approved`
 
@@ -31,7 +31,7 @@ Set up `src/config`, `src/content`, `src/context`, `src/overrides`, `public`, `.
 - [ ] No upstream package source copied into the consumer repo.
 - [ ] Site builds using installed packages (semver) or documented interim workspace exception.
 
-### T8.2 — Migrate content, config, and assets
+### Migrate content, config, and assets
 
 **Labels:** `task:content`, `owner:agentic-ai`, `area:downstream`, `agent:approved`
 
@@ -42,7 +42,7 @@ Move only consumer-owned files from predecessor repos.
 - [ ] No private data enters upstream portfolio-engine.
 - [ ] Content renders correctly.
 
-### T8.3 — Add structured context layer
+### Add structured context layer
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:downstream`, `agent:approved`
 
@@ -53,17 +53,17 @@ Create `site-owner.json`, `brand-voice.json`, and `agent-rules.md` as appropriat
 - [ ] Context is structured and admin-ready.
 - [ ] Agent rules are thin and repo-specific.
 
-### T8.4 — Wire to published packages
+### Wire to published packages
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:downstream`, `agent:approved`
 
-Align `package.json` with **Epic 4** publishing; target semver consumption for Product MVP.
+Align `package.json` with [Package publishing](#epic-package-publishing) publishing; target semver consumption for Product MVP.
 
 **Acceptance criteria**
 
 - [ ] Dependencies reference published versions unless an explicit documented exception exists.
 
-### T8.5 — Verify build and preview
+### Verify build and preview
 
 **Labels:** `task:chore`, `owner:agentic-ai`, `area:downstream`, `agent:approved`
 
@@ -72,7 +72,7 @@ Align `package.json` with **Epic 4** publishing; target semver consumption for P
 - [ ] Local build and preview succeed.
 - [ ] Parity checklist vs pre-split behavior (preview/auth/admin) tracked.
 
-### T8.6 — Reconnect secrets and deployments (human)
+### Reconnect secrets and deployments (human)
 
 **Labels:** `task:chore`, `owner:human-dev`, `area:downstream`
 

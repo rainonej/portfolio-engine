@@ -1,4 +1,4 @@
-# Epic 3 — Runtime buildability: schema, engine-core, editorial-theme, demo-site
+# Runtime buildability: schema, engine-core, editorial-theme, demo-site
 
 **Phase:** Phase 1  
 **MVP relevance:** ★ Required for Backbone MVP  
@@ -32,9 +32,9 @@ This is the core product. The optional workflow-kit and admin-tools do not matte
 - portfolio-engine #41: Add live demo badge/link to README
 
 **Defer to post–Product-MVP:**
-- portfolio-engine #34: Vercel CLI deploy/preview bot → Phase 11 (**Epic 17**)
-- portfolio-engine #36: Copilot rulesets for PRs into dev/epic/* → Phase 11 (**Epic 16**)
-- portfolio-engine #37: Copilot document PR feedback loop → Phase 11 (**Epic 16**)
+- portfolio-engine #34: Vercel CLI deploy/preview bot → Phase 11 ([Admin publishing](#epic-admin-publishing))
+- portfolio-engine #36: Copilot rulesets for PRs into dev/epic/* → Phase 11 ([Contribution safety](#epic-contribution-safety))
+- portfolio-engine #37: Copilot document PR feedback loop → Phase 11 ([Contribution safety](#epic-contribution-safety))
 
 **Verify and close:**
 - portfolio-engine #35: GitHub Project docs ported → likely done, verify and close
@@ -45,7 +45,7 @@ This is the core product. The optional workflow-kit and admin-tools do not matte
 
 ## Tickets
 
-### T3.1 — Reconcile existing runtime and CI issues
+### Reconcile existing runtime and CI issues
 
 **Labels:** `task:chore`, `owner:human-dev`, `area:ci`
 
@@ -58,7 +58,7 @@ Review all open issues per the list above. Apply correct phase labels. Close don
 - [ ] Issue #35 verified and closed if done.
 - [ ] profesional_site #209–#213 and #175 closed with closing comment.
 
-### T3.2 — Fix editorial-theme typecheck/build reliability
+### Fix editorial-theme typecheck/build reliability
 
 **Labels:** `task:bug-fix`, `owner:agentic-ai`, `area:editorial-theme`, `agent:approved`
 
@@ -70,7 +70,7 @@ Resolve TypeScript/Astro check failures and virtual module editor issues. Tracke
 - [ ] Demo-site `astro check` runs non-interactively.
 - [ ] Virtual module imports resolve consistently.
 
-### T3.3 — Verify demo-site build/deploy path
+### Verify demo-site build/deploy path
 
 **Labels:** `task:chore`, `owner:agentic-ai`, `area:demo-site`, `agent:approved`
 
@@ -82,11 +82,11 @@ Ensure demo-site can build locally and deploy via Vercel with documented setting
 - [ ] Vercel output directory and baseUrl are correct.
 - [ ] Demo README is accurate.
 
-### T3.4 — Write real package build scripts
+### Write real package build scripts
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:engine-core`, `area:editorial-theme`, `area:schema`, `agent:approved`
 
-Replace `echo 'build not yet configured'` in all three required packages. See Epic 4 T4.1 for full acceptance criteria. This ticket is the Phase 1 prerequisite; publishing happens in Phase 2 (**Epic 4**).
+Replace `echo 'build not yet configured'` in all three required packages. See [Package publishing — Write real build scripts for required packages](#epic-package-publishing__write-real-build-scripts-for-required-packages) for full acceptance criteria. This ticket is the Phase 1 prerequisite; publishing happens in Phase 2 under the same epic.
 
 **Acceptance criteria**
 
@@ -94,12 +94,12 @@ Replace `echo 'build not yet configured'` in all three required packages. See Ep
 - [ ] `package.json` exports and types fields are correct.
 - [ ] Changesets workflow can publish from the output.
 
-### T3.5 — README pointer (full rewrite in Epic 7)
+### README pointer (full rewrite in MVP docs epic)
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:docs`, `agent:approved`
 
-Ensure README points readers to **Epic 7** for the full Backbone MVP documentation pass (required vs optional packages, two modes).
+Ensure README points readers to [MVP docs](#epic-mvp-docs) for the full Backbone MVP documentation pass (required vs optional packages, two modes).
 
 **Acceptance criteria**
 
-- [ ] Cross-link to Epic 7 / roadmap until Epic 7 completes.
+- [ ] Cross-link to [MVP docs](#epic-mvp-docs) / roadmap until that epic completes.

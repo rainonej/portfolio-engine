@@ -82,21 +82,21 @@ Target adds (post-MVP):
 .portfolio-engine/patch-ledger.json
 ```
 
-None of these exist. This is post–Product-MVP and depends on Phase 5 (**Epic 10**).
+None of these exist. This is post–Product-MVP and depends on Phase 5 ([Registries / manifest](#epic-registries-manifest)).
 
 ## Named technical debt (not yet in any ticket)
 
 ### Hardcoded ROUTE_METADATA
 
-`packages/engine-core/src/route-discovery.ts` lines 17–74 hardcode 9 routes with full metadata as a static array. This is the concrete technical debt that **Epic 10** (explicit registries) is meant to fix. The routes work, but they cannot be inspected by tools or extended by consumers without editing this file.
+`packages/engine-core/src/route-discovery.ts` lines 17–74 hardcode 9 routes with full metadata as a static array. This is the concrete technical debt that [Registries / manifest](#epic-registries-manifest) (explicit registries) is meant to fix. The routes work, but they cannot be inspected by tools or extended by consumers without editing this file.
 
 ### Hardcoded SUPPORTED_COMPONENT_SURFACES
 
-`packages/engine-core/src/override-resolution.ts` hardcodes 4 override surface names as a `Set<string>`. Same issue, same fix (**Epic 10**). The override list is correct for now but cannot be machine-read or dynamically extended.
+`packages/engine-core/src/override-resolution.ts` hardcodes 4 override surface names as a `Set<string>`. Same issue, same fix ([Registries / manifest](#epic-registries-manifest)). The override list is correct for now but cannot be machine-read or dynamically extended.
 
 ### No package build scripts
 
-All three required packages have `"build": "echo 'build not yet configured'"`. The Changesets release workflow cannot publish without real build output. This is a Phase 1 blocker for the separate-consumer-repo model (**Epic 4**).
+All three required packages have `"build": "echo 'build not yet configured'"`. The Changesets release workflow cannot publish without real build output. This is a Phase 1 blocker for the separate-consumer-repo model ([Package publishing](#epic-package-publishing)).
 
 ### No test suite
 

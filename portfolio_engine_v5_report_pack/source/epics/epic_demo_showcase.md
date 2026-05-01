@@ -1,4 +1,4 @@
-# Epic 15 — Demo-site as reference and showcase
+# Demo-site as reference and showcase
 
 **Phase:** Phase 2 (Backbone MVP reference) + Phase 10 (showcase expansion)  
 **MVP relevance:** ★ Reference consumer required for Backbone MVP; full product showcase is post–Product-MVP  
@@ -18,7 +18,7 @@ The demo-site should prove the package works and teach consumers/agents how to u
 
 ## Tickets
 
-### T15.1 — Migrate demo-site to target consumer layout
+### Migrate demo-site to target consumer layout
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:demo-site`, `agent:approved`
 
@@ -30,7 +30,7 @@ Move demo-site toward `src/config`, `src/content`, `src/context`, `src/overrides
 - [ ] Vercel docs updated.
 - [ ] Existing config path issue references updated.
 
-### T15.2 — Add folder READMEs to demo-site
+### Add folder READMEs to demo-site
 
 **Labels:** `task:docs`, `owner:simple-ai`, `area:demo-site`
 
@@ -41,7 +41,7 @@ Add small explanatory README files under each consumer-owned demo folder.
 - [ ] READMEs exist.
 - [ ] READMEs explain what belongs and what does not.
 
-### T15.3 — Add rendered customization index
+### Add rendered customization index
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:demo-site`, `agent:approved`
 
@@ -52,7 +52,7 @@ Create a rendered page explaining config/content/context/overrides/registry/publ
 - [ ] Page renders.
 - [ ] Links rendered result to source files.
 
-### T15.4 — Add source-code explanation panels
+### Add source-code explanation panels
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:demo-site`, `agent:approved`
 
@@ -67,27 +67,27 @@ Each demo customization page should show what file/folder drives the rendered re
 
 These are deferred until after **Product MVP**.
 
-### T15.5 — Add "How config works" showcase page
+### Add "How config works" showcase page
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:demo-site`, `agent:approved`, `mvp:post`
 
-### T15.6 — Add "How content works" showcase page
+### Add "How content works" showcase page
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:demo-site`, `agent:approved`, `mvp:post`
 
-### T15.7 — Add "How context works" showcase page
+### Add "How context works" showcase page
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:demo-site`, `agent:approved`, `mvp:post`
 
-### T15.8 — Add "How overrides work" showcase page
+### Add "How overrides work" showcase page
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:demo-site`, `agent:approved`, `mvp:post`
 
-### T15.9 — Add "How registry works" showcase page
+### Add "How registry works" showcase page
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:demo-site`, `agent:approved`, `mvp:post`
 
-### T15.10 — Add "How MCP workflow-kit helps" showcase page
+### Add "How MCP workflow-kit helps" showcase page
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:demo-site`, `area:workflow-kit`, `agent:approved`, `mvp:post`
 

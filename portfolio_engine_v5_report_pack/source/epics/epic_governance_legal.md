@@ -1,4 +1,4 @@
-# Epic 2 — Governance, legal, and open-source contribution foundation
+# Governance, legal, and open-source contribution foundation
 
 **Phase:** Phase 0  
 **MVP relevance:** Parallel — not required for Backbone MVP runtime work  
@@ -15,7 +15,7 @@ The project is explicitly open source. Consumers may become contributors. That m
 
 ## Tickets
 
-### T0.1 — Decide license strategy
+### Decide license strategy
 
 **Labels:** `task:decision`, `owner:human-dev`, `area:governance`
 
@@ -26,7 +26,7 @@ Decide whether to keep MIT, move to Apache-2.0, or dual-license MIT/Apache-2.0.
 - [ ] Decision recorded.
 - [ ] LICENSE/package metadata follow-up created if needed.
 
-### T0.2 — Add governance and AI contribution docs
+### Add governance and AI contribution docs
 
 **Labels:** `task:chore`, `owner:agentic-ai`, `area:governance`, `agent:approved`
 
@@ -38,7 +38,7 @@ Add `GOVERNANCE.md` and `AI_USAGE.md`.
 - [ ] AI-assisted contributions are allowed but must be reviewed.
 - [ ] Consumer-originated contributions are explicitly supported.
 
-### T0.3 — Add citation, security, DCO, trademark, notice files
+### Add citation, security, DCO, trademark, notice files
 
 **Labels:** `task:chore`, `owner:agentic-ai`, `area:governance`, `agent:approved`
 
@@ -50,7 +50,7 @@ Add `CITATION.cff`, `SECURITY.md`, `DCO.md`, `TRADEMARK.md`, and `NOTICE` as app
 - [ ] Citation metadata is valid.
 - [ ] DCO/sign-off expectations are documented.
 
-### T0.4 — Add PR and issue templates
+### Add PR and issue templates
 
 **Labels:** `task:chore`, `owner:agentic-ai`, `area:safety`, `agent:approved`
 

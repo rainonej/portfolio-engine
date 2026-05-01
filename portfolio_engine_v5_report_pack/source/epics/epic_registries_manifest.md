@@ -1,4 +1,4 @@
-# Epic 10 — Registries, manifest, and runtime package defaults
+# Registries, manifest, and runtime package defaults
 
 **Phase:** Phase 5  
 **MVP relevance:** Post–Product-MVP — full manifest and consumer extension support  
@@ -59,29 +59,33 @@ packages/editorial-theme/src/
 
 ## Tickets
 
-### T10.1 — Move route metadata to explicit registry
+### Move route metadata to explicit registry
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:editorial-theme`, `agent:approved`, `mvp:post`
 
-Create a built-in route registry with labels, paths, visibility, remappable/disableable flags, and agent/admin metadata.
+Create a built-in route registry with labels, paths, visibility, remappable/disableable flags, and agent/admin metadata. Replaces the hardcoded `ROUTE_METADATA` array currently in `packages/engine-core/src/route-discovery.ts`.
 
 **Acceptance criteria**
 
-- [ ] Routes still inject correctly.
-- [ ] Registry exported to manifest.
+- [ ] The static `ROUTE_METADATA` array in `packages/engine-core/src/route-discovery.ts` is removed.
+- [ ] Route metadata is loaded from the editorial-theme registry (`packages/editorial-theme/src/registry/routes.ts`) via the engine-core registry utilities.
+- [ ] Routes still inject correctly in the demo-site build (no regressions).
+- [ ] Registry is exported to `.portfolio-engine/manifest.json`.
 
-### T10.2 — Move override surfaces to explicit registry
+### Move override surfaces to explicit registry
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:editorial-theme`, `agent:approved`, `mvp:post`
 
-Declare supported surfaces with props, default component, page, docs, and guidance.
+Declare supported surfaces with props, default component, page, docs, and guidance. Replaces the hardcoded `SUPPORTED_COMPONENT_SURFACES` array currently in `packages/engine-core/src/override-resolution.ts`.
 
 **Acceptance criteria**
 
-- [ ] Override validation uses registry.
-- [ ] Registry includes docs/guidance fields.
+- [ ] The static `SUPPORTED_COMPONENT_SURFACES` array in `packages/engine-core/src/override-resolution.ts` is removed.
+- [ ] Override validation reads supported surfaces from the editorial-theme registry (`packages/editorial-theme/src/registry/override-surfaces.ts`).
+- [ ] Registry entries include props, default component path, host page, docs URL, and agent/admin guidance fields.
+- [ ] Override resolution still rejects unknown surface names with the existing error contract.
 
-### T10.3 — Generate `.portfolio-engine/manifest.json`
+### Generate `.portfolio-engine/manifest.json`
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:engine-core`, `agent:approved`, `mvp:post`
 
@@ -93,7 +97,7 @@ Generate consumer-local manifest with paths, active routes, override surfaces, c
 - [ ] Manifest includes paths/capabilities.
 - [ ] Manifest does not include private content bodies.
 
-### T10.4 — Define manifest privacy policy
+### Define manifest privacy policy
 
 **Labels:** `task:decision`, `owner:human-dev`, `area:safety`, `mvp:post`
 
@@ -104,7 +108,7 @@ Decide exactly what the manifest may include and what it must not include.
 - [ ] Privacy policy documented.
 - [ ] Workflow-kit/admin-tools implications considered.
 
-### T10.5 — Define registry schema contracts
+### Define registry schema contracts
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:schema`, `agent:approved`, `mvp:post`
 
@@ -116,7 +120,7 @@ Decide exactly what the manifest may include and what it must not include.
 - [ ] Manifest schema type exists.
 - [ ] No imports from engine-core or editorial-theme.
 
-### T10.6 — Add engine-core registry utilities
+### Add engine-core registry utilities
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:engine-core`, `agent:approved`, `mvp:post`
 
@@ -126,7 +130,7 @@ Decide exactly what the manifest may include and what it must not include.
 - [ ] No imports from editorial-theme.
 - [ ] Errors are agent-readable (structured, not just thrown strings).
 
-### T10.7 — Add editorial-theme default registries
+### Add editorial-theme default registries
 
 **Labels:** `task:feat`, `owner:agentic-ai`, `area:editorial-theme`, `agent:approved`, `mvp:post`
 

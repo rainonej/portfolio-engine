@@ -1,4 +1,4 @@
-# Epic 7 — MVP documentation (README, CONTRIBUTING, downstream)
+# MVP documentation (README, CONTRIBUTING, downstream)
 
 **Phase:** Phase 3  
 **MVP relevance:** ★ Required for Backbone MVP  
@@ -15,7 +15,7 @@ Backbone MVP is not only code — it is an understandable contract. Without alig
 
 ## Tickets
 
-### T7.1 — README rewrite: required vs optional
+### README rewrite: required vs optional
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:docs`, `agent:approved`
 
@@ -24,7 +24,7 @@ Backbone MVP is not only code — it is an understandable contract. Without alig
 - [ ] Required runtime packages listed first; optional admin-tools and workflow-kit clearly separated.
 - [ ] Backbone MVP vs Product MVP pointers link to roadmap/product tracks sections.
 
-### T7.2 — Downstream consumption documentation
+### Downstream consumption documentation
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:docs`, `agent:approved`
 
@@ -33,7 +33,7 @@ Backbone MVP is not only code — it is an understandable contract. Without alig
 - [ ] `docs/downstream/consumption.md` (or equivalent) describes install, layout, and package wiring for separate repos.
 - [ ] Product MVP expectation: semver/npm unless a documented exception applies.
 
-### T7.3 — Two-mode documentation (workspace vs semver)
+### Two-mode documentation (workspace vs semver)
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:docs`, `agent:approved`
 
@@ -42,7 +42,7 @@ Backbone MVP is not only code — it is an understandable contract. Without alig
 - [ ] Workspace-link mode documented for monorepo contributors (allowed for Backbone MVP when docs are explicit).
 - [ ] Semver mode documented as the target for agreni-site and jordan-site at Product MVP.
 
-### T7.4 — CONTRIBUTING basics
+### CONTRIBUTING basics
 
 **Labels:** `task:docs`, `owner:agentic-ai`, `area:docs`, `agent:approved`
 
