@@ -1,6 +1,0 @@
-OK: source/project_model.json parses.
-OK: doctype present.
-OK: stylesheet exists.
-OK: found 17 epic source files.
-OK: found 7 section source files.
-NOTE: This is a structural/link check. It is not a full W3C validator.
