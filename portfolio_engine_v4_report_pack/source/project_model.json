@@ -1,0 +1,94 @@
+{
+  "version": "v4",
+  "generated": "2026-04-30",
+  "title": "Portfolio Engine Target Architecture Audit and Roadmap",
+  "packages": [
+    {"name": "@portfolio-engine/schema", "kind": "required runtime", "language": "TypeScript / Zod", "mvp": true, "dependsOn": [], "purpose": "Shared schemas and validation contracts for config, content, context, and future registry data."},
+    {"name": "@portfolio-engine/engine-core", "kind": "required runtime", "language": "TypeScript / Astro integration", "mvp": true, "dependsOn": ["@portfolio-engine/schema"], "purpose": "Config loading, route injection, virtual modules, override resolution, manifests, and generic runtime contracts."},
+    {"name": "@portfolio-engine/editorial-theme", "kind": "required runtime", "language": "Astro / TypeScript / CSS", "mvp": true, "dependsOn": ["@portfolio-engine/engine-core", "@portfolio-engine/schema"], "purpose": "The actual site theme: layouts, routes, components, styles, and public editorialTheme(...) API."},
+    {"name": "@portfolio-engine/admin-tools", "kind": "optional UI package", "language": "Astro / TypeScript", "mvp": false, "dependsOn": ["required runtime packages", "manifest", "schemas"], "purpose": "Rendered admin/reviewer UI so nontechnical consumers can edit content, config, context, assets, and registry entries without looking at code. Extracted from profesional_site/agreni-site — not a greenfield build."},
+    {"name": "portfolio-engine-workflow-kit", "kind": "optional AI tooling", "language": "Python / MCP", "mvp": false, "dependsOn": ["consumer layout contract", "manifest"], "purpose": "Local MCP server exposing tools to Claude/Copilot: inspect_site, plan_request, validate_plan, plan_upstream, patch_ledger."}
+  ],
+  "mvpDefinition": "MVP requires Phase 1 (runtime reliability: TypeScript/build/CI clean, package build scripts written) plus Phase 2 (consumer layout contract established: src/config/ migration done, src/context/ layer added, override bridge demonstrated, docs updated, packages published to npm). Consumer registry, admin-tools, workflow-kit, and advanced automation are post-MVP.",
+  "boardRepos": [
+    {
+      "repo": "rainonej/portfolio-engine",
+      "openIssues": 14,
+      "description": "Phase 1 sprint tail — active engineering work, all MVP-required"
+    },
+    {
+      "repo": "rainonej/agreni-site",
+      "openIssues": 7,
+      "description": "Phase 2/10 — consumer repo scaffolding and content migration; blocked until consumer layout contract is finalized"
+    },
+    {
+      "repo": "rainonej/profesional_site",
+      "openIssues": 40,
+      "description": "Origin monorepo — contains parent epics 4–10, old Epic 8 (obsolete), site-owner content tasks (blocked on Agreni), and governance tasks"
+    }
+  ],
+  "currentIssuesToReconcile": {
+    "portfolio-engine": [
+      {"id": "#16", "title": "Fix editorial-theme pnpm check + TypeScript", "phase": "Phase 1", "mvp": true, "disposition": "Keep — critical blocker"},
+      {"id": "#28", "title": "CI: Staged workflow lint → check → build", "phase": "Phase 1", "mvp": true, "disposition": "Keep"},
+      {"id": "#29", "title": "CI: astro check + demo-site build", "phase": "Phase 1", "mvp": true, "disposition": "Keep"},
+      {"id": "#30", "title": "ESLint + Prettier docs", "phase": "Phase 1", "mvp": true, "disposition": "Keep"},
+      {"id": "#31", "title": "Vercel: Connect portfolio-engine repo", "phase": "Phase 1", "mvp": true, "disposition": "Keep — human required"},
+      {"id": "#32", "title": "Docs: Root README + board links", "phase": "Phase 1", "mvp": true, "disposition": "Keep"},
+      {"id": "#33", "title": "editorial-theme: PostCSS Tailwind", "phase": "Phase 1", "mvp": true, "disposition": "Keep"},
+      {"id": "#34", "title": "Vercel: Optional CLI deploy/preview bot", "phase": "Phase 9", "mvp": false, "disposition": "Defer — add mvp:post label"},
+      {"id": "#35", "title": "Docs: GitHub Project docs ported", "phase": "Phase 0", "mvp": false, "disposition": "Verify done → close"},
+      {"id": "#36", "title": "Copilot: Rulesets for PRs into dev/epic/*", "phase": "Phase 7", "mvp": false, "disposition": "Defer — add mvp:post label"},
+      {"id": "#37", "title": "Copilot: Document PR feedback loop", "phase": "Phase 7", "mvp": false, "disposition": "Defer — add mvp:post label"},
+      {"id": "#38", "title": "theme: PR #17 follow-ups (base URL + schema)", "phase": "Phase 1", "mvp": true, "disposition": "Keep"},
+      {"id": "#40", "title": "Vercel: Update demo-site config baseUrl", "phase": "Phase 1", "mvp": true, "disposition": "Keep"},
+      {"id": "#41", "title": "Docs: Add live demo badge", "phase": "Phase 1", "mvp": true, "disposition": "Keep"}
+    ],
+    "agreni-site": [
+      {"id": "#1", "title": "Task 5.5 — Reconnect secrets, integrations, deployments", "phase": "Phase 2+", "mvp": false, "disposition": "Keep — human required (Vercel/GitHub secrets)"},
+      {"id": "#2", "title": "Epic 5 — Scaffold and Populate agreni-site", "phase": "Phase 2+", "mvp": false, "disposition": "Keep — parent epic"},
+      {"id": "#3", "title": "Task 5.3 — Wire to local workspace/path packages", "phase": "Phase 2+", "mvp": false, "disposition": "Keep"},
+      {"id": "#4", "title": "Task 5.1 — Scaffold agreni-site repo structure", "phase": "Phase 2+", "mvp": false, "disposition": "Keep"},
+      {"id": "#5", "title": "Task 5.6 — Post-split parity verification", "phase": "Phase 2+", "mvp": false, "disposition": "Keep"},
+      {"id": "#6", "title": "Task 5.4 — Preserve preview/auth/admin behavior", "phase": "Phase 2+", "mvp": false, "disposition": "Keep"},
+      {"id": "#7", "title": "Task 5.2 — Migrate all Agreni content/config/media", "phase": "Phase 2+", "mvp": false, "disposition": "Keep — depends on consumer layout finalized"}
+    ],
+    "profesional_site": {
+      "epicFourTasks_done": [
+        {"id": "#175", "title": "Epic 4 — Extract editorial-theme", "disposition": "Close or archive — extraction complete"},
+        {"id": "#209", "title": "Task 4.1 — Port layouts/components/styles", "disposition": "Done — close with reference to portfolio-engine"},
+        {"id": "#210", "title": "Task 4.2 — Port page routes", "disposition": "Done — close with reference to portfolio-engine"},
+        {"id": "#211", "title": "Task 4.3 — Theme consumes engine-core modules", "disposition": "Done — close with reference to portfolio-engine"},
+        {"id": "#212", "title": "Task 4.4 — Define first-party override points", "disposition": "Done — close with reference to portfolio-engine"},
+        {"id": "#213", "title": "Task 4.5 — Create examples/demo-site", "disposition": "Done — close with reference to portfolio-engine"}
+      ],
+      "epicSix_packagePublishing": [
+        {"id": "#177", "title": "Epic 6 — Publish and Stabilize Package Consumption", "reportEpic": "Epic 15", "disposition": "Keep — maps to new Epic 15"},
+        {"id": "#219", "title": "Task 6.1 — Publish first engine packages to npm", "reportEpic": "Epic 15 T15.3", "disposition": "Keep"},
+        {"id": "#220", "title": "Task 6.2 — Switch agreni-site to semver packages", "reportEpic": "Epic 15 T15.4", "disposition": "Keep"},
+        {"id": "#221", "title": "Task 6.3 — Document two development modes", "reportEpic": "Epic 15 T15.2", "disposition": "Keep"},
+        {"id": "#222", "title": "Task 6.4 — Add basic package upgrade workflow", "reportEpic": "Epic 15 T15.5", "disposition": "Keep"}
+      ],
+      "epicSeven_adminTools": [
+        {"id": "#178", "title": "Epic 7 — Extract Admin Tools + Generated Site Map", "reportEpic": "Epic 7", "disposition": "Keep — maps to report Epic 7"},
+        {"id": "#223", "title": "Task 7.1 — Extract admin/reviewer UI into admin-tools", "reportEpic": "Epic 7 T7.1", "disposition": "Keep — Phase 4"},
+        {"id": "#224", "title": "Task 7.2 — Generate site map from route registry", "reportEpic": "Epic 7", "disposition": "Keep — Phase 3/4"},
+        {"id": "#225", "title": "Task 7.3 — Add content/config inspection panels", "reportEpic": "Epic 7", "disposition": "Keep — Phase 4"}
+      ],
+      "epicEight_obsolete": [
+        {"id": "#179", "title": "Epic 8 — Build workflow-kit MVP (old GitHub Actions)", "reportEpic": "Epic 6", "disposition": "Re-scope: update to reference ADR-002 and link to Epic 6"},
+        {"id": "#226", "title": "Task 8.1 — Define workflow classification contract", "reportEpic": "Epic 6", "disposition": "Re-scope: rephrase as MCP tool contracts"},
+        {"id": "#227", "title": "Task 8.2 — Package reusable GitHub workflow templates", "disposition": "Close — old approach, replaced by Python/MCP"},
+        {"id": "#228", "title": "Task 8.3 — Add engine-aware classifier", "disposition": "Close — old approach, replaced by inspect_site and plan_request"},
+        {"id": "#229", "title": "Task 8.4 — Add downstream-to-upstream routing contract", "reportEpic": "Epic 6 T6.6", "disposition": "Re-scope: concept valid, implementation is plan_upstream MCP tool"}
+      ],
+      "siteOwnerContent_separateTrack": [
+        {"id": "#35", "title": "Site owner: positioning and copy", "disposition": "Separate launch track — blocked on Agreni"},
+        {"id": "#36", "title": "Content for blog and testimonials", "disposition": "Separate launch track — blocked on Agreni"},
+        {"id": "#37", "title": "Replace placeholder copy and booking URL", "disposition": "Separate launch track — blocked on Agreni"},
+        {"id": "#40", "title": "Site owner: provide real booking URL", "disposition": "Separate launch track — blocked on Agreni"},
+        {"id": "#41", "title": "Launch content (site owner)", "disposition": "Separate launch track — blocked on Agreni"}
+      ]
+    }
+  }
+}
