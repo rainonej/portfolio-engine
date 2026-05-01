@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Unmaintained legacy generator (v3-era section keys). Use `node scripts/build_report.mjs` instead."""
 from pathlib import Path
 import json, html, re
 ROOT=Path(__file__).resolve().parents[1]
@@ -56,7 +57,7 @@ def dep_svg():
 <rect x="600" y="185" width="220" height="70" rx="16" class="node consumer"></rect><text x="710" y="217" text-anchor="middle" class="node-title">consumer site</text><text x="710" y="239" text-anchor="middle" class="node-sub">agreni / jordan</text>
 <rect x="300" y="300" width="230" height="70" rx="16" class="node optional"></rect><text x="415" y="332" text-anchor="middle" class="node-title">admin-tools</text><text x="415" y="354" text-anchor="middle" class="node-sub">optional UI</text>
 <rect x="600" y="300" width="250" height="70" rx="16" class="node optional"></rect><text x="725" y="332" text-anchor="middle" class="node-title">workflow-kit</text><text x="725" y="354" text-anchor="middle" class="node-sub">optional Python/MCP</text>
-<line x1="220" y1="85" x2="310" y2="85" class="edge"></line><line x1="500" y1="85" x2="600" y2="85" class="edge"></line><line x1="710" y1="120" x2="710" y2="185" class="edge"></line><line x1="610" y1="235" x2="500" y2="300" class="edge optional-edge"></line><line x1="725" y1="300" x2="725" y2="255" class="edge optional-edge"></line><text x="460" y="160" text-anchor="middle" class="mvp-star">★ MVP after required runtime + demo + CI + docs</text></svg>'''
+<line x1="220" y1="85" x2="310" y2="85" class="edge"></line><line x1="500" y1="85" x2="600" y2="85" class="edge"></line><line x1="710" y1="120" x2="710" y2="185" class="edge"></line><line x1="610" y1="235" x2="500" y2="300" class="edge optional-edge"></line><line x1="725" y1="300" x2="725" y2="255" class="edge optional-edge"></line><text x="460" y="160" text-anchor="middle" class="mvp-star">★ Backbone MVP: engine stable after Phases 1–3</text></svg>'''
 
 def package_cards(model):
     cards=[]
@@ -67,7 +68,7 @@ def package_cards(model):
     return '<div class="package-grid">'+'\n'.join(cards)+'</div>'
 
 def page(body):
-    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Portfolio Engine v4 Audit</title><link rel="stylesheet" href="assets/styles.css"></head><body><div class="app"><aside class="sidebar"><div class="brand">Portfolio Engine<br><span>v4 audit pack</span></div><nav><a href="#goals">Goals</a><a href="#packages">Packages</a><a href="#graph">Dependency graph</a><a href="#upstream">Upstream repo</a><a href="#consumer">Consumer repo</a><a href="#audit">Current vs target</a><a href="#roadmap">MVP roadmap</a><a href="#epics">Epics & tickets</a><a href="#sources">Source files</a></nav></aside><main>{body}</main></div><script>function filterEpics(){{const q=document.getElementById('epicSearch').value.toLowerCase();document.querySelectorAll('.epic-card').forEach(c=>{{c.style.display=c.innerText.toLowerCase().includes(q)?'':'none';}});}}</script></body></html>'''
+    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Portfolio Engine v5 Audit</title><link rel="stylesheet" href="assets/styles.css"></head><body><div class="app"><aside class="sidebar"><div class="brand">Portfolio Engine<br><span>v5 audit pack (legacy py)</span></div><nav><a href="#goals">Goals</a><a href="#packages">Packages</a><a href="#graph">Dependency graph</a><a href="#upstream">Upstream repo</a><a href="#consumer">Consumer repo</a><a href="#audit">Current vs target</a><a href="#roadmap">MVP roadmap</a><a href="#epics">Epics & tickets</a><a href="#sources">Source files</a></nav></aside><main>{body}</main></div><script>function filterEpics(){{const q=document.getElementById('epicSearch').value.toLowerCase();document.querySelectorAll('.epic-card').forEach(c=>{{c.style.display=c.innerText.toLowerCase().includes(q)?'':'none';}});}}</script></body></html>'''
 
 def main():
     model=json.loads((SRC/'project_model.json').read_text())
