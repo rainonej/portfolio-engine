@@ -71,17 +71,19 @@ Add machine-readable route/override/path/capability registries and `.portfolio-e
 
 See: `epic_12_explicit_registries.md`
 
-## Phase 4 — Consumer extension registry
+## Phase 4 — Admin-tools UI
+
+Post-MVP optional UI for nontechnical editing. Prioritized here because the majority of MVP admin-tools features are already substantially built, and because non-developer consumers (e.g. agreni-site) benefit from this before the more complex extension registry or workflow-kit layers.
+
+See: `epic_07_admin_tools.md`
+
+## Phase 5 — Consumer extension registry
 
 Post-MVP middle ground. Allows local pages, local embeds, and local components without editing upstream packages.
 
-## Phase 5 — Python/MCP workflow-kit
+## Phase 6 — Python/MCP workflow-kit
 
 Post-MVP optional AI tool layer for Claude/Copilot/OpenHands and other agents.
-
-## Phase 6 — Admin-tools UI
-
-Post-MVP optional UI for nontechnical editing. See future modules in `epic_07_admin_tools.md`.
 
 ## Phase 7 — Consumer bootstrap/setup script
 

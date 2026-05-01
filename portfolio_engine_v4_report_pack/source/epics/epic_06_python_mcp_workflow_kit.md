@@ -1,6 +1,6 @@
 # Epic 6 — Optional Python/MCP workflow-kit
 
-**Phase:** Phase 5  
+**Phase:** Phase 6  
 **MVP relevance:** Post-MVP, highly recommended for AI-native workflow  
 **Labels:** `type:epic`, `area:workflow-kit`, `source:human`
 

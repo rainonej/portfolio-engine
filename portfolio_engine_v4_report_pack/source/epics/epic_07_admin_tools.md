@@ -1,6 +1,6 @@
 # Epic 7 — Optional admin-tools UI
 
-**Phase:** Phase 6  
+**Phase:** Phase 4  
 **MVP relevance:** Post-MVP  
 **Labels:** `type:epic`, `area:admin-tools`, `source:human`
 

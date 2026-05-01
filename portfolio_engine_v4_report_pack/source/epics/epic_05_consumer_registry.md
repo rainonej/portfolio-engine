@@ -1,6 +1,6 @@
 # Epic 5 — Consumer extension registry
 
-**Phase:** Phase 4  
+**Phase:** Phase 5  
 **MVP relevance:** Post-MVP  
 **Labels:** `type:epic`, `area:consumer-registry`, `area:theme`, `source:human`
 
