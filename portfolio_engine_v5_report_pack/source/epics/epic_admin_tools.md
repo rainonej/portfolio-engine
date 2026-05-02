@@ -16,6 +16,7 @@ Admin-tools is the intended content editing mechanism for agreni-site (replacing
 ## Extraction source
 
 The admin UI to extract is in the profesional_site/agreni-site codebase. See:
+
 - profesional_site #178: Epic 7 — Extract Admin Tools + Generated Site Map
 - profesional_site #223: Task 7.1 — Extract admin/reviewer UI into admin-tools package
 - profesional_site #224: Task 7.2 — Generate site map from route registry

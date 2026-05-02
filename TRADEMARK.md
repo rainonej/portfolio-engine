@@ -8,7 +8,7 @@ The following names and marks are associated with the project:
 
 - Portfolio Engine
 - portfolio-engine
-- @portfolio-engine/* package names
+- @portfolio-engine/\* package names
 - Portfolio Engine logos, if any are added later
 
 ## License does not grant trademark rights

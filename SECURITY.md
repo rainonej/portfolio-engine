@@ -6,11 +6,11 @@ Portfolio Engine is currently pre-1.0.
 
 Security support applies to the default branch and the latest published package versions once packages are publicly released.
 
-| Version | Supported |
-| ------- | --------- |
-| main/default branch | Yes |
+| Version                   | Supported           |
+| ------------------------- | ------------------- |
+| main/default branch       | Yes                 |
 | latest published packages | Yes, once published |
-| old pre-release versions | Best effort |
+| old pre-release versions  | Best effort         |
 
 ## Reporting a vulnerability
 

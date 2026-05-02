@@ -1,6 +1,6 @@
 name: Decision record
 description: Track a human architecture/governance decision
-title: "[Decision]: "
+title: '[Decision]: '
 labels:
   - task:decision
   - source:human

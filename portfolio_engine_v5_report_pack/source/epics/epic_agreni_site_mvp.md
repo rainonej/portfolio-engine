@@ -15,7 +15,7 @@ Product MVP is defined by two real products; agreni-site is the first. Success p
 
 ## Board mapping
 
-- agreni-site GitHub issues #1–#7  
+- agreni-site GitHub issues #1–#7
 - profesional_site #219 (switch to semver packages) — coordinates with [Package publishing](#epic-package-publishing)
 
 ## Tickets
