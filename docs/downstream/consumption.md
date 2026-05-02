@@ -1,5 +1,20 @@
 # Consuming portfolio-engine
 
+## Consumer site layout
+
+The canonical `src/` directory contract for any consumer site:
+
+```
+your-site/
+  src/
+    config/     JSON config files consumed by editorialTheme()
+    content/    Astro content collections
+    context/    Site-owner identity and brand voice (agent use)
+    overrides/  Component overrides (named surfaces only)
+```
+
+These directories are contract-stable. Only `config/` and `content/` affect the Astro build; `context/` is for AI-assisted workflows and is never imported by the theme.
+
 There are two modes for consuming portfolio-engine packages, depending on whether you are a downstream site owner or an engine contributor.
 
 ## Semver mode (separate consumer repo)
@@ -21,10 +36,10 @@ import { editorialTheme } from '@portfolio-engine/editorial-theme';
 export default defineConfig({
   integrations: [
     editorialTheme({
-      siteConfigPath: './config/site.json',
-      navigationConfigPath: './config/navigation.json',
-      themeConfigPath: './config/theme.json',
-      featuresConfigPath: './config/features.json',
+      siteConfigPath: './src/config/site.json',
+      navigationConfigPath: './src/config/navigation.json',
+      themeConfigPath: './src/config/theme.json',
+      featuresConfigPath: './src/config/features.json',
     }),
   ],
 });
@@ -78,12 +93,11 @@ To switch from semver back to workspace-link:
 
 ## Overrides
 
-Place override files in `src/overrides/components/` in your consumer site. The exact named surfaces are defined by `@portfolio-engine/editorial-theme` (Task 4.4). Do not override arbitrary internal files — only named surfaces are stable.
+Place override files in `src/overrides/` in your consumer site. Only named surfaces are stable override targets — do not override arbitrary internal files.
 
 ```
-agreni-site/
+your-site/
   src/
     overrides/
-      components/
-        Nav.astro         ← replaces the theme's Nav
+      Nav.astro         ← replaces the theme's Nav
 ```
