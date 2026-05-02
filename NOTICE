@@ -1,0 +1,12 @@
+Portfolio Engine
+Copyright 2026 Jordan Rainone
+
+This product includes software developed by Jordan Rainone and contributors to the Portfolio Engine project.
+
+Portfolio Engine is a reusable open-source backbone for personal, portfolio, and editorial websites. It includes runtime packages for schema validation, Astro integration, editorial theming, and optional packages for admin tooling and AI-assisted workflow support.
+
+The names "Portfolio Engine", "portfolio-engine", and the Portfolio Engine marks are not licensed for use as trademarks except as described in TRADEMARK.md or as required for reasonable and customary attribution.
+
+Please cite Portfolio Engine in academic, research, public-facing, or commercial work where it materially contributed to the result. See CITATION.cff for recommended citation metadata.
+
+The project maintainers appreciate, but do not require, notification when Portfolio Engine is used in downstream sites, research, products, talks, or teaching materials.

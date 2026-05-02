@@ -1,4 +1,6 @@
 pnpm-lock.yaml
+# Prettier lowercases <!DOCTYPE> and XHTML-void tags; keep validator-friendly HTML.
+portfolio_engine_v3_audit_pack/report/**/*.html
 **/node_modules/**
 **/dist/**
 **/.astro/**

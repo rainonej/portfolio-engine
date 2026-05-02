@@ -9,6 +9,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --check \"**/*.{md,json,yml,yaml,mjs}\" --ignore-path .prettierignore",
     "format:write": "prettier --write \"**/*.{md,json,yml,yaml,mjs}\" --ignore-path .prettierignore",
+    "build:audit-report-shells": "node portfolio_engine_v3_audit_pack/write-report-shells.mjs",
     "check": "pnpm -r run check",
     "release": "changeset publish"
   },
@@ -18,7 +19,9 @@
     "@types/node": "^22.0.0",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
+    "marked": "^15",
     "prettier": "^3.4.2",
+    "tsup": "^8.3.0",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.19.0"
   },
