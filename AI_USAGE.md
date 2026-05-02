@@ -28,8 +28,6 @@ A trivial autocomplete suggestion does not need detailed disclosure. A multi-fil
 
 The label `agent:approved` means a human maintainer has approved an AI agent to act on the issue.
 
-The old provider-specific `claude-ready` label should be treated as deprecated once label migration is complete.
-
 ## Agent workflow
 
 Before editing code, an agent should inspect:
