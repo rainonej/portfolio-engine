@@ -29,10 +29,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Require npm publish token
-        if: ${{ secrets.NPM_TOKEN == '' }}
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          echo '::error::Repository secret NPM_TOKEN is not set. Add an npm automation token under Settings → Secrets and variables → Actions (see docs/workflows/release-workflow.md).'
-          exit 1
+          if [ -z "${NPM_TOKEN}" ]; then
+            echo '::error::Repository secret NPM_TOKEN is not set. Add an npm automation token under Settings → Secrets and variables → Actions (see docs/workflows/release-workflow.md).'
+            exit 1
+          fi
 
       - name: Create release PR or publish
         uses: changesets/action@v1
