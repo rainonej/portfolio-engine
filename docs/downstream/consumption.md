@@ -1,5 +1,20 @@
 # Consuming portfolio-engine
 
+## Consumer site layout
+
+The canonical `src/` directory contract for any consumer site:
+
+```
+your-site/
+  src/
+    config/     JSON config files consumed by editorialTheme()
+    content/    Astro content collections
+    context/    Site-owner identity and brand voice (agent use)
+    overrides/  Component overrides (named surfaces only)
+```
+
+These directories are contract-stable. The build always reads `config/` and `content/`. Files under `src/overrides/` change the site **when** you wire them through `editorialTheme({ overrides })` (the integration resolves paths at config time and theme components load them at render time). `context/` is not read by the build—it is for AI-assisted workflows only.
+
 There are two modes for consuming portfolio-engine packages, depending on whether you are a downstream site owner or an engine contributor.
 
 ## Semver mode (separate consumer repo)
@@ -21,10 +36,10 @@ import { editorialTheme } from '@portfolio-engine/editorial-theme';
 export default defineConfig({
   integrations: [
     editorialTheme({
-      siteConfigPath: './config/site.json',
-      navigationConfigPath: './config/navigation.json',
-      themeConfigPath: './config/theme.json',
-      featuresConfigPath: './config/features.json',
+      siteConfigPath: './src/config/site.json',
+      navigationConfigPath: './src/config/navigation.json',
+      themeConfigPath: './src/config/theme.json',
+      featuresConfigPath: './src/config/features.json',
     }),
   ],
 });
@@ -78,12 +93,40 @@ To switch from semver back to workspace-link:
 
 ## Overrides
 
-Place override files in `src/overrides/components/` in your consumer site. The exact named surfaces are defined by `@portfolio-engine/editorial-theme` (Task 4.4). Do not override arbitrary internal files — only named surfaces are stable.
+Overrides are **not** picked up from disk automatically. Pass an `overrides` object to `editorialTheme()` with paths **relative to the consumer project root**. Only named surfaces declared by the engine are valid; unsupported names fail at build time.
+
+**Supported component surfaces (v1):** `Hero`, `FeaturedWriting`, `TestimonialSection`, `CollaborationSection`. You may also pass `styles` for extra CSS files merged after the theme’s global styles.
+
+**Example — `astro.config.mjs`:**
+
+```js
+import { defineConfig } from 'astro/config';
+import { editorialTheme } from '@portfolio-engine/editorial-theme';
+
+export default defineConfig({
+  integrations: [
+    editorialTheme({
+      siteConfigPath: './src/config/site.json',
+      navigationConfigPath: './src/config/navigation.json',
+      themeConfigPath: './src/config/theme.json',
+      featuresConfigPath: './src/config/features.json',
+      overrides: {
+        components: {
+          Hero: './src/overrides/Hero.astro',
+        },
+        styles: ['./src/overrides/custom.css'],
+      },
+    }),
+  ],
+});
+```
+
+By convention, keep those files under `src/overrides/` (any layout under that folder is fine as long as the paths in `overrides` match). Do not point at arbitrary internal theme files—only the supported surface keys above are stable.
 
 ```
-agreni-site/
+your-site/
   src/
     overrides/
-      components/
-        Nav.astro         ← replaces the theme's Nav
+      Hero.astro        ← example: wired via overrides.components.Hero
+      custom.css        ← example: wired via overrides.styles
 ```
