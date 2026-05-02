@@ -13,7 +13,7 @@ your-site/
     overrides/  Component overrides (named surfaces only)
 ```
 
-These directories are contract-stable. Only `config/` and `content/` affect the Astro build; `context/` is for AI-assisted workflows and is never imported by the theme.
+These directories are contract-stable. The build always reads `config/` and `content/`. Files under `src/overrides/` change the site **when** you wire them through `editorialTheme({ overrides })` (the integration resolves paths at config time and theme components load them at render time). `context/` is not read by the build—it is for AI-assisted workflows only.
 
 There are two modes for consuming portfolio-engine packages, depending on whether you are a downstream site owner or an engine contributor.
 
@@ -93,11 +93,40 @@ To switch from semver back to workspace-link:
 
 ## Overrides
 
-Place override files in `src/overrides/` in your consumer site. Only named surfaces are stable override targets — do not override arbitrary internal files.
+Overrides are **not** picked up from disk automatically. Pass an `overrides` object to `editorialTheme()` with paths **relative to the consumer project root**. Only named surfaces declared by the engine are valid; unsupported names fail at build time.
+
+**Supported component surfaces (v1):** `Hero`, `FeaturedWriting`, `TestimonialSection`, `CollaborationSection`. You may also pass `styles` for extra CSS files merged after the theme’s global styles.
+
+**Example — `astro.config.mjs`:**
+
+```js
+import { defineConfig } from 'astro/config';
+import { editorialTheme } from '@portfolio-engine/editorial-theme';
+
+export default defineConfig({
+  integrations: [
+    editorialTheme({
+      siteConfigPath: './src/config/site.json',
+      navigationConfigPath: './src/config/navigation.json',
+      themeConfigPath: './src/config/theme.json',
+      featuresConfigPath: './src/config/features.json',
+      overrides: {
+        components: {
+          Hero: './src/overrides/Hero.astro',
+        },
+        styles: ['./src/overrides/custom.css'],
+      },
+    }),
+  ],
+});
+```
+
+By convention, keep those files under `src/overrides/` (any layout under that folder is fine as long as the paths in `overrides` match). Do not point at arbitrary internal theme files—only the supported surface keys above are stable.
 
 ```
 your-site/
   src/
     overrides/
-      Nav.astro         ← replaces the theme's Nav
+      Hero.astro        ← example: wired via overrides.components.Hero
+      custom.css        ← example: wired via overrides.styles
 ```

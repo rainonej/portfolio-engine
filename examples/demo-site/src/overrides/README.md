@@ -1,5 +1,7 @@
 # overrides/
 
-Drop component overrides here to replace editorial-theme surfaces.
-Only named surfaces (e.g. Nav.astro) are stable override targets.
-See docs/downstream/consumption.md for details.
+Put optional override components and styles here, then **wire them in `astro.config.mjs`** via `editorialTheme({ overrides: { components, styles } })`. Files in this folder are not auto-discovered.
+
+Supported component surfaces: `Hero`, `FeaturedWriting`, `TestimonialSection`, `CollaborationSection`.
+
+See `docs/downstream/consumption.md` for a full `editorialTheme({ overrides })` example.
