@@ -1,0 +1,60 @@
+name: Downstream-originated upstream request
+description: Propose an upstream feature discovered from a consumer repo need
+title: "[Downstream → Upstream]: "
+labels:
+  - task:feat
+  - source:downstream
+body:
+  - type: input
+    id: downstream_repo
+    attributes:
+      label: Downstream repo
+      placeholder: rainonej/agreni-site
+    validations:
+      required: true
+  - type: textarea
+    id: original_request
+    attributes:
+      label: Original user/site-owner request
+    validations:
+      required: true
+  - type: textarea
+    id: attempted_local_solution
+    attributes:
+      label: Attempted local solution
+      description: What was tried in content/config/context/registry/override?
+  - type: checkboxes
+    id: layers_checked
+    attributes:
+      label: Local layers checked
+      options:
+        - label: content
+        - label: config
+        - label: context
+        - label: override
+        - label: consumer registry
+        - label: temporary patch
+  - type: textarea
+    id: upstream_need
+    attributes:
+      label: General upstream capability needed
+    validations:
+      required: true
+  - type: dropdown
+    id: target_package
+    attributes:
+      label: Likely target package
+      options:
+        - schema
+        - engine-core
+        - editorial-theme
+        - admin-tools
+        - workflow-kit
+        - unknown
+  - type: textarea
+    id: privacy
+    attributes:
+      label: Privacy review
+      description: Confirm no private content, names, credentials, or site-specific hacks are required upstream.
+    validations:
+      required: true
