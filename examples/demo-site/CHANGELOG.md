@@ -1,5 +1,14 @@
 # demo-site
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies
+  - @portfolio-engine/schema@0.1.1
+  - @portfolio-engine/engine-core@0.1.1
+  - @portfolio-engine/editorial-theme@0.1.1
+
 ## 0.0.2
 
 ### Patch Changes

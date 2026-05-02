@@ -1,25 +1,13 @@
 {
   "name": "@portfolio-engine/engine-core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Route registry, config loader, virtual modules, and override resolution for portfolio-engine",
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./src/*": "./src/*",
     "./client": {
       "types": "./src/client.d.ts"
-    }
-  },
-  "publishConfig": {
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
-    "exports": {
-      ".": {
-        "import": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "./client": {
-        "types": "./dist/client.d.ts"
-      }
     }
   },
   "scripts": {

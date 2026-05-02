@@ -1,5 +1,13 @@
 # @portfolio-engine/engine-core
 
+## 0.1.1
+
+### Patch Changes
+
+- Fix npm package entry points: remove `publishConfig` that rewrote `exports` to missing `dist/` files. Published packages now expose `./src/index.ts` and `./src/*` so Astro/Vite consumers resolve the integration and theme sources correctly.
+- Updated dependencies
+  - @portfolio-engine/schema@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes
