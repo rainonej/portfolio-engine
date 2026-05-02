@@ -13,7 +13,7 @@ Configuration: [`eslint.config.mjs`](../../eslint.config.mjs) at the monorepo ro
 
 ## Prettier
 
-Runs on Markdown, JSON, YAML, and `.mjs` files. TypeScript sources are formatted by ESLint (via `eslint-config-prettier`).
+Runs on Markdown, JSON, YAML, and `.mjs` files. TypeScript (`.ts`) files are not covered by Prettier in this repo — ESLint handles lint rules only, not formatting, for those files.
 
 ```bash
 pnpm format        # Check formatting

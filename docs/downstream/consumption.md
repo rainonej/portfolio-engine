@@ -9,7 +9,7 @@ The production mode for `agreni-site` and `jordan-site`. Your consumer repo is a
 **Install from npm:**
 
 ```bash
-pnpm add @portfolio-engine/editorial-theme@0.1.0
+pnpm add @portfolio-engine/editorial-theme@latest
 ```
 
 **`astro.config.mjs`:**
@@ -66,7 +66,7 @@ Run `pnpm install` from the monorepo root. `pnpm -r run build` will include the 
 
 To switch a consumer repo from workspace-link to semver:
 
-1. Replace `"link:..."` or `"workspace:*"` with the semver version (e.g., `"^0.1.0"`) in the consumer's `package.json`.
+1. Replace `"link:..."` or `"workspace:*"` with the published semver version (e.g., `"^0.2.0"`) in the consumer's `package.json`.
 2. Run `pnpm install` in the consumer repo.
 3. Verify the build still passes: `pnpm build`.
 
