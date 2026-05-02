@@ -157,7 +157,10 @@ function mdToHtml(md, opts = {}) {
 function parseEpic(filename, md) {
   const lines = md.split(/\r?\n/);
   const title = (lines[0] || '').replace(/^#\s+/, '').trim();
-  const slug = filename.replace(/^epic_/, '').replace(/\.md$/, '').replace(/_/g, '-');
+  const slug = filename
+    .replace(/^epic_/, '')
+    .replace(/\.md$/, '')
+    .replace(/_/g, '-');
   const grab = (re) => {
     for (const l of lines.slice(0, 30)) {
       const m = l.match(re);
@@ -267,7 +270,9 @@ const epicFiles = fs
   .readdirSync(path.join(SRC, 'epics'))
   .filter((f) => f.endsWith('.md'))
   .sort();
-const epics = epicFiles.map((f) => parseEpic(f, fs.readFileSync(path.join(SRC, 'epics', f), 'utf8')));
+const epics = epicFiles.map((f) =>
+  parseEpic(f, fs.readFileSync(path.join(SRC, 'epics', f), 'utf8')),
+);
 epics.sort((a, b) => a.minPhase - b.minPhase || a.filename.localeCompare(b.filename));
 const epicsBySlug = Object.fromEntries(epics.map((e) => [e.slug, e]));
 

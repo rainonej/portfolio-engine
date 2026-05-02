@@ -1,6 +1,6 @@
 name: Feature request
 description: Propose a reusable upstream capability
-title: "[Feature]: "
+title: '[Feature]: '
 labels:
   - task:feat
   - source:human

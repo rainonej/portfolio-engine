@@ -9,9 +9,22 @@
       "types": "./src/client.d.ts"
     }
   },
+  "publishConfig": {
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "import": "./dist/index.js",
+        "types": "./dist/index.d.ts"
+      },
+      "./client": {
+        "types": "./dist/client.d.ts"
+      }
+    }
+  },
   "scripts": {
-    "build": "echo 'build not yet configured'",
-    "dev": "echo 'dev not yet configured'",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "check": "tsc --noEmit"
   },
   "dependencies": {

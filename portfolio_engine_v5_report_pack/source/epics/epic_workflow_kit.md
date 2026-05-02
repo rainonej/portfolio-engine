@@ -19,13 +19,13 @@ This epic replaces `profesional_site #179` (obsolete GitHub Actions workflow-kit
 
 **Disposition of old tasks:**
 
-| Issue | Title | Action |
-|---|---|---|
-| profesional_site #179 | Old workflow-kit MVP | Re-scope: reference ADR-002 and [Workflow-kit](#epic-workflow-kit) |
-| profesional_site #226 | Task 8.1 — Define workflow classification contract | Re-scope: MCP tool contracts |
-| profesional_site #227 | Task 8.2 — Package reusable GitHub workflow templates | **Close** |
-| profesional_site #228 | Task 8.3 — Add engine-aware classifier | **Close** |
-| profesional_site #229 | Task 8.4 — Downstream-to-upstream routing | Re-scope: `plan_upstream` MCP tool |
+| Issue                 | Title                                                 | Action                                                             |
+| --------------------- | ----------------------------------------------------- | ------------------------------------------------------------------ |
+| profesional_site #179 | Old workflow-kit MVP                                  | Re-scope: reference ADR-002 and [Workflow-kit](#epic-workflow-kit) |
+| profesional_site #226 | Task 8.1 — Define workflow classification contract    | Re-scope: MCP tool contracts                                       |
+| profesional_site #227 | Task 8.2 — Package reusable GitHub workflow templates | **Close**                                                          |
+| profesional_site #228 | Task 8.3 — Add engine-aware classifier                | **Close**                                                          |
+| profesional_site #229 | Task 8.4 — Downstream-to-upstream routing             | Re-scope: `plan_upstream` MCP tool                                 |
 
 ## Target package shape
 

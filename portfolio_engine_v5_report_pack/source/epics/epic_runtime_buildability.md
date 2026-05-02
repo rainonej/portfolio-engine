@@ -20,6 +20,7 @@ This is the core product. The optional workflow-kit and admin-tools do not matte
 ## Existing issues to reconcile (portfolio-engine repo)
 
 **Keep — Phase 1 sprint (active):**
+
 - portfolio-engine #16: editorial-theme pnpm check and Astro/editor TypeScript ← critical blocker
 - portfolio-engine #28: Staged CI workflow lint → check → build
 - portfolio-engine #29: astro check + demo-site build in pipeline
@@ -32,14 +33,17 @@ This is the core product. The optional workflow-kit and admin-tools do not matte
 - portfolio-engine #41: Add live demo badge/link to README
 
 **Defer to post–Product-MVP:**
+
 - portfolio-engine #34: Vercel CLI deploy/preview bot → Phase 11 ([Admin publishing](#epic-admin-publishing))
-- portfolio-engine #36: Copilot rulesets for PRs into dev/epic/* → Phase 11 ([Contribution safety](#epic-contribution-safety))
+- portfolio-engine #36: Copilot rulesets for PRs into dev/epic/\* → Phase 11 ([Contribution safety](#epic-contribution-safety))
 - portfolio-engine #37: Copilot document PR feedback loop → Phase 11 ([Contribution safety](#epic-contribution-safety))
 
 **Verify and close:**
+
 - portfolio-engine #35: GitHub Project docs ported → likely done, verify and close
 
 **Old Epic 4 tasks in profesional_site — DONE, close:**
+
 - profesional_site #209–#213: All extraction tasks complete
 - profesional_site #175: Parent Epic 4 — close or archive
 

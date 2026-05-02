@@ -1,6 +1,6 @@
 name: Temporary downstream patch
 description: Track a local workaround that should eventually be removed
-title: "[Temporary Patch]: "
+title: '[Temporary Patch]: '
 labels:
   - task:chore
   - source:downstream
@@ -16,7 +16,7 @@ body:
     id: affected_package
     attributes:
       label: Affected upstream package
-      placeholder: "@portfolio-engine/editorial-theme"
+      placeholder: '@portfolio-engine/editorial-theme'
     validations:
       required: true
   - type: textarea

@@ -1,6 +1,6 @@
 name: Bug report
 description: Report a reproducible bug in Portfolio Engine
-title: "[Bug]: "
+title: '[Bug]: '
 labels:
   - task:bug-fix
   - source:human

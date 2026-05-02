@@ -18,6 +18,7 @@ This epic also documents the two development modes so contributors know which to
 ## Maps to old Epic 6 (profesional_site)
 
 This epic is the v5 equivalent of profesional_site issues:
+
 - #177: Epic 6 — Publish and Stabilize Package Consumption
 - #219: Task 6.1 — Publish first engine packages to npm
 - #220: Task 6.2 — Switch agreni-site from local paths to semver packages

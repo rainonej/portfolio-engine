@@ -1,6 +1,6 @@
 name: Downstream-originated upstream request
 description: Propose an upstream feature discovered from a consumer repo need
-title: "[Downstream → Upstream]: "
+title: '[Downstream → Upstream]: '
 labels:
   - task:feat
   - source:downstream
