@@ -5,6 +5,7 @@ type: software
 authors:
   - family-names: "Rainone"
     given-names: "Jordan"
+    email: "rainonej@gmail.com"
 repository-code: "https://github.com/rainonej/portfolio-engine"
 url: "https://github.com/rainonej/portfolio-engine"
 abstract: "A reusable open-source backbone for personal, portfolio, and editorial websites, including shared schema, Astro integration, editorial theming, and optional admin and AI workflow tooling."

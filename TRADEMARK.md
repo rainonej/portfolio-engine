@@ -40,7 +40,5 @@ You may fork the project under the open-source license. If your fork is not offi
 For trademark permission, contact the maintainer through the repository or at:
 
 ```text
-jordan@example.com
+rainonej@gmail.com
 ```
-
-Replace this placeholder before publishing.

@@ -19,10 +19,8 @@ Please do **not** report security vulnerabilities through public GitHub issues.
 Report vulnerabilities privately by emailing:
 
 ```text
-security@example.com
+rainonej@gmail.com
 ```
-
-Replace this placeholder with the maintainer's preferred security contact before publishing.
 
 Please include affected package or path, vulnerability description, reproduction steps, impact, suggested fix if known, downstream impact, and whether secrets/private content may be exposed.
 

@@ -44,8 +44,7 @@ This bundle therefore uses Apache-2.0 for code, citation/notification as request
 
 ## Follow-up placeholders to replace
 
-- `security@example.com`
-- `jordan@example.com`
+- Maintainer contact email is set to `rainonej@gmail.com` in `SECURITY.md`, `TRADEMARK.md`, and `CITATION.cff`.
 - version/date in `CITATION.cff` if needed
 
 This is a strong open-source foundation, but it is not legal advice.
