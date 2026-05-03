@@ -1,0 +1,11 @@
+OK: source/project_model.json parses.
+OK: doctype present.
+OK: stylesheet exists.
+OK: found 18 epic source files.
+OK: found 8 section source files.
+OK: phase timeline rendered.
+OK: 2 milestone banners present.
+OK: 18 epic anchor IDs present.
+OK: 109 ticket anchor IDs present.
+OK: no "v4" literals in rendered HTML.
+NOTE: This is a structural/link check. It is not a full W3C validator.

@@ -1,17 +1,18 @@
 {
   "name": "@portfolio-engine/engine-core",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "Route registry, config loader, virtual modules, and override resolution for portfolio-engine",
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./src/*": "./src/*",
     "./client": {
       "types": "./src/client.d.ts"
     }
   },
   "scripts": {
-    "build": "echo 'build not yet configured'",
-    "dev": "echo 'dev not yet configured'",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "check": "tsc --noEmit"
   },
   "dependencies": {

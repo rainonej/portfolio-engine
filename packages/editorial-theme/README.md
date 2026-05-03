@@ -148,6 +148,10 @@ editorialTheme({
 Each file is read at build time and inlined as a global stylesheet on
 every page.
 
+## Deploying (separate consumer repo)
+
+For a **standalone** Astro repo that depends on this package from npm: Vercel import, `pnpm install` / `pnpm build`, **production branch `main`**, **`dev` and PRs for previews**, canonical `SITE_URL`, and OAuth callback notes are in **[`docs/downstream/consumption.md` § Vercel (standalone consumer repo)](../../docs/downstream/consumption.md#vercel-standalone-consumer-repo)**.
+
 ## Status
 
 First public feature release — Epic 4. See

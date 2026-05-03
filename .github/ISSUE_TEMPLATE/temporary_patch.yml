@@ -1,0 +1,53 @@
+name: Temporary downstream patch
+description: Track a local workaround that should eventually be removed
+title: '[Temporary Patch]: '
+labels:
+  - task:chore
+  - source:downstream
+body:
+  - type: input
+    id: downstream_repo
+    attributes:
+      label: Downstream repo
+      placeholder: rainonej/agreni-site
+    validations:
+      required: true
+  - type: input
+    id: affected_package
+    attributes:
+      label: Affected upstream package
+      placeholder: '@portfolio-engine/editorial-theme'
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: Why is the patch needed?
+    validations:
+      required: true
+  - type: input
+    id: patch_location
+    attributes:
+      label: Patch/workaround location
+      placeholder: patches/@portfolio-engine__editorial-theme.patch
+  - type: input
+    id: upstream_issue
+    attributes:
+      label: Upstream issue or PR
+      placeholder: https://github.com/rainonej/portfolio-engine/issues/...
+  - type: textarea
+    id: removal_condition
+    attributes:
+      label: Removal condition
+      description: When can this patch be removed?
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: This patch does not contain private data.
+          required: true
+        - label: This patch is temporary and should not become hidden fork behavior.
+          required: true

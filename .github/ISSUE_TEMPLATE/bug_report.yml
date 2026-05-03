@@ -1,0 +1,64 @@
+name: Bug report
+description: Report a reproducible bug in Portfolio Engine
+title: '[Bug]: '
+labels:
+  - task:bug-fix
+  - source:human
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - schema
+        - engine-core
+        - editorial-theme
+        - admin-tools
+        - workflow-kit
+        - demo-site
+        - docs
+        - CI/release
+        - downstream consumer
+        - unknown
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Node, pnpm, OS, package versions, branch, browser if relevant.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or screenshots
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues.
+        - label: I removed secrets/private data from logs.
+          required: true

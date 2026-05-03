@@ -153,16 +153,20 @@ export function resolveThemePagesDir(projectRootDir: string): string {
   try {
     const req = createRequire(join(projectRootDir, 'package.json'));
     const entry = req.resolve('@portfolio-engine/editorial-theme');
-    // entry = .../editorial-theme/src/index.ts (or .js)
-    // Two levels up: file → src/ → package root, then re-enter src/pages.
-    return resolve(entry, '..', '..', 'src', 'pages');
+    // entry resolves to the package's exports entrypoint:
+    //   workspace: .../editorial-theme/src/index.ts  → one up = src/ → pages/
+    //   published:  .../editorial-theme/dist/index.js → one up = dist/ → pages/
+    // This intentionally uses the entry's own directory so that the pages
+    // directory is co-located with the entrypoint (src/pages or dist/pages).
+    return resolve(entry, '..', 'pages');
   } catch {
+    // Fallback for unusual layouts — assumes a normally-built published package.
     return resolve(
       projectRootDir,
       'node_modules',
       '@portfolio-engine',
       'editorial-theme',
-      'src',
+      'dist',
       'pages',
     );
   }

@@ -1,0 +1,58 @@
+name: Feature request
+description: Propose a reusable upstream capability
+title: '[Feature]: '
+labels:
+  - task:feat
+  - source:human
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Target area
+      options:
+        - schema
+        - engine-core
+        - editorial-theme
+        - admin-tools
+        - workflow-kit
+        - demo-site
+        - docs
+        - governance/safety
+        - unknown
+    validations:
+      required: true
+  - type: textarea
+    id: need
+    attributes:
+      label: User need
+      description: What should users be able to do?
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current workaround
+      description: How would someone do this today, if at all?
+  - type: checkboxes
+    id: local_layers
+    attributes:
+      label: Could this be solved downstream?
+      options:
+        - label: I considered content.
+        - label: I considered config.
+        - label: I considered context.
+        - label: I considered overrides.
+        - label: I considered consumer registry.
+        - label: Upstream package change is still required.
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: Non-goals
+  - type: textarea
+    id: examples
+    attributes:
+      label: Example usage or API sketch

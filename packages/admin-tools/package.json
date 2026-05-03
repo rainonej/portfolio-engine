@@ -1,6 +1,7 @@
 {
   "name": "@portfolio-engine/admin-tools",
-  "version": "0.0.1",
+  "private": true,
+  "version": "0.0.3",
   "description": "Admin and reviewer UI components for portfolio-engine sites",
   "type": "module",
   "exports": {

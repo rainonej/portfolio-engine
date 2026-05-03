@@ -10,6 +10,8 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,6 +29,15 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Require npm publish token
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "${NPM_TOKEN}" ]; then
+            echo '::error::Repository secret NPM_TOKEN is not set. Add an npm automation token under Settings → Secrets and variables → Actions (see docs/workflows/release-workflow.md).'
+            exit 1
+          fi
 
       - name: Create release PR or publish
         uses: changesets/action@v1

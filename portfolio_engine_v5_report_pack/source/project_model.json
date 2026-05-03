@@ -1,0 +1,535 @@
+{
+  "version": "v5",
+  "generated": "2026-04-30",
+  "title": "Portfolio Engine Target Architecture Audit and Roadmap",
+  "packages": [
+    {
+      "name": "@portfolio-engine/schema",
+      "kind": "required runtime",
+      "language": "TypeScript / Zod",
+      "mvp": true,
+      "dependsOn": [],
+      "purpose": "Shared schemas and validation contracts for config, content, context, and future registry data."
+    },
+    {
+      "name": "@portfolio-engine/engine-core",
+      "kind": "required runtime",
+      "language": "TypeScript / Astro integration",
+      "mvp": true,
+      "dependsOn": ["@portfolio-engine/schema"],
+      "purpose": "Config loading, route injection, virtual modules, override resolution, manifests, and generic runtime contracts."
+    },
+    {
+      "name": "@portfolio-engine/editorial-theme",
+      "kind": "required runtime",
+      "language": "Astro / TypeScript / CSS",
+      "mvp": true,
+      "dependsOn": ["@portfolio-engine/engine-core", "@portfolio-engine/schema"],
+      "purpose": "The actual site theme: layouts, routes, components, styles, and public editorialTheme(...) API."
+    },
+    {
+      "name": "@portfolio-engine/admin-tools",
+      "kind": "optional UI package",
+      "language": "Astro / TypeScript",
+      "mvp": false,
+      "dependsOn": ["required runtime packages", "manifest", "schemas"],
+      "purpose": "Rendered admin/reviewer UI so nontechnical consumers can edit content, config, context, assets, and registry entries without looking at code. Extracted from profesional_site/agreni-site — not a greenfield build."
+    },
+    {
+      "name": "portfolio-engine-workflow-kit",
+      "kind": "optional AI tooling",
+      "language": "Python / MCP",
+      "mvp": false,
+      "dependsOn": ["consumer layout contract", "manifest"],
+      "purpose": "Local MCP server exposing tools to Claude/Copilot: inspect_site, plan_request, validate_plan, plan_upstream, patch_ledger."
+    }
+  ],
+  "mvpDefinition": "v5 defines Backbone MVP (after Phase 3): runtime buildability, consumer layout contract, override bridge when advertised, MVP documentation; workspace-link allowed if docs are clear. Product MVP (after Phase 4): agreni-site and jordan-site as clean private consumers on semver/npm unless an explicit documented exception applies. Registries, admin-tools, workflow-kit, bootstrap, and advanced automation are post–Product-MVP.",
+  "productTracks": [
+    { "id": "A", "name": "Runtime engine", "summary": "schema, engine-core, editorial-theme" },
+    { "id": "B", "name": "Demo-site", "summary": "reference consumer and teaching surface" },
+    {
+      "id": "C",
+      "name": "agreni-site",
+      "summary": "first real private consumer (nontechnical workflow)"
+    },
+    {
+      "id": "D",
+      "name": "jordan-site",
+      "summary": "second real consumer (different brand/content goals)"
+    },
+    { "id": "E", "name": "admin-tools", "summary": "optional editing UI" },
+    { "id": "F", "name": "workflow-kit", "summary": "optional Python/MCP agent tools" },
+    {
+      "id": "G",
+      "name": "Governance and safety",
+      "summary": "legal, labels, board, contribution safety, docs"
+    }
+  ],
+  "mvpMilestones": {
+    "backboneMvp": "After Phase 3 — engine stable: packages build, layout contract proven, MVP docs complete, override bridge if advertised.",
+    "productMvp": "After Phase 4 — agreni-site and jordan-site exist as clean private repos consuming published packages (or documented exception)."
+  },
+  "phases": [
+    {
+      "number": 0,
+      "title": "Planning, governance, and debt visibility",
+      "description": "Coordinate the v5 audit framing, reconcile the live GitHub board, set the legal and contribution foundation, and standardize the `area:*` and `agent:*` labels that gate AI-assisted work.",
+      "motivation": "Without an agreed path, a license, governance docs, and machine-readable labels, downstream work duplicates effort and AI contributions become risky. Phase 0 is the prerequisite that lets every other phase proceed with confidence.",
+      "products": ["G"],
+      "owners": ["human-dev", "agentic-ai"],
+      "areas": ["governance", "docs", "safety"],
+      "epics": [
+        { "slug": "meta-roadmap" },
+        { "slug": "label-taxonomy" },
+        { "slug": "governance-legal" }
+      ]
+    },
+    {
+      "number": 1,
+      "title": "Runtime backbone buildability",
+      "description": "Stabilize schema, engine-core, editorial-theme, CI, and Vercel; replace no-op build scripts with real ones so the required packages are actually buildable.",
+      "motivation": "The runtime is the core product. Without a buildable, type-checked, CI-verified backbone, no consumer can use the engine and no later phase has solid ground.",
+      "products": ["A", "B"],
+      "owners": ["agentic-ai", "human-dev"],
+      "areas": ["schema", "engine-core", "editorial-theme", "demo-site", "ci", "release"],
+      "epics": [
+        { "slug": "runtime-buildability" },
+        { "slug": "package-publishing", "scope": "build scripts only" }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Consumer layout contract, publish, demo migration",
+      "description": "Define the preferred consumer layout (`src/config`, `src/content`, `src/context`, `src/overrides`, `public`, `.portfolio-engine`), migrate demo-site to it, and publish the first engine packages so agreni-site can consume them via semver.",
+      "motivation": "The repo layout is the contract for nontechnical site-owners and AI agents. Publishing locks in the boundary between upstream packages and consumer repos so Product MVP can consume real versioned dependencies.",
+      "products": ["A", "B", "C", "D", "E", "F"],
+      "owners": ["agentic-ai", "human-dev", "simple-ai"],
+      "areas": ["downstream", "docs", "engine-core", "schema", "demo-site", "release"],
+      "epics": [
+        { "slug": "consumer-layout" },
+        { "slug": "package-publishing", "scope": "publish + agreni semver wiring" },
+        { "slug": "demo-showcase", "scope": "migrate demo-site + folder READMEs" }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Override proof and MVP documentation",
+      "description": "Land the named override bridge end-to-end (Hero + custom CSS) when overrides are advertised, and ship MVP-level documentation: README, downstream consumption, two-mode docs (workspace vs semver), CONTRIBUTING basics.",
+      "motivation": "Backbone MVP is both code-stable and documentation-complete. Without override proof and clear consumption docs, consumers cannot adopt the engine and Product MVP cannot be validated.",
+      "products": ["A", "B", "C", "D", "G"],
+      "owners": ["agentic-ai"],
+      "areas": ["editorial-theme", "engine-core", "demo-site", "docs"],
+      "epics": [{ "slug": "override-bridge" }, { "slug": "mvp-docs" }]
+    },
+    {
+      "milestone": "Backbone MVP",
+      "after": 3,
+      "summary": "Engine stable enough to serve real consumer repos. Packages build, layout contract proven, override bridge demonstrated when advertised, MVP docs complete."
+    },
+    {
+      "number": 4,
+      "title": "First consumer products: agreni-site and jordan-site",
+      "description": "Deliver agreni-site and jordan-site as clean private consumer repos on the target layout, consuming published packages (or documented exception). Migrate or author content/config/context, verify build and preview.",
+      "motivation": "Two distinct real products at MVP reduce the risk that the backbone only works for one site. Success proves the engine works outside the monorepo.",
+      "products": ["C", "D"],
+      "owners": ["agentic-ai", "human-dev"],
+      "areas": ["downstream", "workflow-kit"],
+      "epics": [{ "slug": "agreni-site-mvp" }, { "slug": "jordan-site-mvp" }]
+    },
+    {
+      "milestone": "Product MVP",
+      "after": 4,
+      "summary": "Two real products (agreni-site + jordan-site) validate the engine end-to-end against the consumer layout contract and published packages."
+    },
+    {
+      "number": 5,
+      "title": "Registries and manifest",
+      "description": "Move route metadata and supported override surfaces into explicit registries; generate `.portfolio-engine/manifest.json`; ship default registries inside `schema`, `engine-core`, and `editorial-theme`.",
+      "motivation": "Capabilities are currently implicit (hardcoded route lists, component trees). Explicit registries are machine-readable contracts for agents, admin-tools, and workflow-kit.",
+      "products": ["A", "B", "E", "F"],
+      "owners": ["agentic-ai", "human-dev"],
+      "areas": ["schema", "engine-core", "editorial-theme", "safety"],
+      "epics": [{ "slug": "registries-manifest" }]
+    },
+    {
+      "number": 6,
+      "title": "Admin-tools extraction",
+      "description": "Extract the existing admin UI from the profesional_site/agreni-site codebase into the `@portfolio-engine/admin-tools` package. Not a greenfield build — most MVP admin features already exist and just need packaging.",
+      "motivation": "Admin-tools is the intended content editing path for agreni-site (replacing Pages CMS). Extracting first reduces risk of building on top of an unfinished foundation.",
+      "products": ["C", "E"],
+      "owners": ["agentic-ai", "human-dev"],
+      "areas": ["admin-tools"],
+      "epics": [{ "slug": "admin-tools" }]
+    },
+    {
+      "number": 7,
+      "title": "Consumer extension registry",
+      "description": "Add the consumer-owned registry as the middle ground between content/config and upstream changes; allow local pages, embeds, and components without editing package internals.",
+      "motivation": "Consumers should declare local reusable pages and embeds without editing upstream packages or paying the upstream review cost.",
+      "products": ["A", "B", "C", "D", "E", "F"],
+      "owners": ["agentic-ai", "human-dev"],
+      "areas": ["consumer-registry", "editorial-theme", "demo-site"],
+      "epics": [{ "slug": "consumer-registry" }]
+    },
+    {
+      "number": 8,
+      "title": "Python/MCP workflow-kit",
+      "description": "Build the optional Python package exposing MCP tools to Claude/Copilot: `inspect_site`, `plan_request`, `validate_plan`, `plan_upstream`, `patch_ledger`.",
+      "motivation": "Consumer agents should not manually run terminal commands or guess repo structure. They should call provider-neutral tools through MCP.",
+      "products": ["C", "D", "F", "G"],
+      "owners": ["agentic-ai"],
+      "areas": ["workflow-kit"],
+      "epics": [{ "slug": "workflow-kit" }]
+    },
+    {
+      "number": 9,
+      "title": "Consumer bootstrap and setup",
+      "description": "Ship a setup script that bootstraps a consumer repo from scratch — required runtime files, optional MCP setup, printed Vercel/GitHub guidance, dry-run support.",
+      "motivation": "Nontechnical adopters should not have to manually wire a multi-language project. A bootstrap script reduces the barrier to adoption and ensures the layout contract is followed from day one.",
+      "products": ["C", "D", "F", "G"],
+      "owners": ["agentic-ai", "human-dev"],
+      "areas": ["downstream", "workflow-kit", "docs"],
+      "epics": [{ "slug": "consumer-bootstrap" }]
+    },
+    {
+      "number": 10,
+      "title": "Demo-site product showcase expansion",
+      "description": "Build teaching pages on the demo-site that show how config, content, context, overrides, registry, and the MCP workflow-kit work, with rendered result and source snippets side by side.",
+      "motivation": "Demo-site teaches consumers and agents how to use every layer. Conflating this with the Backbone MVP CI role caused scope creep, so showcase work is deferred until after Product MVP.",
+      "products": ["B"],
+      "owners": ["agentic-ai"],
+      "areas": ["demo-site", "workflow-kit", "docs"],
+      "epics": [{ "slug": "demo-showcase", "scope": "post-MVP showcase tickets only" }]
+    },
+    {
+      "number": 11,
+      "title": "Contribution safety and admin publishing",
+      "description": "Add layer-boundary guards, AI review prompts, and public-safe planner workflows for consumer-originated PRs; expose preview/public publishing concepts in admin-tools (branch model, Vercel setup, optional cadence schema).",
+      "motivation": "Once consumers and their agents start contributing upstream, PRs need to be safe and reviewable. Nontechnical site-owners need clear preview vs production semantics so they don't accidentally publish.",
+      "products": ["C", "D", "E", "G"],
+      "owners": ["agentic-ai", "human-dev"],
+      "areas": ["safety", "ci", "admin-tools", "vercel", "docs", "schema"],
+      "epics": [{ "slug": "contribution-safety" }, { "slug": "admin-publishing" }]
+    }
+  ],
+  "boardRepos": [
+    {
+      "repo": "rainonej/portfolio-engine",
+      "openIssues": 14,
+      "description": "Phase 1 sprint tail — active engineering work, all MVP-required"
+    },
+    {
+      "repo": "rainonej/agreni-site",
+      "openIssues": 7,
+      "description": "Phase 4 Product MVP — consumer repo; aligns with report Epics 8 and 4"
+    },
+    {
+      "repo": "rainonej/profesional_site",
+      "openIssues": 40,
+      "description": "Origin monorepo — contains parent epics 4–10, old Epic 8 (obsolete), site-owner content tasks (blocked on Agreni), and governance tasks"
+    }
+  ],
+  "currentIssuesToReconcile": {
+    "portfolio-engine": [
+      {
+        "id": "#16",
+        "title": "Fix editorial-theme pnpm check + TypeScript",
+        "phase": "Phase 1",
+        "mvp": true,
+        "disposition": "Keep — critical blocker"
+      },
+      {
+        "id": "#28",
+        "title": "CI: Staged workflow lint → check → build",
+        "phase": "Phase 1",
+        "mvp": true,
+        "disposition": "Keep"
+      },
+      {
+        "id": "#29",
+        "title": "CI: astro check + demo-site build",
+        "phase": "Phase 1",
+        "mvp": true,
+        "disposition": "Keep"
+      },
+      {
+        "id": "#30",
+        "title": "ESLint + Prettier docs",
+        "phase": "Phase 1",
+        "mvp": true,
+        "disposition": "Keep"
+      },
+      {
+        "id": "#31",
+        "title": "Vercel: Connect portfolio-engine repo",
+        "phase": "Phase 1",
+        "mvp": true,
+        "disposition": "Keep — human required"
+      },
+      {
+        "id": "#32",
+        "title": "Docs: Root README + board links",
+        "phase": "Phase 1",
+        "mvp": true,
+        "disposition": "Keep"
+      },
+      {
+        "id": "#33",
+        "title": "editorial-theme: PostCSS Tailwind",
+        "phase": "Phase 1",
+        "mvp": true,
+        "disposition": "Keep"
+      },
+      {
+        "id": "#34",
+        "title": "Vercel: Optional CLI deploy/preview bot",
+        "phase": "Phase 9",
+        "mvp": false,
+        "disposition": "Defer — add mvp:post label"
+      },
+      {
+        "id": "#35",
+        "title": "Docs: GitHub Project docs ported",
+        "phase": "Phase 0",
+        "mvp": false,
+        "disposition": "Verify done → close"
+      },
+      {
+        "id": "#36",
+        "title": "Copilot: Rulesets for PRs into dev/epic/*",
+        "phase": "Phase 7",
+        "mvp": false,
+        "disposition": "Defer — add mvp:post label"
+      },
+      {
+        "id": "#37",
+        "title": "Copilot: Document PR feedback loop",
+        "phase": "Phase 7",
+        "mvp": false,
+        "disposition": "Defer — add mvp:post label"
+      },
+      {
+        "id": "#38",
+        "title": "theme: PR #17 follow-ups (base URL + schema)",
+        "phase": "Phase 1",
+        "mvp": true,
+        "disposition": "Keep"
+      },
+      {
+        "id": "#40",
+        "title": "Vercel: Update demo-site config baseUrl",
+        "phase": "Phase 1",
+        "mvp": true,
+        "disposition": "Keep"
+      },
+      {
+        "id": "#41",
+        "title": "Docs: Add live demo badge",
+        "phase": "Phase 1",
+        "mvp": true,
+        "disposition": "Keep"
+      }
+    ],
+    "agreni-site": [
+      {
+        "id": "#1",
+        "title": "Task 5.5 — Reconnect secrets, integrations, deployments",
+        "phase": "Phase 2+",
+        "mvp": false,
+        "disposition": "Keep — human required (Vercel/GitHub secrets)"
+      },
+      {
+        "id": "#2",
+        "title": "Epic 5 — Scaffold and Populate agreni-site",
+        "phase": "Phase 2+",
+        "mvp": false,
+        "disposition": "Keep — parent epic"
+      },
+      {
+        "id": "#3",
+        "title": "Task 5.3 — Wire to local workspace/path packages",
+        "phase": "Phase 2+",
+        "mvp": false,
+        "disposition": "Keep"
+      },
+      {
+        "id": "#4",
+        "title": "Task 5.1 — Scaffold agreni-site repo structure",
+        "phase": "Phase 2+",
+        "mvp": false,
+        "disposition": "Keep"
+      },
+      {
+        "id": "#5",
+        "title": "Task 5.6 — Post-split parity verification",
+        "phase": "Phase 2+",
+        "mvp": false,
+        "disposition": "Keep"
+      },
+      {
+        "id": "#6",
+        "title": "Task 5.4 — Preserve preview/auth/admin behavior",
+        "phase": "Phase 2+",
+        "mvp": false,
+        "disposition": "Keep"
+      },
+      {
+        "id": "#7",
+        "title": "Task 5.2 — Migrate all Agreni content/config/media",
+        "phase": "Phase 2+",
+        "mvp": false,
+        "disposition": "Keep — depends on consumer layout finalized"
+      }
+    ],
+    "profesional_site": {
+      "epicFourTasks_done": [
+        {
+          "id": "#175",
+          "title": "Epic 4 — Extract editorial-theme",
+          "disposition": "Close or archive — extraction complete"
+        },
+        {
+          "id": "#209",
+          "title": "Task 4.1 — Port layouts/components/styles",
+          "disposition": "Done — close with reference to portfolio-engine"
+        },
+        {
+          "id": "#210",
+          "title": "Task 4.2 — Port page routes",
+          "disposition": "Done — close with reference to portfolio-engine"
+        },
+        {
+          "id": "#211",
+          "title": "Task 4.3 — Theme consumes engine-core modules",
+          "disposition": "Done — close with reference to portfolio-engine"
+        },
+        {
+          "id": "#212",
+          "title": "Task 4.4 — Define first-party override points",
+          "disposition": "Done — close with reference to portfolio-engine"
+        },
+        {
+          "id": "#213",
+          "title": "Task 4.5 — Create examples/demo-site",
+          "disposition": "Done — close with reference to portfolio-engine"
+        }
+      ],
+      "epicSix_packagePublishing": [
+        {
+          "id": "#177",
+          "title": "Epic 6 — Publish and Stabilize Package Consumption",
+          "reportEpic": "package-publishing",
+          "disposition": "Keep — maps to package-publishing epic"
+        },
+        {
+          "id": "#219",
+          "title": "Task 6.1 — Publish first engine packages to npm",
+          "reportEpic": "package-publishing (Publish first engine packages to npm)",
+          "disposition": "Keep"
+        },
+        {
+          "id": "#220",
+          "title": "Task 6.2 — Switch agreni-site to semver packages",
+          "reportEpic": "package-publishing (Validate agreni-site can consume) / agreni-site-mvp",
+          "disposition": "Keep"
+        },
+        {
+          "id": "#221",
+          "title": "Task 6.3 — Document two development modes",
+          "reportEpic": "package-publishing (Document two development modes) / mvp-docs",
+          "disposition": "Keep"
+        },
+        {
+          "id": "#222",
+          "title": "Task 6.4 — Add basic package upgrade workflow",
+          "reportEpic": "package-publishing (Add basic package upgrade workflow) / agreni-site-mvp",
+          "disposition": "Keep"
+        }
+      ],
+      "epicSeven_adminTools": [
+        {
+          "id": "#178",
+          "title": "Epic 7 — Extract Admin Tools + Generated Site Map",
+          "reportEpic": "admin-tools",
+          "disposition": "Keep — maps to report admin-tools epic"
+        },
+        {
+          "id": "#223",
+          "title": "Task 7.1 — Extract admin/reviewer UI into admin-tools",
+          "reportEpic": "admin-tools (Update admin-tools docs for target layout)",
+          "disposition": "Keep — Phase 6"
+        },
+        {
+          "id": "#224",
+          "title": "Task 7.2 — Generate site map from route registry",
+          "reportEpic": "admin-tools",
+          "disposition": "Keep — Phase 6"
+        },
+        {
+          "id": "#225",
+          "title": "Task 7.3 — Add content/config inspection panels",
+          "reportEpic": "admin-tools",
+          "disposition": "Keep — Phase 6"
+        }
+      ],
+      "epicEight_obsolete": [
+        {
+          "id": "#179",
+          "title": "Epic 8 — Build workflow-kit MVP (old GitHub Actions)",
+          "reportEpic": "workflow-kit",
+          "disposition": "Re-scope: update to reference ADR-002 and link to workflow-kit epic"
+        },
+        {
+          "id": "#226",
+          "title": "Task 8.1 — Define workflow classification contract",
+          "reportEpic": "workflow-kit",
+          "disposition": "Re-scope: rephrase as MCP tool contracts"
+        },
+        {
+          "id": "#227",
+          "title": "Task 8.2 — Package reusable GitHub workflow templates",
+          "disposition": "Close — old approach, replaced by Python/MCP"
+        },
+        {
+          "id": "#228",
+          "title": "Task 8.3 — Add engine-aware classifier",
+          "disposition": "Close — old approach, replaced by inspect_site and plan_request"
+        },
+        {
+          "id": "#229",
+          "title": "Task 8.4 — Add downstream-to-upstream routing contract",
+          "reportEpic": "workflow-kit (Implement plan_upstream)",
+          "disposition": "Re-scope: concept valid, implementation is plan_upstream MCP tool"
+        }
+      ],
+      "siteOwnerContent_separateTrack": [
+        {
+          "id": "#35",
+          "title": "Site owner: positioning and copy",
+          "disposition": "Separate launch track — blocked on Agreni"
+        },
+        {
+          "id": "#36",
+          "title": "Content for blog and testimonials",
+          "disposition": "Separate launch track — blocked on Agreni"
+        },
+        {
+          "id": "#37",
+          "title": "Replace placeholder copy and booking URL",
+          "disposition": "Separate launch track — blocked on Agreni"
+        },
+        {
+          "id": "#40",
+          "title": "Site owner: provide real booking URL",
+          "disposition": "Separate launch track — blocked on Agreni"
+        },
+        {
+          "id": "#41",
+          "title": "Launch content (site owner)",
+          "disposition": "Separate launch track — blocked on Agreni"
+        }
+      ]
+    }
+  }
+}

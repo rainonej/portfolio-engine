@@ -1,7 +1,7 @@
 {
   "name": "demo-site",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Example Astro site consuming @portfolio-engine/editorial-theme",
   "type": "module",
   "scripts": {

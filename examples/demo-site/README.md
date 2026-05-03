@@ -49,3 +49,5 @@ Recommended **Option A** (pnpm workspace–friendly):
 6. **Production branch:** `main` (or your release branch). **Preview:** all other branches and PRs (including `dev`) so every push gets a URL.
 
 If you instead set Root Directory to `examples/demo-site`, you must run install from the monorepo root (e.g. custom install command); Option A avoids that foot-gun.
+
+**Standalone downstream repo** (separate Git project, e.g. `agreni-site`): Vercel root is that repo’s root, `pnpm build`, and branch rules are the same idea (`main` = production, `dev` / PRs = previews). See **[`docs/downstream/consumption.md` § Vercel (standalone consumer repo)](../../docs/downstream/consumption.md#vercel-standalone-consumer-repo)**.

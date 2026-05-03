@@ -1,14 +1,15 @@
 {
   "name": "@portfolio-engine/schema",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "Shared Zod schemas for portfolio-engine content and config",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./src/*": "./src/*"
   },
   "scripts": {
-    "build": "echo 'build not yet configured'",
-    "dev": "echo 'dev not yet configured'",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "check": "tsc --noEmit"
   },
   "dependencies": {
