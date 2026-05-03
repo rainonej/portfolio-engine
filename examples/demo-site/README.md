@@ -1,6 +1,6 @@
 # demo-site
 
-Reference **Astro consumer** for [`@portfolio-engine/editorial-theme`](../../packages/editorial-theme/). It proves the integration end-to-end and mirrors how **agreni-site** / **jordan-site** should wire config, content, and `astro.config.mjs`.
+Reference **Astro consumer** for [`@portfolio-engine/editorial-theme`](../../packages/editorial-theme/). It proves integration end-to-end, including named overrides, explicit route/override registries, generated manifest output, and admin tooling.
 
 ## What you own vs the theme
 
@@ -30,6 +30,10 @@ pnpm --filter demo-site run build
 ```
 
 Build output: `examples/demo-site/dist/` (**SSR** via `@astrojs/node` so `/admin` and `/api/auth/*` work). Open `http://localhost:4321/admin` after `pnpm --filter demo-site dev` (dev bypass skips GitHub; see `.env.example` for OAuth).
+
+Each build also generates `.portfolio-engine/manifest.json` in the demo-site root, including resolved route registry entries and named override surfaces.
+
+The demo intentionally passes **custom registry metadata** (`agentGuidance`, `guidance`, `docsUrl`) through `editorialTheme({ registries })` in `astro.config.mjs` to exercise the registry + manifest contract directly.
 
 ## Checks
 

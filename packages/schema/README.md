@@ -11,4 +11,4 @@ See [`docs/packages/schema.md`](../../docs/packages/schema.md) for architecture 
 
 ## Status
 
-Under development — Epic 3.
+Active runtime package used by `engine-core`/`editorial-theme`, including manifest-related registry types (`RouteRegistryEntry`, `OverrideSurfaceEntry`, `EngineManifest`).

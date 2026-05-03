@@ -11,4 +11,4 @@ See [`docs/packages/workflow-kit.md`](../../docs/packages/workflow-kit.md) for a
 
 ## Status
 
-Deferred — Epic 8 (after Epics 3–6 complete).
+Scaffold package only. The npm workspace/package exists and typechecks, but runtime workflow templates and MCP tooling are not implemented yet.

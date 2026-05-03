@@ -2,7 +2,7 @@
 
 Reusable GitHub Actions workflow templates and AI change classifier for portfolio-engine downstream sites.
 
-## Planned capabilities
+## Planned capabilities (target)
 
 **Workflow classification contract** — classifies changes in a consumer site into one of:
 
@@ -21,7 +21,4 @@ Reusable GitHub Actions workflow templates and AI change classifier for portfoli
 
 ## Status
 
-Deferred — Epic 8. Requires:
-
-- Epic 3 (route registry — Task 3.6)
-- Epic 4 (override surfaces — Task 4.4)
+Scaffold-stage package is present in the workspace as `@portfolio-engine/workflow-kit`, but the workflow templates/classifier server described above are still planned work.
