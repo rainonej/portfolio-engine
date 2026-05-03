@@ -10,7 +10,6 @@ Admin and reviewer UI for portfolio-engine sites.
 
 ## Status
 
-Deferred — Epic 7. Requires:
+**Shipped (v0):** `adminTools()` Astro integration — `/admin` read-only dashboard (engine virtual modules + content collections) and `/api/auth/*` GitHub OAuth. See [`packages/admin-tools/README.md`](../../packages/admin-tools/README.md) and `examples/demo-site/astro.config.mjs`.
 
-- Epic 5 (agreni-site consumer working, auth/admin behaviour preserved)
-- Epic 3 (route registry contract — Task 3.6)
+**Next:** Port GitHub Contents `/api/content` and in-browser editors from `professional_site` (Epic 7).
