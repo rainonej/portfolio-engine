@@ -63,7 +63,7 @@ Use this when the consumer site is its **own Git repository** (for example `agre
    | **Build Command**    | `pnpm build`                                                                                                                                                                                                                                                                 |
    | **Output Directory** | Leave default when using [`@astrojs/vercel`](https://docs.astro.build/en/guides/integrations-guide/vercel/) — the adapter emits the correct serverless output. Do **not** point only at `dist` unless you know you are shipping a fully static export with no server routes. |
 
-4. **Node.js version:** **22.x** in **Project → Settings → General** (matches common Vercel serverless runtimes and reduces “works on my machine” drift).
+4. **Node.js version:** **22.x** in **Project → Settings → General** (matches common Vercel serverless runtimes and reduces "works on my machine" drift).
 
 ### Production on `main`, previews on `dev`
 
@@ -73,7 +73,7 @@ Use this when the consumer site is its **own Git repository** (for example `agre
 
 ### Canonical site URL (`SITE_URL`)
 
-Astro’s top-level `site` option drives canonical URLs and Open Graph metadata. Recommended pattern in the consumer’s `astro.config.mjs`:
+Astro's top-level `site` option drives canonical URLs and Open Graph metadata. Recommended pattern in the consumer's `astro.config.mjs`:
 
 ```js
 const site =
@@ -91,7 +91,7 @@ Redeploy after changing environment variables so builds pick them up.
 
 ### OAuth and server routes
 
-If the consumer exposes **GitHub OAuth**, **session cookies**, or **API routes** under `/api/*` or `/admin`, add [`@astrojs/vercel`](https://docs.astro.build/en/guides/integrations-guide/vercel/) (or your host’s adapter) and configure `output` / adapter per Astro’s hybrid/server docs.
+If the consumer exposes **GitHub OAuth**, **session cookies**, or **API routes** under `/api/*` or `/admin`, add [`@astrojs/vercel`](https://docs.astro.build/en/guides/integrations-guide/vercel/) (or your host's adapter) and configure `output` / adapter per Astro's hybrid/server docs.
 
 **GitHub OAuth app:** register **authorization callback URLs** for every origin users will hit—at minimum production **and** preview origins (each preview deployment has its own hostname unless you use a stable preview domain). Without preview callbacks, sign-in from a Preview deployment will fail after redirect.
 
@@ -102,7 +102,7 @@ If your site uses environment variables such as `CONTENT_BRANCH` for GitHub Cont
 - **Production** env → branch that backs the live site (often `main`).
 - **Preview** env → staging branch (often `dev`) so preview deployments do not edit production-tracked files.
 
-Your consumer repo’s own `README` or `docs/setup.md` should list the exact secrets and names for that deployment.
+Your consumer repo's own `README` or `docs/setup.md` should list the exact secrets and names for that deployment.
 
 ## Workspace-link mode (monorepo contributor)
 
@@ -154,38 +154,38 @@ Overrides are **not** picked up from disk automatically. Pass an `overrides` obj
 
 ### Supported surfaces
 
-| Surface name | Upstream implementation | Props passed |
-|---|---|---|
-| `Hero` | `HeroSection.astro` | `person`, `bookingUrl`, `pillars`, `base`, `tagline?` |
-| `FeaturedWriting` | `FeaturedWritingSection.astro` | `writings`, `base` |
-| `TestimonialSection` | `TestimonialSection.astro` | `testimonials` |
-| `CollaborationSection` | `CollaborationSection.astro` | `bookingUrl`, `base` |
-| `Footer` | `Footer.astro` | `base` |
+| Surface name           | Upstream implementation        | Props passed                                          |
+| ---------------------- | ------------------------------ | ----------------------------------------------------- |
+| `Hero`                 | `HeroSection.astro`            | `person`, `bookingUrl`, `pillars`, `base`, `tagline?` |
+| `FeaturedWriting`      | `FeaturedWritingSection.astro` | `posts`, `base`                                       |
+| `TestimonialSection`   | `TestimonialSection.astro`     | `testimonials`                                        |
+| `CollaborationSection` | `CollaborationSection.astro`   | `base`, `ctaBody?`                                    |
+| `Footer`               | `Footer.astro`                 | `adminHref`, `siteTitle`                              |
 
 The surface **name** (e.g. `Hero`) is the stable contract key. The upstream implementation file it replaces (e.g. `HeroSection.astro`) is an internal detail that may be renamed. Your override file receives the props listed above and is rendered in place of the default implementation.
 
-You may also pass `styles` (array of CSS file paths) to append extra CSS after the theme’s global styles — useful for custom properties or utility overrides without replacing a component.
+You may also pass `styles` (array of CSS file paths) to append extra CSS after the theme's global styles — useful for custom properties or utility overrides without replacing a component.
 
 ### Wiring overrides
 
 **Example — `astro.config.mjs`:**
 
 ```js
-import { defineConfig } from ‘astro/config’;
-import { editorialTheme } from ‘@portfolio-engine/editorial-theme’;
+import { defineConfig } from 'astro/config';
+import { editorialTheme } from '@portfolio-engine/editorial-theme';
 
 export default defineConfig({
   integrations: [
     editorialTheme({
-      siteConfigPath: ‘./src/config/site.json’,
-      navigationConfigPath: ‘./src/config/navigation.json’,
-      themeConfigPath: ‘./src/config/theme.json’,
-      featuresConfigPath: ‘./src/config/features.json’,
+      siteConfigPath: './src/config/site.json',
+      navigationConfigPath: './src/config/navigation.json',
+      themeConfigPath: './src/config/theme.json',
+      featuresConfigPath: './src/config/features.json',
       overrides: {
         components: {
-          Hero: ‘./src/overrides/Hero.astro’,
+          Hero: './src/overrides/Hero.astro',
         },
-        styles: [‘./src/overrides/custom.css’],
+        styles: ['./src/overrides/custom.css'],
       },
     }),
   ],
