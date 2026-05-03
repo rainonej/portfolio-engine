@@ -7,7 +7,7 @@ The setup prompt asks Claude to strictly execute a **7-phase workflow**. In the 
 
 ## Mistakes Claude made
 
-## 1) Leaked internal chain-of-thought / process notes to the user
+### 1) Leaked internal chain-of-thought / process notes to the user
 **Observed behavior:** Claude outputs lines like:
 - “The user has pasted a portfolio site setup prompt. I need to follow the phases…”
 - “Let me check my memory…”
@@ -25,9 +25,9 @@ The setup prompt asks Claude to strictly execute a **7-phase workflow**. In the 
 
 ---
 
-## 2) Non-portable local memory path surfaced to user
+### 2) Non-portable local memory path surfaced to user
 **Observed behavior:**
-- “Read C:\Users\raino\.claude\projects\...\MEMORY.md” appears in transcript.
+- "Read `C:\Users\raino\.claude\projects\...\MEMORY.md`" appears in transcript.
 
 **Why this is a mistake:**
 - Leaks implementation details and local filesystem paths.
@@ -40,7 +40,7 @@ The setup prompt asks Claude to strictly execute a **7-phase workflow**. In the 
 
 ---
 
-## 3) Did not cleanly enforce “collect all at once” while still handling ambiguity
+### 3) Did not cleanly enforce “collect all at once” while still handling ambiguity
 **Observed behavior:**
 - Claude asked for all fields at once initially (good), but after user supplied a PDF and one audience override, Claude proceeded by inferring many fields and then asked three separate confirmations in a multi-part way.
 
@@ -55,7 +55,7 @@ The setup prompt asks Claude to strictly execute a **7-phase workflow**. In the 
 
 ---
 
-## 4) Tone handling was acknowledged but not operationalized
+### 4) Tone handling was acknowledged but not operationalized
 **Observed behavior:**
 - User said “Ignore the Tone stuff for now.” Claude accepted implicitly but continued generating copy options without explicitly recording a fallback tone strategy.
 
@@ -68,7 +68,7 @@ The setup prompt asks Claude to strictly execute a **7-phase workflow**. In the 
 
 ---
 
-## 5) Over-verbose self-narration reduced clarity
+### 5) Over-verbose self-narration reduced clarity
 **Observed behavior:**
 - Multiple “Let me…” and planning narration before substantive output.
 
@@ -83,7 +83,7 @@ The setup prompt asks Claude to strictly execute a **7-phase workflow**. In the 
 
 ---
 
-## 6) Missed opportunity to validate user-provided artifact format
+### 6) Missed opportunity to validate user-provided artifact format
 **Observed behavior:**
 - User pasted a PDF filename only (`Jordan_Rainone_Fundamental_standard_dense_resume (2).pdf`), and Claude proceeded as though resume contents were available.
 
@@ -98,7 +98,7 @@ The setup prompt asks Claude to strictly execute a **7-phase workflow**. In the 
 
 ---
 
-## 7) Spelling/quality control miss in user-derived text
+### 7) Spelling/quality control miss in user-derived text
 **Observed behavior:**
 - User input had typo (“descision makers”); assistant did not normalize or silently correct in its summary.
 
@@ -112,7 +112,7 @@ The setup prompt asks Claude to strictly execute a **7-phase workflow**. In the 
 
 ---
 
-## 8) Weak constraint reinforcement around phase boundaries
+### 8) Weak constraint reinforcement around phase boundaries
 **Observed behavior:**
 - Claude generally stayed in Phase 1, but the internal narration suggested future decisions and copy generation before user confirmation.
 
@@ -128,31 +128,31 @@ The setup prompt asks Claude to strictly execute a **7-phase workflow**. In the 
 
 ## Prompt/instruction weaknesses that contributed
 
-## A) No explicit prohibition against exposing internal reasoning
+### A) No explicit prohibition against exposing internal reasoning
 The prompt tells Claude *what to do* but not *how to communicate safely*.
 
 **Add:**
 - “Do not expose internal reasoning, tool logs, memory file paths, or planning notes. Provide only user-relevant outputs.”
 
-## B) “Ask one follow-up” is ambiguous when multiple fields are unresolved
+### B) “Ask one follow-up” is ambiguous when multiple fields are unresolved
 It does not clarify whether one follow-up can bundle multiple unresolved fields.
 
 **Add:**
 - “If multiple fields remain unclear, ask a **single consolidated follow-up message** listing all unresolved items with suggested defaults.”
 
-## C) No artifact-access rule for attached files
+### C) No artifact-access rule for attached files
 Prompt assumes Claude can read provided files.
 
 **Add:**
 - “If a referenced file is not accessible in-session, say so and request upload or pasted excerpts before inferring details.”
 
-## D) No default policy for skipped required fields
+### D) No default policy for skipped required fields
 User can say “ignore X for now,” but prompt doesn’t specify fallback behavior.
 
 **Add:**
 - “When a required field is deferred, apply a temporary default, label it clearly, and revisit at the designated later phase.”
 
-## E) No response format template per phase
+### E) No response format template per phase
 Without a rigid template, assistants may over-narrate.
 
 **Add:**
@@ -190,16 +190,16 @@ Use this as an addendum near the top of your master prompt:
 ---
 
 ## Example of a better Phase 1 response to this exact user turn
-“Great — I can use your resume details plus your audience note. I still need one confirmation bundle before Phase 2.
-
-Please approve or edit these:
-1) **Role:** Applied ML Scientist
-2) **Tagline:** PhD mathematician turned applied ML scientist — I help research ideas survive messy enterprise data.
-3) **Description:** I build multimodal ML systems and evaluation frameworks for teams that need research-grade rigor and production-ready software.
-4) **Pages:** Work, Writing, About, Contact (default)
-5) **Tone (temporary default):** Clear, professional, direct (we’ll refine in Phase 5)
-6) **Repo name:** jordan-site
-
-Reply with ‘approve’ or send edits inline. **Phase 1 incomplete** until this is confirmed.”
+> Great — I can use your resume details plus your audience note. I still need one confirmation bundle before Phase 2.
+>
+> Please approve or edit these:
+> 1) **Role:** Applied ML Scientist
+> 2) **Tagline:** PhD mathematician turned applied ML scientist — I help research ideas survive messy enterprise data.
+> 3) **Description:** I build multimodal ML systems and evaluation frameworks for teams that need research-grade rigor and production-ready software.
+> 4) **Pages:** Work, Writing, About, Contact (default)
+> 5) **Tone (temporary default):** Clear, professional, direct (we’ll refine in Phase 5)
+> 6) **Repo name:** jordan-site
+>
+> Reply with ‘approve’ or send edits inline. **Phase 1 incomplete** until this is confirmed.
 
 This keeps strict phase control, one consolidated follow-up, and clear completion criteria.
