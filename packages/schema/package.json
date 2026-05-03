@@ -1,6 +1,6 @@
 {
   "name": "@portfolio-engine/schema",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Shared Zod schemas for portfolio-engine content and config",
   "type": "module",
   "exports": {
