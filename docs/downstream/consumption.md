@@ -47,6 +47,63 @@ export default defineConfig({
 
 **Upgrade:** bump the version in `package.json` and run `pnpm install`. Pin to a specific minor to control when you pick up changes.
 
+## Vercel (standalone consumer repo)
+
+Use this when the consumer site is its **own Git repository** (for example `agreni-site`), not `examples/demo-site` inside this monorepo. Monorepo demo deploy is documented in **[`examples/demo-site/README.md`](../../examples/demo-site/README.md#vercel)** instead.
+
+### Connect the project
+
+1. In the Vercel dashboard, **Add New → Project** and import the consumer repository.
+2. **Root Directory:** the repository root (`.`). The Astro app, `package.json`, and `pnpm-lock.yaml` should live at that root.
+3. **Framework Preset:** Astro when auto-detected; otherwise set commands manually:
+
+   | Setting | Typical value |
+   |---------|----------------|
+   | **Install Command** | `pnpm install` |
+   | **Build Command** | `pnpm build` |
+   | **Output Directory** | Leave default when using [`@astrojs/vercel`](https://docs.astro.build/en/guides/integrations-guide/vercel/) — the adapter emits the correct serverless output. Do **not** point only at `dist` unless you know you are shipping a fully static export with no server routes. |
+
+4. **Node.js version:** **22.x** in **Project → Settings → General** (matches common Vercel serverless runtimes and reduces “works on my machine” drift).
+
+### Production on `main`, previews on `dev`
+
+1. **Settings → Git → Production Branch** → set to **`main`**. Pushes to `main` update the **production** deployment and your production domain.
+2. Keep a long-lived **`dev`** branch for staging. Pushes to **`dev`** (and to any other non-production branch, plus pull requests) create **Preview** deployments with their own `*.vercel.app` URLs.
+3. Typical flow: feature branches → PR into **`dev`** (preview per PR) → merge **`dev` → `main`** when you are ready to ship to production. One Vercel project is enough; you do not need a second project for staging.
+
+### Canonical site URL (`SITE_URL`)
+
+Astro’s top-level `site` option drives canonical URLs and Open Graph metadata. Recommended pattern in the consumer’s `astro.config.mjs`:
+
+```js
+const site =
+  process.env.SITE_URL ??
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined) ??
+  'https://your-fallback.example';
+```
+
+Then in Vercel **Environment variables**:
+
+- **Production:** set `SITE_URL` to the real public origin (for example `https://www.example.com` after you add a custom domain).
+- **Preview:** omit `SITE_URL` so previews use `https://${VERCEL_URL}` from the snippet above, unless you use a fixed preview hostname.
+
+Redeploy after changing environment variables so builds pick them up.
+
+### OAuth and server routes
+
+If the consumer exposes **GitHub OAuth**, **session cookies**, or **API routes** under `/api/*` or `/admin`, add [`@astrojs/vercel`](https://docs.astro.build/en/guides/integrations-guide/vercel/) (or your host’s adapter) and configure `output` / adapter per Astro’s hybrid/server docs.
+
+**GitHub OAuth app:** register **authorization callback URLs** for every origin users will hit—at minimum production **and** preview origins (each preview deployment has its own hostname unless you use a stable preview domain). Without preview callbacks, sign-in from a Preview deployment will fail after redirect.
+
+### Optional: branch-scoped CMS or content APIs
+
+If your site uses environment variables such as `CONTENT_BRANCH` for GitHub Contents API writes, scope them in Vercel:
+
+- **Production** env → branch that backs the live site (often `main`).
+- **Preview** env → staging branch (often `dev`) so preview deployments do not edit production-tracked files.
+
+Your consumer repo’s own `README` or `docs/setup.md` should list the exact secrets and names for that deployment.
+
 ## Workspace-link mode (monorepo contributor)
 
 Use this when you need to change engine packages and see results in a consumer site at the same time, without publishing to npm.

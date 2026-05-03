@@ -65,10 +65,10 @@ import { editorialTheme } from '@portfolio-engine/editorial-theme';
 export default defineConfig({
   integrations: [
     editorialTheme({
-      siteConfigPath: './config/site.json',
-      navigationConfigPath: './config/navigation.json',
-      themeConfigPath: './config/theme.json',
-      featuresConfigPath: './config/features.json',
+      siteConfigPath: './src/config/site.json',
+      navigationConfigPath: './src/config/navigation.json',
+      themeConfigPath: './src/config/theme.json',
+      featuresConfigPath: './src/config/features.json',
     }),
   ],
 });
@@ -76,13 +76,18 @@ export default defineConfig({
 
 See [`packages/editorial-theme/README.md`](packages/editorial-theme/README.md) for required config, collections, and overrides.
 
+**Setting up a new consumer site from scratch?** See **[`docs/downstream/new-site-setup.md`](docs/downstream/new-site-setup.md)** — step-by-step commands, all config file templates, content collection setup, Vercel wiring, and a ready-to-paste Claude bootstrap prompt.
+
+For **separate-repo** layout, semver vs. workspace-link, overrides, and **Vercel (production on `main`, previews on `dev`)**, see **[`docs/downstream/consumption.md`](docs/downstream/consumption.md)** — especially [§ Vercel (standalone consumer repo)](docs/downstream/consumption.md#vercel-standalone-consumer-repo).
+
 ## CI
 
 GitHub Actions runs **lint → typecheck → Astro check → build** on pushes to `main` / `dev` and on pull requests targeting `main`, `dev`, or `epic/*`. See [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
-## Vercel (demo site)
+## Vercel
 
-Deploy **`examples/demo-site`** by connecting this repository in Vercel with **root directory = repository root**, install `pnpm install`, build `pnpm --filter demo-site run build`, output **`examples/demo-site/dist`**. Production typically tracks **`main`**; **`dev`** and PRs get preview URLs. Details: [examples/demo-site/README.md](examples/demo-site/README.md#vercel).
+- **This monorepo (`examples/demo-site`):** connect **`rainonej/portfolio-engine`**, root = repo root, `pnpm install`, `pnpm --filter demo-site run build`, output `examples/demo-site/dist`. Production on **`main`**; **`dev`** and PRs → previews. Details: [examples/demo-site/README.md](examples/demo-site/README.md#vercel).
+- **A sibling consumer repo** (standalone site): follow **[`docs/downstream/consumption.md` § Vercel](docs/downstream/consumption.md#vercel-standalone-consumer-repo)** — root = that repo’s root, `pnpm build`, adapter/output as documented there.
 
 ## Issues and project board
 
