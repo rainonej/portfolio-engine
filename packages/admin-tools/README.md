@@ -29,7 +29,7 @@ export default defineConfig({
 });
 ```
 
-With `devBypass: true`, `pnpm astro dev` skips GitHub login and opens a **read-only** overview (site config, route tree, content counts). Remove `devBypass` for real OAuth.
+With `devBypass: true`, `pnpm astro dev` skips GitHub login and opens the dashboard with **local file writes enabled** — you can load/save files in `src/content`, `src/config`, `src/context`, `src/registry`, and `public/` directly. Remove `devBypass` for real OAuth (writes go through the GitHub Contents API in that mode).
 
 ## Production OAuth
 

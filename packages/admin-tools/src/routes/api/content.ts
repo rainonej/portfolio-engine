@@ -16,6 +16,7 @@ async function walk(dir: string, root: string): Promise<FileEntry[]> {
   const entries = await fs.readdir(dir, { withFileTypes: true });
   const out: FileEntry[] = [];
   for (const entry of entries) {
+    if (entry.isSymbolicLink()) continue;
     const abs = path.join(dir, entry.name);
     if (entry.isDirectory()) out.push(...(await walk(abs, root)));
     else {
@@ -27,12 +28,14 @@ async function walk(dir: string, root: string): Promise<FileEntry[]> {
 }
 
 function resolveAllowed(cwd: string, relativePath: string): string | null {
-  const clean = relativePath.replace(/^\/+/, '');
-  const allowedRoots = ['src/content/', 'src/config/', 'src/context/', 'src/registry/', 'public/'];
-  if (!allowedRoots.some((r) => clean.startsWith(r))) return null;
-  const abs = path.resolve(cwd, clean);
-  if (!abs.startsWith(path.resolve(cwd) + path.sep)) return null;
-  return abs;
+  const abs = path.resolve(cwd, relativePath.replace(/^\/+/, ''));
+  const cwdAbs = path.resolve(cwd);
+  const allowedRoots = ['src/content', 'src/config', 'src/context', 'src/registry', 'public'];
+  const allowed = allowedRoots.some((r) => {
+    const rootAbs = path.join(cwdAbs, r);
+    return abs === rootAbs || abs.startsWith(rootAbs + path.sep);
+  });
+  return allowed ? abs : null;
 }
 
 
@@ -64,12 +67,27 @@ export const GET: APIRoute = async ({ request, url }) => {
   if (file) {
     const abs = resolveAllowed(cwd, file);
     if (!abs) return Response.json({ error: 'Invalid file path' }, { status: 400, headers: NO_STORE });
-    try {
-      const content = await fs.readFile(abs, 'utf8');
-      return Response.json({ file, content }, { headers: NO_STORE });
-    } catch {
-      return Response.json({ error: 'Not found' }, { status: 404, headers: NO_STORE });
+    if (authed.devBypass) {
+      try {
+        const lstat = await fs.lstat(abs);
+        if (lstat.isSymbolicLink()) return Response.json({ error: 'Invalid file path' }, { status: 400, headers: NO_STORE });
+        const content = await fs.readFile(abs, 'utf8');
+        return Response.json({ file, content }, { headers: NO_STORE });
+      } catch {
+        return Response.json({ error: 'Not found' }, { status: 404, headers: NO_STORE });
+      }
     }
+    // OAuth mode: read from GitHub Contents API so this works on deployed servers
+    const owner = repoOwner(); const repo = repoName(); const branch = repoBranch();
+    if (!owner || !repo || !authed.accessToken) return Response.json({ error: 'Repo/auth misconfiguration' }, { status: 500, headers: NO_STORE });
+    const ghPath = file.replace(/^\/+/, '');
+    const ghUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(ghPath).replace(/%2F/g, '/')}?ref=${encodeURIComponent(branch)}`;
+    const ghRes = await fetch(ghUrl, { headers: { Authorization: `Bearer ${authed.accessToken}`, Accept: 'application/vnd.github+json', 'User-Agent': 'portfolio-engine-admin-tools' } });
+    if (!ghRes.ok) return Response.json({ error: 'Not found' }, { status: 404, headers: NO_STORE });
+    const ghData = await ghRes.json() as { content?: string; encoding?: string };
+    if (!ghData.content || ghData.encoding !== 'base64') return Response.json({ error: 'Unexpected GitHub response' }, { status: 502, headers: NO_STORE });
+    const content = Buffer.from(ghData.content.replace(/\n/g, ''), 'base64').toString('utf8');
+    return Response.json({ file, content }, { headers: NO_STORE });
   }
 
   const section = url.searchParams.get('section') ?? 'content';
@@ -90,6 +108,8 @@ export const PUT: APIRoute = async ({ request }) => {
 
   if (authed.devBypass) {
     await fs.mkdir(path.dirname(abs), { recursive: true });
+    const lstat = await fs.lstat(abs).catch(() => null);
+    if (lstat?.isSymbolicLink()) return Response.json({ error: 'Invalid file path' }, { status: 400, headers: NO_STORE });
     await fs.writeFile(abs, body.content, 'utf8');
     return Response.json({ ok: true, mode: 'local-dev' }, { headers: NO_STORE });
   }

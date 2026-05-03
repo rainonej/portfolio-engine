@@ -42,10 +42,10 @@ async function readJsonSafe(relativePath: string): Promise<Record<string, unknow
   }
 }
 
-let readOnly = false;
+let devBypass = false;
 
 if (process.env.ADMIN_TOOLS_DEV_BYPASS === '1' && import.meta.env.DEV) {
-  readOnly = true;
+  devBypass = true;
 } else {
   const token = parseCookies(Astro.request.headers.get('cookie'))['session'];
   const secret = process.env.SESSION_SECRET;
@@ -90,6 +90,7 @@ const projectsSorted = [...projects].sort(
 
 const logoutUrl = sitePathUrl(Astro.request, 'api/auth/logout');
 const homeUrl = siteHomeUrl(Astro.request);
+const contentApiUrl = sitePathUrl(Astro.request, 'api/content');
 
 const configAudit = await listFilesSafe('src/config');
 const contentAudit = await listFilesSafe('src/content');
@@ -153,10 +154,11 @@ const missingAreas = [
       </header>
 
       {
-        readOnly && (
+        devBypass && (
           <p class="adm-banner">
-            Read-only session: configure GitHub OAuth and <code>SESSION_SECRET</code> for full sign-in. In production, set
-            <code>ADMIN_TOOLS_GITHUB_REPO_OWNER</code> and <code>ADMIN_TOOLS_GITHUB_REPO_NAME</code> for collaborator checks.
+            Dev bypass mode: local file writes enabled. Configure GitHub OAuth and <code>SESSION_SECRET</code> for full
+            sign-in. In production, set <code>ADMIN_TOOLS_GITHUB_REPO_OWNER</code> and{' '}
+            <code>ADMIN_TOOLS_GITHUB_REPO_NAME</code> for collaborator checks.
           </p>
         )
       }
@@ -226,7 +228,7 @@ const missingAreas = [
       </section>
 
 
-      <section class="adm-section">
+      <section class="adm-section" id="adm-editor-section" data-content-api-url={contentApiUrl}>
         <h2 class="adm-h2">Content editor (MVP)</h2>
         <div class="adm-card adm-card--wide">
           <p class="adm-profile-bio">Read/write editor for files in src/content, src/config, src/context, src/registry, and public.</p>
@@ -450,36 +452,37 @@ const missingAreas = [
         window.location.href = home;
       });
 
-      const fileInput = document.getElementById('adm-file');
-      const contentArea = document.getElementById('adm-content');
+      const contentApiUrl = (document.getElementById('adm-editor-section') as HTMLElement)?.dataset.contentApiUrl ?? '/api/content';
+      const fileInput = document.getElementById('adm-file') as HTMLInputElement | null;
+      const contentArea = document.getElementById('adm-content') as HTMLTextAreaElement | null;
       const status = document.getElementById('adm-status');
       document.getElementById('adm-load')?.addEventListener('click', async () => {
         const file = fileInput?.value?.trim();
-        if (!file) return;
+        if (!file || !status) return;
         status.textContent = 'Loading…';
-        const res = await fetch(`/api/content?file=${encodeURIComponent(file)}`, { credentials: 'include' });
+        const res = await fetch(`${contentApiUrl}?file=${encodeURIComponent(file)}`, { credentials: 'include' });
         const data = await res.json();
         if (!res.ok) { status.textContent = `Load failed: ${data.error ?? res.status}`; return; }
-        contentArea.value = data.content ?? '';
+        if (contentArea) contentArea.value = data.content ?? '';
         status.textContent = `Loaded ${file}`;
       });
       document.getElementById('adm-save')?.addEventListener('click', async () => {
         const file = fileInput?.value?.trim();
-        if (!file) return;
+        if (!file || !status) return;
         status.textContent = 'Saving…';
-        const res = await fetch('/api/content', { method: 'PUT', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ file, content: contentArea.value }) });
+        const res = await fetch(contentApiUrl, { method: 'PUT', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ file, content: contentArea?.value ?? '' }) });
         const data = await res.json();
         status.textContent = res.ok ? `Saved ${file} (${data.mode})` : `Save failed: ${data.error ?? res.status}`;
       });
 
-    
       const dropzone = document.getElementById('adm-dropzone');
-      const uploadInput = document.getElementById('adm-upload-input');
+      const uploadInput = document.getElementById('adm-upload-input') as HTMLInputElement | null;
       const uploadList = document.getElementById('adm-upload-list');
       const uploadStatus = document.getElementById('adm-upload-status');
-      const targetDirInput = document.getElementById('adm-target-dir');
+      const targetDirInput = document.getElementById('adm-target-dir') as HTMLInputElement | null;
 
-      const renderFiles = (files) => {
+      const renderFiles = (files: FileList) => {
+        if (!uploadList) return;
         uploadList.innerHTML = '';
         [...files].forEach((f) => {
           const li = document.createElement('li');
@@ -488,21 +491,21 @@ const missingAreas = [
         });
       };
 
-      const doUpload = async (fileList) => {
+      const doUpload = async (fileList: FileList | null) => {
         if (!fileList || fileList.length === 0) return;
         renderFiles(fileList);
-        uploadStatus.textContent = 'Uploading…';
+        if (uploadStatus) uploadStatus.textContent = 'Uploading…';
         const fd = new FormData();
         const dir = targetDirInput?.value?.trim() || '';
         fd.append('targetDir', dir);
         [...fileList].forEach((f) => fd.append('files', f));
-        const res = await fetch('/api/content', { method: 'POST', credentials: 'include', body: fd });
+        const res = await fetch(contentApiUrl, { method: 'POST', credentials: 'include', body: fd });
         const data = await res.json();
-        uploadStatus.textContent = res.ok ? `Uploaded: ${(data.saved || []).join(', ')}` : `Upload failed: ${data.error || res.status}`;
+        if (uploadStatus) uploadStatus.textContent = res.ok ? `Uploaded: ${(data.saved || []).join(', ')}` : `Upload failed: ${data.error || res.status}`;
       };
 
       dropzone?.addEventListener('click', () => uploadInput?.click());
-      uploadInput?.addEventListener('change', () => doUpload(uploadInput.files));
+      uploadInput?.addEventListener('change', () => doUpload(uploadInput?.files ?? null));
       ['dragenter', 'dragover'].forEach((evt) => dropzone?.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.add('is-over'); }));
       ['dragleave', 'drop'].forEach((evt) => dropzone?.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.remove('is-over'); }));
       dropzone?.addEventListener('drop', (e) => {
