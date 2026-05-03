@@ -1,0 +1,3 @@
+# Match CI (Linux) and Prettier: LF in repo and working tree. Avoids Windows
+# reporting every md/json/yml as "wrong" when core.autocrlf rewrites line endings.
+* text=auto eol=lf
