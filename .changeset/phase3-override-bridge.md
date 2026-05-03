@@ -1,6 +1,6 @@
 ---
-"@portfolio-engine/engine-core": patch
-"@portfolio-engine/editorial-theme": patch
+'@portfolio-engine/engine-core': patch
+'@portfolio-engine/editorial-theme': patch
 ---
 
 Fix override bridge for Windows SSG builds. Replace `@vite-ignore` dynamic
