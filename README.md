@@ -93,10 +93,10 @@ pnpm format   # Prettier check
 
 **Optional** (post-MVP add-ons, not required to run a site):
 
-| Package                                                    | Description                                              |
-| ---------------------------------------------------------- | -------------------------------------------------------- |
-| [`@portfolio-engine/admin-tools`](packages/admin-tools/)   | Admin/reviewer UI for nontechnical site owners           |
-| [`portfolio-engine-workflow-kit`](packages/workflow-kit/)  | Python/MCP tools for AI-assisted consumer workflows      |
+| Package                                                   | Description                                         |
+| --------------------------------------------------------- | --------------------------------------------------- |
+| [`@portfolio-engine/admin-tools`](packages/admin-tools/)  | Admin/reviewer UI for nontechnical site owners      |
+| [`portfolio-engine-workflow-kit`](packages/workflow-kit/) | Python/MCP tools for AI-assisted consumer workflows |
 
 ### CI
 
