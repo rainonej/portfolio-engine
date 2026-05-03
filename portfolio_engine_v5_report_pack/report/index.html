@@ -28,7 +28,7 @@
 <li>✅ Consumer layout contract: demo-site has <code>src/config/</code>, <code>src/content/</code>, <code>src/context/</code>, <code>src/overrides/</code>, <code>public/</code>, <code>.portfolio-engine/</code></li>
 <li>✅ Config migrated from top-level <code>config/</code> to <code>src/config/</code></li>
 <li>✅ Context layer placeholder files in demo-site: <code>site-owner.json</code>, <code>brand-voice.json</code>, <code>agent-rules.md</code></li>
-<li>✅ Packages published to npm: <code>schema@0.1.2</code>, <code>engine-core@0.1.3</code>, <code>editorial-theme@0.1.3</code></li>
+<li>✅ Packages published to npm: <code>schema@0.1.1</code>, <code>engine-core@0.1.2</code>, <code>editorial-theme@0.1.2</code></li>
 <li>✅ Downstream docs: <code>consumption.md</code>, <code>new-site-setup.md</code>, <code>setup-with-claude.md</code>, <code>upgrade-path.md</code></li>
 <li>⬜ Context Zod schemas not yet in <code>@portfolio-engine/schema</code> — <code>site-owner.json</code> and <code>brand-voice.json</code> exist in demo-site but are untyped (new gap)</li>
 <li>⬜ agreni-site semver wiring (Phase 4 target)</li>
@@ -61,7 +61,7 @@
 <li>✅ demo-site: <code>.portfolio-engine/manifest.json</code> generated at build time</li>
 </ul>
 
-<h2>Phase 6 — Admin-tools extraction ✅ COMPLETE (shipped ahead of schedule)</h2>
+<h2>Phase 6 — Admin-tools extraction ⬜ IN PROGRESS (extraction shipped; npm publish pending)</h2>
 <ul>
 <li>✅ <code>@portfolio-engine/admin-tools</code>: Astro integration (<code>integration.ts</code>)</li>
 <li>✅ Admin UI route (<code>src/routes/admin.astro</code>) with full content/config/registry view</li>
@@ -69,7 +69,7 @@
 <li>✅ <code>/api/content</code> endpoint for local and GitHub-backed content writes</li>
 <li>✅ GitHub OAuth flow: auth/callback, session management, logout</li>
 <li>✅ File audit UI</li>
-<li>✅ Published to npm as <code>@portfolio-engine/admin-tools@0.0.6</code> (was <code>private:true</code> — now public)</li>
+<li>⬜ Publish to npm as <code>@portfolio-engine/admin-tools</code> — package is still <code>private: true</code> at <code>0.0.5</code>; npm publish not yet done</li>
 <li>✅ <code>docs/packages/admin-tools.md</code> updated with integration and setup instructions</li>
 </ul>
 
@@ -108,7 +108,7 @@
 <ul>
 <li><strong>Context Zod schemas missing.</strong> <code>src/context/site-owner.json</code> and <code>brand-voice.json</code> exist in demo-site but <code>@portfolio-engine/schema</code> has no typed Zod schemas for them. Agent and tool reads are unvalidated. Should be added in Phase 2 follow-up.</li>
 <li><strong>workflow-kit stub comment stale.</strong> <code>packages/workflow-kit/src/index.ts</code> still describes the old GitHub Actions approach. Phase 8 must update this before any Python/MCP work begins.</li>
-<li><strong>admin-tools <code>private</code> flag.</strong> Package was marked <code>"private": true</code>, preventing npm publish. Removed and published as <code>0.0.6</code> on 2026-05-03.</li>
+<li><strong>admin-tools <code>private</code> flag.</strong> Package remains <code>"private": true</code> at <code>0.0.5</code>; it has not been published to npm yet. Removing the flag and publishing is a prerequisite for Phase 6 to be considered complete.</li>
 <li><strong>No consumer registry in demo-site.</strong> <code>src/registry/</code> does not exist yet — Phase 7 prerequisite, but worth noting as a visible gap when reading the target layout docs.</li>
 </ul>
 </section><section id="goals" class="panel"><h1>Big Picture Goals</h1>
