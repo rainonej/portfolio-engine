@@ -31,6 +31,7 @@ export function adminTools(options: AdminToolsOptions = {}): AstroIntegration {
         route('/api/auth/logout', './routes/api/auth/logout.ts');
         route('/api/auth/github', './routes/api/auth/github.ts');
         route('/api/auth/callback', './routes/api/auth/callback.ts');
+        route('/api/content', './routes/api/content.ts');
       },
     },
   };

@@ -29,7 +29,7 @@ export default defineConfig({
 });
 ```
 
-With `devBypass: true`, `pnpm astro dev` skips GitHub login and opens a **read-only** overview (site config, route tree, content counts). Remove `devBypass` for real OAuth.
+With `devBypass: true`, `pnpm astro dev` skips GitHub login and opens the dashboard with **local file writes enabled** — you can load/save files in `src/content`, `src/config`, `src/context`, `src/registry`, and `public/` directly. Remove `devBypass` for real OAuth (writes go through the GitHub Contents API in that mode).
 
 ## Production OAuth
 
@@ -57,4 +57,4 @@ The default dashboard expects collections named **`writing`**, **`projects`**, *
 
 ## Status
 
-Read-only overview and auth plumbing ship first; GitHub Contents editing (drawers, `/api/content`) is the next extraction step from `professional_site`.
+MVP overview, auth plumbing, and a basic in-browser file editor are shipped. `/api/content` now supports inventory + file reads and saves (local writes in `devBypass`, GitHub Contents API writes in OAuth mode) across content/config/context/registry/public paths. Includes drag-and-drop/browse upload for `public/` assets (with optional subfolder target) so non-technical users can add images/files and reference them in pages. Rich schema-aware drawers and polished editing UX remain a follow-up extraction step from `professional_site`.
