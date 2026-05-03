@@ -1,0 +1,37 @@
+---
+import { config } from '@portfolio-engine:config';
+import Override from '@portfolio-engine:override/Footer';
+import { getBase } from '../lib/utils';
+
+const base = getBase();
+const adminOriginEnv =
+  import.meta.env.PUBLIC_ADMIN_ORIGIN?.trim().replace(/\/$/, '') ?? '';
+const adminOrigin = adminOriginEnv || (base !== '' ? config.site.baseUrl : '');
+const adminHref = adminOrigin ? `${adminOrigin}/admin` : `${base}/admin`;
+
+---
+
+{
+  Override ? (
+    <Override adminHref={adminHref} siteTitle={config.site.title} />
+  ) : (
+    <footer class="mt-24 border-t border-stone-100 px-6 py-10 text-center text-sm text-stone-400">
+      <p>
+        © {new Date().getFullYear()}
+        {config.site.title} &middot; Made with{' '}
+        <a
+          href="https://github.com/rainonej/portfolio-engine"
+          class="transition-colors hover:text-stone-600"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          portfolio-engine
+        </a>{' '}
+        &middot;{' '}
+        <a href={adminHref} class="transition-colors hover:text-stone-600">
+          Admin
+        </a>
+      </p>
+    </footer>
+  )
+}

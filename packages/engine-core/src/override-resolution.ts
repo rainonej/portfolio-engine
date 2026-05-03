@@ -1,4 +1,5 @@
 import { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import type { OverrideMap } from './types.js';
 
 export interface OverrideConfig {
@@ -31,6 +32,7 @@ const SUPPORTED_COMPONENT_SURFACES = new Set<string>([
   'FeaturedWriting',
   'TestimonialSection',
   'CollaborationSection',
+  'Footer',
 ]);
 
 export function resolveOverrides(config: OverrideConfig, projectRootDir: string): OverrideMap {
@@ -49,7 +51,7 @@ export function resolveOverrides(config: OverrideConfig, projectRootDir: string)
           `  Supported surfaces: ${SUPPORTED_COMPONENT_SURFACES.size > 0 ? [...SUPPORTED_COMPONENT_SURFACES].join(', ') : '(none declared yet — override surfaces are defined in Task 4.4)'}`,
       );
     }
-    overrideMap[surface] = resolve(projectRootDir, relativePath);
+    overrideMap[surface] = pathToFileURL(resolve(projectRootDir, relativePath)).href;
   }
 
   const styles = config.styles ?? [];

@@ -17,6 +17,11 @@ const VIRTUAL_MODULE_IDS = [
   '@portfolio-engine:context',
   '@portfolio-engine:routes',
   '@portfolio-engine:overrides',
+  '@portfolio-engine:override/Hero',
+  '@portfolio-engine:override/FeaturedWriting',
+  '@portfolio-engine:override/TestimonialSection',
+  '@portfolio-engine:override/CollaborationSection',
+  '@portfolio-engine:override/Footer',
 ] as const;
 
 type VirtualModuleId = (typeof VIRTUAL_MODULE_IDS)[number];
@@ -65,6 +70,26 @@ export function createVirtualModulesPlugin(options: VirtualModulePluginOptions):
           return `export const routes = ${JSON.stringify(routes)};`;
         case '@portfolio-engine:overrides':
           return `export const overrides = ${JSON.stringify(overrides)};`;
+        case '@portfolio-engine:override/Hero':
+          return overrides.Hero
+            ? `import _default from ${JSON.stringify(overrides.Hero)}; export default _default;`
+            : `export default null;`;
+        case '@portfolio-engine:override/FeaturedWriting':
+          return overrides.FeaturedWriting
+            ? `import _default from ${JSON.stringify(overrides.FeaturedWriting)}; export default _default;`
+            : `export default null;`;
+        case '@portfolio-engine:override/TestimonialSection':
+          return overrides.TestimonialSection
+            ? `import _default from ${JSON.stringify(overrides.TestimonialSection)}; export default _default;`
+            : `export default null;`;
+        case '@portfolio-engine:override/CollaborationSection':
+          return overrides.CollaborationSection
+            ? `import _default from ${JSON.stringify(overrides.CollaborationSection)}; export default _default;`
+            : `export default null;`;
+        case '@portfolio-engine:override/Footer':
+          return overrides.Footer
+            ? `import _default from ${JSON.stringify(overrides.Footer)}; export default _default;`
+            : `export default null;`;
       }
     },
   };

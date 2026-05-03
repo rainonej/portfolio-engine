@@ -1,5 +1,7 @@
 # portfolio-engine
 
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://portfolio-engine-demo-site.vercel.app)
+
 An Astro theme for personal portfolio sites. It provides routes, layouts, and styles so you focus on your content — and it's designed to be set up entirely through Claude prompts.
 
 ---
@@ -36,7 +38,7 @@ src/
                                        Zod schemas
 ```
 
-The engine packages are published to npm. Your repo just installs them.
+The three **required** packages are published to npm — your repo installs them. `admin-tools` and `workflow-kit` are optional add-ons built on top.
 
 ---
 
@@ -81,13 +83,20 @@ pnpm format   # Prettier check
 
 ### Packages
 
+**Required runtime** (every consumer installs these):
+
 | Package                                                          | Description                                                         |
 | ---------------------------------------------------------------- | ------------------------------------------------------------------- |
 | [`@portfolio-engine/editorial-theme`](packages/editorial-theme/) | Astro theme: layouts, components, page routes                       |
 | [`@portfolio-engine/engine-core`](packages/engine-core/)         | Config loader, virtual modules, route registry, override resolution |
 | [`@portfolio-engine/schema`](packages/schema/)                   | Shared Zod schemas for content and configuration                    |
-| [`@portfolio-engine/admin-tools`](packages/admin-tools/)         | Admin/reviewer UI _(Epic 7)_                                        |
-| [`@portfolio-engine/workflow-kit`](packages/workflow-kit/)       | Reusable GitHub workflows and AI classifier _(Epic 8)_              |
+
+**Optional** (post-MVP add-ons, not required to run a site):
+
+| Package                                                   | Description                                         |
+| --------------------------------------------------------- | --------------------------------------------------- |
+| [`@portfolio-engine/admin-tools`](packages/admin-tools/)  | Admin/reviewer UI for nontechnical site owners      |
+| [`portfolio-engine-workflow-kit`](packages/workflow-kit/) | Python/MCP tools for AI-assisted consumer workflows |
 
 ### CI
 

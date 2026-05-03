@@ -63,7 +63,7 @@ Use this when the consumer site is its **own Git repository** (for example `agre
    | **Build Command**    | `pnpm build`                                                                                                                                                                                                                                                                 |
    | **Output Directory** | Leave default when using [`@astrojs/vercel`](https://docs.astro.build/en/guides/integrations-guide/vercel/) — the adapter emits the correct serverless output. Do **not** point only at `dist` unless you know you are shipping a fully static export with no server routes. |
 
-4. **Node.js version:** **22.x** in **Project → Settings → General** (matches common Vercel serverless runtimes and reduces “works on my machine” drift).
+4. **Node.js version:** **22.x** in **Project → Settings → General** (matches common Vercel serverless runtimes and reduces "works on my machine" drift).
 
 ### Production on `main`, previews on `dev`
 
@@ -73,7 +73,7 @@ Use this when the consumer site is its **own Git repository** (for example `agre
 
 ### Canonical site URL (`SITE_URL`)
 
-Astro’s top-level `site` option drives canonical URLs and Open Graph metadata. Recommended pattern in the consumer’s `astro.config.mjs`:
+Astro's top-level `site` option drives canonical URLs and Open Graph metadata. Recommended pattern in the consumer's `astro.config.mjs`:
 
 ```js
 const site =
@@ -91,7 +91,7 @@ Redeploy after changing environment variables so builds pick them up.
 
 ### OAuth and server routes
 
-If the consumer exposes **GitHub OAuth**, **session cookies**, or **API routes** under `/api/*` or `/admin`, add [`@astrojs/vercel`](https://docs.astro.build/en/guides/integrations-guide/vercel/) (or your host’s adapter) and configure `output` / adapter per Astro’s hybrid/server docs.
+If the consumer exposes **GitHub OAuth**, **session cookies**, or **API routes** under `/api/*` or `/admin`, add [`@astrojs/vercel`](https://docs.astro.build/en/guides/integrations-guide/vercel/) (or your host's adapter) and configure `output` / adapter per Astro's hybrid/server docs.
 
 **GitHub OAuth app:** register **authorization callback URLs** for every origin users will hit—at minimum production **and** preview origins (each preview deployment has its own hostname unless you use a stable preview domain). Without preview callbacks, sign-in from a Preview deployment will fail after redirect.
 
@@ -102,7 +102,7 @@ If your site uses environment variables such as `CONTENT_BRANCH` for GitHub Cont
 - **Production** env → branch that backs the live site (often `main`).
 - **Preview** env → staging branch (often `dev`) so preview deployments do not edit production-tracked files.
 
-Your consumer repo’s own `README` or `docs/setup.md` should list the exact secrets and names for that deployment.
+Your consumer repo's own `README` or `docs/setup.md` should list the exact secrets and names for that deployment.
 
 ## Workspace-link mode (monorepo contributor)
 
@@ -152,7 +152,21 @@ To switch from semver back to workspace-link:
 
 Overrides are **not** picked up from disk automatically. Pass an `overrides` object to `editorialTheme()` with paths **relative to the consumer project root**. Only named surfaces declared by the engine are valid; unsupported names fail at build time.
 
-**Supported component surfaces (v1):** `Hero`, `FeaturedWriting`, `TestimonialSection`, `CollaborationSection`. You may also pass `styles` for extra CSS files merged after the theme’s global styles.
+### Supported surfaces
+
+| Surface name           | Upstream implementation        | Props passed                                          |
+| ---------------------- | ------------------------------ | ----------------------------------------------------- |
+| `Hero`                 | `HeroSection.astro`            | `person`, `bookingUrl`, `pillars`, `base`, `tagline?` |
+| `FeaturedWriting`      | `FeaturedWritingSection.astro` | `posts`, `base`                                       |
+| `TestimonialSection`   | `TestimonialSection.astro`     | `testimonials`                                        |
+| `CollaborationSection` | `CollaborationSection.astro`   | `base`, `ctaBody?`                                    |
+| `Footer`               | `Footer.astro`                 | `adminHref`, `siteTitle`                              |
+
+The surface **name** (e.g. `Hero`) is the stable contract key. The upstream implementation file it replaces (e.g. `HeroSection.astro`) is an internal detail that may be renamed. Your override file receives the props listed above and is rendered in place of the default implementation.
+
+You may also pass `styles` (array of CSS file paths) to append extra CSS after the theme's global styles — useful for custom properties or utility overrides without replacing a component.
+
+### Wiring overrides
 
 **Example — `astro.config.mjs`:**
 
@@ -178,7 +192,7 @@ export default defineConfig({
 });
 ```
 
-By convention, keep those files under `src/overrides/` (any layout under that folder is fine as long as the paths in `overrides` match). Do not point at arbitrary internal theme files—only the supported surface keys above are stable.
+By convention, keep those files under `src/overrides/`. Do not point at arbitrary internal theme files — only the surface keys in the table above are stable.
 
 ```
 your-site/
@@ -187,3 +201,5 @@ your-site/
       Hero.astro        ← example: wired via overrides.components.Hero
       custom.css        ← example: wired via overrides.styles
 ```
+
+A working demo override for `Hero` lives at [`examples/demo-site/src/overrides/Hero.astro`](../../examples/demo-site/src/overrides/Hero.astro).

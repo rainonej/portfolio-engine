@@ -1,5 +1,5 @@
 ---
-import { overrides } from '@portfolio-engine:overrides';
+import Override from '@portfolio-engine:override/TestimonialSection';
 import Reveal from '../Reveal.astro';
 import SectionIntro from '../SectionIntro.astro';
 import TestimonialBlock from '../TestimonialBlock.astro';
@@ -15,10 +15,6 @@ interface Props {
 }
 
 const { testimonials } = Astro.props;
-
-const Override = overrides.TestimonialSection
-  ? ((await import(/* @vite-ignore */ overrides.TestimonialSection)) as any).default
-  : null;
 ---
 
 {Override ? (
