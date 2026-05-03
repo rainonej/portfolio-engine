@@ -4,6 +4,7 @@ import autoprefixer from 'autoprefixer';
 import tailwindcss from 'tailwindcss';
 import { createEngineIntegration } from '@portfolio-engine/engine-core';
 import type { EngineIntegrationOptions } from '@portfolio-engine/engine-core';
+import { DEFAULT_OVERRIDE_SURFACES, DEFAULT_ROUTE_REGISTRY } from './registry.js';
 
 export type EditorialThemeOptions = EngineIntegrationOptions;
 
@@ -36,5 +37,14 @@ export function editorialTheme(options: EditorialThemeOptions): AstroIntegration
     },
   };
 
-  return [tailwindIntegration, createEngineIntegration(options)];
+  return [
+    tailwindIntegration,
+    createEngineIntegration({
+      ...options,
+      registries: {
+        routes: options.registries?.routes ?? DEFAULT_ROUTE_REGISTRY,
+        overrideSurfaces: options.registries?.overrideSurfaces ?? DEFAULT_OVERRIDE_SURFACES,
+      },
+    }),
+  ];
 }

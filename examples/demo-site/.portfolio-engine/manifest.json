@@ -1,0 +1,123 @@
+{
+  "generatedAt": "2026-05-03T04:43:09.987Z",
+  "rootDir": "/home/runner/work/portfolio-engine/portfolio-engine/examples/demo-site/",
+  "routes": [
+    {
+      "pattern": "/about",
+      "label": "About",
+      "section": null,
+      "visibility": "public",
+      "remappable": true,
+      "disableable": true,
+      "resolved": "/about"
+    },
+    {
+      "pattern": "/contact",
+      "label": "Contact",
+      "section": null,
+      "visibility": "public",
+      "remappable": true,
+      "disableable": true,
+      "resolved": "/contact"
+    },
+    {
+      "pattern": "/",
+      "label": "Home",
+      "section": null,
+      "visibility": "public",
+      "remappable": true,
+      "disableable": false,
+      "resolved": "/"
+    },
+    {
+      "pattern": "/work/[slug]",
+      "label": "Work detail",
+      "section": null,
+      "visibility": "hidden",
+      "remappable": false,
+      "disableable": false,
+      "resolved": "/work/[slug]"
+    },
+    {
+      "pattern": "/work",
+      "label": "Work",
+      "section": null,
+      "visibility": "public",
+      "remappable": true,
+      "disableable": true,
+      "resolved": "/work"
+    },
+    {
+      "pattern": "/writing/[slug]",
+      "label": "Writing detail",
+      "section": null,
+      "visibility": "hidden",
+      "remappable": false,
+      "disableable": false,
+      "resolved": "/writing/[slug]"
+    },
+    {
+      "pattern": "/writing",
+      "label": "Writing",
+      "section": null,
+      "visibility": "public",
+      "remappable": true,
+      "disableable": true,
+      "resolved": "/writing"
+    }
+  ],
+  "overrideSurfaces": [
+    {
+      "name": "Hero",
+      "props": [
+        "person",
+        "bookingUrl",
+        "pillars",
+        "base",
+        "tagline"
+      ],
+      "defaultComponentPath": "src/components/sections/HeroSection.astro",
+      "hostPage": "src/pages/index.astro"
+    },
+    {
+      "name": "FeaturedWriting",
+      "props": [
+        "posts",
+        "base"
+      ],
+      "defaultComponentPath": "src/components/sections/FeaturedWritingSection.astro",
+      "hostPage": "src/pages/index.astro"
+    },
+    {
+      "name": "TestimonialSection",
+      "props": [
+        "testimonials"
+      ],
+      "defaultComponentPath": "src/components/sections/TestimonialSection.astro",
+      "hostPage": "src/pages/index.astro"
+    },
+    {
+      "name": "CollaborationSection",
+      "props": [
+        "base",
+        "ctaBody"
+      ],
+      "defaultComponentPath": "src/components/sections/CollaborationSection.astro",
+      "hostPage": "src/pages/index.astro"
+    },
+    {
+      "name": "Footer",
+      "props": [
+        "adminHref",
+        "siteTitle"
+      ],
+      "defaultComponentPath": "src/components/Footer.astro",
+      "hostPage": "src/layouts/Layout.astro"
+    }
+  ],
+  "capabilities": {
+    "routeRemap": true,
+    "routeDisable": true,
+    "namedOverrides": true
+  }
+}

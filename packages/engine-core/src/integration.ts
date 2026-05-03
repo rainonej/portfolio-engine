@@ -9,12 +9,18 @@ import { resolveOverrides } from './override-resolution.js';
 import type { OverrideConfig } from './override-resolution.js';
 import { createVirtualModulesPlugin } from './virtual-modules.js';
 import type { BuildContext } from './types.js';
+import { writeManifest } from './manifest.js';
+import type { ManifestRouteEntry, OverrideSurfaceEntry, RouteRegistryEntry } from '@portfolio-engine/schema';
 
 export interface EngineIntegrationOptions extends EngineConfig {
   /** Remap or disable individual routes before injection. */
   routes?: RouteOverrides;
   /** Component and style overrides — downstream paths replace theme defaults. */
   overrides?: OverrideConfig;
+  registries?: {
+    routes: RouteRegistryEntry[];
+    overrideSurfaces: OverrideSurfaceEntry[];
+  };
 }
 
 export function createEngineIntegration(options: EngineIntegrationOptions): AstroIntegration {
@@ -23,6 +29,7 @@ export function createEngineIntegration(options: EngineIntegrationOptions): Astr
     hooks: {
       'astro:config:setup': async ({ config, command, injectRoute, updateConfig }) => {
         const rootDir = fileURLToPath(config.root);
+        const registries = options.registries ?? { routes: [], overrideSurfaces: [] };
 
         // 1. Load and validate config files
         const resolvedConfig = await loadConfig(
@@ -37,7 +44,7 @@ export function createEngineIntegration(options: EngineIntegrationOptions): Astr
 
         // 2. Discover routes from editorial-theme pages directory
         const pagesDir = resolveThemePagesDir(rootDir);
-        const discovered = discoverRoutes(pagesDir);
+        const discovered = discoverRoutes(pagesDir, registries.routes);
 
         // 3. Apply route remaps / disables from downstream config
         const { routes: activeRoutes } = applyRouteOverrides(discovered, options.routes ?? {});
@@ -51,7 +58,21 @@ export function createEngineIntegration(options: EngineIntegrationOptions): Astr
         }
 
         // 5. Resolve component and style overrides
-        const overrides = resolveOverrides(options.overrides ?? {}, rootDir);
+        const overrides = resolveOverrides(options.overrides ?? {}, rootDir, registries.overrideSurfaces);
+
+        // Build manifest route entries from the active (post-remap) route set.
+        // Start from routeRecord (which already has all required fields), then
+        // layer in any optional metadata (agentGuidance, adminDescription) from
+        // the canonical registry entry if it exists.
+        const registryMap = new Map(registries.routes.map((r) => [r.pattern, r]));
+        const manifestRoutes: ManifestRouteEntry[] = activeRoutes.map((r) => {
+          const registryEntry = registryMap.get(r.routeRecord.pattern);
+          const entry: ManifestRouteEntry = { ...r.routeRecord };
+          if (registryEntry?.agentGuidance !== undefined) entry.agentGuidance = registryEntry.agentGuidance;
+          if (registryEntry?.adminDescription !== undefined) entry.adminDescription = registryEntry.adminDescription;
+          return entry;
+        });
+        writeManifest(rootDir, manifestRoutes, registries.overrideSurfaces);
 
         // 6. Build context for virtual modules
         const context: BuildContext = {
