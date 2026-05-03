@@ -1,6 +1,6 @@
 # Portfolio site setup — paste this into Claude Code
 
-Copy the entire contents of this file and paste it into Claude Code as your first message. Claude will guide you through everything from there — asking for your details, building the site, and telling you exactly when to go click something in Vercel.
+Copy the entire contents of this file and paste it into Claude Code as your first message. Claude should run this as a **phased operator runbook** for a modern portfolio-engine consumer (route registry, manifest, named overrides, and admin tools enabled by default).
 
 ---
 
@@ -16,18 +16,19 @@ and what — if anything — you need from me or need me to do manually.
 
 ## Phase 1 — Learn about me
 
-Before touching any files, ask me for everything you need. Collect it all at
-once rather than one question at a time:
+Before touching any files, ask me for everything you need in one grouped prompt:
 
 - **Name** — as it should appear on the site
-- **Role** — what I do (e.g. "product designer", "educator", "software engineer")
+- **Role** — what I do
 - **Tagline** — one short punchy line
 - **Description** — one sentence: my work and who I do it for
 - **Location** — city and country
-- **Tone** — how I write (e.g. "warm and direct", "precise and minimal")
-- **Audience** — who reads my site (e.g. "hiring managers at education nonprofits")
-- **Pages** — which of these I want: Work, Writing, About, Contact (default: all four)
-- **Repo name** — what to call my GitHub repository (e.g. "jordan-site")
+- **Tone** — how I write
+- **Audience** — who reads my site
+- **Pages** — which of these I want: Work, Writing, About, Contact (default: all)
+- **Booking URL** — optional scheduling link
+- **Social URLs** — GitHub, LinkedIn, X/Twitter (optional)
+- **Repo name** — what to call my GitHub repository
 
 If any answer is vague, ask one follow-up before moving on.
 
@@ -41,103 +42,106 @@ https://github.com/rainonej/portfolio-engine/blob/main/docs/downstream/new-site-
 Do all of the following:
 
 - Scaffold the Astro project and install `@portfolio-engine/editorial-theme`
+- Install `@portfolio-engine/admin-tools` and Node adapter support as part of the default setup
 - Create `src/config/site.json`, `navigation.json`, `theme.json`, `features.json`
-  with my real details
 - Create `src/content.config.ts` and placeholder content in `src/content/`
-  (I'll replace placeholders with real work later)
-- Fill in `src/context/site-owner.json` and `src/context/brand-voice.json`
-  from my Phase 1 answers; leave `agent-rules.md` as a template I can edit
+- Fill `src/context/site-owner.json` and `src/context/brand-voice.json`; keep `agent-rules.md` as an editable template
 - Create `src/overrides/README.md`
+- Wire at least one named override surface (Hero) so the overrides system is demonstrated
+- Run a local build and confirm `.portfolio-engine/manifest.json` is generated
 
-When done, tell me what was created and list any files I should come back and
-edit myself.
+When done, summarize what was created and list files I should customize first.
 
 ---
 
 ## Phase 3 — Push to GitHub
 
-1. Initialize a git repo here if one doesn't exist yet
-2. Create a new GitHub repo called the name I gave in Phase 1 — use
-   `gh repo create` if the GitHub CLI is available, otherwise walk me through
-   creating it at github.com
+1. Initialize a git repo if needed
+2. Create a new GitHub repo using my chosen repo name (`gh repo create` if available)
 3. Commit everything and push to `main`
 
-Tell me the GitHub URL when it's pushed.
+Tell me the GitHub URL after push.
 
 ---
 
-## Phase 4 — Vercel (you'll guide me through this manually)
+## Phase 4 — Vercel (manual, guided)
 
-You can't click buttons, so your job here is to give me exact instructions.
-Tell me:
+Give me exact click-by-click instructions.
 
-> Go to vercel.com and log in. Click **Add New → Project** and import your
-> **[repo name]** repository. Set:
+For a standard standalone consumer repo, tell me:
+
+> Go to vercel.com and log in. Click **Add New → Project** and import **[repo name]**.
+> Set:
 >
-> - Root Directory: `.` (leave it as-is)
+> - Root Directory: `.`
+> - Install Command: `pnpm install`
 > - Build Command: `pnpm build`
-> - Output Directory: leave as default
+> - Output Directory: default
 >
-> Click **Deploy** and wait for it to go green. Then go to
-> **Settings → General** and set Node.js to **22.x**. Come back here and
-> paste the URL it gave you (it looks like `your-repo.vercel.app`).
+> Click **Deploy**. After it succeeds, go to **Settings → General** and set Node.js to **22.x**.
+> Come back and paste the deployment URL.
 
-Wait for me to come back with the URL before doing anything else.
-
----
-
-## Phase 5 — Wire up the live URL
-
-Once I give you the Vercel URL:
-
-1. Update `src/config/site.json` `baseUrl` to that URL
-2. Commit and push the change
-3. Ask me: do I want to add my first real project now, or leave the placeholder?
-4. Ask me: do I want to add my first real writing piece now, or leave the placeholder?
-5. Walk me through filling in `src/context/brand-voice.json` properly — ask
-   me questions and write it from my answers rather than leaving it generic
+Wait for my URL before moving on.
 
 ---
 
-## Phase 6 — Production URL env var (you'll guide me)
+## Phase 5 — Wire up canonical URL + polish context
+
+Once I provide the Vercel URL:
+
+1. Update `src/config/site.json` `baseUrl`
+2. Commit and push
+3. Ask whether to replace placeholder project content now
+4. Ask whether to replace placeholder writing now
+5. Improve `src/context/brand-voice.json` by interviewing me briefly and writing concrete values
+
+---
+
+## Phase 6 — Production `SITE_URL` env var (manual, guided)
 
 Tell me:
 
-> Go to your Vercel project → **Settings → Environment Variables**. Add a
-> new variable:
+> In Vercel, open **Settings → Environment Variables**.
+> Add:
 >
 > - Name: `SITE_URL`
-> - Value: `[the URL from Phase 5]`
-> - Environment: **Production** only (uncheck Preview and Development)
+> - Value: `[production URL from Phase 5]`
+> - Environment: **Production only**
 >
-> Save it, then go to **Deployments**, open the latest deployment's menu
-> (three dots), and click **Redeploy**. Come back when it's done.
+> Save, then go to **Deployments**, open the latest deployment menu, and click **Redeploy**.
+> Come back when done.
 
 ---
 
-## Phase 7 — Custom domain (ask me first)
+## Phase 7 — Custom domain (ask first)
 
-Ask me: "Do you have a custom domain you want to use, like yourname.com?"
+Ask: “Do you have a custom domain you want to use, like yourname.com?”
 
-**If yes:** tell me to go to Vercel → **Settings → Domains** → add the
-domain, and walk me through the DNS records I need to set. Once I confirm the
-domain is live:
+- **If yes:** guide domain setup in Vercel, then:
+  1. update `site.json` `baseUrl`
+  2. commit + push
+  3. tell me to update Vercel `SITE_URL` and redeploy
+- **If no:** continue.
 
-1. Update `src/config/site.json` `baseUrl` to the new domain
-2. Commit and push
-3. Tell me to go back to Vercel and update the `SITE_URL` env var to the new
-   domain, then redeploy
+---
 
-**If no:** skip to the wrap-up.
+## Phase 8 — Registry / manifest / admin verification
+
+Run and report these checks:
+
+- Build passes
+- `.portfolio-engine/manifest.json` exists and lists route + override capabilities
+- `/admin` is present and `/api/content` contract is wired
+- Explain how route remaps/disables and named overrides are controlled in config/integration
 
 ---
 
 ## Wrap-up
 
-Give me a short summary:
+Give me a short summary with:
 
-- Where the site is live
-- The three folders that are mine to edit: `src/content/`, `src/config/`,
-  `src/context/`
-- One line on how to add new work later
-- One line on how to update the theme when a new version is out
+- Live URL
+- Repo URL
+- The three folders I own most: `src/content/`, `src/config/`, `src/context/`
+- Where to add overrides: `src/overrides/`
+- One line for theme updates (`pnpm update @portfolio-engine/editorial-theme && pnpm build`)

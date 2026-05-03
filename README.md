@@ -38,7 +38,7 @@ src/
                                        Zod schemas
 ```
 
-The three **required** packages are published to npm — your repo installs them. `admin-tools` and `workflow-kit` are optional add-ons built on top.
+The three **required** packages are published to npm — your repo installs them. `@portfolio-engine/admin-tools` is an optional UI layer; `@portfolio-engine/workflow-kit` exists but is currently scaffold-stage (not a production MCP toolkit yet).
 
 ---
 
@@ -95,8 +95,8 @@ pnpm format   # Prettier check
 
 | Package                                                   | Description                                         |
 | --------------------------------------------------------- | --------------------------------------------------- |
-| [`@portfolio-engine/admin-tools`](packages/admin-tools/)  | Admin/reviewer UI for nontechnical site owners      |
-| [`portfolio-engine-workflow-kit`](packages/workflow-kit/) | Python/MCP tools for AI-assisted consumer workflows |
+| [`@portfolio-engine/admin-tools`](packages/admin-tools/)  | Admin/reviewer UI + `/api/content` + OAuth support (Node adapter required) |
+| [`@portfolio-engine/workflow-kit`](packages/workflow-kit/) | Reserved package for future workflow automation (currently scaffold) |
 
 ### CI
 
