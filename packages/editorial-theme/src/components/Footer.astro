@@ -1,6 +1,6 @@
 ---
 import { config } from '@portfolio-engine:config';
-import { overrides } from '@portfolio-engine:overrides';
+import Override from '@portfolio-engine:override/Footer';
 import { getBase } from '../lib/utils';
 
 const base = getBase();
@@ -9,9 +9,6 @@ const adminOriginEnv =
 const adminOrigin = adminOriginEnv || (base !== '' ? config.site.baseUrl : '');
 const adminHref = adminOrigin ? `${adminOrigin}/admin` : `${base}/admin`;
 
-const Override = overrides.Footer
-  ? ((await import(/* @vite-ignore */ overrides.Footer)) as any).default
-  : null;
 ---
 
 {

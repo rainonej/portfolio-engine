@@ -1,5 +1,5 @@
 ---
-import { overrides } from '@portfolio-engine:overrides';
+import Override from '@portfolio-engine:override/CollaborationSection';
 import Reveal from '../Reveal.astro';
 import CollaborationCTA from '../CollaborationCTA.astro';
 
@@ -9,10 +9,6 @@ interface Props {
 }
 
 const { base, ctaBody } = Astro.props;
-
-const Override = overrides.CollaborationSection
-  ? ((await import(/* @vite-ignore */ overrides.CollaborationSection)) as any).default
-  : null;
 ---
 
 {Override ? (

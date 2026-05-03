@@ -9,6 +9,11 @@ export default defineConfig({
       navigationConfigPath: './src/config/navigation.json',
       themeConfigPath: './src/config/theme.json',
       featuresConfigPath: './src/config/features.json',
+      overrides: {
+        components: {
+          Hero: './src/overrides/Hero.astro',
+        },
+      },
     }),
   ],
 });

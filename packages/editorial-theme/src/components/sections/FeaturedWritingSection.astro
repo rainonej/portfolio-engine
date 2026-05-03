@@ -1,5 +1,5 @@
 ---
-import { overrides } from '@portfolio-engine:overrides';
+import Override from '@portfolio-engine:override/FeaturedWriting';
 import Reveal from '../Reveal.astro';
 import SectionIntro from '../SectionIntro.astro';
 import WritingList from '../WritingList.astro';
@@ -19,10 +19,6 @@ interface Props {
 }
 
 const { posts, base } = Astro.props;
-
-const Override = overrides.FeaturedWriting
-  ? ((await import(/* @vite-ignore */ overrides.FeaturedWriting)) as any).default
-  : null;
 ---
 
 {Override ? (
