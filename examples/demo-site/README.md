@@ -4,11 +4,11 @@ Reference **Astro consumer** for [`@portfolio-engine/editorial-theme`](../../pac
 
 ## What you own vs the theme
 
-| Yours (edit freely)                       | From the theme (via integration)                         |
-| ----------------------------------------- | -------------------------------------------------------- |
-| `config/*.json`                           | Layouts, pages, components, `global.css`                 |
-| `src/content/**`, `src/content.config.ts` | Routes injected by `@portfolio-engine/engine-core`       |
-| `public/**`                               | Tailwind + PostCSS setup inside `editorialTheme()`       |
+| Yours (edit freely)                       | From the theme (via integration)                                                  |
+| ----------------------------------------- | --------------------------------------------------------------------------------- |
+| `config/*.json`                           | Layouts, pages, components, `global.css`                                          |
+| `src/content/**`, `src/content.config.ts` | Routes injected by `@portfolio-engine/engine-core`                                |
+| `public/**`                               | Tailwind + PostCSS setup inside `editorialTheme()`                                |
 | `astro.config.mjs`                        | Virtual modules `@portfolio-engine:config`, `:overrides`, optional `adminTools()` |
 
 Architecture detail: [`docs/packages/editorial-theme.md`](../../docs/packages/editorial-theme.md).

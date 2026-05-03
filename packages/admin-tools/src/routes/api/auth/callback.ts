@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { parseCookies, buildSessionToken, sessionCookieFlags } from '../../../server/session.js';
+import { sitePathUrl } from '../../../server/paths.js';
 
 export const prerender = false;
 
@@ -35,13 +36,22 @@ export const GET: APIRoute = async ({ request, url }) => {
     }),
   });
 
-  const tokenData = (await tokenRes.json()) as {
-    access_token?: string;
-    error?: string;
-  };
+  const rawText = await tokenRes.text();
+  let tokenData: { access_token?: string; error?: string; error_description?: string };
+  try {
+    tokenData = JSON.parse(rawText) as typeof tokenData;
+  } catch {
+    return new Response('OAuth token response was not valid JSON', { status: 502, headers: NO_STORE });
+  }
+
+  if (!tokenRes.ok) {
+    const detail = tokenData.error_description ?? tokenData.error ?? `HTTP ${tokenRes.status}`;
+    return new Response(`OAuth token exchange failed: ${detail}`, { status: 400, headers: NO_STORE });
+  }
 
   if (!tokenData.access_token) {
-    return new Response('OAuth token exchange failed', { status: 400, headers: NO_STORE });
+    const detail = tokenData.error_description ?? tokenData.error ?? 'no access_token';
+    return new Response(`OAuth token exchange failed: ${detail}`, { status: 400, headers: NO_STORE });
   }
 
   const { access_token } = tokenData;
@@ -54,7 +64,14 @@ export const GET: APIRoute = async ({ request, url }) => {
     },
   });
 
-  const user = (await userRes.json()) as { login?: string };
+  const userRaw = await userRes.text();
+  let user: { login?: string };
+  try {
+    user = JSON.parse(userRaw) as { login?: string };
+  } catch {
+    return new Response('GitHub user response was not valid JSON', { status: 502, headers: NO_STORE });
+  }
+
   if (!userRes.ok || !user.login) {
     return new Response('GitHub user request failed', { status: 502, headers: NO_STORE });
   }
@@ -95,7 +112,7 @@ export const GET: APIRoute = async ({ request, url }) => {
   const flags = sessionCookieFlags();
 
   const headers = new Headers({
-    Location: `${url.origin}/admin`,
+    Location: sitePathUrl(request, 'admin'),
     ...NO_STORE,
   });
   headers.append('Set-Cookie', `session=${sessionToken}; ${flags}; Max-Age=${maxAge}`);

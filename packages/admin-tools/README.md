@@ -21,7 +21,9 @@ export default defineConfig({
   output: 'server',
   adapter: node({ mode: 'standalone' }),
   integrations: [
-    editorialTheme({ /* engine paths */ }),
+    editorialTheme({
+      /* engine paths */
+    }),
     adminTools({ devBypass: true }),
   ],
 });
@@ -33,15 +35,21 @@ With `devBypass: true`, `pnpm astro dev` skips GitHub login and opens a **read-o
 
 Set:
 
-| Variable | Purpose |
-|----------|---------|
-| `GITHUB_CLIENT_ID` | OAuth app |
-| `GITHUB_CLIENT_SECRET` | OAuth app |
-| `SESSION_SECRET` | HMAC key for session cookie |
-| `ADMIN_TOOLS_GITHUB_REPO_OWNER` | Repo for collaborator check |
-| `ADMIN_TOOLS_GITHUB_REPO_NAME` | Repo name (falls back to `REPO_*` if set) |
+| Variable                        | Purpose                                   |
+| ------------------------------- | ----------------------------------------- |
+| `GITHUB_CLIENT_ID`              | OAuth app                                 |
+| `GITHUB_CLIENT_SECRET`          | OAuth app                                 |
+| `SESSION_SECRET`                | HMAC key for session cookie               |
+| `ADMIN_TOOLS_GITHUB_REPO_OWNER` | Repo for collaborator check               |
+| `ADMIN_TOOLS_GITHUB_REPO_NAME`  | Repo name (falls back to `REPO_*` if set) |
 
-Register the OAuth callback URL: `https://<your-host>/api/auth/callback`.
+Register the OAuth **callback URL** to match your deployed origin **and** Astro `base` (if any), e.g. `https://<host>/api/auth/callback` or `https://<host>/<base>/api/auth/callback`.
+
+The authorize request uses scope **`read:user repo`** so the collaborator check and future GitHub Contents API calls work on private repositories.
+
+### Session cookie
+
+The signed session cookie follows the same MVP shape as `professional_site` (GitHub access token is embedded in the signed payload). Prefer an opaque server-side session if you need stronger protection against cookie leakage.
 
 ## Content collections
 

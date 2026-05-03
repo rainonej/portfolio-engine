@@ -3,15 +3,23 @@ import { sessionCookieFlags } from '../../../server/session.js';
 
 export const prerender = false;
 
-export const GET: APIRoute = ({ url }) => {
-  const { origin } = url;
+const NO_STORE = { 'Cache-Control': 'no-store' } as const;
+
+/** Clear session cookie; client navigates home (avoids fetch+redirect edge cases with `base`). */
+export const POST: APIRoute = () => {
   const flags = sessionCookieFlags();
   return new Response(null, {
-    status: 302,
+    status: 204,
     headers: {
-      Location: `${origin}/`,
+      ...NO_STORE,
       'Set-Cookie': `session=; ${flags}; Max-Age=0`,
-      'Cache-Control': 'no-store',
     },
+  });
+};
+
+export const GET: APIRoute = () => {
+  return new Response('Method Not Allowed — use POST to log out', {
+    status: 405,
+    headers: { ...NO_STORE, Allow: 'POST' },
   });
 };

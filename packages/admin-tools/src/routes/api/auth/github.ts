@@ -1,9 +1,13 @@
 import type { APIRoute } from 'astro';
 import { sessionCookieFlags } from '../../../server/session.js';
+import { sitePathUrl } from '../../../server/paths.js';
 
 export const prerender = false;
 
 const NO_STORE = { 'Cache-Control': 'no-store' } as const;
+
+/** `repo` is required for collaborator checks and future Contents API writes on private repos. */
+const OAUTH_SCOPE = 'read:user repo';
 
 export const GET: APIRoute = ({ request }) => {
   const clientId = process.env.GITHUB_CLIENT_ID;
@@ -14,12 +18,12 @@ export const GET: APIRoute = ({ request }) => {
     });
   }
 
-  const origin = new URL(request.url).origin;
+  const redirect_uri = sitePathUrl(request, 'api/auth/callback');
   const state = crypto.randomUUID();
   const params = new URLSearchParams({
     client_id: clientId,
-    redirect_uri: `${origin}/api/auth/callback`,
-    scope: 'read:user public_repo',
+    redirect_uri,
+    scope: OAUTH_SCOPE,
     state,
   });
   const flags = sessionCookieFlags();

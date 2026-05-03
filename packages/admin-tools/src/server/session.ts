@@ -1,5 +1,9 @@
 /**
  * Signed session cookie for GitHub-backed admin (same model as professional_site).
+ *
+ * The cookie value includes the GitHub access token (HMAC-signed). Anyone with the
+ * cookie can use the token until expiry — prefer an opaque server-side session id
+ * if you need stronger isolation from cookie leakage.
  */
 
 const SESSION_MAX_AGE_MS = 24 * 60 * 60 * 1000;

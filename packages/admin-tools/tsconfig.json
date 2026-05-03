@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src/index.ts", "src/integration.ts", "src/server/**/*.ts"],
+  "include": ["src/**/*.ts"],
   "compilerOptions": {
     "types": ["astro/client"],
     "noEmit": true

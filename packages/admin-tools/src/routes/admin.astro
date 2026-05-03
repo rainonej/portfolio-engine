@@ -5,11 +5,39 @@ import { getCollection } from 'astro:content';
 import { config } from '@portfolio-engine:config';
 import { routes } from '@portfolio-engine:routes';
 import SiteMapTree from '../components/SiteMapTree.astro';
+import { parseCookies, verifySession } from '../server/session.js';
+import { siteHomeUrl, sitePathUrl } from '../server/paths.js';
 
-const writing = await getCollection('writing');
-const projects = await getCollection('projects');
-const testimonials = await getCollection('testimonials');
-const profile = await getCollection('profile');
+let readOnly = false;
+
+if (process.env.ADMIN_TOOLS_DEV_BYPASS === '1' && import.meta.env.DEV) {
+  readOnly = true;
+} else {
+  const token = parseCookies(Astro.request.headers.get('cookie'))['session'];
+  const secret = process.env.SESSION_SECRET;
+  if (!secret || !token) {
+    return Astro.redirect(sitePathUrl(Astro.request, 'api/auth/github'));
+  }
+  const session = await verifySession(token, secret);
+  if (!session) {
+    return Astro.redirect(sitePathUrl(Astro.request, 'api/auth/github'));
+  }
+}
+
+type KnownCollection = 'writing' | 'projects' | 'testimonials' | 'profile';
+
+async function tryCollection(name: KnownCollection) {
+  try {
+    return await getCollection(name);
+  } catch {
+    return [];
+  }
+}
+
+const writing = await tryCollection('writing');
+const projects = await tryCollection('projects');
+const testimonials = await tryCollection('testimonials');
+const profile = await tryCollection('profile');
 
 const personEntry = profile.find((e) => 'name' in e.data && 'bio' in e.data);
 const shortBio =
@@ -25,6 +53,9 @@ const writingSorted = [...writing].sort(
 const projectsSorted = [...projects].sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
 );
+
+const logoutUrl = sitePathUrl(Astro.request, 'api/auth/logout');
+const homeUrl = siteHomeUrl(Astro.request);
 ---
 
 <!doctype html>
@@ -56,125 +87,109 @@ const projectsSorted = [...projects].sort(
     </style>
   </head>
   <body>
-    <div id="gate" class="adm-gate">
-      <div class="adm-gate-inner">
-        <span class="adm-gate-title">Admin</span>
-        <span id="gate-status" class="adm-gate-status">Checking session…</span>
-      </div>
-    </div>
-
-    <div id="admin-content" class="adm-hidden">
-      <div class="adm-wrap">
-        <header class="adm-header">
-          <p class="adm-kicker">Private</p>
-          <h1 class="adm-h1">Site overview</h1>
-          <p class="adm-lead">
-            {config.site.title} — design, routes, and content at a glance (read-only for now).
-          </p>
-          <button type="button" id="logout-btn" class="adm-logout">Log out</button>
-        </header>
-
-        <p id="read-only-banner" class="adm-banner adm-hidden">
-          Read-only session: configure GitHub OAuth and <code>SESSION_SECRET</code> for full sign-in. In production, set
-          <code>ADMIN_TOOLS_GITHUB_REPO_OWNER</code> and <code>ADMIN_TOOLS_GITHUB_REPO_NAME</code> for collaborator checks.
+    <div class="adm-wrap">
+      <header class="adm-header">
+        <p class="adm-kicker">Private</p>
+        <h1 class="adm-h1">Site overview</h1>
+        <p class="adm-lead">
+          {config.site.title} — design, routes, and content at a glance (read-only for now).
         </p>
+        <button
+          type="button"
+          id="logout-btn"
+          class="adm-logout"
+          data-logout-url={logoutUrl}
+          data-home-url={homeUrl}>Log out</button>
+      </header>
 
-        <section class="adm-section">
-          <h2 class="adm-h2">Site</h2>
-          <div class="adm-card">
-            <dl class="adm-dl">
-              <div>
-                <dt class="adm-dt">Title</dt>
-                <dd class="adm-dd">{config.site.title}</dd>
-              </div>
-              <div>
-                <dt class="adm-dt">Description</dt>
-                <dd class="adm-dd">{config.site.description ?? '—'}</dd>
-              </div>
-            </dl>
-          </div>
-        </section>
+      {
+        readOnly && (
+          <p class="adm-banner">
+            Read-only session: configure GitHub OAuth and <code>SESSION_SECRET</code> for full sign-in. In production, set
+            <code>ADMIN_TOOLS_GITHUB_REPO_OWNER</code> and <code>ADMIN_TOOLS_GITHUB_REPO_NAME</code> for collaborator checks.
+          </p>
+        )
+      }
 
-        {
-          personEntry && 'name' in personEntry.data && (
-            <section class="adm-section">
-              <h2 class="adm-h2">Profile</h2>
-              <div class="adm-card">
-                <p class="adm-profile-name">{personEntry.data.name}</p>
-                <p class="adm-profile-bio">{shortBio}</p>
-              </div>
-            </section>
+      {
+        writing.length === 0 &&
+          projects.length === 0 &&
+          testimonials.length === 0 &&
+          profile.length === 0 && (
+            <p class="adm-banner adm-banner--info">
+              No content collections matched the default admin set (<code>writing</code>, <code>projects</code>,{' '}
+              <code>testimonials</code>, <code>profile</code>). Add them or customize this page for your site.
+            </p>
           )
-        }
+      }
 
-        <section class="adm-section">
-          <h2 class="adm-h2">Routes</h2>
-          <div class="adm-card adm-card--wide">
-            <SiteMapTree routes={routes} />
-          </div>
-        </section>
+      <section class="adm-section">
+        <h2 class="adm-h2">Site</h2>
+        <div class="adm-card">
+          <dl class="adm-dl">
+            <div>
+              <dt class="adm-dt">Title</dt>
+              <dd class="adm-dd">{config.site.title}</dd>
+            </div>
+            <div>
+              <dt class="adm-dt">Description</dt>
+              <dd class="adm-dd">{config.site.description ?? '—'}</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
 
-        <section class="adm-section">
-          <h2 class="adm-h2">Content</h2>
-          <div class="adm-grid">
+      {
+        personEntry && 'name' in personEntry.data && (
+          <section class="adm-section">
+            <h2 class="adm-h2">Profile</h2>
             <div class="adm-card">
-              <h3 class="adm-h3">Writing</h3>
-              <p class="adm-count">{writing.length}</p>
-              <ul class="adm-list">
-                {writingSorted.slice(0, 8).map((w) => <li>{w.data.title}</li>)}
-                {writing.length > 8 && <li>…</li>}
-              </ul>
+              <p class="adm-profile-name">{personEntry.data.name}</p>
+              <p class="adm-profile-bio">{shortBio}</p>
             </div>
-            <div class="adm-card">
-              <h3 class="adm-h3">Projects</h3>
-              <p class="adm-count">{projects.length}</p>
-              <ul class="adm-list">
-                {projectsSorted.slice(0, 8).map((p) => <li>{p.data.title}</li>)}
-                {projects.length > 8 && <li>…</li>}
-              </ul>
-            </div>
-            <div class="adm-card">
-              <h3 class="adm-h3">Testimonials</h3>
-              <p class="adm-count">{testimonials.length}</p>
-              <ul class="adm-list">
-                {testimonials.slice(0, 8).map((t) => <li>{t.data.author}</li>)}
-                {testimonials.length > 8 && <li>…</li>}
-              </ul>
-            </div>
+          </section>
+        )
+      }
+
+      <section class="adm-section">
+        <h2 class="adm-h2">Routes</h2>
+        <div class="adm-card adm-card--wide">
+          <SiteMapTree routes={routes} />
+        </div>
+      </section>
+
+      <section class="adm-section">
+        <h2 class="adm-h2">Content</h2>
+        <div class="adm-grid">
+          <div class="adm-card">
+            <h3 class="adm-h3">Writing</h3>
+            <p class="adm-count">{writing.length}</p>
+            <ul class="adm-list">
+              {writingSorted.slice(0, 8).map((w) => <li>{w.data.title}</li>)}
+              {writing.length > 8 && <li>…</li>}
+            </ul>
           </div>
-        </section>
-      </div>
+          <div class="adm-card">
+            <h3 class="adm-h3">Projects</h3>
+            <p class="adm-count">{projects.length}</p>
+            <ul class="adm-list">
+              {projectsSorted.slice(0, 8).map((p) => <li>{p.data.title}</li>)}
+              {projects.length > 8 && <li>…</li>}
+            </ul>
+          </div>
+          <div class="adm-card">
+            <h3 class="adm-h3">Testimonials</h3>
+            <p class="adm-count">{testimonials.length}</p>
+            <ul class="adm-list">
+              {testimonials.slice(0, 8).map((t) => <li>{t.data.author}</li>)}
+              {testimonials.length > 8 && <li>…</li>}
+            </ul>
+          </div>
+        </div>
+      </section>
     </div>
 
     <style>
-      .adm-hidden {
-        display: none !important;
-      }
-      .adm-gate {
-        position: fixed;
-        inset: 0;
-        z-index: 50;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--adm-paper-2);
-      }
-      .adm-gate-inner {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-        text-align: center;
-      }
-      .adm-gate-title {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: var(--adm-ink);
-      }
-      .adm-gate-status {
-        font-size: 0.875rem;
-        color: var(--adm-muted);
-      }
       .adm-wrap {
         max-width: 64rem;
         margin: 0 auto;
@@ -225,11 +240,19 @@ const projectsSorted = [...projects].sort(
         font-size: 0.875rem;
         color: #422006;
       }
+      .adm-banner--info {
+        border-color: #bae6fd;
+        background: #f0f9ff;
+        color: #0c4a6e;
+      }
       .adm-banner code {
         padding: 0.1em 0.35em;
         border-radius: 0.25rem;
         background: #fef3c7;
         font-size: 0.85em;
+      }
+      .adm-banner--info code {
+        background: #e0f2fe;
       }
       .adm-section {
         margin-bottom: 3.5rem;
@@ -313,41 +336,13 @@ const projectsSorted = [...projects].sort(
     </style>
 
     <script>
-      const gate = document.getElementById('gate')!;
-      const gateStatus = document.getElementById('gate-status')!;
-      const content = document.getElementById('admin-content')!;
       const logoutBtn = document.getElementById('logout-btn')!;
-      const readOnlyBanner = document.getElementById('read-only-banner')!;
-
-      function unlock(readOnly: boolean) {
-        gate.classList.add('adm-hidden');
-        content.classList.remove('adm-hidden');
-        if (readOnly) readOnlyBanner.classList.remove('adm-hidden');
-      }
-
-      async function checkSession() {
-        try {
-          const res = await fetch('/api/auth/session');
-          if (!res.ok) throw new Error('session');
-          const data = (await res.json()) as {
-            authenticated?: boolean;
-            readOnly?: boolean;
-          };
-          if (data.authenticated) {
-            unlock(!!data.readOnly);
-          } else {
-            gateStatus.textContent = 'Redirecting to GitHub…';
-            window.location.href = '/api/auth/github';
-          }
-        } catch {
-          gateStatus.textContent = 'Admin needs server mode (SSR). Use demo-site with output: server.';
-        }
-      }
-
-      checkSession();
-
-      logoutBtn.addEventListener('click', () => {
-        window.location.href = '/api/auth/logout';
+      logoutBtn.addEventListener('click', async () => {
+        const url = logoutBtn.getAttribute('data-logout-url');
+        const home = logoutBtn.getAttribute('data-home-url');
+        if (!url || !home) return;
+        await fetch(url, { method: 'POST', credentials: 'include' });
+        window.location.href = home;
       });
     </script>
   </body>
