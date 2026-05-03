@@ -1,8 +1,12 @@
 // @ts-check
+import node from '@astrojs/node';
 import { defineConfig } from 'astro/config';
+import { adminTools } from '@portfolio-engine/admin-tools';
 import { editorialTheme } from '@portfolio-engine/editorial-theme';
 
 export default defineConfig({
+  output: 'server',
+  adapter: node({ mode: 'standalone' }),
   integrations: [
     editorialTheme({
       siteConfigPath: './src/config/site.json',
@@ -15,5 +19,6 @@ export default defineConfig({
         },
       },
     }),
+    adminTools({ devBypass: true }),
   ],
 });
