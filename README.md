@@ -16,7 +16,7 @@ An Astro theme for personal portfolio sites. It provides routes, layouts, and st
 | **Vercel account** | [vercel.com](https://vercel.com)            |
 | **Claude Code**    | [claude.ai/code](https://claude.ai/code)    |
 
-**Then follow [`docs/downstream/setup-with-claude.md`](docs/downstream/setup-with-claude.md)** — a step-by-step runbook of Claude prompts and Vercel dashboard steps that takes you from empty folder to live site.
+**Then open [`docs/downstream/setup-with-claude.md`](docs/downstream/setup-with-claude.md), copy the whole file, and paste it into Claude Code.** Claude will ask for your details, build the project, and tell you exactly when to go click something in Vercel. One conversation, start to finish.
 
 ---
 
@@ -53,12 +53,12 @@ Check the [releases](https://github.com/rainonej/portfolio-engine/releases) befo
 
 ## More docs
 
-| Topic                                               | Link                                                                         |
-| --------------------------------------------------- | ---------------------------------------------------------------------------- |
-| Setup runbook (Claude prompts + Vercel steps)       | [docs/downstream/setup-with-claude.md](docs/downstream/setup-with-claude.md) |
-| New site setup (full manual reference)              | [docs/downstream/new-site-setup.md](docs/downstream/new-site-setup.md)       |
-| Semver vs. workspace-link, overrides, Vercel detail | [docs/downstream/consumption.md](docs/downstream/consumption.md)             |
-| Lint, format, CI                                    | [docs/contributing/linting.md](docs/contributing/linting.md)                 |
+| Topic                                                   | Link                                                                         |
+| ------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Setup with Claude (paste whole file, Claude guides you) | [docs/downstream/setup-with-claude.md](docs/downstream/setup-with-claude.md) |
+| New site setup (full manual reference)                  | [docs/downstream/new-site-setup.md](docs/downstream/new-site-setup.md)       |
+| Semver vs. workspace-link, overrides, Vercel detail     | [docs/downstream/consumption.md](docs/downstream/consumption.md)             |
+| Lint, format, CI                                        | [docs/contributing/linting.md](docs/contributing/linting.md)                 |
 
 ---
 

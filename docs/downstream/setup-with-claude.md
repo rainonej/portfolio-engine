@@ -1,144 +1,143 @@
-# Setting up your portfolio site with Claude
+# Portfolio site setup — paste this into Claude Code
 
-A step-by-step runbook. Open this file alongside Claude Code and paste each prompt when you reach that step. Steps 3, 5, and 6 are short Vercel dashboard tasks you do yourself — no Claude needed.
-
----
-
-## Before you start
-
-You need these four things installed and accounts created:
-
-|                    |                                                 |
-| ------------------ | ----------------------------------------------- |
-| **Node.js 22**     | [nodejs.org](https://nodejs.org)                |
-| **pnpm**           | Run `npm install -g pnpm` after installing Node |
-| **GitHub account** | [github.com](https://github.com)                |
-| **Vercel account** | [vercel.com](https://vercel.com)                |
-| **Claude Code**    | [claude.ai/code](https://claude.ai/code)        |
-
-Create a new empty folder on your computer. Open it in Claude Code. You're ready.
+Copy the entire contents of this file and paste it into Claude Code as your first message. Claude will guide you through everything from there — asking for your details, building the site, and telling you exactly when to go click something in Vercel.
 
 ---
 
-## Step 1 — Scaffold your site
+You are helping me set up a new personal portfolio site from scratch using
+`@portfolio-engine/editorial-theme` (published on npm, source at
+https://github.com/rainonej/portfolio-engine).
 
-Fill in your details and paste this into Claude Code:
+Work through the phases below in order. Do not move to the next phase until
+the current one is finished. At each phase, tell me clearly what you're doing
+and what — if anything — you need from me or need me to do manually.
 
-```
-I'm setting up a new personal portfolio site using @portfolio-engine/editorial-theme from npm.
-Read the full setup guide at:
+---
+
+## Phase 1 — Learn about me
+
+Before touching any files, ask me for everything you need. Collect it all at
+once rather than one question at a time:
+
+- **Name** — as it should appear on the site
+- **Role** — what I do (e.g. "product designer", "educator", "software engineer")
+- **Tagline** — one short punchy line
+- **Description** — one sentence: my work and who I do it for
+- **Location** — city and country
+- **Tone** — how I write (e.g. "warm and direct", "precise and minimal")
+- **Audience** — who reads my site (e.g. "hiring managers at education nonprofits")
+- **Pages** — which of these I want: Work, Writing, About, Contact (default: all four)
+- **Repo name** — what to call my GitHub repository (e.g. "jordan-site")
+
+If any answer is vague, ask one follow-up before moving on.
+
+---
+
+## Phase 2 — Build the project
+
+Using my answers, follow the technical setup guide at:
 https://github.com/rainonej/portfolio-engine/blob/main/docs/downstream/new-site-setup.md
 
-My details:
-  Name:        [YOUR FULL NAME]
-  Role:        [WHAT YOU DO — e.g. "product designer", "educator", "software engineer"]
-  Tagline:     [SHORT PUNCHY LINE — e.g. "designs for clarity"]
-  Description: [ONE SENTENCE — your work and who you do it for]
-  Location:    [CITY, COUNTRY]
-  Tone:        [HOW YOU WRITE — e.g. "warm and direct", "precise and minimal"]
-  Audience:    [WHO READS YOUR SITE — e.g. "hiring managers in education nonprofits"]
-  Pages I want: Work / Writing / About / Contact (remove any you don't need)
+Do all of the following:
 
-Create placeholder entries in src/content/ that I can swap out for real work later.
-Fill in src/context/ using my details above.
-When you're done, list exactly which files I still need to edit myself.
-```
+- Scaffold the Astro project and install `@portfolio-engine/editorial-theme`
+- Create `src/config/site.json`, `navigation.json`, `theme.json`, `features.json`
+  with my real details
+- Create `src/content.config.ts` and placeholder content in `src/content/`
+  (I'll replace placeholders with real work later)
+- Fill in `src/context/site-owner.json` and `src/context/brand-voice.json`
+  from my Phase 1 answers; leave `agent-rules.md` as a template I can edit
+- Create `src/overrides/README.md`
 
-Claude will scaffold the full project structure, install dependencies, and tell you what's left for you to fill in.
+When done, tell me what was created and list any files I should come back and
+edit myself.
 
 ---
 
-## Step 2 — Push to GitHub
+## Phase 3 — Push to GitHub
 
-Once the scaffold is done, paste this:
+1. Initialize a git repo here if one doesn't exist yet
+2. Create a new GitHub repo called the name I gave in Phase 1 — use
+   `gh repo create` if the GitHub CLI is available, otherwise walk me through
+   creating it at github.com
+3. Commit everything and push to `main`
 
-```
-Please push this project to GitHub.
-  1. Run git init if there's no repo here yet.
-  2. Create a new GitHub repo called [YOUR-REPO-NAME] — use the GitHub CLI (gh repo create)
-     if it's available, otherwise walk me through creating it manually.
-  3. Commit everything and push to main.
-```
+Tell me the GitHub URL when it's pushed.
 
 ---
 
-## Step 3 — Connect to Vercel _(manual — ~2 minutes)_
+## Phase 4 — Vercel (you'll guide me through this manually)
 
-Do this yourself in the Vercel dashboard:
+You can't click buttons, so your job here is to give me exact instructions.
+Tell me:
 
-1. **Add New → Project** → import your GitHub repo
-2. **Root Directory:** leave as `.`
-3. **Build Command:** `pnpm build`
-4. **Node.js:** set to **22.x** (Settings → General)
-5. Click **Deploy** and wait for it to go green
+> Go to vercel.com and log in. Click **Add New → Project** and import your
+> **[repo name]** repository. Set:
+>
+> - Root Directory: `.` (leave it as-is)
+> - Build Command: `pnpm build`
+> - Output Directory: leave as default
+>
+> Click **Deploy** and wait for it to go green. Then go to
+> **Settings → General** and set Node.js to **22.x**. Come back here and
+> paste the URL it gave you (it looks like `your-repo.vercel.app`).
 
-Note the URL Vercel gives you (e.g. `your-repo.vercel.app`). You'll use it in the next step.
-
----
-
-## Step 4 — Make it real
-
-Once the site is live, paste this:
-
-```
-My site is live at [https://your-site.vercel.app].
-
-Please:
-  1. Update src/config/site.json baseUrl to that URL.
-  2. Help me add my first real project to src/content/projects/.
-  3. Help me add my first real writing piece to src/content/writing/.
-  4. Ask me the questions needed to fill in src/context/brand-voice.json
-     with my actual tone, audience, and what language I want to avoid.
-```
+Wait for me to come back with the URL before doing anything else.
 
 ---
 
-## Step 5 — Set your production URL in Vercel _(manual)_
+## Phase 5 — Wire up the live URL
 
-In Vercel: **Project → Settings → Environment Variables**, add:
+Once I give you the Vercel URL:
 
-- **Name:** `SITE_URL`
-- **Value:** your production URL (e.g. `https://your-repo.vercel.app` or your custom domain)
-- **Environment:** Production only
-
-Trigger a redeploy after saving.
-
----
-
-## Step 6 — Add a custom domain _(optional, manual)_
-
-In Vercel: **Project → Settings → Domains** → add your domain, follow the DNS instructions.
-
-Once the domain is live, come back and paste this:
-
-```
-My custom domain is now live at [https://yourname.com].
-
-Please:
-  1. Update src/config/site.json baseUrl to the new domain.
-  2. Remind me to update the SITE_URL env var in Vercel to match.
-```
-
-Then in Vercel update `SITE_URL` to the new domain and redeploy.
+1. Update `src/config/site.json` `baseUrl` to that URL
+2. Commit and push the change
+3. Ask me: do I want to add my first real project now, or leave the placeholder?
+4. Ask me: do I want to add my first real writing piece now, or leave the placeholder?
+5. Walk me through filling in `src/context/brand-voice.json` properly — ask
+   me questions and write it from my answers rather than leaving it generic
 
 ---
 
-## Adding content later
+## Phase 6 — Production URL env var (you'll guide me)
 
-Any time you want to add new work, writing, or update your profile, open Claude Code in your site folder and paste:
+Tell me:
 
-```
-I want to add [a new project / a new blog post / update my about page].
-Here are the details: [describe what you want]
-
-Please create the right file in src/content/ and make sure the frontmatter is correct.
-```
+> Go to your Vercel project → **Settings → Environment Variables**. Add a
+> new variable:
+>
+> - Name: `SITE_URL`
+> - Value: `[the URL from Phase 5]`
+> - Environment: **Production** only (uncheck Preview and Development)
+>
+> Save it, then go to **Deployments**, open the latest deployment's menu
+> (three dots), and click **Redeploy**. Come back when it's done.
 
 ---
 
-## Keeping the theme up to date
+## Phase 7 — Custom domain (ask me first)
 
-```
-Please update @portfolio-engine/editorial-theme to the latest version,
-check the changelog for any breaking changes, and make sure the build still passes.
-```
+Ask me: "Do you have a custom domain you want to use, like yourname.com?"
+
+**If yes:** tell me to go to Vercel → **Settings → Domains** → add the
+domain, and walk me through the DNS records I need to set. Once I confirm the
+domain is live:
+
+1. Update `src/config/site.json` `baseUrl` to the new domain
+2. Commit and push
+3. Tell me to go back to Vercel and update the `SITE_URL` env var to the new
+   domain, then redeploy
+
+**If no:** skip to the wrap-up.
+
+---
+
+## Wrap-up
+
+Give me a short summary:
+
+- Where the site is live
+- The three folders that are mine to edit: `src/content/`, `src/config/`,
+  `src/context/`
+- One line on how to add new work later
+- One line on how to update the theme when a new version is out
