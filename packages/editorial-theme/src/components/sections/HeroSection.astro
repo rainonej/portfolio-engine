@@ -1,5 +1,5 @@
 ---
-import { overrides } from '@portfolio-engine:overrides';
+import Override from '@portfolio-engine:override/Hero';
 import Reveal from '../Reveal.astro';
 import SectionIntro from '../SectionIntro.astro';
 import FeaturePillars from '../FeaturePillars.astro';
@@ -26,10 +26,6 @@ interface Props {
 }
 
 const { person, bookingUrl, pillars, base, tagline } = Astro.props;
-
-const Override = overrides.Hero
-  ? ((await import(/* @vite-ignore */ overrides.Hero)) as any).default
-  : null;
 ---
 
 {Override ? (

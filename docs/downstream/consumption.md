@@ -152,33 +152,47 @@ To switch from semver back to workspace-link:
 
 Overrides are **not** picked up from disk automatically. Pass an `overrides` object to `editorialTheme()` with paths **relative to the consumer project root**. Only named surfaces declared by the engine are valid; unsupported names fail at build time.
 
-**Supported component surfaces (v1):** `Hero`, `FeaturedWriting`, `TestimonialSection`, `CollaborationSection`. You may also pass `styles` for extra CSS files merged after the theme’s global styles.
+### Supported surfaces
+
+| Surface name | Upstream implementation | Props passed |
+|---|---|---|
+| `Hero` | `HeroSection.astro` | `person`, `bookingUrl`, `pillars`, `base`, `tagline?` |
+| `FeaturedWriting` | `FeaturedWritingSection.astro` | `writings`, `base` |
+| `TestimonialSection` | `TestimonialSection.astro` | `testimonials` |
+| `CollaborationSection` | `CollaborationSection.astro` | `bookingUrl`, `base` |
+| `Footer` | `Footer.astro` | `base` |
+
+The surface **name** (e.g. `Hero`) is the stable contract key. The upstream implementation file it replaces (e.g. `HeroSection.astro`) is an internal detail that may be renamed. Your override file receives the props listed above and is rendered in place of the default implementation.
+
+You may also pass `styles` (array of CSS file paths) to append extra CSS after the theme’s global styles — useful for custom properties or utility overrides without replacing a component.
+
+### Wiring overrides
 
 **Example — `astro.config.mjs`:**
 
 ```js
-import { defineConfig } from 'astro/config';
-import { editorialTheme } from '@portfolio-engine/editorial-theme';
+import { defineConfig } from ‘astro/config’;
+import { editorialTheme } from ‘@portfolio-engine/editorial-theme’;
 
 export default defineConfig({
   integrations: [
     editorialTheme({
-      siteConfigPath: './src/config/site.json',
-      navigationConfigPath: './src/config/navigation.json',
-      themeConfigPath: './src/config/theme.json',
-      featuresConfigPath: './src/config/features.json',
+      siteConfigPath: ‘./src/config/site.json’,
+      navigationConfigPath: ‘./src/config/navigation.json’,
+      themeConfigPath: ‘./src/config/theme.json’,
+      featuresConfigPath: ‘./src/config/features.json’,
       overrides: {
         components: {
-          Hero: './src/overrides/Hero.astro',
+          Hero: ‘./src/overrides/Hero.astro’,
         },
-        styles: ['./src/overrides/custom.css'],
+        styles: [‘./src/overrides/custom.css’],
       },
     }),
   ],
 });
 ```
 
-By convention, keep those files under `src/overrides/` (any layout under that folder is fine as long as the paths in `overrides` match). Do not point at arbitrary internal theme files—only the supported surface keys above are stable.
+By convention, keep those files under `src/overrides/`. Do not point at arbitrary internal theme files — only the surface keys in the table above are stable.
 
 ```
 your-site/
@@ -187,3 +201,5 @@ your-site/
       Hero.astro        ← example: wired via overrides.components.Hero
       custom.css        ← example: wired via overrides.styles
 ```
+
+A working demo override for `Hero` lives at [`examples/demo-site/src/overrides/Hero.astro`](../../examples/demo-site/src/overrides/Hero.astro).
