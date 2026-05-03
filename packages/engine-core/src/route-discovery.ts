@@ -3,6 +3,7 @@ import { resolve, join } from 'node:path';
 import { createRequire } from 'node:module';
 import type { Dirent } from 'node:fs';
 import type { RouteRecord } from './types.js';
+import type { RouteRegistryEntry } from '@portfolio-engine/schema';
 
 export interface DiscoveredRoute {
   /** Canonical URL pattern, e.g. /work/[slug] */
@@ -14,65 +15,6 @@ export interface DiscoveredRoute {
 
 // Static metadata for the v1 route surface. resolved is omitted — it is
 // seeded to equal pattern at discovery time and updated by applyRouteOverrides.
-const ROUTE_METADATA: Record<string, Omit<RouteRecord, 'pattern' | 'resolved'>> = {
-  '/': {
-    label: 'Home',
-    section: null,
-    visibility: 'public',
-    remappable: true,
-    disableable: false,
-  },
-  '/about': {
-    label: 'About',
-    section: null,
-    visibility: 'public',
-    remappable: true,
-    disableable: true,
-  },
-  '/work': {
-    label: 'Work',
-    section: null,
-    visibility: 'public',
-    remappable: true,
-    disableable: true,
-  },
-  '/work/[slug]': {
-    label: 'Work detail',
-    section: null,
-    visibility: 'hidden',
-    remappable: false,
-    disableable: false,
-  },
-  '/writing': {
-    label: 'Writing',
-    section: null,
-    visibility: 'public',
-    remappable: true,
-    disableable: true,
-  },
-  '/writing/[slug]': {
-    label: 'Writing detail',
-    section: null,
-    visibility: 'hidden',
-    remappable: false,
-    disableable: false,
-  },
-  '/contact': {
-    label: 'Contact',
-    section: null,
-    visibility: 'public',
-    remappable: true,
-    disableable: true,
-  },
-  '/admin': {
-    label: 'Admin',
-    section: null,
-    visibility: 'admin-only',
-    remappable: false,
-    disableable: false,
-  },
-};
-
 function fileToPattern(relativePath: string): string {
   let p = relativePath.replace(/\\/g, '/').replace(/\.astro$/, '');
   if (p === 'index' || p.endsWith('/index')) {
@@ -113,7 +55,10 @@ function walkAstroFiles(dir: string, base = ''): string[] {
  * Returns an empty array only if the directory does not exist (ENOENT/ENOTDIR).
  * Other filesystem errors (permissions, I/O) are rethrown.
  */
-export function discoverRoutes(pagesDir: string): DiscoveredRoute[] {
+export function discoverRoutes(
+  pagesDir: string,
+  routeRegistry: RouteRegistryEntry[] = [],
+): DiscoveredRoute[] {
   let files: string[];
   try {
     files = walkAstroFiles(pagesDir);
@@ -126,9 +71,11 @@ export function discoverRoutes(pagesDir: string): DiscoveredRoute[] {
     throw error;
   }
 
+  const routeMetadata = new Map(routeRegistry.map((route) => [route.pattern, route]));
   return files.map((f) => {
     const pattern = fileToPattern(f);
-    const meta: Omit<RouteRecord, 'pattern' | 'resolved'> = ROUTE_METADATA[pattern] ?? {
+    const candidate = routeMetadata.get(pattern);
+    const meta: Omit<RouteRecord, 'pattern' | 'resolved'> = candidate ?? {
       label: pattern,
       section: null,
       visibility: 'public' as const,

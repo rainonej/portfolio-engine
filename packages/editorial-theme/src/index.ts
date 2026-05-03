@@ -5,3 +5,4 @@ export { getBase, formatDate, sortByDateDesc, resolveAssetUrl } from './lib/util
 
 export { editorialTheme } from './integration.js';
 export type { EditorialThemeOptions } from './integration.js';
+export { DEFAULT_OVERRIDE_SURFACES, DEFAULT_ROUTE_REGISTRY } from './registry.js';

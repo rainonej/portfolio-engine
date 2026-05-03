@@ -1,0 +1,110 @@
+{
+  "generatedAt": "2026-05-03T04:27:09.743Z",
+  "rootDir": "/workspace/portfolio-engine/examples/demo-site/",
+  "routes": [
+    {
+      "pattern": "/",
+      "label": "Home",
+      "section": null,
+      "visibility": "public",
+      "remappable": true,
+      "disableable": false
+    },
+    {
+      "pattern": "/about",
+      "label": "About",
+      "section": null,
+      "visibility": "public",
+      "remappable": true,
+      "disableable": true
+    },
+    {
+      "pattern": "/work",
+      "label": "Work",
+      "section": null,
+      "visibility": "public",
+      "remappable": true,
+      "disableable": true
+    },
+    {
+      "pattern": "/work/[slug]",
+      "label": "Work detail",
+      "section": null,
+      "visibility": "hidden",
+      "remappable": false,
+      "disableable": false
+    },
+    {
+      "pattern": "/writing",
+      "label": "Writing",
+      "section": null,
+      "visibility": "public",
+      "remappable": true,
+      "disableable": true
+    },
+    {
+      "pattern": "/writing/[slug]",
+      "label": "Writing detail",
+      "section": null,
+      "visibility": "hidden",
+      "remappable": false,
+      "disableable": false
+    },
+    {
+      "pattern": "/contact",
+      "label": "Contact",
+      "section": null,
+      "visibility": "public",
+      "remappable": true,
+      "disableable": true
+    }
+  ],
+  "overrideSurfaces": [
+    {
+      "name": "Hero",
+      "props": [
+        "site",
+        "person"
+      ],
+      "defaultComponentPath": "src/components/sections/HeroSection.astro",
+      "hostPage": "src/pages/index.astro"
+    },
+    {
+      "name": "FeaturedWriting",
+      "props": [
+        "posts"
+      ],
+      "defaultComponentPath": "src/components/sections/FeaturedWritingSection.astro",
+      "hostPage": "src/pages/index.astro"
+    },
+    {
+      "name": "TestimonialSection",
+      "props": [
+        "items"
+      ],
+      "defaultComponentPath": "src/components/sections/TestimonialSection.astro",
+      "hostPage": "src/pages/index.astro"
+    },
+    {
+      "name": "CollaborationSection",
+      "props": [
+        "features"
+      ],
+      "defaultComponentPath": "src/components/sections/CollaborationSection.astro",
+      "hostPage": "src/pages/index.astro"
+    },
+    {
+      "name": "Footer",
+      "props": [
+        "site"
+      ],
+      "defaultComponentPath": "src/components/Footer.astro",
+      "hostPage": "src/layouts/Layout.astro"
+    }
+  ],
+  "capabilities": {
+    "routeRemap": true,
+    "routeDisable": true,
+    "namedOverrides": true
+  }
+}
