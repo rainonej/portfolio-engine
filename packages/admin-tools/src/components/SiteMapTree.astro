@@ -1,0 +1,170 @@
+---
+import type { RouteRecord } from '@portfolio-engine/engine-core';
+
+interface Props {
+  routes: RouteRecord[];
+}
+
+const { routes } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+const root = routes.find((r) => r.resolved === '/');
+const topLevel = routes.filter((r) => r.resolved !== '/' && !r.resolved.includes('['));
+
+function detailOf(parent: RouteRecord): RouteRecord | undefined {
+  return routes.find(
+    (r) => r.resolved.startsWith(parent.resolved + '/') && r.resolved.includes('['),
+  );
+}
+
+function isCurrent(route: RouteRecord): boolean {
+  return currentPath === route.resolved || currentPath.startsWith(route.resolved + '/');
+}
+---
+
+<div class="tree">
+  {
+    root && (
+      <a
+        href={root.resolved}
+        class:list={['tree-node tree-node-home', isCurrent(root) && 'tree-node-current']}
+      >
+        {root.resolved} — {root.label}
+      </a>
+    )
+  }
+
+  <div class="tree-stem" />
+
+  <div class="tree-branches">
+    {
+      topLevel.map((route) => {
+        const detail = detailOf(route);
+        return (
+          <div class="tree-branch">
+            <div class="tree-stem" />
+            <a
+              href={route.resolved}
+              class:list={['tree-node', isCurrent(route) && 'tree-node-current']}
+            >
+              {route.resolved} — {route.label}
+            </a>
+            {detail && (
+              <>
+                <div class="tree-stem" />
+                <span class="tree-node tree-node-dynamic">{detail.resolved}</span>
+              </>
+            )}
+          </div>
+        );
+      })
+    }
+  </div>
+</div>
+
+<style>
+  .tree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: max-content;
+  }
+
+  .tree-stem {
+    width: 2px;
+    height: 32px;
+    background: var(--adm-stone, #94a3b8);
+    opacity: 0.4;
+    flex-shrink: 0;
+  }
+
+  .tree-branches {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+  }
+
+  .tree-branches::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    right: 50%;
+    height: 2px;
+    background: var(--adm-stone, #94a3b8);
+    opacity: 0.35;
+  }
+
+  .tree-branch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px;
+    position: relative;
+  }
+
+  .tree-branch::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--adm-stone, #94a3b8);
+    opacity: 0.35;
+  }
+
+  .tree-branch:first-child::before {
+    left: 50%;
+  }
+  .tree-branch:last-child::before {
+    right: 50%;
+  }
+
+  .tree-node {
+    display: block;
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--adm-border, #e2e8f0);
+    background: var(--adm-paper, #fff);
+    font-size: 0.875rem;
+    color: var(--adm-muted, #64748b);
+    white-space: nowrap;
+    text-decoration: none;
+    transition:
+      color 0.15s,
+      border-color 0.15s;
+  }
+
+  a.tree-node:hover {
+    color: var(--adm-ink, #0f172a);
+    border-color: var(--adm-muted, #64748b);
+  }
+
+  .tree-node-home {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--adm-ink, #0f172a);
+    border-color: var(--adm-muted, #64748b);
+    background: var(--adm-paper-2, #f8fafc);
+  }
+
+  .tree-node-current {
+    color: var(--adm-accent, #b45309);
+    border-color: var(--adm-accent, #b45309);
+    background: var(--adm-paper-2, #f8fafc);
+  }
+
+  a.tree-node-current:hover {
+    color: var(--adm-accent, #b45309);
+    border-color: var(--adm-accent, #b45309);
+  }
+
+  .tree-node-dynamic {
+    font-style: italic;
+    opacity: 0.6;
+    font-size: 0.75rem;
+    border-style: dashed;
+    cursor: default;
+  }
+</style>

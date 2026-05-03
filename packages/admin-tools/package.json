@@ -1,16 +1,16 @@
 {
   "name": "@portfolio-engine/admin-tools",
   "private": true,
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Admin and reviewer UI components for portfolio-engine sites",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
   },
   "scripts": {
-    "build": "echo 'build not yet configured'",
-    "dev": "echo 'dev not yet configured'",
-    "check": "tsc --noEmit"
+    "build": "echo 'no build emit — TypeScript sources consumed directly'",
+    "dev": "echo 'use a consumer site: pnpm --filter demo-site dev'",
+    "check": "tsc --noEmit -p tsconfig.json"
   },
   "peerDependencies": {
     "astro": ">=5.0.0"

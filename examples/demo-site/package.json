@@ -10,6 +10,8 @@
     "check": "astro check"
   },
   "dependencies": {
+    "@astrojs/node": "^9.2.0",
+    "@portfolio-engine/admin-tools": "workspace:*",
     "@portfolio-engine/editorial-theme": "workspace:*",
     "@portfolio-engine/engine-core": "workspace:*",
     "@portfolio-engine/schema": "workspace:*"

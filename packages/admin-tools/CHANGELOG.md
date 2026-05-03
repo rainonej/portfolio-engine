@@ -1,5 +1,18 @@
 # @portfolio-engine/admin-tools
 
+## 0.0.5
+
+### Minor Changes
+
+- Ship `adminTools()` Astro integration: injects `/admin` read-only dashboard (engine virtual modules + content collections) and `/api/auth/*` GitHub OAuth routes. Optional `devBypass` for local `astro dev` without OAuth.
+
+### Patch Changes
+
+- Enforce authentication in `/admin` server render before emitting dashboard HTML; remove client-only gate.
+- OAuth: use `read:user repo`; validate token exchange responses; respect Astro `base` for callback, post-login redirect, and logout.
+- Logout is `POST` only (`GET` returns 405) to avoid cross-site forced logout.
+- Harden `getCollection` usage when optional collections are missing; expand `tsconfig` `include` for route TypeScript.
+
 ## 0.0.4
 
 ### Patch Changes

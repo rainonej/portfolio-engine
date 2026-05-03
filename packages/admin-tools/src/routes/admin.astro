@@ -1,0 +1,519 @@
+---
+export const prerender = false;
+
+import { getCollection } from 'astro:content';
+import { config } from '@portfolio-engine:config';
+import { routes } from '@portfolio-engine:routes';
+import SiteMapTree from '../components/SiteMapTree.astro';
+import { parseCookies, verifySession } from '../server/session.js';
+import { siteHomeUrl, sitePathUrl } from '../server/paths.js';
+
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
+
+interface DirAudit { exists: boolean; files: string[]; }
+async function listFilesSafe(relativeDir: string): Promise<DirAudit> {
+  const root = process.cwd();
+  const start = path.join(root, relativeDir);
+  async function walk(dir: string): Promise<string[]> {
+    const entries = await fs.readdir(dir, { withFileTypes: true });
+    const out: string[] = [];
+    for (const entry of entries) {
+      const abs = path.join(dir, entry.name);
+      if (entry.isDirectory()) out.push(...(await walk(abs)));
+      else out.push(path.relative(root, abs).replaceAll(path.sep, '/'));
+    }
+    return out;
+  }
+
+  try {
+    return { exists: true, files: await walk(start) };
+  } catch {
+    return { exists: false, files: [] };
+  }
+}
+
+async function readJsonSafe(relativePath: string): Promise<Record<string, unknown> | null> {
+  try {
+    const raw = await fs.readFile(path.join(process.cwd(), relativePath), 'utf8');
+    return JSON.parse(raw) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
+let devBypass = false;
+
+if (process.env.ADMIN_TOOLS_DEV_BYPASS === '1' && import.meta.env.DEV) {
+  devBypass = true;
+} else {
+  const token = parseCookies(Astro.request.headers.get('cookie'))['session'];
+  const secret = process.env.SESSION_SECRET;
+  if (!secret || !token) {
+    return Astro.redirect(sitePathUrl(Astro.request, 'api/auth/github'));
+  }
+  const session = await verifySession(token, secret);
+  if (!session) {
+    return Astro.redirect(sitePathUrl(Astro.request, 'api/auth/github'));
+  }
+}
+
+type KnownCollection = 'writing' | 'projects' | 'testimonials' | 'profile';
+
+async function tryCollection(name: KnownCollection) {
+  try {
+    return await getCollection(name);
+  } catch {
+    return [];
+  }
+}
+
+const writing = await tryCollection('writing');
+const projects = await tryCollection('projects');
+const testimonials = await tryCollection('testimonials');
+const profile = await tryCollection('profile');
+
+const personEntry = profile.find((e) => 'name' in e.data && 'bio' in e.data);
+const shortBio =
+  personEntry && 'bio' in personEntry.data && typeof personEntry.data.bio === 'string'
+    ? personEntry.data.bio.length > 120
+      ? personEntry.data.bio.slice(0, 120).trimEnd() + '…'
+      : personEntry.data.bio
+    : '';
+
+const writingSorted = [...writing].sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+);
+const projectsSorted = [...projects].sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+);
+
+const logoutUrl = sitePathUrl(Astro.request, 'api/auth/logout');
+const homeUrl = siteHomeUrl(Astro.request);
+const contentApiUrl = sitePathUrl(Astro.request, 'api/content');
+
+const configAudit = await listFilesSafe('src/config');
+const contentAudit = await listFilesSafe('src/content');
+const contextAudit = await listFilesSafe('src/context');
+const publicAudit = await listFilesSafe('public');
+const registryAudit = await listFilesSafe('src/registry');
+const manifestJson = await readJsonSafe('.portfolio-engine/manifest.json');
+const hasManifest = manifestJson !== null;
+const missingAreas = [
+  !configAudit.exists && 'src/config',
+  !contentAudit.exists && 'src/content',
+  !contextAudit.exists && 'src/context',
+  !publicAudit.exists && 'public',
+  !registryAudit.exists && 'src/registry',
+  !hasManifest && '.portfolio-engine/manifest.json',
+].filter(Boolean);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Admin — Site overview</title>
+    <style is:global>
+      :root {
+        --adm-ink: #0f172a;
+        --adm-muted: #64748b;
+        --adm-border: #e2e8f0;
+        --adm-paper: #ffffff;
+        --adm-paper-2: #f8fafc;
+        --adm-accent: #b45309;
+      }
+      body {
+        margin: 0;
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          sans-serif;
+        background: var(--adm-paper-2);
+        color: var(--adm-ink);
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="adm-wrap">
+      <header class="adm-header">
+        <p class="adm-kicker">Private</p>
+        <h1 class="adm-h1">Site overview</h1>
+        <p class="adm-lead">
+          {config.site.title} — design, routes, and content at a glance (read-only for now).
+        </p>
+        <button
+          type="button"
+          id="logout-btn"
+          class="adm-logout"
+          data-logout-url={logoutUrl}
+          data-home-url={homeUrl}>Log out</button>
+      </header>
+
+      {
+        devBypass && (
+          <p class="adm-banner">
+            Dev bypass mode: local file writes enabled. Configure GitHub OAuth and <code>SESSION_SECRET</code> for full
+            sign-in. In production, set <code>ADMIN_TOOLS_GITHUB_REPO_OWNER</code> and{' '}
+            <code>ADMIN_TOOLS_GITHUB_REPO_NAME</code> for collaborator checks.
+          </p>
+        )
+      }
+
+      {
+        writing.length === 0 &&
+          projects.length === 0 &&
+          testimonials.length === 0 &&
+          profile.length === 0 && (
+            <p class="adm-banner adm-banner--info">
+              No content collections matched the default admin set (<code>writing</code>, <code>projects</code>,{' '}
+              <code>testimonials</code>, <code>profile</code>). Add them or customize this page for your site.
+            </p>
+          )
+      }
+
+      <section class="adm-section">
+        <h2 class="adm-h2">Site</h2>
+        <div class="adm-card">
+          <dl class="adm-dl">
+            <div>
+              <dt class="adm-dt">Title</dt>
+              <dd class="adm-dd">{config.site.title}</dd>
+            </div>
+            <div>
+              <dt class="adm-dt">Description</dt>
+              <dd class="adm-dd">{config.site.description ?? '—'}</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      {
+        personEntry && 'name' in personEntry.data && (
+          <section class="adm-section">
+            <h2 class="adm-h2">Profile</h2>
+            <div class="adm-card">
+              <p class="adm-profile-name">{personEntry.data.name}</p>
+              <p class="adm-profile-bio">{shortBio}</p>
+            </div>
+          </section>
+        )
+      }
+
+      <section class="adm-section">
+        <h2 class="adm-h2">Routes</h2>
+        <div class="adm-card adm-card--wide">
+          <SiteMapTree routes={routes} />
+        </div>
+      </section>
+
+
+      <section class="adm-section">
+        <h2 class="adm-h2">Admin tools audit</h2>
+        <div class="adm-card adm-card--wide">
+          <p class="adm-lead">Coverage of planned admin areas: config, content, context, assets, registry, and manifest.</p>
+          <ul class="adm-list">
+            <li>Config files: {configAudit.files.length}</li>
+            <li>Content files: {contentAudit.files.length}</li>
+            <li>Context files: {contextAudit.files.length}</li>
+            <li>Public assets: {publicAudit.files.length}</li>
+            <li>Registry files: {registryAudit.files.length}</li>
+            <li>Manifest detected: {hasManifest ? 'yes' : 'no'}</li>
+          </ul>
+          {missingAreas.length > 0 ? <p class="adm-banner adm-banner--info">Missing expected paths: {missingAreas.join(', ')}</p> : <p class="adm-profile-bio">No structural blockers detected.</p>}
+        </div>
+      </section>
+
+
+      <section class="adm-section" id="adm-editor-section" data-content-api-url={contentApiUrl}>
+        <h2 class="adm-h2">Content editor (MVP)</h2>
+        <div class="adm-card adm-card--wide">
+          <p class="adm-profile-bio">Read/write editor for files in src/content, src/config, src/context, src/registry, and public.</p>
+          <div class="adm-editor-row">
+            <input id="adm-file" class="adm-input" placeholder="src/content/writing/post.md" />
+            <button id="adm-load" class="adm-btn">Load</button>
+            <button id="adm-save" class="adm-btn adm-btn--primary">Save</button>
+          </div>
+          <textarea id="adm-content" class="adm-textarea" spellcheck="false"></textarea>
+          <p id="adm-status" class="adm-profile-bio"></p>
+        </div>
+      </section>
+
+
+      <section class="adm-section">
+        <h2 class="adm-h2">Public assets uploader</h2>
+        <div class="adm-card adm-card--wide">
+          <p class="adm-profile-bio">Drag & drop files to upload into <code>public/</code>. Use a subfolder path if desired (example: <code>media/projects</code>).</p>
+          <div class="adm-editor-row">
+            <input id="adm-target-dir" class="adm-input" placeholder="media/uploads" />
+          </div>
+          <div id="adm-dropzone" class="adm-dropzone">Drop files here or click to choose files.</div>
+          <input id="adm-upload-input" type="file" multiple class="adm-hidden-input" />
+          <ul id="adm-upload-list" class="adm-list"></ul>
+          <p id="adm-upload-status" class="adm-profile-bio"></p>
+        </div>
+      </section>
+
+      <section class="adm-section">
+        <h2 class="adm-h2">Content</h2>
+        <div class="adm-grid">
+          <div class="adm-card">
+            <h3 class="adm-h3">Writing</h3>
+            <p class="adm-count">{writing.length}</p>
+            <ul class="adm-list">
+              {writingSorted.slice(0, 8).map((w) => <li>{w.data.title}</li>)}
+              {writing.length > 8 && <li>…</li>}
+            </ul>
+          </div>
+          <div class="adm-card">
+            <h3 class="adm-h3">Projects</h3>
+            <p class="adm-count">{projects.length}</p>
+            <ul class="adm-list">
+              {projectsSorted.slice(0, 8).map((p) => <li>{p.data.title}</li>)}
+              {projects.length > 8 && <li>…</li>}
+            </ul>
+          </div>
+          <div class="adm-card">
+            <h3 class="adm-h3">Testimonials</h3>
+            <p class="adm-count">{testimonials.length}</p>
+            <ul class="adm-list">
+              {testimonials.slice(0, 8).map((t) => <li>{t.data.author}</li>)}
+              {testimonials.length > 8 && <li>…</li>}
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <style>
+      .adm-wrap {
+        max-width: 64rem;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 6rem;
+      }
+      .adm-header {
+        margin-bottom: 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid var(--adm-border);
+      }
+      .adm-kicker {
+        margin: 0 0 0.5rem;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--adm-accent);
+      }
+      .adm-h1 {
+        margin: 0;
+        font-size: 2.25rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .adm-lead {
+        margin: 0.5rem 0 0;
+        color: var(--adm-muted);
+      }
+      .adm-logout {
+        margin-top: 1rem;
+        padding: 0;
+        border: none;
+        background: none;
+        font-size: 0.75rem;
+        color: var(--adm-muted);
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      .adm-logout:hover {
+        color: var(--adm-ink);
+      }
+      .adm-banner {
+        margin-bottom: 2rem;
+        padding: 0.75rem 1rem;
+        border: 1px solid #fde68a;
+        border-radius: 0.5rem;
+        background: #fffbeb;
+        font-size: 0.875rem;
+        color: #422006;
+      }
+      .adm-banner--info {
+        border-color: #bae6fd;
+        background: #f0f9ff;
+        color: #0c4a6e;
+      }
+      .adm-banner code {
+        padding: 0.1em 0.35em;
+        border-radius: 0.25rem;
+        background: #fef3c7;
+        font-size: 0.85em;
+      }
+      .adm-banner--info code {
+        background: #e0f2fe;
+      }
+      .adm-section {
+        margin-bottom: 3.5rem;
+      }
+      .adm-h2 {
+        margin: 0 0 1rem;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--adm-muted);
+      }
+      .adm-h3 {
+        margin: 0;
+        font-size: 0.875rem;
+        font-weight: 600;
+      }
+      .adm-card {
+        border: 1px solid var(--adm-border);
+        border-radius: 0.75rem;
+        background: var(--adm-paper);
+        padding: 1.5rem;
+        box-shadow: 0 1px 2px rgb(15 23 42 / 0.04);
+      }
+      .adm-card--wide {
+        overflow-x: auto;
+        padding: 2rem;
+      }
+      .adm-dl {
+        display: grid;
+        gap: 0.75rem;
+        margin: 0;
+        font-size: 0.875rem;
+      }
+      @media (min-width: 640px) {
+        .adm-dl {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .adm-dt {
+        margin: 0;
+        color: var(--adm-muted);
+        font-size: 0.875rem;
+      }
+      .adm-dd {
+        margin: 0.25rem 0 0;
+        font-weight: 500;
+      }
+      .adm-profile-name {
+        margin: 0;
+        font-size: 1.125rem;
+        font-weight: 600;
+      }
+      .adm-profile-bio {
+        margin: 0.5rem 0 0;
+        font-size: 0.875rem;
+        color: var(--adm-muted);
+      }
+      .adm-grid {
+        display: grid;
+        gap: 1.5rem;
+      }
+      @media (min-width: 768px) {
+        .adm-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      .adm-count {
+        margin: 0.25rem 0 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
+      .adm-editor-row { display:flex; gap:.5rem; margin:.75rem 0; flex-wrap:wrap; }
+      .adm-input { flex:1; min-width:20rem; border:1px solid var(--adm-border); border-radius:.5rem; padding:.5rem .65rem; }
+      .adm-btn { border:1px solid var(--adm-border); border-radius:.5rem; background:#fff; padding:.45rem .75rem; cursor:pointer; }
+      .adm-btn--primary { background:#0f172a; color:#fff; border-color:#0f172a; }
+      .adm-textarea { width:100%; min-height:18rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:.8rem; border:1px solid var(--adm-border); border-radius:.5rem; padding:.75rem; }
+      .adm-dropzone { border:2px dashed var(--adm-border); border-radius:.75rem; padding:1.25rem; text-align:center; color:var(--adm-muted); cursor:pointer; margin:.5rem 0; }
+      .adm-dropzone.is-over { border-color:#0f172a; color:#0f172a; background:#f8fafc; }
+      .adm-hidden-input { display:none; }
+      .adm-list {
+        margin: 0.75rem 0 0;
+        padding-left: 1.1rem;
+        max-height: 10rem;
+        overflow-y: auto;
+        font-size: 0.75rem;
+        color: var(--adm-muted);
+      }
+    </style>
+
+    <script>
+      const logoutBtn = document.getElementById('logout-btn')!;
+      logoutBtn.addEventListener('click', async () => {
+        const url = logoutBtn.getAttribute('data-logout-url');
+        const home = logoutBtn.getAttribute('data-home-url');
+        if (!url || !home) return;
+        await fetch(url, { method: 'POST', credentials: 'include' });
+        window.location.href = home;
+      });
+
+      const contentApiUrl = (document.getElementById('adm-editor-section') as HTMLElement)?.dataset.contentApiUrl ?? '/api/content';
+      const fileInput = document.getElementById('adm-file') as HTMLInputElement | null;
+      const contentArea = document.getElementById('adm-content') as HTMLTextAreaElement | null;
+      const status = document.getElementById('adm-status');
+      document.getElementById('adm-load')?.addEventListener('click', async () => {
+        const file = fileInput?.value?.trim();
+        if (!file || !status) return;
+        status.textContent = 'Loading…';
+        const res = await fetch(`${contentApiUrl}?file=${encodeURIComponent(file)}`, { credentials: 'include' });
+        const data = await res.json();
+        if (!res.ok) { status.textContent = `Load failed: ${data.error ?? res.status}`; return; }
+        if (contentArea) contentArea.value = data.content ?? '';
+        status.textContent = `Loaded ${file}`;
+      });
+      document.getElementById('adm-save')?.addEventListener('click', async () => {
+        const file = fileInput?.value?.trim();
+        if (!file || !status) return;
+        status.textContent = 'Saving…';
+        const res = await fetch(contentApiUrl, { method: 'PUT', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ file, content: contentArea?.value ?? '' }) });
+        const data = await res.json();
+        status.textContent = res.ok ? `Saved ${file} (${data.mode})` : `Save failed: ${data.error ?? res.status}`;
+      });
+
+      const dropzone = document.getElementById('adm-dropzone');
+      const uploadInput = document.getElementById('adm-upload-input') as HTMLInputElement | null;
+      const uploadList = document.getElementById('adm-upload-list');
+      const uploadStatus = document.getElementById('adm-upload-status');
+      const targetDirInput = document.getElementById('adm-target-dir') as HTMLInputElement | null;
+
+      const renderFiles = (files: FileList) => {
+        if (!uploadList) return;
+        uploadList.innerHTML = '';
+        [...files].forEach((f) => {
+          const li = document.createElement('li');
+          li.textContent = `${f.name} (${f.type || 'binary'}, ${f.size} bytes)`;
+          uploadList.appendChild(li);
+        });
+      };
+
+      const doUpload = async (fileList: FileList | null) => {
+        if (!fileList || fileList.length === 0) return;
+        renderFiles(fileList);
+        if (uploadStatus) uploadStatus.textContent = 'Uploading…';
+        const fd = new FormData();
+        const dir = targetDirInput?.value?.trim() || '';
+        fd.append('targetDir', dir);
+        [...fileList].forEach((f) => fd.append('files', f));
+        const res = await fetch(contentApiUrl, { method: 'POST', credentials: 'include', body: fd });
+        const data = await res.json();
+        if (uploadStatus) uploadStatus.textContent = res.ok ? `Uploaded: ${(data.saved || []).join(', ')}` : `Upload failed: ${data.error || res.status}`;
+      };
+
+      dropzone?.addEventListener('click', () => uploadInput?.click());
+      uploadInput?.addEventListener('change', () => doUpload(uploadInput?.files ?? null));
+      ['dragenter', 'dragover'].forEach((evt) => dropzone?.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.add('is-over'); }));
+      ['dragleave', 'drop'].forEach((evt) => dropzone?.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.remove('is-over'); }));
+      dropzone?.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        if (!dt?.files) return;
+        doUpload(dt.files);
+      });
+
+    </script>
+  </body>
+</html>
