@@ -57,4 +57,4 @@ The default dashboard expects collections named **`writing`**, **`projects`**, *
 
 ## Status
 
-Read-only overview and auth plumbing ship first; GitHub Contents editing (drawers, `/api/content`) is the next extraction step from `professional_site`.
+MVP overview, auth plumbing, and a basic in-browser file editor are shipped. `/api/content` now supports inventory + file reads and saves (local writes in `devBypass`, GitHub Contents API writes in OAuth mode) across content/config/context/registry/public paths. Rich schema-aware drawers and polished editing UX remain a follow-up extraction step from `professional_site`.

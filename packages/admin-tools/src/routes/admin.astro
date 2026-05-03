@@ -8,6 +8,40 @@ import SiteMapTree from '../components/SiteMapTree.astro';
 import { parseCookies, verifySession } from '../server/session.js';
 import { siteHomeUrl, sitePathUrl } from '../server/paths.js';
 
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
+
+interface DirAudit { exists: boolean; files: string[]; }
+async function listFilesSafe(relativeDir: string): Promise<DirAudit> {
+  const root = process.cwd();
+  const start = path.join(root, relativeDir);
+  async function walk(dir: string): Promise<string[]> {
+    const entries = await fs.readdir(dir, { withFileTypes: true });
+    const out: string[] = [];
+    for (const entry of entries) {
+      const abs = path.join(dir, entry.name);
+      if (entry.isDirectory()) out.push(...(await walk(abs)));
+      else out.push(path.relative(root, abs).replaceAll(path.sep, '/'));
+    }
+    return out;
+  }
+
+  try {
+    return { exists: true, files: await walk(start) };
+  } catch {
+    return { exists: false, files: [] };
+  }
+}
+
+async function readJsonSafe(relativePath: string): Promise<Record<string, unknown> | null> {
+  try {
+    const raw = await fs.readFile(path.join(process.cwd(), relativePath), 'utf8');
+    return JSON.parse(raw) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
 let readOnly = false;
 
 if (process.env.ADMIN_TOOLS_DEV_BYPASS === '1' && import.meta.env.DEV) {
@@ -56,6 +90,22 @@ const projectsSorted = [...projects].sort(
 
 const logoutUrl = sitePathUrl(Astro.request, 'api/auth/logout');
 const homeUrl = siteHomeUrl(Astro.request);
+
+const configAudit = await listFilesSafe('src/config');
+const contentAudit = await listFilesSafe('src/content');
+const contextAudit = await listFilesSafe('src/context');
+const publicAudit = await listFilesSafe('public');
+const registryAudit = await listFilesSafe('src/registry');
+const manifestJson = await readJsonSafe('.portfolio-engine/manifest.json');
+const hasManifest = manifestJson !== null;
+const missingAreas = [
+  !configAudit.exists && 'src/config',
+  !contentAudit.exists && 'src/content',
+  !contextAudit.exists && 'src/context',
+  !publicAudit.exists && 'public',
+  !registryAudit.exists && 'src/registry',
+  !hasManifest && '.portfolio-engine/manifest.json',
+].filter(Boolean);
 ---
 
 <!doctype html>
@@ -155,6 +205,38 @@ const homeUrl = siteHomeUrl(Astro.request);
         <h2 class="adm-h2">Routes</h2>
         <div class="adm-card adm-card--wide">
           <SiteMapTree routes={routes} />
+        </div>
+      </section>
+
+
+      <section class="adm-section">
+        <h2 class="adm-h2">Admin tools audit</h2>
+        <div class="adm-card adm-card--wide">
+          <p class="adm-lead">Coverage of planned admin areas: config, content, context, assets, registry, and manifest.</p>
+          <ul class="adm-list">
+            <li>Config files: {configAudit.files.length}</li>
+            <li>Content files: {contentAudit.files.length}</li>
+            <li>Context files: {contextAudit.files.length}</li>
+            <li>Public assets: {publicAudit.files.length}</li>
+            <li>Registry files: {registryAudit.files.length}</li>
+            <li>Manifest detected: {hasManifest ? 'yes' : 'no'}</li>
+          </ul>
+          {missingAreas.length > 0 ? <p class="adm-banner adm-banner--info">Missing expected paths: {missingAreas.join(', ')}</p> : <p class="adm-profile-bio">No structural blockers detected.</p>}
+        </div>
+      </section>
+
+
+      <section class="adm-section">
+        <h2 class="adm-h2">Content editor (MVP)</h2>
+        <div class="adm-card adm-card--wide">
+          <p class="adm-profile-bio">Read/write editor for files in src/content, src/config, src/context, src/registry, and public.</p>
+          <div class="adm-editor-row">
+            <input id="adm-file" class="adm-input" placeholder="src/content/writing/post.md" />
+            <button id="adm-load" class="adm-btn">Load</button>
+            <button id="adm-save" class="adm-btn adm-btn--primary">Save</button>
+          </div>
+          <textarea id="adm-content" class="adm-textarea" spellcheck="false"></textarea>
+          <p id="adm-status" class="adm-profile-bio"></p>
         </div>
       </section>
 
@@ -325,6 +407,11 @@ const homeUrl = siteHomeUrl(Astro.request);
         font-size: 1.5rem;
         font-weight: 700;
       }
+      .adm-editor-row { display:flex; gap:.5rem; margin:.75rem 0; flex-wrap:wrap; }
+      .adm-input { flex:1; min-width:20rem; border:1px solid var(--adm-border); border-radius:.5rem; padding:.5rem .65rem; }
+      .adm-btn { border:1px solid var(--adm-border); border-radius:.5rem; background:#fff; padding:.45rem .75rem; cursor:pointer; }
+      .adm-btn--primary { background:#0f172a; color:#fff; border-color:#0f172a; }
+      .adm-textarea { width:100%; min-height:18rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:.8rem; border:1px solid var(--adm-border); border-radius:.5rem; padding:.75rem; }
       .adm-list {
         margin: 0.75rem 0 0;
         padding-left: 1.1rem;
@@ -344,6 +431,29 @@ const homeUrl = siteHomeUrl(Astro.request);
         await fetch(url, { method: 'POST', credentials: 'include' });
         window.location.href = home;
       });
+
+      const fileInput = document.getElementById('adm-file');
+      const contentArea = document.getElementById('adm-content');
+      const status = document.getElementById('adm-status');
+      document.getElementById('adm-load')?.addEventListener('click', async () => {
+        const file = fileInput?.value?.trim();
+        if (!file) return;
+        status.textContent = 'Loading…';
+        const res = await fetch(`/api/content?file=${encodeURIComponent(file)}`, { credentials: 'include' });
+        const data = await res.json();
+        if (!res.ok) { status.textContent = `Load failed: ${data.error ?? res.status}`; return; }
+        contentArea.value = data.content ?? '';
+        status.textContent = `Loaded ${file}`;
+      });
+      document.getElementById('adm-save')?.addEventListener('click', async () => {
+        const file = fileInput?.value?.trim();
+        if (!file) return;
+        status.textContent = 'Saving…';
+        const res = await fetch('/api/content', { method: 'PUT', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ file, content: contentArea.value }) });
+        const data = await res.json();
+        status.textContent = res.ok ? `Saved ${file} (${data.mode})` : `Save failed: ${data.error ?? res.status}`;
+      });
+
     </script>
   </body>
 </html>
