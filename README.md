@@ -93,10 +93,10 @@ pnpm format   # Prettier check
 
 **Optional** (post-MVP add-ons, not required to run a site):
 
-| Package                                                   | Description                                         |
-| --------------------------------------------------------- | --------------------------------------------------- |
-| [`@portfolio-engine/admin-tools`](packages/admin-tools/)  | Admin/reviewer UI + `/api/content` + OAuth support (Node adapter required) |
-| [`@portfolio-engine/workflow-kit`](packages/workflow-kit/) | Reserved package for future workflow automation (currently scaffold) |
+| Package                                                    | Description                                                                |
+| ---------------------------------------------------------- | -------------------------------------------------------------------------- |
+| [`@portfolio-engine/admin-tools`](packages/admin-tools/)   | Admin/reviewer UI + `/api/content` + OAuth support (Node adapter required) |
+| [`@portfolio-engine/workflow-kit`](packages/workflow-kit/) | Reserved package for future workflow automation (currently scaffold)       |
 
 ### CI
 
