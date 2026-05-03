@@ -35,6 +35,17 @@ function resolveAllowed(cwd: string, relativePath: string): string | null {
   return abs;
 }
 
+
+
+function resolvePublicDirectory(cwd: string, relativeDir: string): string | null {
+  const clean = relativeDir.replace(/^\/+/, '');
+  const prefixed = clean ? `public/${clean}`.replace(/\/+/g, '/') : 'public';
+  const abs = path.resolve(cwd, prefixed);
+  const publicRoot = path.resolve(cwd, 'public');
+  if (abs !== publicRoot && !abs.startsWith(publicRoot + path.sep)) return null;
+  return abs;
+}
+
 async function auth(request: Request): Promise<{ devBypass: boolean; accessToken: string | null; error?: Response }> {
   const devBypass = process.env.ADMIN_TOOLS_DEV_BYPASS === '1' && import.meta.env.DEV;
   if (devBypass) return { devBypass, accessToken: null };
@@ -106,4 +117,57 @@ export const PUT: APIRoute = async ({ request }) => {
     return Response.json({ error: 'GitHub write failed', detail }, { status: 502, headers: NO_STORE });
   }
   return Response.json({ ok: true, mode: 'github' }, { headers: NO_STORE });
+};
+
+
+export const POST: APIRoute = async ({ request }) => {
+  const authed = await auth(request); if (authed.error) return authed.error;
+  const form = await request.formData().catch(() => null);
+  if (!form) return Response.json({ error: 'Expected multipart form data' }, { status: 400, headers: NO_STORE });
+
+  const targetDir = String(form.get('targetDir') ?? '').trim();
+  const files = form.getAll('files').filter((v): v is File => v instanceof File);
+  if (files.length === 0) return Response.json({ error: 'No files uploaded' }, { status: 400, headers: NO_STORE });
+
+  const cwd = process.cwd();
+  const dirAbs = resolvePublicDirectory(cwd, targetDir);
+  if (!dirAbs) return Response.json({ error: 'Invalid targetDir' }, { status: 400, headers: NO_STORE });
+
+  const saved: string[] = [];
+
+  if (authed.devBypass) {
+    await fs.mkdir(dirAbs, { recursive: true });
+    for (const file of files) {
+      const name = path.basename(file.name);
+      const abs = path.join(dirAbs, name);
+      const bytes = Buffer.from(await file.arrayBuffer());
+      await fs.writeFile(abs, bytes);
+      saved.push(path.relative(cwd, abs).replaceAll(path.sep, '/'));
+    }
+    return Response.json({ ok: true, mode: 'local-dev', saved }, { headers: NO_STORE });
+  }
+
+  const owner = repoOwner(); const repo = repoName(); const branch = repoBranch();
+  if (!owner || !repo || !authed.accessToken) return Response.json({ error: 'Repo/auth misconfiguration' }, { status: 500, headers: NO_STORE });
+  const headers = { Authorization: `Bearer ${authed.accessToken}`, Accept: 'application/vnd.github+json', 'User-Agent': 'portfolio-engine-admin-tools', 'Content-Type': 'application/json' };
+
+  for (const file of files) {
+    const name = path.basename(file.name);
+    const rel = path.relative(cwd, path.join(dirAbs, name)).replaceAll(path.sep, '/');
+    const base = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(rel).replace(/%2F/g, '/')}`;
+    const currentRes = await fetch(`${base}?ref=${encodeURIComponent(branch)}`, { headers });
+    let sha: string | undefined;
+    if (currentRes.ok) {
+      const current = await currentRes.json() as { sha?: string };
+      sha = current.sha;
+    }
+    const content = Buffer.from(await file.arrayBuffer()).toString('base64');
+    const upRes = await fetch(base, { method: 'PUT', headers, body: JSON.stringify({ message: `admin-tools: upload ${rel}`, content, sha, branch }) });
+    if (!upRes.ok) {
+      return Response.json({ error: `Upload failed for ${rel}`, detail: await upRes.text() }, { status: 502, headers: NO_STORE });
+    }
+    saved.push(rel);
+  }
+
+  return Response.json({ ok: true, mode: 'github', saved }, { headers: NO_STORE });
 };
