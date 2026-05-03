@@ -42,8 +42,8 @@ export function editorialTheme(options: EditorialThemeOptions): AstroIntegration
     createEngineIntegration({
       ...options,
       registries: {
-        routes: DEFAULT_ROUTE_REGISTRY,
-        overrideSurfaces: DEFAULT_OVERRIDE_SURFACES,
+        routes: options.registries?.routes ?? DEFAULT_ROUTE_REGISTRY,
+        overrideSurfaces: options.registries?.overrideSurfaces ?? DEFAULT_OVERRIDE_SURFACES,
       },
     }),
   ];

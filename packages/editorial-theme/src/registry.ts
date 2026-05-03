@@ -1,20 +1,4 @@
-export interface RouteRegistryEntry {
-  pattern: string;
-  label: string;
-  section: string | null;
-  visibility: 'public' | 'admin-only' | 'hidden';
-  remappable: boolean;
-  disableable: boolean;
-}
-
-export interface OverrideSurfaceEntry {
-  name: string;
-  props: string[];
-  defaultComponentPath: string;
-  hostPage: string;
-  docsUrl?: string;
-  guidance?: string;
-}
+import type { OverrideSurfaceEntry, RouteRegistryEntry } from '@portfolio-engine/schema';
 
 export const DEFAULT_ROUTE_REGISTRY: RouteRegistryEntry[] = [
   { pattern: '/', label: 'Home', section: null, visibility: 'public', remappable: true, disableable: false },
@@ -27,9 +11,34 @@ export const DEFAULT_ROUTE_REGISTRY: RouteRegistryEntry[] = [
 ];
 
 export const DEFAULT_OVERRIDE_SURFACES: OverrideSurfaceEntry[] = [
-  { name: 'Hero', props: ['site', 'person'], defaultComponentPath: 'src/components/sections/HeroSection.astro', hostPage: 'src/pages/index.astro' },
-  { name: 'FeaturedWriting', props: ['posts'], defaultComponentPath: 'src/components/sections/FeaturedWritingSection.astro', hostPage: 'src/pages/index.astro' },
-  { name: 'TestimonialSection', props: ['items'], defaultComponentPath: 'src/components/sections/TestimonialSection.astro', hostPage: 'src/pages/index.astro' },
-  { name: 'CollaborationSection', props: ['features'], defaultComponentPath: 'src/components/sections/CollaborationSection.astro', hostPage: 'src/pages/index.astro' },
-  { name: 'Footer', props: ['site'], defaultComponentPath: 'src/components/Footer.astro', hostPage: 'src/layouts/Layout.astro' },
+  {
+    name: 'Hero',
+    props: ['person', 'bookingUrl', 'pillars', 'base', 'tagline'],
+    defaultComponentPath: 'src/components/sections/HeroSection.astro',
+    hostPage: 'src/pages/index.astro',
+  },
+  {
+    name: 'FeaturedWriting',
+    props: ['posts', 'base'],
+    defaultComponentPath: 'src/components/sections/FeaturedWritingSection.astro',
+    hostPage: 'src/pages/index.astro',
+  },
+  {
+    name: 'TestimonialSection',
+    props: ['testimonials'],
+    defaultComponentPath: 'src/components/sections/TestimonialSection.astro',
+    hostPage: 'src/pages/index.astro',
+  },
+  {
+    name: 'CollaborationSection',
+    props: ['base', 'ctaBody'],
+    defaultComponentPath: 'src/components/sections/CollaborationSection.astro',
+    hostPage: 'src/pages/index.astro',
+  },
+  {
+    name: 'Footer',
+    props: ['adminHref', 'siteTitle'],
+    defaultComponentPath: 'src/components/Footer.astro',
+    hostPage: 'src/layouts/Layout.astro',
+  },
 ];

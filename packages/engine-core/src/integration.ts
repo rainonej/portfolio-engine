@@ -10,7 +10,7 @@ import type { OverrideConfig } from './override-resolution.js';
 import { createVirtualModulesPlugin } from './virtual-modules.js';
 import type { BuildContext } from './types.js';
 import { writeManifest } from './manifest.js';
-import type { OverrideSurfaceEntry, RouteRegistryEntry } from '@portfolio-engine/schema';
+import type { ManifestRouteEntry, OverrideSurfaceEntry, RouteRegistryEntry } from '@portfolio-engine/schema';
 
 export interface EngineIntegrationOptions extends EngineConfig {
   /** Remap or disable individual routes before injection. */
@@ -59,7 +59,20 @@ export function createEngineIntegration(options: EngineIntegrationOptions): Astr
 
         // 5. Resolve component and style overrides
         const overrides = resolveOverrides(options.overrides ?? {}, rootDir, registries.overrideSurfaces);
-        writeManifest(rootDir, registries.routes, registries.overrideSurfaces);
+
+        // Build manifest route entries from the active (post-remap) route set.
+        // Start from routeRecord (which already has all required fields), then
+        // layer in any optional metadata (agentGuidance, adminDescription) from
+        // the canonical registry entry if it exists.
+        const registryMap = new Map(registries.routes.map((r) => [r.pattern, r]));
+        const manifestRoutes: ManifestRouteEntry[] = activeRoutes.map((r) => {
+          const registryEntry = registryMap.get(r.routeRecord.pattern);
+          const entry: ManifestRouteEntry = { ...r.routeRecord };
+          if (registryEntry?.agentGuidance !== undefined) entry.agentGuidance = registryEntry.agentGuidance;
+          if (registryEntry?.adminDescription !== undefined) entry.adminDescription = registryEntry.adminDescription;
+          return entry;
+        });
+        writeManifest(rootDir, manifestRoutes, registries.overrideSurfaces);
 
         // 6. Build context for virtual modules
         const context: BuildContext = {

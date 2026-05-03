@@ -79,6 +79,9 @@ importers:
       '@portfolio-engine/engine-core':
         specifier: workspace:*
         version: link:../engine-core
+      '@portfolio-engine/schema':
+        specifier: workspace:*
+        version: link:../schema
       autoprefixer:
         specifier: ^10.4.20
         version: 10.5.0(postcss@8.5.12)

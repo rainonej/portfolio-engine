@@ -73,4 +73,4 @@ export type SiteConfig = z.infer<typeof SiteConfigSchema>;
 export type NavigationConfig = z.infer<typeof NavigationConfigSchema>;
 export type ThemeConfig = z.infer<typeof ThemeConfigSchema>;
 export type FeaturesConfig = z.infer<typeof FeaturesConfigSchema>;
-export type { EngineManifest, OverrideSurfaceEntry, RouteRegistryEntry } from './registry.js';
+export type { EngineManifest, ManifestRouteEntry, OverrideSurfaceEntry, RouteRegistryEntry } from './registry.js';

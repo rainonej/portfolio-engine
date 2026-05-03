@@ -20,10 +20,21 @@ export interface OverrideSurfaceEntry {
   guidance?: string;
 }
 
+/**
+ * A route entry as it appears in the generated manifest: the canonical registry
+ * entry plus the `resolved` path that was actually injected (which may differ
+ * when a consumer has remapped the route to a different URL).
+ */
+export interface ManifestRouteEntry extends RouteRegistryEntry {
+  /** Actual injected URL pattern after any consumer remap (equals `pattern` when not remapped) */
+  resolved: string;
+}
+
 export interface EngineManifest {
   generatedAt: string;
   rootDir: string;
-  routes: RouteRegistryEntry[];
+  /** Active route set after applying consumer remaps/disables — not the raw canonical registry */
+  routes: ManifestRouteEntry[];
   overrideSurfaces: OverrideSurfaceEntry[];
   capabilities: {
     routeRemap: boolean;

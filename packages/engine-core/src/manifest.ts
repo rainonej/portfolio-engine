@@ -1,10 +1,10 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import type { EngineManifest, OverrideSurfaceEntry, RouteRegistryEntry } from '@portfolio-engine/schema';
+import type { EngineManifest, ManifestRouteEntry, OverrideSurfaceEntry } from '@portfolio-engine/schema';
 
 export function writeManifest(
   rootDir: string,
-  routes: RouteRegistryEntry[],
+  routes: ManifestRouteEntry[],
   overrideSurfaces: OverrideSurfaceEntry[],
 ): void {
   const manifest: EngineManifest = {
