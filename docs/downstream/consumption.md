@@ -57,10 +57,10 @@ Use this when the consumer site is its **own Git repository** (for example `agre
 2. **Root Directory:** the repository root (`.`). The Astro app, `package.json`, and `pnpm-lock.yaml` should live at that root.
 3. **Framework Preset:** Astro when auto-detected; otherwise set commands manually:
 
-   | Setting | Typical value |
-   |---------|----------------|
-   | **Install Command** | `pnpm install` |
-   | **Build Command** | `pnpm build` |
+   | Setting              | Typical value                                                                                                                                                                                                                                                                |
+   | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | **Install Command**  | `pnpm install`                                                                                                                                                                                                                                                               |
+   | **Build Command**    | `pnpm build`                                                                                                                                                                                                                                                                 |
    | **Output Directory** | Leave default when using [`@astrojs/vercel`](https://docs.astro.build/en/guides/integrations-guide/vercel/) — the adapter emits the correct serverless output. Do **not** point only at `dist` unless you know you are shipping a fully static export with no server routes. |
 
 4. **Node.js version:** **22.x** in **Project → Settings → General** (matches common Vercel serverless runtimes and reduces “works on my machine” drift).
