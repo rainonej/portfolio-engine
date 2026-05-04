@@ -1,5 +1,3 @@
-$ErrorActionPreference = 'Stop'
-
 <#
 Portfolio Engine downstream setup orchestrator (Windows)
 Safe to read before running.
@@ -17,8 +15,11 @@ param(
   [switch]$DryRun
 )
 
+$ErrorActionPreference = 'Stop'
+
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $StepsDir = Join-Path $ScriptDir 'scripts'
+if (-not (Test-Path $StepsDir)) { throw "Missing scripts directory: $StepsDir" }
 
 function Step($kind, $msg) { Write-Host "`n[$kind] $msg" }
 function Run-Step($name, $scriptPath, $skip) {

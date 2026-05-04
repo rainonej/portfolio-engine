@@ -5,7 +5,7 @@ set -euo pipefail
 # Safe to read before running. Set SKIP_* env vars to skip phases.
 # Example: DRY_RUN=1 SKIP_INSTALL=1 ./docs/downstream/setup.sh
 
-ROOT_DIR="$(pwd)"
+ROOT_DIR="$(pwd -P)"
 SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/scripts"
 
 step() { printf "\n[%s] %s\n" "$1" "$2"; }
@@ -26,6 +26,8 @@ run_step() {
 
 step "INFO" "Starting downstream bootstrap in $ROOT_DIR"
 step "INFO" "Scripts directory: $SCRIPTS_DIR"
+[[ -d "$SCRIPTS_DIR" ]] || { step "ERROR" "Missing scripts directory: $SCRIPTS_DIR"; exit 1; }
+[[ -f "$ROOT_DIR/package.json" ]] || { step "ERROR" "Run from your scaffolded site repo root (missing package.json in $ROOT_DIR)"; exit 1; }
 if [[ "${DRY_RUN:-0}" == "1" ]]; then
   step "INFO" "DRY_RUN=1: no files will be modified"
 fi

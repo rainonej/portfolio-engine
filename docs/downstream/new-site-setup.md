@@ -17,9 +17,10 @@ Step-by-step guide for bootstrapping a new standalone portfolio site (like `jord
 
 If you are using Claude Code, do this first:
 
-1. Copy `docs/downstream/setup-with-claude.md` and paste it into Claude.
-2. If you already have source material, paste your resume and design brief in the same chat.
-3. Ask Claude to run `docs/downstream/setup.sh` (macOS/Linux) or `docs/downstream/setup.ps1` (Windows) first, then continue with manual file wiring.
+1. Scaffold the project first (`pnpm create astro@latest . --template minimal --install --typescript strict --git false`).
+2. In your new site repo, create `docs/downstream/` and copy `setup-with-claude.md`, `setup.sh`, `setup.ps1`, and `scripts/` from this repo.
+3. Paste `docs/downstream/setup-with-claude.md` into Claude and include your resume/design brief if available.
+4. Ask Claude to run `docs/downstream/setup.sh` (macOS/Linux) or `docs/downstream/setup.ps1` (Windows), then continue with manual file wiring.
 
 This reduces typing mistakes and keeps a machine-readable friction log in `src/docs/setup-feedback.md`.
 
