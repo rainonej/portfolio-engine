@@ -8,6 +8,7 @@ You are helping me set up a new personal portfolio site from scratch using
 `@portfolio-engine/editorial-theme` + `@portfolio-engine/admin-tools`.
 
 Operate in phases. Keep a running friction log in `src/docs/setup-feedback.md` during setup.
+`@portfolio-engine/admin-tools` is currently private/unpublished for standalone consumer sites; do not attempt to install it unless a published release is available.
 If I provide a resume and/or design doc, save them to `src/docs/resume.md` and `src/docs/design-brief.md` first, then use them as source-of-truth.
 
 ## Phase 1 — intake
@@ -30,7 +31,6 @@ https://github.com/rainonej/portfolio-engine/blob/main/docs/downstream/new-site-
 Also:
 
 - run `docs/downstream/setup.sh` (macOS/Linux) or `docs/downstream/setup.ps1` (Windows) if present to automate standard setup
-- ensure `adminTools({ devBypass: true })` is configured after `editorialTheme(...)`
 - ensure Astro output is `static`
 - create placeholder `src/content/profile/person.json` and `src/content/profile/cv.json`
 - set `.gitignore` entries for `.portfolio-engine/` and `.vercel/`

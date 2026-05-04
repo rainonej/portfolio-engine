@@ -87,10 +87,14 @@ The scaffold's default `src/pages/index.astro` conflicts with the theme's `/` ro
 ## 2 — Install packages
 
 ```bash
-pnpm add @portfolio-engine/editorial-theme @portfolio-engine/admin-tools @astrojs/vercel
+pnpm add @portfolio-engine/editorial-theme @astrojs/vercel
 ```
 
 ---
+
+
+> **Note on admin tools:** `@portfolio-engine/admin-tools` is currently private/unpublished.
+> Do not include it in standalone consumer site installs until a public release is available.
 
 ## 3 — Replace `astro.config.mjs`
 
@@ -99,7 +103,6 @@ pnpm add @portfolio-engine/editorial-theme @portfolio-engine/admin-tools @astroj
 import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
 import { editorialTheme } from '@portfolio-engine/editorial-theme';
-import { adminTools } from '@portfolio-engine/admin-tools';
 
 // Production sets SITE_URL in Vercel env vars. Previews fall back to VERCEL_URL.
 const site =
@@ -118,7 +121,6 @@ export default defineConfig({
       themeConfigPath: './src/config/theme.json',
       featuresConfigPath: './src/config/features.json',
     }),
-    adminTools({ devBypass: true }),
   ],
 });
 ```

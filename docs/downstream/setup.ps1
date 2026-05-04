@@ -32,6 +32,7 @@ function Run-Step($name, $scriptPath, $skip) {
 }
 
 Step 'INFO' "Starting downstream bootstrap in $(Get-Location)"
+if (-not (Test-Path 'package.json')) { throw 'package.json not found. Run from scaffolded repo root.' }
 if ($DryRun) { Step 'INFO' 'DryRun enabled: no files will be modified' }
 Run-Step 'Preflight checks' (Join-Path $StepsDir '01-preflight.ps1') $SkipPreflight
 Run-Step 'Install packages' (Join-Path $StepsDir '02-install-packages.ps1') $SkipInstall
