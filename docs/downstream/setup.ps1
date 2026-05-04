@@ -2,7 +2,7 @@
 Portfolio Engine downstream setup orchestrator (Windows)
 Safe to read before running.
 Use switches to skip phases, e.g.:
-  ./docs/downstream/setup.ps1 -DryRun -SkipInstall -SkipGitignore
+  ./docs/downstream/setup.ps1 -DryRun -SkipInstall -SkipAgentTooling
 #>
 
 param(
@@ -12,6 +12,7 @@ param(
   [switch]$SkipRouteFix,
   [switch]$SkipFeedback,
   [switch]$SkipGitignore,
+  [switch]$SkipAgentTooling,
   [switch]$DryRun
 )
 
@@ -38,5 +39,6 @@ Run-Step 'Create directories' (Join-Path $StepsDir '03-create-dirs.ps1') $SkipDi
 Run-Step 'Remove scaffold route collision' (Join-Path $StepsDir '04-remove-index-route.ps1') $SkipRouteFix
 Run-Step 'Seed setup feedback doc' (Join-Path $StepsDir '05-seed-feedback-log.ps1') $SkipFeedback
 Run-Step 'Patch .gitignore' (Join-Path $StepsDir '06-patch-gitignore.ps1') $SkipGitignore
+Run-Step 'Seed agent tooling' (Join-Path $StepsDir '07-seed-agent-tooling.ps1') $SkipAgentTooling
 
 Step 'DONE' 'Bootstrap complete. Continue with docs/downstream/new-site-setup.md'

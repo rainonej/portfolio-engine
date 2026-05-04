@@ -34,6 +34,14 @@ Also:
 - ensure Astro output is `static`
 - create placeholder `src/content/profile/person.json` and `src/content/profile/cv.json`
 - set `.gitignore` entries for `.portfolio-engine/` and `.vercel/`
+- seed agent tooling unless I explicitly opt out:
+  - `CLAUDE.md`
+  - `.github/copilot-instructions.md`
+  - `.cursor/mcp.example.json`
+  - `src/docs/agent-tooling.md`
+  - `src/docs/visual-qa-prompt.md`
+  - `src/docs/design-review-checklist.md`
+- read `src/docs/agent-tooling.md` before using MCP/plugin/browser tools
 
 Write each confusion/error/contradiction to `src/docs/setup-feedback.md` as you go.
 
@@ -55,7 +63,14 @@ Guide manual import and set:
 - Node 22
 - `SITE_URL` as production-only env var
 
-If available, offer Vercel MCP/plugin or Vercel CLI to reduce manual clicks; otherwise provide click-by-click fallback.
+If available, use the tool split documented in `src/docs/agent-tooling.md`:
+
+- Vercel Plugin for implementation guidance.
+- Vercel MCP for live Vercel state.
+- Context7 for current package docs.
+- Playwright for browser-based verification.
+
+If those tools are unavailable, provide click-by-click fallback instructions.
 
 ## Phase 5 — admin + branch behavior verification
 
@@ -64,6 +79,7 @@ Verify:
 - `/admin` works in local dev with `devBypass: true`
 - admin/auth routes are not main-branch-only and work on preview deployments too
 - OAuth env vars are documented (all required vars listed)
+- run the visual QA checklist in `src/docs/visual-qa-prompt.md` after deployment or meaningful UI changes
 
 ## Phase 6 — CI
 

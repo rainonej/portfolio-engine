@@ -55,12 +55,15 @@ Check the [releases](https://github.com/rainonej/portfolio-engine/releases) befo
 
 ## More docs
 
-| Topic                                                   | Link                                                                         |
-| ------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| Setup with Claude (paste whole file, Claude guides you) | [docs/downstream/setup-with-claude.md](docs/downstream/setup-with-claude.md) |
-| New site setup (full manual reference)                  | [docs/downstream/new-site-setup.md](docs/downstream/new-site-setup.md)       |
-| Semver vs. workspace-link, overrides, Vercel detail     | [docs/downstream/consumption.md](docs/downstream/consumption.md)             |
-| Lint, format, CI                                        | [docs/contributing/linting.md](docs/contributing/linting.md)                 |
+| Topic                                                   | Link                                                                                     |
+| ------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Setup with Claude (paste whole file, Claude guides you) | [docs/downstream/setup-with-claude.md](docs/downstream/setup-with-claude.md)             |
+| New site setup (full manual reference)                  | [docs/downstream/new-site-setup.md](docs/downstream/new-site-setup.md)                   |
+| Semver vs. workspace-link, overrides, Vercel detail     | [docs/downstream/consumption.md](docs/downstream/consumption.md)                         |
+| Agent tooling for downstream vibe-coding                | [docs/downstream/agent-tooling.md](docs/downstream/agent-tooling.md)                     |
+| Visual QA prompt                                        | [docs/downstream/visual-qa-prompt.md](docs/downstream/visual-qa-prompt.md)               |
+| Design review checklist                                 | [docs/downstream/design-review-checklist.md](docs/downstream/design-review-checklist.md) |
+| Lint, format, CI                                        | [docs/contributing/linting.md](docs/contributing/linting.md)                             |
 
 ---
 
