@@ -32,12 +32,8 @@ install_if_missing "$TEMPLATE_DIR/mcp.example.json" ".cursor/mcp.example.json"
 install_if_missing "$TEMPLATE_DIR/CLAUDE.md" "CLAUDE.md"
 install_if_missing "$TEMPLATE_DIR/copilot-instructions.md" ".github/copilot-instructions.md"
 
-install_if_missing "$DOWNSTREAM_DIR/agent-tooling.md" "src/docs/agent-tooling.md"
-install_if_missing "$DOWNSTREAM_DIR/visual-qa-prompt.md" "src/docs/visual-qa-prompt.md"
-install_if_missing "$DOWNSTREAM_DIR/design-review-checklist.md" "src/docs/design-review-checklist.md"
-
 touch .gitignore
-grep -q '^\.cursor/mcp\.json$' .gitignore || echo '.cursor/mcp.json' >> .gitignore
+grep -q '^\.cursor/mcp\.json$' .gitignore || printf '\n.cursor/mcp.json\n' >> .gitignore
 
 echo "Agent tooling seed complete."
 echo "Next: copy .cursor/mcp.example.json to .cursor/mcp.json if you want project-local Cursor MCP config."

@@ -4,8 +4,8 @@ Use this checklist before calling a portfolio site visually ready.
 
 ## Brand fit
 
-- Does the page feel like the person described in `src/context/site-owner.json`?
-- Does the tone match `src/context/brand-voice.json`?
+- Does the page feel like the person described in `src/context/site-owner.json` (if present)?
+- Does the tone match `src/context/brand-voice.json` (if present)?
 - Does the design fit the audience?
 - Does the hero section immediately explain who this person is and why they matter?
 

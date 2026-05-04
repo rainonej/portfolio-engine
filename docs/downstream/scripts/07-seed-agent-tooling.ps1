@@ -29,17 +29,13 @@ Install-IfMissing (Join-Path $TemplateDir 'mcp.example.json') '.cursor/mcp.examp
 Install-IfMissing (Join-Path $TemplateDir 'CLAUDE.md') 'CLAUDE.md'
 Install-IfMissing (Join-Path $TemplateDir 'copilot-instructions.md') '.github/copilot-instructions.md'
 
-Install-IfMissing (Join-Path $DownstreamDir 'agent-tooling.md') 'src/docs/agent-tooling.md'
-Install-IfMissing (Join-Path $DownstreamDir 'visual-qa-prompt.md') 'src/docs/visual-qa-prompt.md'
-Install-IfMissing (Join-Path $DownstreamDir 'design-review-checklist.md') 'src/docs/design-review-checklist.md'
-
 if (-not (Test-Path '.gitignore')) {
   New-Item -ItemType File -Path '.gitignore' | Out-Null
 }
 
 $content = Get-Content '.gitignore' -Raw
 if ($content -notmatch '(?m)^\.cursor/mcp\.json$') {
-  Add-Content '.gitignore' '.cursor/mcp.json'
+  Add-Content '.gitignore' "`n.cursor/mcp.json"
 }
 
 Write-Host 'Agent tooling seed complete.'

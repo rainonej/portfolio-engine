@@ -115,7 +115,7 @@ Do not change production Vercel settings, production branch, domains, or environ
 
 After meaningful UI changes, use Playwright MCP or Playwright CLI.
 
-At minimum check:
+Check the routes that are active for this site (see `src/config/features.json` and `src/config/navigation.json`). Default routes are:
 
 - homepage desktop
 - homepage mobile
@@ -129,15 +129,17 @@ At minimum check:
 - obvious overflow or clipping
 - obvious color-contrast problems
 
+Routes may be disabled or renamed in your site's configuration; only check routes that are active.
+
 Do not claim a visual bug is fixed unless the site was inspected in a browser, or explicitly say the review was code-only.
 
 ### Content and tone
 
 Before writing copy, read:
 
-- `src/context/site-owner.json`
-- `src/context/brand-voice.json`
-- `src/context/agent-rules.md`
+- `src/context/site-owner.json`, if present
+- `src/context/brand-voice.json`, if present
+- `src/context/agent-rules.md`, if present
 - `src/docs/design-brief.md`, if present
 - `src/docs/resume.md`, if present
 

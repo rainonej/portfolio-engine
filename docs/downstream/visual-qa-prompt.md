@@ -14,7 +14,7 @@ pnpm dev
 
 Open the local URL in Playwright.
 
-Review these routes:
+Review the routes that are active for this site. Check `src/config/features.json` and `src/config/navigation.json` to determine which routes are enabled. Default routes are:
 
 - `/`
 - `/work`
@@ -22,6 +22,8 @@ Review these routes:
 - `/about`
 - `/contact`
 - `/admin` if admin tools are enabled
+
+Routes may be disabled or renamed in your site's configuration; only review routes that are active.
 
 Review these viewport sizes:
 

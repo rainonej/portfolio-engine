@@ -26,13 +26,13 @@ Prefer consumer-site configuration, content, context, or override changes first.
 
 Before writing copy or changing design direction, read:
 
-- `src/context/site-owner.json`
-- `src/context/brand-voice.json`
-- `src/context/agent-rules.md`
+- `src/context/site-owner.json`, if present
+- `src/context/brand-voice.json`, if present
+- `src/context/agent-rules.md`, if present
 - `src/docs/design-brief.md`, if present
 - `src/docs/resume.md`, if present
-- `src/docs/agent-tooling.md`, if present
-- `src/docs/design-review-checklist.md`, if present
+- `docs/downstream/agent-tooling.md`, if present
+- `docs/downstream/design-review-checklist.md`, if present
 
 Do not invent credentials, jobs, awards, publications, client names, degrees, or biographical details.
 
@@ -81,7 +81,7 @@ pnpm lint
 
 After layout/style changes, inspect the site in a browser.
 
-Check:
+Check the routes that are active for this site (see `src/config/features.json` and `src/config/navigation.json`). Default routes are:
 
 - `/`
 - `/work`
@@ -89,6 +89,8 @@ Check:
 - `/about`
 - `/contact`
 - `/admin`, if enabled
+
+Routes may be disabled or renamed in your site's configuration; only check routes that are active.
 
 Check desktop and mobile.
 
