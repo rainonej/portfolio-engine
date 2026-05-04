@@ -59,5 +59,4 @@ The default dashboard expects collections named **`writing`**, **`projects`**, *
 
 MVP overview, auth plumbing, and a basic in-browser file editor are shipped. `/api/content` now supports inventory + file reads and saves (local writes in `devBypass`, GitHub Contents API writes in OAuth mode) across content/config/context/registry/public paths. Includes drag-and-drop/browse upload for `public/` assets (with optional subfolder target) so non-technical users can add images/files and reference them in pages. Rich schema-aware drawers and polished editing UX remain a follow-up extraction step from `professional_site`.
 
-
 > `devBypass` only applies in local dev and is safe to leave configured; production behavior still requires OAuth env vars.

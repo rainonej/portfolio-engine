@@ -12,7 +12,6 @@ Step-by-step guide for bootstrapping a new standalone portfolio site (like `jord
 
 ---
 
-
 ## 0 — Fast path (recommended for non-technical users)
 
 If you are using Claude Code, do this first:
@@ -29,6 +28,7 @@ The setup scripts are intentionally split into a **master orchestrator** + **sma
 ---
 
 Script controls:
+
 - Bash dry-run preview: `DRY_RUN=1 ./docs/downstream/setup.sh`
 - PowerShell dry-run preview: `./docs/downstream/setup.ps1 -DryRun`
 - Bash skip phase: `SKIP_INSTALL=1 ./docs/downstream/setup.sh`
@@ -268,7 +268,6 @@ Replace this with a real post.
 }
 ```
 
-
 ---
 
 ## 8 — Verify locally
@@ -299,8 +298,6 @@ Add this to `.gitignore`:
 7. **Production Branch:** `main`. Keep `dev` for staging previews.
 
 `SITE_URL` powers canonical URLs, Open Graph links, and sitemap URLs.
-
-
 
 ---
 

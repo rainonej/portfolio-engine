@@ -13,6 +13,7 @@ If I provide a resume and/or design doc, save them to `src/docs/resume.md` and `
 ## Phase 1 — intake
 
 Ask once for missing items only:
+
 - name, role, tagline, one-line description, location
 - tone, audience
 - pages (Work/Writing/About/Contact)
@@ -27,6 +28,7 @@ Follow:
 https://github.com/rainonej/portfolio-engine/blob/main/docs/downstream/new-site-setup.md
 
 Also:
+
 - run `docs/downstream/setup.sh` (macOS/Linux) or `docs/downstream/setup.ps1` (Windows) if present to automate standard setup
 - ensure `adminTools({ devBypass: true })` is configured after `editorialTheme(...)`
 - ensure Astro output is `static`
@@ -47,6 +49,7 @@ Before running setup scripts, read them first and execute a dry-run preview (`DR
 ## Phase 4 — Vercel setup (guided)
 
 Guide manual import and set:
+
 - Production branch: `main`
 - Preview branches: `dev` + PRs
 - Node 22
@@ -57,6 +60,7 @@ If available, offer Vercel MCP/plugin or Vercel CLI to reduce manual clicks; oth
 ## Phase 5 — admin + branch behavior verification
 
 Verify:
+
 - `/admin` works in local dev with `devBypass: true`
 - admin/auth routes are not main-branch-only and work on preview deployments too
 - OAuth env vars are documented (all required vars listed)
@@ -68,9 +72,9 @@ Ensure CI runs on pushes/PRs for both `main` and `dev`.
 ## Phase 7 — wrap-up + feedback ticket
 
 At end:
+
 1. summarize live URL, repo URL, branch strategy, and where to edit content
 2. sanitize `src/docs/setup-feedback.md` (no personal data, no secrets)
 3. open a GitHub issue in `portfolio-engine` titled
    `Setup friction report from [repo-name]` and paste sanitized feedback
 4. include issue URL in final summary
-
