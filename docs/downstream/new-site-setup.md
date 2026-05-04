@@ -6,7 +6,7 @@ Step-by-step guide for bootstrapping a new standalone portfolio site (like `jord
 
 ## Prerequisites
 
-- **Node.js 22** and **pnpm 9+** (`npm i -g pnpm`)
+- **Node.js 24** and **pnpm 10+** (`npm i -g pnpm`)
 - A new empty GitHub repo (clone it locally before starting)
 - A Vercel account (for deployment)
 
@@ -87,7 +87,7 @@ The scaffold's default `src/pages/index.astro` conflicts with the theme's `/` ro
 ## 2 — Install packages
 
 ```bash
-pnpm add @portfolio-engine/editorial-theme @portfolio-engine/admin-tools @astrojs/vercel
+pnpm add @portfolio-engine/editorial-theme @portfolio-engine/admin-tools @astrojs/vercel zod
 ```
 
 ---
@@ -204,8 +204,9 @@ mkdir -p src/config src/content/projects src/content/writing src/content/profile
 Create `src/content.config.ts`:
 
 ```ts
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { z } from 'zod';
 
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
@@ -216,7 +217,7 @@ const projects = defineCollection({
     date: z.coerce.date(),
     tags: z.array(z.string()).optional(),
     image: z.string().optional(),
-    link: z.string().url().optional(),
+    link: z.url().optional(),
   }),
 });
 
@@ -330,7 +331,7 @@ Add this to `.gitignore`:
 2. In Vercel: **Add New → Project** → import your repo.
 3. **Root Directory:** `.` (repo root).
 4. **Build Command:** `pnpm build` — **Output Directory:** leave default.
-5. **Node.js version:** 22.x (Settings → General).
+5. **Node.js version:** 24.x (Settings → General).
 6. **Environment variable:** `SITE_URL` = `https://your-custom-domain.com` (Production only; leave unset for Previews).
 7. **Production Branch:** `main`. Keep `dev` for staging previews.
 

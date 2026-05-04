@@ -21,13 +21,13 @@ Run from the consumer-site repo root.
 npm install -g @anthropic-ai/claude-code
 
 claude mcp add --transport http vercel https://mcp.vercel.com
+claude mcp add --transport http context7 https://mcp.context7.com/mcp
 claude mcp add playwright npx @playwright/mcp@latest
-
-npx ctx7 setup
-npx plugins add vercel/vercel-plugin
 ```
 
-Then start Claude Code and authenticate MCP servers when prompted:
+Then enable the Vercel plugin from the Claude Code plugin marketplace (`/plugins` → search "vercel").
+
+Start Claude Code and authenticate MCP servers when prompted:
 
 ```bash
 claude
@@ -44,12 +44,7 @@ cp .cursor/mcp.example.json .cursor/mcp.json
 
 Then restart Cursor and authenticate any MCP servers that ask for OAuth.
 
-Install Context7 and the Vercel Plugin:
-
-```bash
-npx ctx7 setup
-npx plugins add vercel/vercel-plugin
-```
+Install the Vercel plugin from the Cursor plugin marketplace.
 
 ## Windows note
 

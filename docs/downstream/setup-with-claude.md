@@ -57,7 +57,7 @@ Guide manual import and set:
 
 - Production branch: `main`
 - Preview branches: `dev` + PRs
-- Node 22
+- Node 24
 - `SITE_URL` as production-only env var
 
 If available, use the tool split documented in `docs/downstream/agent-tooling.md`:
