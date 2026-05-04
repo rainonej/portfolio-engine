@@ -1,4 +1,5 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'zod';
 import { glob } from 'astro/loaders';
 
 const profile = defineCollection({
@@ -10,8 +11,8 @@ const profile = defineCollection({
       bio: z.string(),
       photo: z.string().optional(),
       email: z.string().optional(),
-      linkedin: z.string().url().optional(),
-      instagram: z.string().url().optional(),
+      linkedin: z.url().optional(),
+      instagram: z.url().optional(),
     }),
     // cv entry
     z.object({
@@ -48,7 +49,7 @@ const projects = defineCollection({
     featured: z.boolean().optional().default(false),
     image: z.string().optional(),
     tags: z.array(z.string()).optional(),
-    link: z.string().url().optional(),
+    link: z.url().optional(),
     date: z.coerce.date(),
   }),
 });
