@@ -17,7 +17,7 @@ Step-by-step guide for bootstrapping a new standalone portfolio site (like `jord
 If you are using Claude Code, do this first:
 
 1. Scaffold the project first (`pnpm create astro@latest . --template minimal --install --typescript strict --git false`).
-2. In your new site repo, create `docs/downstream/` and copy `setup-with-claude.md`, `setup.sh`, `setup.ps1`, and `scripts/` from this repo.
+2. In your new site repo, create `docs/downstream/` and copy the full `docs/downstream/` directory from this repo, including `setup-with-claude.md`, `setup.sh`, `setup.ps1`, `scripts/`, `templates/`, and the agent-tooling docs.
 3. Paste `docs/downstream/setup-with-claude.md` into Claude and include your resume/design brief if available.
 4. Ask Claude to run `docs/downstream/setup.sh` (macOS/Linux) or `docs/downstream/setup.ps1` (Windows), then continue with manual file wiring.
 
@@ -33,6 +33,43 @@ Script controls:
 - PowerShell dry-run preview: `./docs/downstream/setup.ps1 -DryRun`
 - Bash skip phase: `SKIP_INSTALL=1 ./docs/downstream/setup.sh`
 - PowerShell skip phase: `./docs/downstream/setup.ps1 -SkipInstall`
+- Bash skip agent tooling seed: `SKIP_AGENT_TOOLING=1 ./docs/downstream/setup.sh`
+- PowerShell skip agent tooling seed: `./docs/downstream/setup.ps1 -SkipAgentTooling`
+
+## 0.5 — Optional agent tooling
+
+The setup scripts can seed optional agent-tooling files:
+
+- `CLAUDE.md`
+- `.github/copilot-instructions.md`
+- `.cursor/mcp.example.json`
+
+These files help Claude Code, Cursor, and Copilot use the right tools for the right job. The full tooling guidance lives in `docs/downstream/agent-tooling.md` (already present if you copied the `docs/downstream/` directory in step 0).
+
+Recommended tools:
+
+| Tool                 | Purpose                                                                               |
+| -------------------- | ------------------------------------------------------------------------------------- |
+| Vercel MCP           | inspect live Vercel deployments, logs, domains, env var names, and protected previews |
+| Vercel Plugin        | Vercel-specific implementation guidance                                               |
+| Context7             | current package docs and API examples                                                 |
+| Playwright MCP / CLI | browser-based visual QA                                                               |
+| Lighthouse CI        | optional performance/accessibility/SEO regression checks                              |
+| Vale                 | optional prose and tone linting                                                       |
+
+See `docs/downstream/agent-tooling.md`.
+
+If you do not want these files, run:
+
+```bash
+SKIP_AGENT_TOOLING=1 ./docs/downstream/setup.sh
+```
+
+or on Windows:
+
+```powershell
+./docs/downstream/setup.ps1 -SkipAgentTooling
+```
 
 ## 1 — Scaffold the Astro project
 
