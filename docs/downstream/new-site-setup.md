@@ -12,22 +12,45 @@ Step-by-step guide for bootstrapping a new standalone portfolio site (like `jord
 
 ---
 
+## 0 — Fast path (recommended for non-technical users)
+
+If you are using Claude Code, do this first:
+
+1. Scaffold the project first (`pnpm create astro@latest . --template minimal --install --typescript strict --git false`).
+2. In your new site repo, create `docs/downstream/` and copy `setup-with-claude.md`, `setup.sh`, `setup.ps1`, and `scripts/` from this repo.
+3. Paste `docs/downstream/setup-with-claude.md` into Claude and include your resume/design brief if available.
+4. Ask Claude to run `docs/downstream/setup.sh` (macOS/Linux) or `docs/downstream/setup.ps1` (Windows), then continue with manual file wiring.
+
+This reduces typing mistakes and keeps a machine-readable friction log in `src/docs/setup-feedback.md`.
+
+The setup scripts are intentionally split into a **master orchestrator** + **small numbered phase scripts** in `docs/downstream/scripts/` so Claude can skip or edit phases safely.
+
+---
+
+Script controls:
+
+- Bash dry-run preview: `DRY_RUN=1 ./docs/downstream/setup.sh`
+- PowerShell dry-run preview: `./docs/downstream/setup.ps1 -DryRun`
+- Bash skip phase: `SKIP_INSTALL=1 ./docs/downstream/setup.sh`
+- PowerShell skip phase: `./docs/downstream/setup.ps1 -SkipInstall`
+
 ## 1 — Scaffold the Astro project
 
 Run this in the root of your empty repo:
 
 ```bash
 pnpm create astro@latest . --template minimal --install --typescript strict --git false
+rm -f src/pages/index.astro
 ```
 
-Accept all prompts. This drops in `astro.config.mjs`, `tsconfig.json`, `package.json`, and a minimal `src/` skeleton.
+The scaffold's default `src/pages/index.astro` conflicts with the theme's `/` route, so remove it immediately.
 
 ---
 
-## 2 — Install the theme
+## 2 — Install packages
 
 ```bash
-pnpm add @portfolio-engine/editorial-theme @astrojs/vercel
+pnpm add @portfolio-engine/editorial-theme @portfolio-engine/admin-tools @astrojs/vercel
 ```
 
 ---
@@ -39,6 +62,7 @@ pnpm add @portfolio-engine/editorial-theme @astrojs/vercel
 import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
 import { editorialTheme } from '@portfolio-engine/editorial-theme';
+import { adminTools } from '@portfolio-engine/admin-tools';
 
 // Production sets SITE_URL in Vercel env vars. Previews fall back to VERCEL_URL.
 const site =
@@ -57,16 +81,19 @@ export default defineConfig({
       themeConfigPath: './src/config/theme.json',
       featuresConfigPath: './src/config/features.json',
     }),
+    adminTools({ devBypass: true }),
   ],
 });
 ```
+
+Use `output: 'static'` for Astro 6 compatibility with both theme routes and admin API routes (`prerender = false` on admin endpoints handles SSR where needed).
 
 ---
 
 ## 4 — Create the `src/` directory layout
 
 ```bash
-mkdir -p src/config src/content/projects src/content/writing src/content/profile src/content/testimonials src/context src/overrides
+mkdir -p src/config src/content/projects src/content/writing src/content/profile src/content/testimonials src/context src/overrides src/docs
 ```
 
 ---
@@ -177,11 +204,13 @@ const testimonials = defineCollection({
 
 const profile = defineCollection({
   loader: glob({ pattern: '**/*.json', base: './src/content/profile' }),
-  schema: z.object({
-    name: z.string().optional(),
-    bio: z.string().optional(),
-    email: z.string().optional(),
-  }),
+  schema: z
+    .object({
+      name: z.string().optional(),
+      bio: z.string().optional(),
+      email: z.string().optional(),
+    })
+    .passthrough(),
 });
 
 export const collections = { projects, writing, testimonials, profile };
@@ -192,6 +221,8 @@ export const collections = { projects, writing, testimonials, profile };
 ## 7 — Add placeholder content
 
 Drop at least one entry in each enabled collection so Astro doesn't error on empty globs.
+
+Also add required profile files used by `/about`.
 
 **`src/content/projects/hello-world.md`**
 
@@ -218,79 +249,45 @@ description: 'Writing placeholder.'
 Replace this with a real post.
 ```
 
----
-
-## 8 — Fill in `src/context/` (your identity layer)
-
-These files are **never read by the Astro build** — they exist for AI assistants (like Claude) working on your site. Take ten minutes to fill them in honestly; the more accurate they are, the better AI output you'll get.
-
-**`src/context/site-owner.json`** — who you are:
+**`src/content/profile/person.json`**
 
 ```json
 {
   "name": "Your Full Name",
-  "role": "Your title or discipline",
-  "location": "City, Country",
-  "website": "https://yoursite.com"
+  "bio": "One paragraph about you.",
+  "email": "you@example.com"
 }
 ```
 
-**`src/context/brand-voice.json`** — how you write:
+**`src/content/profile/cv.json`**
 
 ```json
 {
-  "tone": "describe your tone (e.g. warm and direct, precise and minimal)",
-  "audience": "who you're writing for (e.g. design-minded engineers, nonprofit hiring managers)",
-  "avoid": ["jargon words or phrases you dislike"],
-  "examples": ["a sentence that sounds like you"]
+  "awards": [{ "title": "...", "context": "...", "description": "..." }],
+  "education": [{ "degree": "...", "institution": "...", "location": "...", "year": "..." }]
 }
 ```
 
-**`src/context/agent-rules.md`** — standing instructions for AI:
-
-```md
-# Agent rules
-
-- Write in first person unless asked otherwise.
-- Keep descriptions under 100 words unless asked for long-form.
-- Do not invent credentials or project details — ask me if unsure.
-- Prefer concrete, specific language over abstract or corporate-speak.
-```
-
-**`src/context/README.md`**:
-
-```md
-# context/
-
-Site-owner identity and brand guidance for AI-assisted workflows.
-These files are read by agents, not by the Astro build.
-```
-
 ---
 
-## 9 — Add `src/overrides/README.md`
-
-```md
-# overrides/
-
-Drop component overrides here, then wire them in astro.config.mjs via
-editorialTheme({ overrides: { components: { Hero: './src/overrides/Hero.astro' } } }).
-Only named surfaces are stable. See docs/downstream/consumption.md.
-```
-
----
-
-## 10 — Verify locally
+## 8 — Verify locally
 
 ```bash
-pnpm dev        # Should open on http://localhost:4321
-pnpm check      # Astro type-check
-pnpm build      # Full build (catches SSR/adapter issues)
+pnpm dev
+pnpm check
+pnpm build
+```
+
+Add this to `.gitignore`:
+
+```gitignore
+.portfolio-engine/
+.vercel/
 ```
 
 ---
 
-## 11 — Deploy to Vercel
+## 9 — Deploy to Vercel
 
 1. Push to GitHub.
 2. In Vercel: **Add New → Project** → import your repo.
@@ -300,39 +297,14 @@ pnpm build      # Full build (catches SSR/adapter issues)
 6. **Environment variable:** `SITE_URL` = `https://your-custom-domain.com` (Production only; leave unset for Previews).
 7. **Production Branch:** `main`. Keep `dev` for staging previews.
 
-After the first deploy succeeds, update `src/config/site.json` `baseUrl` to the real production URL.
+`SITE_URL` powers canonical URLs, Open Graph links, and sitemap URLs.
 
 ---
 
-## Bootstrap with Claude
+## 10 — Troubleshooting quick hits
 
-If you'd rather have an AI do the scaffolding, create a fresh repo, clone it, and paste this into a Claude Code session:
-
-```
-I'm setting up a new standalone portfolio site called [SITE_NAME] that consumes
-@portfolio-engine/editorial-theme from npm. The monorepo that publishes this package
-is at https://github.com/rainonej/portfolio-engine — read its README and
-docs/downstream/new-site-setup.md for the expected file layout and config shapes.
-
-Please scaffold everything: astro.config.mjs, src/config/*.json, src/content.config.ts,
-placeholder content, and src/context/ files using the details below.
-
-About me:
-- Name: [YOUR NAME]
-- Role/discipline: [WHAT YOU DO]
-- Location: [CITY, COUNTRY]
-- Tagline: [PUNCHY ONE-LINER]
-- Audience: [WHO YOU'RE WRITING FOR]
-- Tone: [HOW YOU WRITE]
-- Website I want to deploy to: [https://yoursite.com]
-
-Navigation I want: [list the pages — Work / Writing / About / Contact or your own]
-
-For content, create placeholder entries I can replace — do not invent real projects.
-For src/context/, fill in site-owner.json and brand-voice.json from the details above.
-Leave agent-rules.md as a template I can edit.
-
-After scaffolding, tell me exactly which files I still need to fill in myself.
-```
-
-Fill in the bracketed fields, paste, and Claude will set up the full structure. Then go back and fill in `src/content/` with your real work.
+- `/` route collision warning: delete `src/pages/index.astro`.
+- `/about` build error for missing profile entries: add `profile/person.json` and `profile/cv.json`.
+- `/admin` production 500 "server misconfiguration": verify all required OAuth env vars are present.
+- Canonical URL points to localhost: set `SITE_URL` in Vercel production env vars and redeploy.
+- Work detail pages 404: keep `output: 'static'` (do not switch to `server` for this setup).

@@ -6,20 +6,20 @@ Optional Astro integration that injects a **private `/admin` dashboard** and **G
 
 - Use together with `@portfolio-engine/editorial-theme` (or any setup that registers `@portfolio-engine/engine-core` virtual modules: `config`, `routes`, …).
 - **`adminTools()` must appear after `editorialTheme([...])`** in `astro.config` so injected routes resolve engine virtual modules and your content collections.
-- **SSR**: set `output: 'server'` (or hybrid) and add a Node (or other) adapter. Admin API routes do not run in static export.
+- Use `output: 'static'` for Astro 6 consumer sites with the editorial theme; admin API routes opt into SSR individually via `prerender = false`.
 
 ## Quick start (local)
 
 ```js
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
-import node from '@astrojs/node';
+import vercel from '@astrojs/vercel';
 import { editorialTheme } from '@portfolio-engine/editorial-theme';
 import { adminTools } from '@portfolio-engine/admin-tools';
 
 export default defineConfig({
-  output: 'server',
-  adapter: node({ mode: 'standalone' }),
+  output: 'static',
+  adapter: vercel(),
   integrations: [
     editorialTheme({
       /* engine paths */
@@ -58,3 +58,5 @@ The default dashboard expects collections named **`writing`**, **`projects`**, *
 ## Status
 
 MVP overview, auth plumbing, and a basic in-browser file editor are shipped. `/api/content` now supports inventory + file reads and saves (local writes in `devBypass`, GitHub Contents API writes in OAuth mode) across content/config/context/registry/public paths. Includes drag-and-drop/browse upload for `public/` assets (with optional subfolder target) so non-technical users can add images/files and reference them in pages. Rich schema-aware drawers and polished editing UX remain a follow-up extraction step from `professional_site`.
+
+> `devBypass` only applies in local dev and is safe to leave configured; production behavior still requires OAuth env vars.
