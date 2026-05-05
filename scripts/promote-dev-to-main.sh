@@ -20,7 +20,7 @@ if [[ -z "$pr" ]]; then
   echo 'Creating promotion PR dev → main…'
   gh pr create --base main --head dev \
     --title 'chore(release): promote dev → main' \
-    --body 'Promotion via VS Code task **Promote dev → main** (`scripts/promote-dev-to-main.sh`).'
+    --body 'Promotion via VS Code task **Promote dev → main** (scripts/promote-dev-to-main.sh).'
   pr="$(gh pr list --base main --head dev --state open --json number -q '.[0].number' | tr -d '[:space:]')"
 fi
 

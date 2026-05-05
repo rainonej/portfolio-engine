@@ -5,8 +5,6 @@
       "label": "Promote dev → main",
       "detail": "Create or reuse dev→main PR, wait for CI, merge (requires gh CLI + auth)",
       "type": "shell",
-      "command": "bash",
-      "args": ["${workspaceFolder}/scripts/promote-dev-to-main.sh"],
       "options": {
         "cwd": "${workspaceFolder}",
         "env": {
@@ -22,6 +20,14 @@
           "-File",
           "${workspaceFolder}/scripts/promote-dev-to-main.ps1"
         ]
+      },
+      "linux": {
+        "command": "bash",
+        "args": ["${workspaceFolder}/scripts/promote-dev-to-main.sh"]
+      },
+      "osx": {
+        "command": "bash",
+        "args": ["${workspaceFolder}/scripts/promote-dev-to-main.sh"]
       },
       "problemMatcher": [],
       "presentation": {
