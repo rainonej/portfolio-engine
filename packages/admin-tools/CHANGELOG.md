@@ -1,5 +1,13 @@
 # @portfolio-engine/admin-tools
 
+## 0.0.8
+
+### Patch Changes
+
+- b10cfd6: Republish all core packages after release pipeline hardening so tarballs consistently include built dist artifacts.
+- Updated dependencies [b10cfd6]
+  - @portfolio-engine/engine-core@0.1.5
+
 ## 0.0.7
 
 ### Patch Changes

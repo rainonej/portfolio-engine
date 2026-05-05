@@ -1,5 +1,11 @@
 # @portfolio-engine/schema
 
+## 0.1.4
+
+### Patch Changes
+
+- b10cfd6: Republish all core packages after release pipeline hardening so tarballs consistently include built dist artifacts.
+
 ## 0.1.3
 
 ### Patch Changes
