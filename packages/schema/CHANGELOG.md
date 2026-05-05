@@ -1,5 +1,11 @@
 # @portfolio-engine/schema
 
+## 0.3.0
+
+### Minor Changes
+
+- 777d3da: Add provider-light scheduling config and `SchedulingBlock` component for downstream contact pages. Supports button, link, and iframe embed modes using public HTTPS booking URLs without provider SDKs or calendar API integration.
+
 ## 0.2.0
 
 ### Minor Changes
