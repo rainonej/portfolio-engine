@@ -18,10 +18,10 @@ Manual rescue: **Actions → Release → Run workflow** (`workflow_dispatch`) on
 
 Two-phase behavior:
 
-| Phase | Trigger | What happens |
-| ----- | ------- | ------------- |
+| Phase   | Trigger                                                                      | What happens                                                                                                                                      |
+| ------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Version | Push / dispatch on `main`, pending `.changeset/*.md` (excluding `README.md`) | `pnpm exec changeset version`, lockfile refresh (`pnpm install --no-frozen-lockfile` + lockfile commit if needed), **commit(s) pushed to `main`** |
-| Publish | Next push on `main` when no pending changesets | `pnpm build`, verify `dist/`, then **`pnpm release`** with `NODE_AUTH_TOKEN` |
+| Publish | Next push on `main` when no pending changesets                               | `pnpm build`, verify `dist/`, then **`pnpm release`** with `NODE_AUTH_TOKEN`                                                                      |
 
 `changeset publish` no-ops when local versions already match the registry.
 
@@ -62,11 +62,11 @@ Squash-merging **`dev` → `main`** normally keeps `.changeset/*.md` files as lo
 
 ## Required secrets
 
-| Secret | Where | Purpose |
-| ------ | ----- | ------- |
-| `NPM_TOKEN` | Repo → Settings → Secrets and variables → Actions | Publish to npm (automation token) |
+| Secret              | Where                                                      | Purpose                                                 |
+| ------------------- | ---------------------------------------------------------- | ------------------------------------------------------- |
+| `NPM_TOKEN`         | Repo → Settings → Secrets and variables → Actions          | Publish to npm (automation token)                       |
 | `RELEASE_BOT_TOKEN` | Same (optional but usually required on protected branches) | Push version commits to `main` and sync merges to `dev` |
-| `GITHUB_TOKEN` | Provided by Actions | Fallback when `RELEASE_BOT_TOKEN` is not set |
+| `GITHUB_TOKEN`      | Provided by Actions                                        | Fallback when `RELEASE_BOT_TOKEN` is not set            |
 
 ## Fork / dry-run verification
 
