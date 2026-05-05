@@ -1,4 +1,4 @@
-# demo-site
+# node-ssr-demo
 
 ## 0.0.4
 

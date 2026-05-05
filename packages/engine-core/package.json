@@ -18,7 +18,7 @@
   },
   "scripts": {
     "build": "tsup && node ./scripts/copy-client-dts.mjs",
-    "dev": "tsup --watch",
+    "dev": "tsup --watch --onSuccess \"node ./scripts/copy-client-dts.mjs\"",
     "check": "tsc --noEmit"
   },
   "dependencies": {
