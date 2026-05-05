@@ -10,13 +10,13 @@ An Astro theme for personal portfolio sites. It provides routes, layouts, and st
 
 **You need:**
 
-|                    |                                             |
-| ------------------ | ------------------------------------------- |
-| **Node.js 22**     | [nodejs.org](https://nodejs.org)            |
-| **pnpm**           | `npm install -g pnpm` after installing Node |
-| **GitHub account** | [github.com](https://github.com)            |
-| **Vercel account** | [vercel.com](https://vercel.com)            |
-| **Claude Code**    | [claude.ai/code](https://claude.ai/code)    |
+|                    |                                                                           |
+| ------------------ | ------------------------------------------------------------------------- |
+| **Node.js 24+**    | [nodejs.org](https://nodejs.org) — matches root [`engines`](package.json) |
+| **pnpm 10+**       | `npm install -g pnpm` after installing Node                               |
+| **GitHub account** | [github.com](https://github.com)                                          |
+| **Vercel account** | [vercel.com](https://vercel.com)                                          |
+| **Claude Code**    | [claude.ai/code](https://claude.ai/code)                                  |
 
 **Then open [`docs/downstream/setup-with-claude.md`](docs/downstream/setup-with-claude.md), copy the whole file, and paste it into Claude Code.** Claude will ask for your details, build the project, and tell you exactly when to go click something in Vercel. One conversation, start to finish.
 
@@ -38,7 +38,7 @@ src/
                                        Zod schemas
 ```
 
-The three **required** packages are published to npm — your repo installs them. `@portfolio-engine/admin-tools` is an optional UI layer; `@portfolio-engine/workflow-kit` exists but is currently scaffold-stage (not a production MCP toolkit yet).
+The three **required** packages are published to npm — your repo installs them. **`@portfolio-engine/admin-tools`** is optional (also on npm). **`@portfolio-engine/workflow-kit`** is scaffold-stage (not a production MCP toolkit yet).
 
 ---
 
@@ -55,12 +55,16 @@ Check the [releases](https://github.com/rainonej/portfolio-engine/releases) befo
 
 ## More docs
 
-| Topic                                                   | Link                                                                         |
-| ------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| Setup with Claude (paste whole file, Claude guides you) | [docs/downstream/setup-with-claude.md](docs/downstream/setup-with-claude.md) |
-| New site setup (full manual reference)                  | [docs/downstream/new-site-setup.md](docs/downstream/new-site-setup.md)       |
-| Semver vs. workspace-link, overrides, Vercel detail     | [docs/downstream/consumption.md](docs/downstream/consumption.md)             |
-| Lint, format, CI                                        | [docs/contributing/linting.md](docs/contributing/linting.md)                 |
+| Topic                                                   | Link                                                                                       |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Setup with Claude (paste whole file, Claude guides you) | [docs/downstream/setup-with-claude.md](docs/downstream/setup-with-claude.md)               |
+| New site setup (full manual reference)                  | [docs/downstream/new-site-setup.md](docs/downstream/new-site-setup.md)                     |
+| Semver vs. workspace-link, overrides, Vercel detail     | [docs/downstream/consumption.md](docs/downstream/consumption.md)                           |
+| Agent tooling for downstream vibe-coding                | [docs/downstream/agent-tooling.md](docs/downstream/agent-tooling.md)                       |
+| Visual QA prompt                                        | [docs/downstream/visual-qa-prompt.md](docs/downstream/visual-qa-prompt.md)                 |
+| Design review checklist                                 | [docs/downstream/design-review-checklist.md](docs/downstream/design-review-checklist.md)   |
+| Lint, format, CI                                        | [docs/contributing/linting.md](docs/contributing/linting.md)                               |
+| Gitignored local files (MCP, smoke test, `.vercel`)     | [docs/contributing/gitignored-local-files.md](docs/contributing/gitignored-local-files.md) |
 
 ---
 
@@ -100,17 +104,21 @@ pnpm format   # Prettier check
 
 ### CI
 
-GitHub Actions runs **lint → typecheck → Astro check → build** on every push to `main` / `dev` and on pull requests. See [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
+GitHub Actions runs **lint → check (packages build + typecheck + `astro check`) → full build → packed tarball smoke test** on pushes to `main` / `dev` and on PRs. Uses **Node 24** and **pnpm 10**. See [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
 ### Runtime requirements
 
-- Node **≥ 18**, pnpm **≥ 9** — see [`engines`](package.json) in root `package.json`
-- CI uses Node 20; Vercel serverless uses Node 22
-- Astro 5 — bump deliberately across the workspace when upgrading
+- Node **≥ 24**, pnpm **≥ 10** — see [`engines`](package.json) in root `package.json`.
+- Match CI locally when possible so `astro build` with **`@astrojs/vercel`** behaves the same (Windows may need **Developer Mode** for symlinks during that step; see [examples/demo-site/README.md](examples/demo-site/README.md)).
+- **Astro 6** — bump deliberately across the workspace when upgrading.
 
 ### Vercel (demo site)
 
-Connect **`rainonej/portfolio-engine`** in Vercel: root = repo root, build = `pnpm --filter demo-site run build`, output = `examples/demo-site/dist`. Production on `main`; `dev` and PRs get previews. Details: [examples/demo-site/README.md](examples/demo-site/README.md#vercel).
+Connect **`rainonej/portfolio-engine`** in Vercel: root = repo root, install `pnpm install`, build `pnpm --filter demo-site run build`; follow the adapter output layout from **`@astrojs/vercel`** (do not assume a flat `dist/` only). Production on `main`; `dev` and PRs get previews. Details: [examples/demo-site/README.md](examples/demo-site/README.md#vercel).
+
+### Local-only / gitignored files
+
+MCP config (`.mcp.json`, `.cursor/mcp.json`), smoke-test dirs, and local `.vercel` output are gitignored. See **[`docs/contributing/gitignored-local-files.md`](docs/contributing/gitignored-local-files.md)** so you do not commit them by mistake.
 
 ### Publishing
 

@@ -17,7 +17,7 @@ Architecture detail: [`docs/packages/editorial-theme.md`](../../docs/packages/ed
 
 From the **monorepo root** (`portfolio-engine/`), not only this folder:
 
-- Node **≥ 18**, **pnpm ≥ 9** (see root [`package.json` engines](../../package.json)).
+- Node **≥ 24**, **pnpm ≥ 10** (see root [`package.json` engines](../../package.json)).
 
 ## Install and run
 
@@ -29,11 +29,15 @@ pnpm --filter demo-site dev
 pnpm --filter demo-site run build
 ```
 
-Build output: `examples/demo-site/dist/` (**SSR** via `@astrojs/node` so `/admin` and `/api/auth/*` work). Open `http://localhost:4321/admin` after `pnpm --filter demo-site dev` (dev bypass skips GitHub; see `.env.example` for OAuth).
+This example uses **`output: 'static'`** with **[`@astrojs/vercel`](https://docs.astro.build/en/guides/integrations-guide/vercel/)**, matching **[`docs/downstream/new-site-setup.md`](../../docs/downstream/new-site-setup.md)**. Admin and API routes set `prerender = false` so they can run as serverless/SSR on Vercel.
+
+Open `http://localhost:4321/admin` after `pnpm --filter demo-site dev` (dev bypass skips GitHub; see `.env.example` for OAuth).
 
 Each build also generates `.portfolio-engine/manifest.json` in the demo-site root, including resolved route registry entries and named override surfaces.
 
 The demo intentionally passes **custom registry metadata** (`agentGuidance`, `guidance`, `docsUrl`) through `editorialTheme({ registries })` in `astro.config.mjs` to exercise the registry + manifest contract directly.
+
+For a **Node SSR** mirror of this site (standalone server bundle), see [`examples/node-ssr-demo`](../node-ssr-demo/).
 
 ## Checks
 
@@ -41,15 +45,19 @@ The demo intentionally passes **custom registry metadata** (`agentGuidance`, `gu
 pnpm --filter demo-site run check   # astro check
 ```
 
+### Windows: `astro build` and symlinks
+
+`@astrojs/vercel` may create symlinks under `.vercel/output/`. If `astro build` fails with `EPERM` on `symlink`, enable **Developer Mode** (Settings → System → For developers) or run the build in **WSL** / **CI (Linux)**, where symlinks are allowed.
+
 ## Vercel
 
 Recommended **Option A** (pnpm workspace–friendly):
 
 1. Create a Vercel project linked to **`rainonej/portfolio-engine`**.
 2. **Root Directory:** repository root (`.`), _not_ only `examples/demo-site`, so `workspace:*` resolves during install.
-3. **Install Command:** `pnpm install`
-4. **Build Command:** `pnpm --filter demo-site run build`
-5. **Output Directory:** `examples/demo-site/dist` (Node server bundle — ensure the Vercel project runtime matches Astro’s Node adapter, or swap the adapter for `@astrojs/vercel` if you deploy there.)
+3. **Install Command:** `pnpm install` (or `pnpm install --frozen-lockfile` to match [`vercel.json`](../../vercel.json))
+4. **Build Command:** `pnpm --filter "./packages/*" run build && pnpm --filter demo-site build` — workspace packages must emit `dist/` before Astro loads `astro.config.mjs` (see [`vercel.json`](../../vercel.json)).
+5. **Output Directory:** `examples/demo-site/.vercel/output` — [`@astrojs/vercel`](https://docs.astro.build/en/guides/integrations-guide/vercel/) writes the Build Output API layout here, not a flat `dist/`.
 6. **Production branch:** `main` (or your release branch). **Preview:** all other branches and PRs (including `dev`) so every push gets a URL.
 
 If you instead set Root Directory to `examples/demo-site`, you must run install from the monorepo root (e.g. custom install command); Option A avoids that foot-gun.

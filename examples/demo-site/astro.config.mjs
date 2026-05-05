@@ -1,5 +1,5 @@
 // @ts-check
-import node from '@astrojs/node';
+import vercel from '@astrojs/vercel';
 import { defineConfig } from 'astro/config';
 import { adminTools } from '@portfolio-engine/admin-tools';
 import {
@@ -19,9 +19,15 @@ const overrideRegistry = DEFAULT_OVERRIDE_SURFACES.map((surface) => ({
   guidance: `Use ${surface.name} for downstream customization before proposing upstream edits.`,
 }));
 
+const site =
+  process.env.SITE_URL ??
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined) ??
+  'http://localhost:4321';
+
 export default defineConfig({
-  output: 'server',
-  adapter: node({ mode: 'standalone' }),
+  site,
+  output: 'static',
+  adapter: vercel(),
   integrations: [
     editorialTheme({
       siteConfigPath: './src/config/site.json',

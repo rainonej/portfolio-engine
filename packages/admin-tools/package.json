@@ -3,22 +3,33 @@
   "version": "0.0.6",
   "description": "Admin and reviewer UI components for portfolio-engine sites",
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
   "scripts": {
-    "build": "echo 'no build emit — TypeScript sources consumed directly'",
-    "dev": "echo 'use a consumer site: pnpm --filter demo-site dev'",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "check": "tsc --noEmit -p tsconfig.json"
   },
   "peerDependencies": {
-    "astro": ">=5.0.0"
+    "astro": "^6.0.0"
   },
   "dependencies": {
     "@portfolio-engine/engine-core": "workspace:*"
   },
   "devDependencies": {
-    "astro": "^5.18.1",
-    "typescript": "^5.0.0"
+    "astro": "^6.2.2",
+    "tsup": "^8.3.0",
+    "typescript": "^6.0.0"
   }
 }

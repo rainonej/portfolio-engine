@@ -1,147 +1,93 @@
 # Portfolio site setup — paste this into Claude Code
 
-Copy the entire contents of this file and paste it into Claude Code as your first message. Claude should run this as a **phased operator runbook** for a modern portfolio-engine consumer (route registry, manifest, named overrides, and admin tools enabled by default).
+Copy this whole file into Claude Code as your first message.
 
 ---
 
 You are helping me set up a new personal portfolio site from scratch using
-`@portfolio-engine/editorial-theme` (published on npm, source at
-https://github.com/rainonej/portfolio-engine).
+`@portfolio-engine/editorial-theme` + `@portfolio-engine/admin-tools`.
 
-Work through the phases below in order. Do not move to the next phase until
-the current one is finished. At each phase, tell me clearly what you're doing
-and what — if anything — you need from me or need me to do manually.
+Operate in phases. Keep a running friction log in `src/docs/setup-feedback.md` during setup.
+If I provide a resume and/or design doc, save them to `src/docs/resume.md` and `src/docs/design-brief.md` first, then use them as source-of-truth.
 
----
+## Phase 1 — intake
 
-## Phase 1 — Learn about me
+Ask once for missing items only:
 
-Before touching any files, ask me for everything you need in one grouped prompt:
+- name, role, tagline, one-line description, location
+- tone, audience
+- pages (Work/Writing/About/Contact)
+- social links + booking URL (optional)
+- repo name
 
-- **Name** — as it should appear on the site
-- **Role** — what I do
-- **Tagline** — one short punchy line
-- **Description** — one sentence: my work and who I do it for
-- **Location** — city and country
-- **Tone** — how I write
-- **Audience** — who reads my site
-- **Pages** — which of these I want: Work, Writing, About, Contact (default: all)
-- **Booking URL** — optional scheduling link
-- **Social URLs** — GitHub, LinkedIn, X/Twitter (optional)
-- **Repo name** — what to call my GitHub repository
+If resume/design docs were provided, do **not** re-ask obvious info; infer carefully and only confirm ambiguities.
 
-If any answer is vague, ask one follow-up before moving on.
+## Phase 2 — scaffold + configure
 
----
-
-## Phase 2 — Build the project
-
-Using my answers, follow the technical setup guide at:
+Follow:
 https://github.com/rainonej/portfolio-engine/blob/main/docs/downstream/new-site-setup.md
 
-Do all of the following:
+Also:
 
-- Scaffold the Astro project and install `@portfolio-engine/editorial-theme`
-- Install `@portfolio-engine/admin-tools` and Node adapter support as part of the default setup
-- Create `src/config/site.json`, `navigation.json`, `theme.json`, `features.json`
-- Create `src/content.config.ts` and placeholder content in `src/content/`
-- Fill `src/context/site-owner.json` and `src/context/brand-voice.json`; keep `agent-rules.md` as an editable template
-- Create `src/overrides/README.md`
-- Wire at least one named override surface (Hero) so the overrides system is demonstrated
-- Run a local build and confirm `.portfolio-engine/manifest.json` is generated
+- run `docs/downstream/setup.sh` (macOS/Linux) or `docs/downstream/setup.ps1` (Windows) if present to automate standard setup
+- ensure `adminTools({ devBypass: true })` is configured after `editorialTheme(...)`
+- ensure Astro output is `static`
+- create placeholder `src/content/profile/person.json` and `src/content/profile/cv.json`
+- set `.gitignore` entries for `.portfolio-engine/` and `.vercel/`
+- seed agent tooling unless I explicitly opt out:
+  - `CLAUDE.md`
+  - `.github/copilot-instructions.md`
+  - `.cursor/mcp.example.json` (seed copies from `docs/downstream/templates/agent/mcp.example.json`)
+- read `docs/downstream/agent-tooling.md` before using MCP/plugin/browser tools (the file lives in the downstream docs directory copied in step 0)
 
-When done, summarize what was created and list files I should customize first.
+Write each confusion/error/contradiction to `src/docs/setup-feedback.md` as you go.
 
----
+Before running setup scripts, read them first and execute a dry-run preview (`DRY_RUN=1` or `-DryRun`). If a phase is unnecessary, skip it using script flags/environment variables rather than hand-editing unrelated files.
 
-## Phase 3 — Push to GitHub
+## Phase 3 — git + GitHub
 
-1. Initialize a git repo if needed
-2. Create a new GitHub repo using my chosen repo name (`gh repo create` if available)
-3. Commit everything and push to `main`
+- create `main` (production) and `dev` (preview/staging) branches
+- set default branch to `main`
+- push both branches
+- use branch protections if available
 
-Tell me the GitHub URL after push.
+## Phase 4 — Vercel setup (guided)
 
----
+Guide manual import and set:
 
-## Phase 4 — Vercel (manual, guided)
+- Production branch: `main`
+- Preview branches: `dev` + PRs
+- Node 24
+- `SITE_URL` as production-only env var
 
-Give me exact click-by-click instructions.
+If available, use the tool split documented in `docs/downstream/agent-tooling.md`:
 
-For a standard standalone consumer repo, tell me:
+- Vercel Plugin for implementation guidance.
+- Vercel MCP for live Vercel state.
+- Context7 for current package docs.
+- Playwright for browser-based verification.
 
-> Go to vercel.com and log in. Click **Add New → Project** and import **[repo name]**.
-> Set:
->
-> - Root Directory: `.`
-> - Install Command: `pnpm install`
-> - Build Command: `pnpm build`
-> - Output Directory: default
->
-> Click **Deploy**. After it succeeds, go to **Settings → General** and set Node.js to **22.x**.
-> Come back and paste the deployment URL.
+If those tools are unavailable, provide click-by-click fallback instructions.
 
-Wait for my URL before moving on.
+## Phase 5 — admin + branch behavior verification
 
----
+Verify:
 
-## Phase 5 — Wire up canonical URL + polish context
+- `/admin` works in local dev with `devBypass: true`
+- admin/auth routes are not main-branch-only and work on preview deployments too
+- OAuth env vars are documented (all required vars listed)
+- run the visual QA checklist in `docs/downstream/visual-qa-prompt.md` after deployment or meaningful UI changes
 
-Once I provide the Vercel URL:
+## Phase 6 — CI
 
-1. Update `src/config/site.json` `baseUrl`
-2. Commit and push
-3. Ask whether to replace placeholder project content now
-4. Ask whether to replace placeholder writing now
-5. Improve `src/context/brand-voice.json` by interviewing me briefly and writing concrete values
+Ensure CI runs on pushes/PRs for both `main` and `dev`.
 
----
+## Phase 7 — wrap-up + feedback ticket
 
-## Phase 6 — Production `SITE_URL` env var (manual, guided)
+At end:
 
-Tell me:
-
-> In Vercel, open **Settings → Environment Variables**.
-> Add:
->
-> - Name: `SITE_URL`
-> - Value: `[production URL from Phase 5]`
-> - Environment: **Production only**
->
-> Save, then go to **Deployments**, open the latest deployment menu, and click **Redeploy**.
-> Come back when done.
-
----
-
-## Phase 7 — Custom domain (ask first)
-
-Ask: “Do you have a custom domain you want to use, like yourname.com?”
-
-- **If yes:** guide domain setup in Vercel, then:
-  1. update `site.json` `baseUrl`
-  2. commit + push
-  3. tell me to update Vercel `SITE_URL` and redeploy
-- **If no:** continue.
-
----
-
-## Phase 8 — Registry / manifest / admin verification
-
-Run and report these checks:
-
-- Build passes
-- `.portfolio-engine/manifest.json` exists and lists route + override capabilities
-- `/admin` is present and `/api/content` contract is wired
-- Explain how route remaps/disables and named overrides are controlled in config/integration
-
----
-
-## Wrap-up
-
-Give me a short summary with:
-
-- Live URL
-- Repo URL
-- The three folders I own most: `src/content/`, `src/config/`, `src/context/`
-- Where to add overrides: `src/overrides/`
-- One line for theme updates (`pnpm update @portfolio-engine/editorial-theme && pnpm build`)
+1. summarize live URL, repo URL, branch strategy, and where to edit content
+2. sanitize `src/docs/setup-feedback.md` (no personal data, no secrets)
+3. open a GitHub issue in `portfolio-engine` titled
+   `Setup friction report from [repo-name]` and paste sanitized feedback
+4. include issue URL in final summary

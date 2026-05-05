@@ -3,9 +3,15 @@
   "version": "0.1.2",
   "description": "Shared Zod schemas for portfolio-engine content and config",
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./src/*": "./src/*"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
   "scripts": {
     "build": "tsup",
@@ -13,9 +19,9 @@
     "check": "tsc --noEmit"
   },
   "dependencies": {
-    "zod": "^3.25.76"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^6.0.0"
   }
 }

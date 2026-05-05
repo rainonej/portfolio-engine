@@ -4,7 +4,7 @@ import { cpSync, existsSync } from 'node:fs';
 // Copies .astro and .css assets into dist/ after TypeScript compilation.
 // Astro processes .astro files natively at consumer build time — they are not compiled here.
 function copyAssets() {
-  for (const dir of ['components', 'layouts', 'pages', 'styles']) {
+  for (const dir of ['components', 'layouts', 'pages', 'styles', 'lib']) {
     if (existsSync(`src/${dir}`)) {
       cpSync(`src/${dir}`, `dist/${dir}`, { recursive: true });
     }

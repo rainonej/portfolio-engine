@@ -3,9 +3,15 @@
   "version": "0.1.3",
   "description": "The first-party Astro theme built on @portfolio-engine/engine-core",
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./src/*": "./src/*"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
   "scripts": {
     "build": "tsup",
@@ -13,17 +19,16 @@
     "check": "tsc --noEmit"
   },
   "peerDependencies": {
-    "astro": ">=5.0.0"
+    "astro": "^6.0.0"
   },
   "dependencies": {
     "@portfolio-engine/engine-core": "workspace:*",
     "@portfolio-engine/schema": "workspace:*",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.0"
+    "@tailwindcss/vite": "^4.2.4",
+    "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
-    "astro": "^5.18.1",
-    "typescript": "^5.0.0"
+    "astro": "^6.2.2",
+    "typescript": "^6.0.0"
   }
 }

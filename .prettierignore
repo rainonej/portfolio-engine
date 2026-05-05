@@ -6,4 +6,7 @@ portfolio_engine_v3_audit_pack/report/**/*.html
 **/node_modules/**
 **/dist/**
 **/.astro/**
+**/.vercel/**
+.cursor/mcp.json
+.playwright-mcp/
 **/coverage/**

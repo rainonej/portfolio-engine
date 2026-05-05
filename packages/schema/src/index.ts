@@ -3,18 +3,18 @@ import { z } from 'zod';
 export const SiteConfigSchema = z.object({
   title: z.string(),
   description: z.string(),
-  baseUrl: z.string().url(),
+  baseUrl: z.url(),
   tagline: z.string(),
-  bookingUrl: z.string().url().optional(),
+  bookingUrl: z.url().optional(),
   contact: z.object({
     heading: z.string(),
     body: z.string(),
   }),
   social: z
     .object({
-      github: z.string().url().optional(),
-      twitter: z.string().url().optional(),
-      linkedin: z.string().url().optional(),
+      github: z.url().optional(),
+      twitter: z.url().optional(),
+      linkedin: z.url().optional(),
     })
     .optional(),
 });

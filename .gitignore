@@ -145,3 +145,12 @@ vite.config.ts.timestamp-*
 # pnpm
 .pnpm-store/
 pnpm-lock.yaml.bak
+
+# Local MCP config
+.mcp.json
+.cursor/mcp.json
+
+# Playwright MCP local artifacts
+.playwright-mcp/
+mcp-list-verify.txt
+.smoke-packs/
