@@ -22,6 +22,8 @@ const FONT_SANS_DEFAULT =
   '"Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
 const FONT_SERIF_DEFAULT =
   '"Cormorant Garamond", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif';
+const FONT_MONO_DEFAULT =
+  'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace';
 
 /** Comfortable type scale (CSS lengths). */
 export const TYPO_SCALE_COMFORTABLE: Record<string, string> = {
@@ -156,6 +158,7 @@ export function resolveTypographyVariables(theme: ThemeConfig | undefined): Map<
   if (!typo) {
     out.set('--font-sans-stack', resolvedEntry(FONT_SANS_DEFAULT, 'default'));
     out.set('--font-serif-stack', resolvedEntry(FONT_SERIF_DEFAULT, 'default'));
+    out.set('--font-mono-stack', resolvedEntry(FONT_MONO_DEFAULT, 'default'));
     for (const [k, v] of Object.entries(TYPO_SCALE_COMFORTABLE)) {
       out.set(k, resolvedEntry(v, 'default'));
     }
@@ -187,6 +190,14 @@ export function resolveTypographyVariables(theme: ThemeConfig | undefined): Map<
       typo.fonts?.body ? sansStack : FONT_SANS_DEFAULT,
       typo.fonts?.body ? 'theme.typography.fonts.body' : 'default',
     ),
+  );
+
+  const monoStack = typo.fonts?.mono
+    ? `${sanitizeCssValue(typo.fonts.mono)}, ui-monospace, monospace`
+    : FONT_MONO_DEFAULT;
+  out.set(
+    '--font-mono-stack',
+    resolvedEntry(monoStack, typo.fonts?.mono ? 'theme.typography.fonts.mono' : 'default'),
   );
 
   const presetMap =

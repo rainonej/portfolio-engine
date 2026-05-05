@@ -26,6 +26,24 @@ function slugify(str: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
+/** Drawer tags field is comma-separated; frontmatter may still be an array after YAML fixes. */
+function normalizeTagsInput(raw: unknown): string[] {
+  if (Array.isArray(raw)) return raw.map((t) => String(t).trim()).filter(Boolean);
+  return String(raw ?? '')
+    .split(',')
+    .map((t) => t.trim())
+    .filter(Boolean);
+}
+
+async function remotePathReadable(api: ReturnType<typeof createContentApi>, path: string): Promise<boolean> {
+  try {
+    await api.getText(path);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function escapeHtml(s: string): string {
   return s
     .replace(/&/g, '&amp;')
@@ -174,9 +192,21 @@ function showToast(el: HTMLElement, msg: string, isError = false): void {
   }, 4000);
 }
 
-function collectionMdPath(type: 'project' | 'writing', slug: string): string {
+function collectionMarkdownPath(type: 'project' | 'writing', slug: string, ext: '.md' | '.mdx'): string {
   const dir = type === 'project' ? 'projects' : 'writing';
-  return `src/content/${dir}/${slug}.md`;
+  return `src/content/${dir}/${slug}${ext}`;
+}
+
+async function resolveMarkdownEntryPath(
+  api: ReturnType<typeof createContentApi>,
+  type: 'project' | 'writing',
+  slug: string,
+): Promise<string | null> {
+  const md = collectionMarkdownPath(type, slug, '.md');
+  if (await remotePathReadable(api, md)) return md;
+  const mdx = collectionMarkdownPath(type, slug, '.mdx');
+  if (await remotePathReadable(api, mdx)) return mdx;
+  return null;
 }
 
 function testimonialPath(slug: string): string {
@@ -473,7 +503,11 @@ function initDrawer(
     let existing: Record<string, unknown> = {};
     let pathForDelete: string | null = null;
     if (slug) {
-      pathForDelete = collectionMdPath(type, slug);
+      pathForDelete = await resolveMarkdownEntryPath(api, type, slug);
+      if (!pathForDelete) {
+        showToast(toastEl, `No entry found for "${slug}" as .md or .mdx.`, true);
+        return;
+      }
       try {
         const { content } = await api.getText(pathForDelete);
         const { data, body } = yamlFrontmatter.parse(content);
@@ -485,36 +519,52 @@ function initDrawer(
     }
     const typeLabel = type === 'project' ? 'Project' : 'Essay';
     const dir = type === 'project' ? 'projects' : 'writing';
+    const subtitle =
+      slug && pathForDelete
+        ? pathForDelete.replace(/^src\/content\//, 'content/')
+        : `content/${dir}/…`;
     openModal({
       title: slug ? `Edit ${typeLabel}` : `New ${typeLabel}`,
-      subtitle: slug ? `content/${dir}/${slug}.md` : `content/${dir}/…`,
+      subtitle,
       groups: markdownGroups(type, existing),
       onSave: async (vals) => {
         const title = (vals.title as string).trim();
         if (!title) throw new Error('Title is required');
-        const tags = (vals.tags as string)
-          .split(',')
-          .map((t) => t.trim())
-          .filter(Boolean);
+        const tags = normalizeTagsInput(vals.tags);
+        const targetSlug = slug ?? slugify(title);
+        const label = type === 'project' ? 'project' : 'essay';
+
+        if (!slug && (await remotePathReadable(api, collectionMarkdownPath(type, targetSlug, '.md')))) {
+          throw new Error(`A ${label} with slug "${targetSlug}" already exists (.md). Pick a different title.`);
+        }
+        if (!slug && (await remotePathReadable(api, collectionMarkdownPath(type, targetSlug, '.mdx')))) {
+          throw new Error(`A ${label} with slug "${targetSlug}" already exists (.mdx). Pick a different title.`);
+        }
+
         const fmData: Record<string, unknown> = {
           title,
-          description: vals.description || undefined,
           date: vals.date || new Date().toISOString().slice(0, 10),
           tags,
           image: vals.image || undefined,
           featured: !!vals.featured,
         };
-        if (type === 'project' && vals.link) fmData.link = vals.link;
-        if (type === 'writing') fmData.draft = !!vals.draft;
+        if (type === 'project') {
+          const trimmedDesc = (vals.description as string)?.trim();
+          fmData.description =
+            trimmedDesc ||
+            (slug ? String(existing.description ?? '').trim() : '') ||
+            'Description pending.';
+          if (vals.link) fmData.link = vals.link;
+        } else {
+          const wd = (vals.description as string)?.trim();
+          if (wd) fmData.description = wd;
+          fmData.draft = !!vals.draft;
+        }
         const fileContent = yamlFrontmatter.stringify(fmData, (vals.body as string) || '');
-        const targetSlug = slug ?? slugify(title);
+        const ext = slug && pathForDelete?.endsWith('.mdx') ? '.mdx' : '.md';
+        const outPath = collectionMarkdownPath(type, targetSlug, ext);
         const verb = slug ? 'update' : 'add';
-        const label = type === 'project' ? 'project' : 'essay';
-        await api.putText(
-          collectionMdPath(type, targetSlug),
-          fileContent,
-          `admin-tools: ${verb} ${label} "${title}"`,
-        );
+        await api.putText(outPath, fileContent, `admin-tools: ${verb} ${label} "${title}"`);
       },
       onDelete:
         slug && pathForDelete
@@ -557,6 +607,9 @@ function initDrawer(
           featured: !!vals.featured,
         };
         const targetSlug = slug ?? slugify(author);
+        if (!slug && (await remotePathReadable(api, testimonialPath(targetSlug)))) {
+          throw new Error(`A testimonial with slug "${targetSlug}" already exists. Pick a different author name or edit the existing entry.`);
+        }
         const verb = slug ? 'update' : 'add';
         await api.putText(
           testimonialPath(targetSlug),

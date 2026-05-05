@@ -4,7 +4,7 @@ import AmbientBackground from '../components/AmbientBackground.astro';
 import Footer from '../components/Footer.astro';
 import ThemeTokenOverrides from '../components/ThemeTokenOverrides.astro';
 import '../styles/global.css';
-import { EDITORIAL_GOOGLE_FONTS_STYLESHEET_HREF } from '../lib/google-fonts.js';
+import { editorialGoogleFontsStylesheetHref } from '../lib/google-fonts.js';
 import { config } from '@portfolio-engine:config';
 import { overrides } from '@portfolio-engine:overrides';
 import { readFileSync } from 'node:fs';
@@ -29,6 +29,8 @@ const imageUrl = ogImage
     ? ogImage
     : `${site}${base}/${ogImage.replace(/^\//, '')}`
   : `${site}${base}/og-default.svg`;
+
+const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
 ---
 
 <!doctype html>
@@ -59,7 +61,7 @@ const imageUrl = ogImage
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href={EDITORIAL_GOOGLE_FONTS_STYLESHEET_HREF} rel="stylesheet" />
+    <link href={googleFontsHref} rel="stylesheet" />
     <title>{title}</title>
     <ThemeTokenOverrides />
     {extraCss && <style is:global set:html={extraCss} />}

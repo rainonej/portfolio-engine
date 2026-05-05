@@ -87,6 +87,11 @@ export const EDITORIAL_THEME_TOKEN_GROUPS: DesignTokenGroup[] = [
         usage: 'Body UI (theme.typography.fonts.body)',
       },
       {
+        cssVar: '--font-mono-stack',
+        label: 'Mono stack',
+        usage: 'Code / monospace (theme.typography.fonts.mono)',
+      },
+      {
         cssVar: '--text-body',
         label: 'Body size',
         usage: 'Base reading size (theme.typography.scale.body or preset)',

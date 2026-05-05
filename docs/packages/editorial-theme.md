@@ -33,6 +33,10 @@ The first-party Astro theme built on `engine-core`.
 
 Admin route handled separately in `@portfolio-engine/admin-tools` (Epic 7).
 
+### Theme, tokens, and `theme.json`
+
+Editorial palette, type scale, semantic colors, and typography overrides are documented in **[`docs/downstream/design-tokens-and-theme.md`](../downstream/design-tokens-and-theme.md)**. Layout and admin load Google Fonts via **`editorialGoogleFontsStylesheetHref`** based on `src/config/theme.json` when families are hosted on Google Fonts.
+
 ### Override surfaces
 
 Named override points are explicit and stable. Consumers can override individual components by placing a file in their `src/overrides/components/` directory. The exact surface list is defined in Task 4.4.

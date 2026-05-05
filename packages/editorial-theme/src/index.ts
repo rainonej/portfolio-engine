@@ -2,7 +2,10 @@
 
 // Utility exports
 export { getBase, formatDate, sortByDateDesc, resolveAssetUrl } from './lib/utils.js';
-export { EDITORIAL_GOOGLE_FONTS_STYLESHEET_HREF } from './lib/google-fonts.js';
+export {
+  editorialGoogleFontsStylesheetHref,
+  EDITORIAL_GOOGLE_FONTS_STYLESHEET_HREF,
+} from './lib/google-fonts.js';
 
 export { editorialTheme } from './integration.js';
 export type { EditorialThemeOptions } from './integration.js';

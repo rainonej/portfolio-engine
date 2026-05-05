@@ -22,6 +22,7 @@
   --font-sans-stack: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol", "Noto Color Emoji";
   --font-serif-stack: "Cormorant Garamond", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono-stack: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 
   /**
    * Type scale — mirrors schema TYPO_SCALE_COMFORTABLE / ThemeTokenOverrides defaults.

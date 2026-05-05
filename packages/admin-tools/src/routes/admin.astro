@@ -3,7 +3,7 @@ export const prerender = false;
 
 import '@portfolio-engine/editorial-theme/styles/global.css';
 import ThemeTokenOverrides from '@portfolio-engine/editorial-theme/components/ThemeTokenOverrides.astro';
-import { EDITORIAL_GOOGLE_FONTS_STYLESHEET_HREF } from '@portfolio-engine/editorial-theme';
+import { editorialGoogleFontsStylesheetHref } from '@portfolio-engine/editorial-theme';
 import { getCollection } from 'astro:content';
 import { config } from '@portfolio-engine:config';
 import { routes } from '@portfolio-engine:routes';
@@ -130,6 +130,7 @@ const missingAreas = [
 
 const themeColorsJson = JSON.stringify(config.theme?.colors ?? {});
 const designSnapshotJson = JSON.stringify(buildDesignSnapshot(config.theme));
+const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
 ---
 
 <!doctype html>
@@ -141,7 +142,7 @@ const designSnapshotJson = JSON.stringify(buildDesignSnapshot(config.theme));
     <title>Admin — Site overview</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href={EDITORIAL_GOOGLE_FONTS_STYLESHEET_HREF} rel="stylesheet" />
+    <link href={googleFontsHref} rel="stylesheet" />
   </head>
   <body class="admin-shell">
     <ThemeTokenOverrides />

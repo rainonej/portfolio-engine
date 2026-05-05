@@ -1,5 +1,40 @@
 /** YAML frontmatter subset used by portfolio content collections. */
 
+/** YAML flow sequence `tags: ['a', 'b']` / `[ "a", "b" ]` (single line). */
+function parseFlowYamlSequence(rest: string): string[] | null {
+  const t = rest.trim();
+  if (!t.startsWith('[') || !t.endsWith(']')) return null;
+  const inner = t.slice(1, -1).trim();
+  if (inner === '') return [];
+
+  const items: string[] = [];
+  let buf = '';
+  let quote: "'" | '"' | null = null;
+
+  for (let i = 0; i < inner.length; i++) {
+    const c = inner[i];
+    if (quote) {
+      if (c === quote) quote = null;
+      else buf += c;
+      continue;
+    }
+    if (c === "'" || c === '"') {
+      quote = c;
+      continue;
+    }
+    if (c === ',') {
+      const piece = buf.trim();
+      if (piece) items.push(unquoteYaml(piece));
+      buf = '';
+      continue;
+    }
+    buf += c;
+  }
+  const last = buf.trim();
+  if (last) items.push(unquoteYaml(last));
+  return items;
+}
+
 function unquoteYaml(s: string): string {
   if (s.startsWith('"')) {
     try {
@@ -57,6 +92,13 @@ export const yamlFrontmatter = {
           i++;
         }
         data[key] = items;
+        continue;
+      }
+
+      const flowSeq = parseFlowYamlSequence(rest);
+      if (flowSeq !== null) {
+        data[key] = flowSeq;
+        i++;
         continue;
       }
 
