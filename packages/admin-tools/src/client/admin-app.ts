@@ -78,6 +78,31 @@ function peTokenFromCssVar(cssVar: string): string {
   return cssVar.replace(/^--/, '');
 }
 
+/** True if `s` looks like a concrete CSS color browsers accept in `background`. */
+function looksLikeCssColor(s: string): boolean {
+  const v = s.trim();
+  if (!v || v === '(not set)') return false;
+  if (/^#([0-9a-f]{3,8})$/i.test(v)) return true;
+  if (/^(rgb|rgba|hsl|hsla|lab|lch|oklch|oklab|color)\(/i.test(v)) return true;
+  return false;
+}
+
+/**
+ * Pick a swatch fill: prefer server snapshot (hex from theme) so we are not
+ * broken when getComputedStyle serializes to `color(srgb …)` / `oklch(…)` etc.
+ */
+function resolveSwatchBackground(
+  cssVar: string,
+  computed: string,
+  snapshotCss: Record<string, { value: string; source: string }> | null,
+): string {
+  const snap = snapshotCss?.[cssVar]?.value?.trim();
+  if (snap && looksLikeCssColor(snap)) return snap;
+  const comp = computed.trim();
+  if (comp && looksLikeCssColor(comp)) return comp;
+  return 'transparent';
+}
+
 function parseThemeConfigColors(): Record<string, string> {
   const raw = document.getElementById('admin-root')?.dataset.themeColors;
   if (!raw) return {};
@@ -105,10 +130,11 @@ function initTokenSwatches(): void {
     const grid = document.createElement('div');
     grid.className = 'adm-token-grid';
     for (const t of group.tokens) {
-      const value = style.getPropertyValue(t.cssVar).trim() || '(not set)';
-      const looksLikeColor =
-        /^#([0-9a-f]{3,8})$/i.test(value) || /^rgb/i.test(value) || /^hsl/i.test(value);
-      const swatchBg = looksLikeColor && !value.startsWith('(') ? value : 'transparent';
+      const computedRaw = style.getPropertyValue(t.cssVar).trim();
+      const snapRaw = snapshotCss?.[t.cssVar]?.value?.trim();
+      // Prefer snapshot for display when present: avoids unreadable `color(srgb…)` / `oklch(…)` from getComputedStyle.
+      const value = snapRaw || computedRaw || '(not set)';
+      const swatchBg = resolveSwatchBackground(t.cssVar, computedRaw, snapshotCss);
       const card = document.createElement('div');
       card.className = 'adm-token-card';
       card.dataset.peToken = peTokenFromCssVar(t.cssVar);
