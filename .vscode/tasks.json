@@ -2,49 +2,8 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "dev-main: Promote + Release (GitHub)",
-      "detail": "PR dev→main, CI, merge, gh workflow Release, wait for publish. Needs gh CLI. Find via Ctrl+Shift+P → Tasks: Run Task → type dev-main",
-      "type": "shell",
-      "options": {
-        "cwd": "${workspaceFolder}",
-        "env": {
-          "GIT_TERMINAL_PROMPT": "0"
-        }
-      },
-      "windows": {
-        "command": "powershell.exe",
-        "args": [
-          "-NoProfile",
-          "-ExecutionPolicy",
-          "Bypass",
-          "-File",
-          "${workspaceFolder}/scripts/promote-dev-to-main.ps1"
-        ]
-      },
-      "linux": {
-        "command": "bash",
-        "args": ["${workspaceFolder}/scripts/promote-dev-to-main.sh"]
-      },
-      "osx": {
-        "command": "bash",
-        "args": ["${workspaceFolder}/scripts/promote-dev-to-main.sh"]
-      },
-      "problemMatcher": [],
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": true,
-        "panel": "dedicated",
-        "showReuseMessage": false,
-        "clear": true
-      },
-      "runOptions": {
-        "instanceLimit": 1
-      }
-    },
-    {
       "label": "Promote dev → main",
-      "detail": "Same as dev-main: Promote + Release (GitHub). Ctrl+Shift+P → Tasks: Run Task",
+      "detail": "Open dev→main PR, wait CI, merge, run Release on main until publish finishes (gh CLI). Search: promote or dev-main",
       "type": "shell",
       "options": {
         "cwd": "${workspaceFolder}",
