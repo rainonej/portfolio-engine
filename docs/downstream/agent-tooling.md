@@ -50,6 +50,8 @@ cp docs/downstream/templates/agent/mcp.example.json .cursor/mcp.json
 
 Then restart Cursor and authenticate any MCP servers that ask for OAuth.
 
+If **Installed MCP Servers** shows entries as **Disabled**, turn each toggle **on** in **Settings → Features → Model Context Protocol**. Cursor keeps that enable/disable state in the app (not in `.cursor/mcp.json`); the JSON file only declares servers. Restart Cursor after changing `mcp.json`.
+
 Install the Vercel plugin from the Cursor plugin marketplace.
 
 ## Windows note
