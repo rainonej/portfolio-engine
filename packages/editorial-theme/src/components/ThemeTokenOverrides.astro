@@ -1,0 +1,12 @@
+---
+/**
+ * Applies resolved colors + typography from src/config/theme.json so the public site and
+ * admin preview stay aligned with consumer configuration.
+ */
+import { config } from '@portfolio-engine:config';
+import { buildThemeOverrideCss } from '@portfolio-engine/schema';
+
+const css = buildThemeOverrideCss(config.theme);
+---
+
+{css && <style is:global set:html={css} />}

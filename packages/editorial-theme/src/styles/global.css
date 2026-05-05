@@ -1,25 +1,125 @@
+@import "./design-tokens.css";
 @import "tailwindcss";
 
-@layer base {
-  :root {
-    /* Brand palette — warm editorial academic */
-    --paper: #f7f4ef;
-    --paper-light: #fcfbf8;
-    --ink: #1e1a17;
-    --stone-soft: #6b625b;
-    --copper: #9a5a2e;
-    --clay: #b87c5a;
-    --warm-line: #e6ded3;
-    --pale-sand: #efe6da;
-    --olive: #5c6650;
-  }
+@theme {
+  --font-sans: var(--font-sans-stack);
+  --font-serif: var(--font-serif-stack);
+  --font-mono: var(--font-mono-stack);
+}
 
+@layer base {
   html {
     scroll-behavior: smooth;
   }
 }
 
 @layer components {
+  /* ── Admin design preview (mirrors common theme patterns; processed with this CSS file) ── */
+  .admin-shell {
+    @apply min-h-screen antialiased;
+    background: var(--pale-sand);
+    color: var(--ink);
+    font-family: var(--font-sans-stack);
+  }
+
+  .admin-preview-typography-stack {
+    @apply flex flex-col gap-4;
+  }
+
+  .admin-preview-panel {
+    @apply flex flex-col gap-4 rounded-2xl border p-8;
+    border-color: var(--warm-line);
+    background: var(--paper-light);
+  }
+
+  .admin-preview-actions {
+    @apply flex flex-wrap gap-4;
+  }
+
+  .admin-preview-eyebrow {
+    font-size: var(--text-label);
+    @apply font-semibold uppercase tracking-[0.14em];
+    color: var(--copper);
+  }
+
+  .admin-preview-serif-aa {
+    font-size: var(--text-display);
+    @apply font-serif font-bold italic leading-none;
+    color: var(--ink);
+  }
+
+  .admin-preview-serif-title {
+    font-size: var(--text-title);
+    @apply font-serif font-bold;
+    color: var(--ink);
+  }
+
+  .admin-preview-serif-italic {
+    font-size: var(--text-heading);
+    @apply font-serif italic;
+    color: var(--ink);
+  }
+
+  .admin-preview-serif-section {
+    font-size: var(--text-subheading);
+    @apply font-serif;
+    color: var(--ink);
+  }
+
+  .admin-preview-sans-aa {
+    font-size: var(--text-display);
+    @apply font-semibold leading-none;
+    color: var(--ink);
+  }
+
+  .admin-preview-sans-strong {
+    font-size: var(--text-subheading);
+    @apply font-semibold;
+    color: var(--ink);
+  }
+
+  .admin-preview-body {
+    font-size: var(--text-body);
+    @apply leading-relaxed;
+    color: var(--stone-soft);
+  }
+
+  .admin-preview-meta {
+    font-size: var(--text-small);
+    color: var(--stone-soft);
+  }
+
+  .admin-preview-meta-spaced {
+    @apply mb-3;
+    font-size: var(--text-small);
+    color: var(--stone-soft);
+  }
+
+  .admin-preview-link {
+    font-size: var(--text-small);
+    @apply font-medium underline underline-offset-4;
+    color: var(--copper);
+  }
+
+  .admin-preview-btn-primary {
+    font-size: var(--text-small);
+    @apply inline-flex rounded-full px-8 py-3 font-medium text-white;
+    background: var(--ink);
+  }
+
+  .admin-preview-btn-secondary {
+    font-size: var(--text-small);
+    @apply inline-flex rounded-full border px-8 py-3 font-medium;
+    border-color: var(--warm-line);
+    color: var(--ink);
+  }
+
+  .admin-preview-interactive-label {
+    font-size: var(--text-small);
+    @apply mb-1;
+    color: var(--stone-soft);
+  }
+
   /* Ambient background — paper atmosphere, not visual feature */
   .ambient-blob {
     @apply absolute rounded-full;
