@@ -1,0 +1,83 @@
+---
+import type { SchedulingProvider, SchedulingMode } from '@portfolio-engine/schema';
+
+export interface Props {
+  enabled?: boolean;
+  provider?: SchedulingProvider;
+  mode?: SchedulingMode;
+  url?: string;
+  label?: string;
+  heading?: string;
+  eyebrow?: string;
+  description?: string;
+  height?: number;
+  openInNewTab?: boolean;
+}
+
+const {
+  enabled = false,
+  provider = 'custom',
+  mode = 'button',
+  url,
+  label = 'Book a time',
+  heading,
+  eyebrow,
+  description,
+  height = 720,
+  openInNewTab = true,
+} = Astro.props;
+
+const shouldRender = enabled && typeof url === 'string' && url.trim().length > 0;
+let safeUrl: URL | null = null;
+
+if (shouldRender) {
+  try {
+    safeUrl = new URL(url);
+  } catch {
+    throw new Error('SchedulingBlock requires an absolute https:// URL.');
+  }
+
+  if (safeUrl.protocol !== 'https:') {
+    throw new Error('SchedulingBlock requires an absolute https:// URL.');
+  }
+}
+
+const target = openInNewTab ? '_blank' : undefined;
+const rel = openInNewTab ? 'noopener noreferrer' : undefined;
+---
+
+{
+  shouldRender && safeUrl && (
+    <section class="pe-scheduling-block" data-provider={provider} data-mode={mode}>
+      {(eyebrow || heading || description) && (
+        <div class="pe-scheduling-block__copy">
+          {eyebrow && <p class="pe-scheduling-block__eyebrow">{eyebrow}</p>}
+          {heading && <h2 class="pe-scheduling-block__heading">{heading}</h2>}
+          {description && <p class="pe-scheduling-block__description">{description}</p>}
+        </div>
+      )}
+
+      {mode === 'embed' ? (
+        <div class="pe-scheduling-block__embed-shell">
+          <iframe
+            class="pe-scheduling-block__iframe"
+            src={safeUrl.toString()}
+            title={label}
+            width="100%"
+            height={height}
+            loading="lazy"
+          />
+        </div>
+      ) : (
+        <a
+          class={mode === 'button' ? 'pe-scheduling-block__button' : 'pe-scheduling-block__link'}
+          href={safeUrl.toString()}
+          target={target}
+          rel={rel}
+        >
+          {label}
+        </a>
+      )}
+    </section>
+  )
+}

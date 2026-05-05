@@ -5,6 +5,13 @@
   "tagline": "designs for clarity",
   "contact": {
     "heading": "Let's work together",
-    "body": "I'm available for design partnerships, product consulting, and creative collaborations. Reach out and let's find what's possible."
+    "body": "I'm available for design partnerships, product consulting, and creative collaborations. Reach out and let's find what's possible.",
+    "scheduling": {
+      "enabled": true,
+      "provider": "calendly",
+      "mode": "button",
+      "url": "https://calendly.com/example/intro-call",
+      "label": "Book an intro call"
+    }
   }
 }
