@@ -11,7 +11,12 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./layouts/Layout.astro": "./dist/layouts/Layout.astro",
+    "./styles/global.css": "./dist/styles/global.css",
+    "./styles/design-tokens.css": "./dist/styles/design-tokens.css",
+    "./components/ThemeTypographyOverrides.astro": "./dist/components/ThemeTypographyOverrides.astro",
+    "./components/ThemeTokenOverrides.astro": "./dist/components/ThemeTokenOverrides.astro"
   },
   "scripts": {
     "build": "tsup",
@@ -25,7 +30,7 @@
   "dependencies": {
     "@portfolio-engine/engine-core": "workspace:*",
     "@portfolio-engine/schema": "workspace:*",
-    "@tailwindcss/vite": "^4.2.4",
+    "@tailwindcss/postcss": "^4.2.4",
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {

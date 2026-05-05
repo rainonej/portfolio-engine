@@ -1,0 +1,15 @@
+{
+  "semanticColors": {
+    "surface": { "page": "#f5f2ec", "wash": "#efe6da" },
+    "text": { "primary": "#1a1714", "muted": "#5c534c" },
+    "accent": { "primary": "#8b4d28", "secondary": "#a66f4d" },
+    "border": { "default": "#e0d8ce" }
+  },
+  "typography": {
+    "preset": "comfortable",
+    "fonts": {
+      "heading": "Cormorant Garamond",
+      "body": "Inter"
+    }
+  }
+}

@@ -325,6 +325,12 @@ Add this to `.gitignore`:
 
 ---
 
+## 8.5 — Optional: custom routes via registry
+
+To add bespoke URLs backed by your own Astro pages (without new named override surfaces in the theme), follow [custom-page-via-registry.md](./custom-page-via-registry.md).
+
+---
+
 ## 9 — Deploy to Vercel
 
 1. Push to GitHub.

@@ -100,17 +100,28 @@ export const GET: APIRoute = async ({ request, url }) => {
 
 export const PUT: APIRoute = async ({ request }) => {
   const authed = await auth(request); if (authed.error) return authed.error;
-  const body = await request.json().catch(() => null) as { file?: string; content?: string; message?: string } | null;
+  const body = await request.json().catch(() => null) as {
+    file?: string;
+    content?: string;
+    message?: string;
+    base64?: boolean;
+  } | null;
   if (!body?.file || typeof body.content !== 'string') return Response.json({ error: 'Missing file or content' }, { status: 400, headers: NO_STORE });
   const cwd = process.cwd();
   const abs = resolveAllowed(cwd, body.file);
   if (!abs) return Response.json({ error: 'Invalid file path' }, { status: 400, headers: NO_STORE });
 
+  const useB64 = body.base64 === true;
+  const ghPayloadContent = useB64
+    ? body.content.replace(/\n/g, '')
+    : Buffer.from(body.content, 'utf8').toString('base64');
+
   if (authed.devBypass) {
     await fs.mkdir(path.dirname(abs), { recursive: true });
     const lstat = await fs.lstat(abs).catch(() => null);
     if (lstat?.isSymbolicLink()) return Response.json({ error: 'Invalid file path' }, { status: 400, headers: NO_STORE });
-    await fs.writeFile(abs, body.content, 'utf8');
+    const payload = useB64 ? Buffer.from(body.content.replace(/\n/g, ''), 'base64') : Buffer.from(body.content, 'utf8');
+    await fs.writeFile(abs, payload);
     return Response.json({ ok: true, mode: 'local-dev' }, { headers: NO_STORE });
   }
 
@@ -130,11 +141,57 @@ export const PUT: APIRoute = async ({ request }) => {
   const upRes = await fetch(base, {
     method: 'PUT',
     headers: { ...headers, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: body.message ?? `admin-tools: update ${ghPath}`, content: Buffer.from(body.content, 'utf8').toString('base64'), sha, branch }),
+    body: JSON.stringify({ message: body.message ?? `admin-tools: update ${ghPath}`, content: ghPayloadContent, sha, branch }),
   });
   if (!upRes.ok) {
     const detail = await upRes.text();
     return Response.json({ error: 'GitHub write failed', detail }, { status: 502, headers: NO_STORE });
+  }
+  return Response.json({ ok: true, mode: 'github' }, { headers: NO_STORE });
+};
+
+export const DELETE: APIRoute = async ({ request }) => {
+  const authed = await auth(request); if (authed.error) return authed.error;
+  const body = await request.json().catch(() => null) as { file?: string; message?: string } | null;
+  if (!body?.file) return Response.json({ error: 'Missing file' }, { status: 400, headers: NO_STORE });
+  const cwd = process.cwd();
+  const abs = resolveAllowed(cwd, body.file);
+  if (!abs) return Response.json({ error: 'Invalid file path' }, { status: 400, headers: NO_STORE });
+
+  if (authed.devBypass) {
+    try {
+      const lstat = await fs.lstat(abs);
+      if (lstat.isSymbolicLink()) return Response.json({ error: 'Invalid file path' }, { status: 400, headers: NO_STORE });
+      await fs.unlink(abs);
+      return Response.json({ ok: true, mode: 'local-dev' }, { headers: NO_STORE });
+    } catch {
+      return Response.json({ error: 'Not found' }, { status: 404, headers: NO_STORE });
+    }
+  }
+
+  const owner = repoOwner(); const repo = repoName(); const branch = repoBranch();
+  if (!owner || !repo || !authed.accessToken) return Response.json({ error: 'Repo/auth misconfiguration' }, { status: 500, headers: NO_STORE });
+
+  const ghPath = body.file.replace(/^\/+/, '');
+  const base = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(ghPath).replace(/%2F/g, '/')}`;
+  const headers = { Authorization: `Bearer ${authed.accessToken}`, Accept: 'application/vnd.github+json', 'User-Agent': 'portfolio-engine-admin-tools', 'Content-Type': 'application/json' };
+  const currentRes = await fetch(`${base}?ref=${encodeURIComponent(branch)}`, { headers });
+  if (!currentRes.ok) return Response.json({ error: 'Not found' }, { status: 404, headers: NO_STORE });
+  const current = await currentRes.json() as { sha?: string };
+  if (!current.sha) return Response.json({ error: 'Unexpected GitHub response' }, { status: 502, headers: NO_STORE });
+
+  const delRes = await fetch(base, {
+    method: 'DELETE',
+    headers,
+    body: JSON.stringify({
+      message: body.message ?? `admin-tools: delete ${ghPath}`,
+      sha: current.sha,
+      branch,
+    }),
+  });
+  if (!delRes.ok) {
+    const detail = await delRes.text();
+    return Response.json({ error: 'GitHub delete failed', detail }, { status: 502, headers: NO_STORE });
   }
   return Response.json({ ok: true, mode: 'github' }, { headers: NO_STORE });
 };

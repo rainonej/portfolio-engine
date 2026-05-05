@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-05T15:51:55.014Z",
+  "generatedAt": "2026-05-05T18:31:46.334Z",
   "rootDir": ".",
   "routes": [
     {
@@ -71,6 +71,16 @@
       "disableable": true,
       "agentGuidance": "Prefer Writing for public-facing navigation tasks.",
       "resolved": "/writing"
+    },
+    {
+      "pattern": "/how-i-think",
+      "resolved": "/how-i-think",
+      "label": "How I Think",
+      "section": null,
+      "visibility": "public",
+      "remappable": false,
+      "disableable": false,
+      "routeOrigin": "consumer-local"
     }
   ],
   "overrideSurfaces": [
@@ -135,6 +145,7 @@
   "capabilities": {
     "routeRemap": true,
     "routeDisable": true,
-    "namedOverrides": true
+    "namedOverrides": true,
+    "consumerLocalRoutes": true
   }
 }

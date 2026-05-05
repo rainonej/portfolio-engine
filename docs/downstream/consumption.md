@@ -15,6 +15,8 @@ your-site/
 
 These directories are contract-stable. The build always reads `config/` and `content/`. Files under `src/overrides/` change the site **when** you wire them through `editorialTheme({ overrides })` (the integration resolves paths at config time and theme components load them at render time). `context/` is not read by the build—it is for AI-assisted workflows only.
 
+For **`theme.json`** (colors, typography, tokens) and how they map to CSS variables, see **[`design-tokens-and-theme.md`](design-tokens-and-theme.md)**.
+
 There are two modes for consuming portfolio-engine packages, depending on whether you are a downstream site owner or an engine contributor.
 
 ## Semver mode (separate consumer repo)

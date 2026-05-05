@@ -7,6 +7,7 @@ The Astro integration at the heart of portfolio-engine.
 - **Config loader + schema bridge** — reads and validates `config/site.json`, `config/navigation.json`, `config/theme.json`, `config/features.json` against `@portfolio-engine/schema` Zod schemas. Produces a typed `ResolvedConfig`.
 - **Virtual modules** — exposes resolved config and build context to theme components via `@portfolio-engine:config`, `@portfolio-engine:context`, `@portfolio-engine:routes`, `@portfolio-engine:overrides`. Implemented with native Vite `resolveId`/`load` hooks.
 - **Route discovery + injection** — scans the `editorial-theme` pages directory and injects routes via Astro's `injectRoute` hook.
+- **Consumer registry (MVP)** — reads `src/registry/portfolio-engine.registry.json`, injects extra routes from `src/pages-local`, rejects URL collisions with theme routes, and records local routes in `.portfolio-engine/manifest.json`. See [../downstream/custom-page-via-registry.md](../downstream/custom-page-via-registry.md).
 - **Route remap / enable / disable** — consumers can disable or remap individual routes via config.
 - **Route registry** — exports a typed `RouteRegistry` covering all active (post-override) public + admin routes.
 - **Override resolution** — resolves named component override surfaces declared by `editorial-theme`.
@@ -33,7 +34,7 @@ Implemented via native Vite `resolveId`/`load` plugin hooks. The `\0` prefix on 
 | ----------------------------- | ----------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `@portfolio-engine:config`    | `config`    | `ResolvedConfig` | Validated site + navigation + theme + features config                                                                                                                                   |
 | `@portfolio-engine:context`   | `context`   | `BuildContext`   | Env, mode, base URL                                                                                                                                                                     |
-| `@portfolio-engine:routes`    | `routes`    | `RouteRegistry`  | Active (post-override) route registry — disabled routes excluded, remapped routes reflected                                                                                             |
+| `@portfolio-engine:routes`    | `routes`    | `RouteRegistry`  | Active route registry — editorial-theme routes after remap/disable **plus** consumer-local routes from the registry                                                                     |
 | `@portfolio-engine:overrides` | `overrides` | `OverrideMap`    | Component override map (component name → absolute path). Reserved key `__styles__` holds a JSON-encoded `string[]` of absolute CSS paths to append after the theme's global stylesheet. |
 
 Consumer packages (e.g. `editorial-theme`) get full TypeScript types automatically — the integration calls Astro's `injectTypes()` hook to inject a reference directive into the consumer's TypeScript environment. No manual setup is needed.
