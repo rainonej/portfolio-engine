@@ -1,5 +1,46 @@
 import { z } from 'zod';
 
+export const SchedulingProviderSchema = z.enum([
+  'calendly',
+  'cal',
+  'google-calendar',
+  'microsoft-bookings',
+  'custom',
+]);
+
+export const SchedulingModeSchema = z.enum(['button', 'link', 'embed']);
+
+const SchedulingUrlSchema = z.url().refine((value) => value.startsWith('https://'), {
+  message: 'Scheduling URL must be an absolute https:// URL.',
+});
+
+export const SchedulingConfigSchema = z
+  .object({
+    enabled: z.boolean().default(false),
+    provider: SchedulingProviderSchema.default('custom'),
+    mode: SchedulingModeSchema.default('button'),
+    url: SchedulingUrlSchema.optional(),
+    label: z.string().optional(),
+    heading: z.string().optional(),
+    eyebrow: z.string().optional(),
+    description: z.string().optional(),
+    height: z.number().int().positive().default(720),
+    openInNewTab: z.boolean().default(true),
+  })
+  .superRefine((value, ctx) => {
+    if (value.enabled && !value.url) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['url'],
+        message: 'Scheduling URL is required when scheduling is enabled.',
+      });
+    }
+  });
+
+export type SchedulingProvider = z.infer<typeof SchedulingProviderSchema>;
+export type SchedulingMode = z.infer<typeof SchedulingModeSchema>;
+export type SchedulingConfig = z.infer<typeof SchedulingConfigSchema>;
+
 export const SiteConfigSchema = z.object({
   title: z.string(),
   description: z.string(),
@@ -9,6 +50,7 @@ export const SiteConfigSchema = z.object({
   contact: z.object({
     heading: z.string(),
     body: z.string(),
+    scheduling: SchedulingConfigSchema.optional(),
   }),
   social: z
     .object({

@@ -2,30 +2,17 @@
 import Layout from '../layouts/Layout.astro';
 import { config } from '@portfolio-engine:config';
 import { loadProfilePerson } from '../lib/load-profile-person';
+import SchedulingBlock from '../components/SchedulingBlock.astro';
 
 const person = await loadProfilePerson();
 
 const bookingUrl = config.site.bookingUrl || null;
-const { heading: contactHeading, body: contactBody } = config.site.contact;
+const { heading: contactHeading, body: contactBody, scheduling } = config.site.contact;
+
+const hasConfiguredScheduling = scheduling?.enabled === true;
 ---
 
 <Layout title={`Contact — ${person.name}`}>
-  {
-    bookingUrl && (
-      <Fragment slot="head">
-        <link
-          href="https://assets.calendly.com/assets/external/widget.css"
-          rel="stylesheet"
-        />
-        <script
-          is:inline
-          type="text/javascript"
-          src="https://assets.calendly.com/assets/external/widget.js"
-          async
-        />
-      </Fragment>
-    )
-  }
   <section class="mx-auto max-w-5xl px-6 pb-24 pt-40">
     <div class="max-w-xl">
       <p
@@ -40,14 +27,22 @@ const { heading: contactHeading, body: contactBody } = config.site.contact;
         {contactBody}
       </p>
 
+      {hasConfiguredScheduling && <SchedulingBlock {...scheduling} />}
+
       {
-        bookingUrl ? (
-          <div
-            class="calendly-inline-widget overflow-hidden rounded-2xl border border-stone-100"
-            data-url={bookingUrl}
-            style="min-width:320px;height:700px;"
+        !hasConfiguredScheduling && bookingUrl && (
+          <SchedulingBlock
+            enabled={true}
+            provider="custom"
+            mode="button"
+            url={bookingUrl}
+            label="Book a conversation"
           />
-        ) : (
+        )
+      }
+
+      {
+        !hasConfiguredScheduling && !bookingUrl && (
           <div class="rounded-2xl border border-stone-100 bg-stone-50 px-8 py-16 text-center text-stone-400">
             <p class="mb-2 font-medium">Booking coming soon</p>
             <p class="text-sm">In the meantime, reach out by email below.</p>
