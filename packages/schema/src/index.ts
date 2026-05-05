@@ -60,3 +60,11 @@ export type FeaturesConfig = z.infer<typeof FeaturesConfigSchema>;
 
 export * from './design-resolve.js';
 export type { EngineManifest, ManifestRouteEntry, OverrideSurfaceEntry, RouteRegistryEntry } from './registry.js';
+export {
+  CONSUMER_REGISTRY_DEFAULT_RELATIVE_PATH,
+  ConsumerLocalRouteEntrySchema,
+  ConsumerPortfolioEngineRegistrySchema,
+  parseConsumerPortfolioEngineRegistry,
+  type ConsumerLocalRouteEntry,
+  type ConsumerPortfolioEngineRegistry,
+} from './consumer-registry.js';
