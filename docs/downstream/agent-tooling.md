@@ -22,8 +22,10 @@ npm install -g @anthropic-ai/claude-code
 
 claude mcp add --transport http vercel https://mcp.vercel.com
 claude mcp add --transport http context7 https://mcp.context7.com/mcp
-claude mcp add playwright npx @playwright/mcp@latest
+claude mcp add playwright -- npx @playwright/mcp@0.0.73
 ```
+
+Use a **pinned** Playwright MCP version (update deliberately when you upgrade). Avoid `@latest` in committed configs or anything loaded on startup.
 
 Then enable the Vercel plugin from the Claude Code plugin marketplace (`/plugins` → search "vercel").
 
@@ -36,10 +38,14 @@ claude
 
 ## Recommended install: Cursor
 
-Copy:
+Copy the template into **gitignored** `.cursor/mcp.json` (Cursor reads [project `mcp.json` under `.cursor/`](https://cursor.com/docs/context/mcp); it does **not** use repo-root `.mcp.json`).
 
 ```bash
-cp .cursor/mcp.example.json .cursor/mcp.json
+# In portfolio-engine (template lives under docs/):
+cp docs/downstream/templates/agent/mcp.example.json .cursor/mcp.json
+
+# In a consumer site that already has `.cursor/mcp.example.json` from the agent-tooling seed:
+# cp .cursor/mcp.example.json .cursor/mcp.json
 ```
 
 Then restart Cursor and authenticate any MCP servers that ask for OAuth.
@@ -57,11 +63,23 @@ Example:
   "mcpServers": {
     "playwright": {
       "command": "cmd",
-      "args": ["/c", "npx", "@playwright/mcp@latest"]
+      "args": ["/c", "npx", "@playwright/mcp@0.0.73"]
     }
   }
 }
 ```
+
+## Where MCP config lives (avoid double-loading)
+
+Different tools read **different files**. Putting the same stdio server in every file does **not** help; it can spawn extra processes and makes debugging harder.
+
+| Host | File for this repo | Notes |
+|------|-------------------|--------|
+| **Cursor** (Agent / chat MCP) | **`.cursor/mcp.json`** only for this workspace | Optional global: `%USERPROFILE%\.cursor\mcp.json`. Cursor does **not** read repo-root `.mcp.json`. |
+| **Claude Code** (CLI / panel) | **`%USERPROFILE%\.claude.json`** under your project path when using **`claude mcp add … --scope local`** | Team-shared alternative: repo-root `.mcp.json` (`--scope project`). `claude mcp list` spawns stdio from `.mcp.json` for health checks—keep that file lean. |
+| **Other** | `%USERPROFILE%\.claude\mcp.json` may exist for separate entries | Do not assume it is merged with Cursor’s config; treat it as Claude Code–side only. |
+
+For **portfolio-engine**, prefer **`.cursor/mcp.json` + local-scoped `claude mcp add`** and skip committed `.mcp.json` unless the whole team agrees.
 
 ## Agent operating rules
 

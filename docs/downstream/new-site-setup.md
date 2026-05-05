@@ -42,7 +42,7 @@ The setup scripts can seed optional agent-tooling files:
 
 - `CLAUDE.md`
 - `.github/copilot-instructions.md`
-- `.cursor/mcp.example.json`
+- `.cursor/mcp.example.json` (seed copies from `docs/downstream/templates/agent/mcp.example.json`)
 
 These files help Claude Code, Cursor, and Copilot use the right tools for the right job. The full tooling guidance lives in `docs/downstream/agent-tooling.md` (already present if you copied the `docs/downstream/` directory in step 0).
 
