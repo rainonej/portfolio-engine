@@ -2,7 +2,9 @@
 import Nav from '../components/Nav.astro';
 import AmbientBackground from '../components/AmbientBackground.astro';
 import Footer from '../components/Footer.astro';
+import ThemeTypographyOverrides from '../components/ThemeTypographyOverrides.astro';
 import '../styles/global.css';
+import { EDITORIAL_GOOGLE_FONTS_STYLESHEET_HREF } from '../lib/google-fonts.js';
 import { config } from '@portfolio-engine:config';
 import { overrides } from '@portfolio-engine:overrides';
 import { readFileSync } from 'node:fs';
@@ -57,11 +59,9 @@ const imageUrl = ogImage
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,700;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <link href={EDITORIAL_GOOGLE_FONTS_STYLESHEET_HREF} rel="stylesheet" />
     <title>{title}</title>
+    <ThemeTypographyOverrides />
     {extraCss && <style is:global set:html={extraCss} />}
     <slot name="head" />
   </head>

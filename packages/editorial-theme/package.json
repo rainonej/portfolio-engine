@@ -11,7 +11,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./styles/global.css": "./dist/styles/global.css",
+    "./styles/design-tokens.css": "./dist/styles/design-tokens.css",
+    "./components/ThemeTypographyOverrides.astro": "./dist/components/ThemeTypographyOverrides.astro"
   },
   "scripts": {
     "build": "tsup",

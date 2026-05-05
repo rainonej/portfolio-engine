@@ -1,17 +1,24 @@
 ---
 export const prerender = false;
 
+import '@portfolio-engine/editorial-theme/styles/global.css';
+import ThemeTypographyOverrides from '@portfolio-engine/editorial-theme/components/ThemeTypographyOverrides.astro';
+import { EDITORIAL_GOOGLE_FONTS_STYLESHEET_HREF } from '@portfolio-engine/editorial-theme';
 import { getCollection } from 'astro:content';
 import { config } from '@portfolio-engine:config';
 import { routes } from '@portfolio-engine:routes';
 import SiteMapTree from '../components/SiteMapTree.astro';
 import { parseCookies, verifySession } from '../server/session.js';
 import { siteHomeUrl, sitePathUrl } from '../server/paths.js';
+import { EDITORIAL_THEME_TOKEN_GROUPS } from '../lib/design-token-groups.js';
 
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
-interface DirAudit { exists: boolean; files: string[]; }
+interface DirAudit {
+  exists: boolean;
+  files: string[];
+}
 async function listFilesSafe(relativeDir: string): Promise<DirAudit> {
   const root = process.cwd();
   const start = path.join(root, relativeDir);
@@ -88,9 +95,21 @@ const projectsSorted = [...projects].sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
 );
 
+function formatShort(d: Date): string {
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
 const logoutUrl = sitePathUrl(Astro.request, 'api/auth/logout');
 const homeUrl = siteHomeUrl(Astro.request);
 const contentApiUrl = sitePathUrl(Astro.request, 'api/content');
+
+const personOnDisk = await readJsonSafe('src/content/profile/person.json');
+const siteOnDisk = await readJsonSafe('src/config/site.json');
+const settingsAvailable =
+  personOnDisk !== null &&
+  siteOnDisk !== null &&
+  typeof personOnDisk['name'] === 'string' &&
+  typeof siteOnDisk['title'] === 'string';
 
 const configAudit = await listFilesSafe('src/config');
 const contentAudit = await listFilesSafe('src/content');
@@ -107,6 +126,8 @@ const missingAreas = [
   !registryAudit.exists && 'src/registry',
   !hasManifest && '.portfolio-engine/manifest.json',
 ].filter(Boolean);
+
+const themeColorsJson = JSON.stringify(config.theme?.colors ?? {});
 ---
 
 <!doctype html>
@@ -116,222 +137,489 @@ const missingAreas = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex,nofollow" />
     <title>Admin — Site overview</title>
-    <style is:global>
-      :root {
-        --adm-ink: #0f172a;
-        --adm-muted: #64748b;
-        --adm-border: #e2e8f0;
-        --adm-paper: #ffffff;
-        --adm-paper-2: #f8fafc;
-        --adm-accent: #b45309;
-      }
-      body {
-        margin: 0;
-        font-family:
-          ui-sans-serif,
-          system-ui,
-          sans-serif;
-        background: var(--adm-paper-2);
-        color: var(--adm-ink);
-        line-height: 1.5;
-      }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href={EDITORIAL_GOOGLE_FONTS_STYLESHEET_HREF} rel="stylesheet" />
   </head>
-  <body>
-    <div class="adm-wrap">
-      <header class="adm-header">
-        <p class="adm-kicker">Private</p>
-        <h1 class="adm-h1">Site overview</h1>
-        <p class="adm-lead">
-          {config.site.title} — design, routes, and content at a glance (read-only for now).
-        </p>
-        <button
-          type="button"
-          id="logout-btn"
-          class="adm-logout"
-          data-logout-url={logoutUrl}
-          data-home-url={homeUrl}>Log out</button>
-      </header>
+  <body class="admin-shell">
+    <ThemeTypographyOverrides />
+    <script type="application/json" id="admin-token-json" set:html={JSON.stringify(EDITORIAL_THEME_TOKEN_GROUPS)} />
 
-      {
-        devBypass && (
-          <p class="adm-banner">
-            Dev bypass mode: local file writes enabled. Configure GitHub OAuth and <code>SESSION_SECRET</code> for full
-            sign-in. In production, set <code>ADMIN_TOOLS_GITHUB_REPO_OWNER</code> and{' '}
-            <code>ADMIN_TOOLS_GITHUB_REPO_NAME</code> for collaborator checks.
+    <div id="admin-root" data-content-api={contentApiUrl} data-theme-colors={themeColorsJson}>
+      <div class="adm-wrap">
+        <header class="adm-header">
+          <p class="adm-kicker">Private</p>
+          <h1 class="adm-h1">Site overview</h1>
+          <p class="adm-lead">
+            {config.site.title} — design tokens, content, and structure in one place.
           </p>
-        )
-      }
+          <button
+            type="button"
+            id="logout-btn"
+            class="adm-logout"
+            data-logout-url={logoutUrl}
+            data-home-url={homeUrl}>Log out</button>
 
-      {
-        writing.length === 0 &&
-          projects.length === 0 &&
-          testimonials.length === 0 &&
-          profile.length === 0 && (
-            <p class="adm-banner adm-banner--info">
-              No content collections matched the default admin set (<code>writing</code>, <code>projects</code>,{' '}
-              <code>testimonials</code>, <code>profile</code>). Add them or customize this page for your site.
+          <nav class="adm-jump" aria-label="Page sections">
+            <a class="adm-jump-link" href="#design">Design</a>
+            <a class="adm-jump-link" href="#settings">Settings</a>
+            <a class="adm-jump-link" href="#content">Content</a>
+            <a class="adm-jump-link" href="#structure">Structure</a>
+            <a class="adm-jump-link" href="#audit">Audit</a>
+            <a class="adm-jump-link" href="#advanced">Advanced</a>
+          </nav>
+        </header>
+
+        {
+          devBypass && (
+            <p class="adm-banner">
+              Dev bypass mode: local file writes enabled. Configure GitHub OAuth and <code>SESSION_SECRET</code> for full
+              sign-in. In production, set <code>ADMIN_TOOLS_GITHUB_REPO_OWNER</code> and{' '}
+              <code>ADMIN_TOOLS_GITHUB_REPO_NAME</code> for collaborator checks.
             </p>
           )
-      }
+        }
 
-      <section class="adm-section">
-        <h2 class="adm-h2">Site</h2>
-        <div class="adm-card">
-          <dl class="adm-dl">
-            <div>
-              <dt class="adm-dt">Title</dt>
-              <dd class="adm-dd">{config.site.title}</dd>
+        {
+          writing.length === 0 &&
+            projects.length === 0 &&
+            testimonials.length === 0 &&
+            profile.length === 0 && (
+              <p class="adm-banner adm-banner--info">
+                No content collections matched the default admin set (<code>writing</code>, <code>projects</code>,{' '}
+                <code>testimonials</code>, <code>profile</code>). Add them or extend this page for your site.
+              </p>
+            )
+        }
+
+        <section class="adm-section" id="design">
+          <h2 class="adm-h2">Design</h2>
+          <p class="adm-section-lead">
+            Colors, fonts, and type scale come from the same <code>design-tokens.css</code> and <code>global.css</code> as
+            the public site (<code>@portfolio-engine/editorial-theme</code>). Swatches read live CSS variables; optional
+            <code>theme.json</code> colors and typography overrides apply here too.
+          </p>
+          <div id="admin-design-swatches"></div>
+
+          <div class="adm-subsection">
+            <h3 class="adm-h3">Typography</h3>
+            <p class="adm-muted">
+              Samples use the shared theme utility classes (serif/sans stacks, weights, and sizes) so this preview tracks
+              the live site. Heading font and root size can be tuned via <code>src/config/theme.json</code>.
+            </p>
+            <div class="admin-preview-typography-stack">
+              <div class="admin-preview-panel">
+                <p class="admin-preview-meta-spaced">font-serif — Cormorant Garamond</p>
+                <p class="admin-preview-serif-aa">Aa</p>
+                <p class="admin-preview-serif-title">Page heading — bold serif</p>
+                <p class="admin-preview-serif-italic">Page heading — italic serif</p>
+                <p class="admin-preview-serif-section">Section heading — regular serif</p>
+              </div>
+              <div class="admin-preview-panel">
+                <p class="admin-preview-meta-spaced">font-sans — Inter</p>
+                <p class="admin-preview-sans-aa">Aa</p>
+                <p class="admin-preview-sans-strong">Body text — semibold</p>
+                <p class="admin-preview-body">
+                  Body text — regular. This sample paragraph shows how reading text looks on the site using the sans stack
+                  at base size with relaxed line-height.
+                </p>
+                <p class="admin-preview-meta">Small text — labels, captions, metadata</p>
+                <p class="admin-preview-eyebrow">Eyebrow label — uppercase tracked</p>
+              </div>
+              <div class="admin-preview-panel">
+                <p class="admin-preview-interactive-label">Interactive samples</p>
+                <div class="admin-preview-actions">
+                  <span class="admin-preview-btn-primary">Primary button</span>
+                  <span class="admin-preview-btn-secondary">Secondary button</span>
+                  <span class="admin-preview-link">Text link →</span>
+                </div>
+              </div>
             </div>
-            <div>
-              <dt class="adm-dt">Description</dt>
-              <dd class="adm-dd">{config.site.description ?? '—'}</dd>
+          </div>
+        </section>
+
+        <section class="adm-section" id="settings" data-settings-available={settingsAvailable ? 'true' : 'false'}>
+          <h2 class="adm-h2">Settings</h2>
+          {
+            settingsAvailable ? (
+              <>
+                <p class="adm-section-lead">
+                  Profile fields live in <code>src/content/profile/person.json</code>. Site fields live in{' '}
+                  <code>src/config/site.json</code>.
+                </p>
+                <div class="adm-card adm-card--wide" id="adm-settings">
+                  <div id="adm-settings-display">
+                    <div class="adm-settings-head">
+                      <p class="adm-settings-kicker">Preview</p>
+                      <button type="button" class="adm-btn adm-btn--ghost" id="adm-settings-edit">
+                        Edit settings
+                      </button>
+                    </div>
+                    <div class="adm-settings-body">
+                      {
+                        typeof personOnDisk?.['photo'] === 'string' && personOnDisk['photo'] ? (
+                          <img
+                            src={String(personOnDisk['photo'])}
+                            alt=""
+                            class="adm-settings-photo"
+                            width="64"
+                            height="64"
+                          />
+                        ) : (
+                          <div class="adm-settings-photo-placeholder" aria-hidden="true" />
+                        )
+                      }
+                      <div class="adm-settings-copy">
+                        <p class="adm-settings-name">{String(personOnDisk?.['name'] ?? '')}</p>
+                        <p class="adm-settings-tagline">{config.site.tagline}</p>
+                        <p class="adm-settings-bio">{shortBio || String(personOnDisk?.['bio'] ?? '')}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <form id="adm-settings-form" class="adm-settings-form" hidden>
+                    <div class="adm-settings-head">
+                      <p class="adm-settings-kicker">Editing</p>
+                      <div class="adm-settings-actions">
+                        <button type="button" class="adm-btn adm-btn--ghost" id="adm-settings-cancel">
+                          Cancel
+                        </button>
+                        <button type="submit" class="adm-btn adm-btn--primary">
+                          Save settings
+                        </button>
+                      </div>
+                    </div>
+                    <p class="adm-form-group-label">Profile</p>
+                    <div class="adm-form-grid">
+                      <label class="adm-label"
+                        >Name<input class="adm-input" name="name" type="text" /></label
+                      >
+                      <label class="adm-label"
+                        >Email<input class="adm-input" name="email" type="email" /></label
+                      >
+                      <label class="adm-label"
+                        >LinkedIn<input class="adm-input" name="linkedin" type="url" /></label
+                      >
+                      <label class="adm-label"
+                        >Instagram<input class="adm-input" name="instagram" type="url" /></label
+                      >
+                      <label class="adm-label adm-label--full"
+                        >Photo path<input class="adm-input" name="photo" type="text" placeholder="/media/portrait.jpg" /></label
+                      >
+                      <label class="adm-label adm-label--full"
+                        >Bio<textarea class="adm-input adm-textarea" name="bio" rows="4"></textarea></label
+                      >
+                    </div>
+                    <p class="adm-form-group-label">Site</p>
+                    <div class="adm-form-grid">
+                      <label class="adm-label adm-label--full"
+                        >Title<input class="adm-input" name="title" type="text" /></label
+                      >
+                      <label class="adm-label adm-label--full"
+                        >Tagline<input class="adm-input" name="tagline" type="text" /></label
+                      >
+                      <label class="adm-label adm-label--full"
+                        >Description<textarea class="adm-input adm-textarea" name="description" rows="3"></textarea></label
+                      >
+                      <label class="adm-label adm-label--full"
+                        >Booking URL<input class="adm-input" name="bookingUrl" type="url" placeholder="https://…" /></label
+                      >
+                      <label class="adm-label adm-label--full"
+                        >Contact heading<input class="adm-input" name="contactHeading" type="text" /></label
+                      >
+                      <label class="adm-label adm-label--full"
+                        >Contact body<textarea class="adm-input adm-textarea" name="contactBody" rows="3"></textarea></label
+                      >
+                    </div>
+                  </form>
+                </div>
+              </>
+            ) : (
+              <p class="adm-banner adm-banner--info">
+                Settings editor needs both <code>src/content/profile/person.json</code> and <code>src/config/site.json</code>.
+              </p>
+            )
+          }
+        </section>
+
+        <section class="adm-section" id="content">
+          <h2 class="adm-h2">Content</h2>
+          <p class="adm-section-lead">Edit entries in place. New items are saved to your content folders.</p>
+
+          <div class="adm-stat-row">
+            <div class="adm-stat">
+              <span class="adm-stat-num">{projects.length}</span>
+              <span class="adm-stat-label">Projects</span>
             </div>
-          </dl>
-        </div>
-      </section>
-
-      {
-        personEntry && 'name' in personEntry.data && (
-          <section class="adm-section">
-            <h2 class="adm-h2">Profile</h2>
-            <div class="adm-card">
-              <p class="adm-profile-name">{personEntry.data.name}</p>
-              <p class="adm-profile-bio">{shortBio}</p>
+            <div class="adm-stat">
+              <span class="adm-stat-num">{writing.length}</span>
+              <span class="adm-stat-label">Writing</span>
             </div>
-          </section>
-        )
-      }
-
-      <section class="adm-section">
-        <h2 class="adm-h2">Routes</h2>
-        <div class="adm-card adm-card--wide">
-          <SiteMapTree routes={routes} />
-        </div>
-      </section>
-
-
-      <section class="adm-section">
-        <h2 class="adm-h2">Admin tools audit</h2>
-        <div class="adm-card adm-card--wide">
-          <p class="adm-lead">Coverage of planned admin areas: config, content, context, assets, registry, and manifest.</p>
-          <ul class="adm-list">
-            <li>Config files: {configAudit.files.length}</li>
-            <li>Content files: {contentAudit.files.length}</li>
-            <li>Context files: {contextAudit.files.length}</li>
-            <li>Public assets: {publicAudit.files.length}</li>
-            <li>Registry files: {registryAudit.files.length}</li>
-            <li>Manifest detected: {hasManifest ? 'yes' : 'no'}</li>
-          </ul>
-          {missingAreas.length > 0 ? <p class="adm-banner adm-banner--info">Missing expected paths: {missingAreas.join(', ')}</p> : <p class="adm-profile-bio">No structural blockers detected.</p>}
-        </div>
-      </section>
-
-
-      <section class="adm-section" id="adm-editor-section" data-content-api-url={contentApiUrl}>
-        <h2 class="adm-h2">Content editor (MVP)</h2>
-        <div class="adm-card adm-card--wide">
-          <p class="adm-profile-bio">Read/write editor for files in src/content, src/config, src/context, src/registry, and public.</p>
-          <div class="adm-editor-row">
-            <input id="adm-file" class="adm-input" placeholder="src/content/writing/post.md" />
-            <button id="adm-load" class="adm-btn">Load</button>
-            <button id="adm-save" class="adm-btn adm-btn--primary">Save</button>
+            <div class="adm-stat">
+              <span class="adm-stat-num">{testimonials.length}</span>
+              <span class="adm-stat-label">Testimonials</span>
+            </div>
           </div>
-          <textarea id="adm-content" class="adm-textarea" spellcheck="false"></textarea>
-          <p id="adm-status" class="adm-profile-bio"></p>
-        </div>
-      </section>
 
-
-      <section class="adm-section">
-        <h2 class="adm-h2">Public assets uploader</h2>
-        <div class="adm-card adm-card--wide">
-          <p class="adm-profile-bio">Drag & drop files to upload into <code>public/</code>. Use a subfolder path if desired (example: <code>media/projects</code>).</p>
-          <div class="adm-editor-row">
-            <input id="adm-target-dir" class="adm-input" placeholder="media/uploads" />
+          <div class="adm-list-section">
+            <div class="adm-list-head">
+              <div>
+                <p class="adm-list-kicker">Projects</p>
+                <p class="adm-list-path">src/content/projects/</p>
+              </div>
+              <button type="button" class="adm-btn adm-btn--ghost" data-admin-new="project">
+                + New project
+              </button>
+            </div>
+            <div class="adm-card-list">
+              {
+                projectsSorted.map((p, i) => (
+                  <div class:list={['adm-card-row', i > 0 && 'adm-card-row--border']}>
+                    <div class="adm-card-main">
+                      <p class="adm-card-title">{p.data.title}</p>
+                      <div class="adm-card-meta">
+                        <span>{formatShort(p.data.date)}</span>
+                        {p.data.featured && <span class="adm-pill adm-pill--accent">Featured</span>}
+                        {p.data.tags?.map((tag) => <span class="adm-pill">{tag}</span>)}
+                      </div>
+                    </div>
+                    <button type="button" class="adm-btn adm-btn--ghost" data-admin-edit="project" data-slug={p.id}>
+                      Edit
+                    </button>
+                  </div>
+                ))
+              }
+            </div>
           </div>
-          <div id="adm-dropzone" class="adm-dropzone">Drop files here or click to choose files.</div>
-          <input id="adm-upload-input" type="file" multiple class="adm-hidden-input" />
-          <ul id="adm-upload-list" class="adm-list"></ul>
-          <p id="adm-upload-status" class="adm-profile-bio"></p>
-        </div>
-      </section>
 
-      <section class="adm-section">
-        <h2 class="adm-h2">Content</h2>
-        <div class="adm-grid">
-          <div class="adm-card">
-            <h3 class="adm-h3">Writing</h3>
-            <p class="adm-count">{writing.length}</p>
-            <ul class="adm-list">
-              {writingSorted.slice(0, 8).map((w) => <li>{w.data.title}</li>)}
-              {writing.length > 8 && <li>…</li>}
+          <div class="adm-list-section">
+            <div class="adm-list-head">
+              <div>
+                <p class="adm-list-kicker">Writing</p>
+                <p class="adm-list-path">src/content/writing/</p>
+              </div>
+              <button type="button" class="adm-btn adm-btn--ghost" data-admin-new="writing">
+                + New essay
+              </button>
+            </div>
+            <div class="adm-card-list">
+              {
+                writingSorted.map((w, i) => (
+                  <div
+                    class:list={['adm-card-row', i > 0 && 'adm-card-row--border', w.data.draft && 'adm-card-row--draft']}
+                  >
+                    <div class="adm-card-main">
+                      <p class="adm-card-title">{w.data.title}</p>
+                      <div class="adm-card-meta">
+                        <span>{formatShort(w.data.date)}</span>
+                        {w.data.draft && <span class="adm-pill adm-pill--warn">Draft</span>}
+                        {w.data.tags?.map((tag) => <span class="adm-pill">{tag}</span>)}
+                      </div>
+                    </div>
+                    <button type="button" class="adm-btn adm-btn--ghost" data-admin-edit="writing" data-slug={w.id}>
+                      Edit
+                    </button>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+
+          <div class="adm-list-section">
+            <div class="adm-list-head">
+              <div>
+                <p class="adm-list-kicker">Testimonials</p>
+                <p class="adm-list-path">src/content/testimonials/</p>
+              </div>
+              <button type="button" class="adm-btn adm-btn--ghost" data-admin-new="testimonial">
+                + New testimonial
+              </button>
+            </div>
+            <div class="adm-card-list">
+              {
+                testimonials.map((t, i) => (
+                  <div class:list={['adm-card-row', i > 0 && 'adm-card-row--border']}>
+                    <div class="adm-card-main">
+                      <p class="adm-card-title">{t.data.author}</p>
+                      <p class="adm-card-quote">
+                        “{t.data.quote.length > 140 ? t.data.quote.slice(0, 140).trimEnd() + '…' : t.data.quote}”
+                      </p>
+                      <div class="adm-card-meta">
+                        <span>{t.data.role}</span>
+                        {t.data.featured && <span class="adm-pill adm-pill--accent">Featured</span>}
+                      </div>
+                    </div>
+                    <button type="button" class="adm-btn adm-btn--ghost" data-admin-edit="testimonial" data-slug={t.id}>
+                      Edit
+                    </button>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </section>
+
+        <section class="adm-section" id="structure">
+          <h2 class="adm-h2">Structure</h2>
+          <p class="adm-section-lead">Theme routes and how they connect.</p>
+          <div class="adm-card adm-card--wide adm-card--scroll">
+            <SiteMapTree routes={routes} />
+          </div>
+        </section>
+
+        <section class="adm-section" id="audit">
+          <h2 class="adm-h2">Admin tools audit</h2>
+          <div class="adm-card adm-card--wide">
+            <p class="adm-section-lead">Coverage of planned admin areas: config, content, context, assets, registry, and manifest.</p>
+            <ul class="adm-inline-list">
+              <li>Config files: {configAudit.files.length}</li>
+              <li>Content files: {contentAudit.files.length}</li>
+              <li>Context files: {contextAudit.files.length}</li>
+              <li>Public assets: {publicAudit.files.length}</li>
+              <li>Registry files: {registryAudit.files.length}</li>
+              <li>Manifest detected: {hasManifest ? 'yes' : 'no'}</li>
             </ul>
+            {
+              missingAreas.length > 0 ? (
+                <p class="adm-banner adm-banner--info">Missing expected paths: {missingAreas.join(', ')}</p>
+              ) : (
+                <p class="adm-muted">No structural blockers detected.</p>
+              )
+            }
           </div>
-          <div class="adm-card">
-            <h3 class="adm-h3">Projects</h3>
-            <p class="adm-count">{projects.length}</p>
-            <ul class="adm-list">
-              {projectsSorted.slice(0, 8).map((p) => <li>{p.data.title}</li>)}
-              {projects.length > 8 && <li>…</li>}
-            </ul>
+        </section>
+
+        <section class="adm-section" id="advanced">
+          <h2 class="adm-h2">Advanced</h2>
+          <p class="adm-section-lead">Raw path editor and asset uploads for power users.</p>
+          <div class="adm-card adm-card--wide">
+            <h3 class="adm-h3">File editor</h3>
+            <p class="adm-muted">Edit any allowed path under content, config, context, registry, or public metadata.</p>
+            <div class="adm-editor-row">
+              <input id="adm-file" class="adm-input" placeholder="src/content/writing/post.md" />
+              <button type="button" id="adm-load" class="adm-btn adm-btn--ghost">
+                Load
+              </button>
+              <button type="button" id="adm-save" class="adm-btn adm-btn--primary">
+                Save
+              </button>
+            </div>
+            <textarea id="adm-content" class="adm-textarea" spellcheck="false"></textarea>
+            <p id="adm-status" class="adm-muted"></p>
           </div>
-          <div class="adm-card">
-            <h3 class="adm-h3">Testimonials</h3>
-            <p class="adm-count">{testimonials.length}</p>
-            <ul class="adm-list">
-              {testimonials.slice(0, 8).map((t) => <li>{t.data.author}</li>)}
-              {testimonials.length > 8 && <li>…</li>}
-            </ul>
+          <div class="adm-card adm-card--wide">
+            <h3 class="adm-h3">Public uploads</h3>
+            <p class="adm-muted">
+              Upload into <code>public/</code>. Optional subfolder (example: <code>media/projects</code>).
+            </p>
+            <div class="adm-editor-row">
+              <input id="adm-target-dir" class="adm-input" placeholder="media/uploads" />
+            </div>
+            <div id="adm-dropzone" class="adm-dropzone">Drop files here or click to choose files.</div>
+            <input id="adm-upload-input" type="file" multiple class="adm-hidden-input" />
+            <ul id="adm-upload-list" class="adm-upload-list"></ul>
+            <p id="adm-upload-status" class="adm-muted"></p>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
+
+    <div id="adm-drawer-backdrop" class="adm-drawer-backdrop" aria-hidden="true"></div>
+    <div id="adm-drawer" class="adm-drawer" role="dialog" aria-modal="true" aria-labelledby="adm-drawer-title" inert>
+      <div class="adm-drawer-inner">
+        <header class="adm-drawer-head">
+          <div>
+            <h2 id="adm-drawer-title" class="adm-drawer-title"></h2>
+            <p id="adm-drawer-subtitle" class="adm-drawer-subtitle"></p>
+          </div>
+          <button type="button" id="adm-drawer-close" class="adm-icon-btn" aria-label="Close">
+            ×
+          </button>
+        </header>
+        <div id="adm-drawer-fields" class="adm-drawer-fields"></div>
+        <footer class="adm-drawer-foot">
+          <button type="button" id="adm-drawer-delete" class="adm-btn adm-btn--danger" hidden>
+            Delete
+          </button>
+          <div class="adm-drawer-foot-actions">
+            <button type="button" id="adm-drawer-cancel" class="adm-btn adm-btn--ghost">
+              Cancel
+            </button>
+            <button type="button" id="adm-drawer-save" class="adm-btn adm-btn--primary">
+              Save
+            </button>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <div id="adm-toast" class="adm-toast" role="status" aria-live="polite"></div>
 
     <style>
       .adm-wrap {
-        max-width: 64rem;
+        max-width: 52rem;
         margin: 0 auto;
-        padding: 3rem 1.5rem 6rem;
+        padding: 2.5rem 1.25rem 5rem;
       }
       .adm-header {
-        margin-bottom: 3rem;
-        padding-bottom: 2rem;
-        border-bottom: 1px solid var(--adm-border);
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--warm-line);
       }
       .adm-kicker {
-        margin: 0 0 0.5rem;
+        margin: 0 0 0.35rem;
         font-size: 0.6875rem;
         font-weight: 600;
         letter-spacing: 0.2em;
         text-transform: uppercase;
-        color: var(--adm-accent);
+        color: var(--copper);
       }
       .adm-h1 {
         margin: 0;
-        font-size: 2.25rem;
+        font-size: 2rem;
         font-weight: 700;
         letter-spacing: -0.02em;
       }
       .adm-lead {
         margin: 0.5rem 0 0;
-        color: var(--adm-muted);
+        color: var(--stone-soft);
+        max-width: 40rem;
       }
       .adm-logout {
-        margin-top: 1rem;
+        margin-top: 0.75rem;
         padding: 0;
         border: none;
         background: none;
         font-size: 0.75rem;
-        color: var(--adm-muted);
+        color: var(--stone-soft);
         text-decoration: underline;
         cursor: pointer;
       }
       .adm-logout:hover {
-        color: var(--adm-ink);
+        color: var(--ink);
+      }
+      .adm-jump {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1.25rem;
+      }
+      .adm-jump-link {
+        display: inline-block;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        border: 1px solid var(--warm-line);
+        background: var(--paper-light);
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--copper);
+        text-decoration: none;
+      }
+      .adm-jump-link:hover {
+        border-color: var(--copper);
       }
       .adm-banner {
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
         padding: 0.75rem 1rem;
         border: 1px solid #fde68a;
         border-radius: 0.5rem;
@@ -344,176 +632,581 @@ const missingAreas = [
         background: #f0f9ff;
         color: #0c4a6e;
       }
-      .adm-banner code {
-        padding: 0.1em 0.35em;
-        border-radius: 0.25rem;
-        background: #fef3c7;
-        font-size: 0.85em;
-      }
-      .adm-banner--info code {
-        background: #e0f2fe;
-      }
       .adm-section {
-        margin-bottom: 3.5rem;
+        margin-bottom: 3rem;
       }
       .adm-h2 {
-        margin: 0 0 1rem;
+        margin: 0 0 0.35rem;
         font-size: 0.6875rem;
         font-weight: 600;
         letter-spacing: 0.15em;
         text-transform: uppercase;
-        color: var(--adm-muted);
+        color: var(--stone-soft);
+      }
+      .adm-section-lead {
+        margin: 0 0 1rem;
+        font-size: 0.875rem;
+        color: var(--stone-soft);
+        max-width: 44rem;
       }
       .adm-h3 {
-        margin: 0;
-        font-size: 0.875rem;
+        margin: 0 0 0.5rem;
+        font-size: 0.9375rem;
         font-weight: 600;
       }
-      .adm-card {
-        border: 1px solid var(--adm-border);
+      .adm-muted {
+        margin: 0;
+        font-size: 0.8125rem;
+        color: var(--stone-soft);
+      }
+      .adm-subsection {
+        margin-top: 2rem;
+        padding: 1.25rem;
+        border: 1px solid var(--warm-line);
         border-radius: 0.75rem;
-        background: var(--adm-paper);
-        padding: 1.5rem;
-        box-shadow: 0 1px 2px rgb(15 23 42 / 0.04);
+        background: var(--paper-light);
       }
-      .adm-card--wide {
-        overflow-x: auto;
-        padding: 2rem;
+      .adm-token-group {
+        margin-bottom: 1.75rem;
       }
-      .adm-dl {
+      .adm-token-group-title {
+        margin: 0 0 0.75rem;
+        font-size: 1.05rem;
+        font-weight: 600;
+      }
+      .adm-token-file-hint {
+        margin: 0 0 0.75rem;
+        font-size: 0.8125rem;
+        color: var(--stone-soft);
+      }
+      .adm-token-grid {
         display: grid;
         gap: 0.75rem;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      }
+      .adm-token-card {
+        border: 1px solid var(--warm-line);
+        border-radius: 0.65rem;
+        overflow: hidden;
+        background: var(--paper-light);
+      }
+      .adm-token-swatch {
+        height: 4.5rem;
+      }
+      .adm-token-meta {
+        padding: 0.65rem 0.75rem;
+      }
+      .adm-token-label {
         margin: 0;
-        font-size: 0.875rem;
-      }
-      @media (min-width: 640px) {
-        .adm-dl {
-          grid-template-columns: 1fr 1fr;
-        }
-      }
-      .adm-dt {
-        margin: 0;
-        color: var(--adm-muted);
-        font-size: 0.875rem;
-      }
-      .adm-dd {
-        margin: 0.25rem 0 0;
-        font-weight: 500;
-      }
-      .adm-profile-name {
-        margin: 0;
-        font-size: 1.125rem;
+        font-size: 0.8125rem;
         font-weight: 600;
       }
-      .adm-profile-bio {
+      .adm-token-value,
+      .adm-token-var {
+        margin: 0.2rem 0 0;
+        font-size: 0.7rem;
+        font-family: ui-monospace, monospace;
+        color: var(--stone-soft);
+      }
+      .adm-token-usage {
+        margin: 0.45rem 0 0;
+        font-size: 0.72rem;
+        color: var(--stone-soft);
+        line-height: 1.35;
+      }
+      .adm-card {
+        border: 1px solid var(--warm-line);
+        border-radius: 0.75rem;
+        background: var(--paper-light);
+        padding: 1.25rem;
+        box-shadow: 0 1px 2px rgb(30 26 23 / 0.04);
+      }
+      .adm-card--wide {
+        padding: 1.5rem;
+      }
+      .adm-card--scroll {
+        overflow-x: auto;
+      }
+      .adm-settings-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+      }
+      .adm-settings-kicker {
+        margin: 0;
+        font-size: 0.65rem;
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--stone-soft);
+      }
+      .adm-settings-body {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+      .adm-settings-photo {
+        width: 4rem;
+        height: 4rem;
+        border-radius: 999px;
+        object-fit: cover;
+        border: 1px solid var(--warm-line);
+      }
+      .adm-settings-photo-placeholder {
+        width: 4rem;
+        height: 4rem;
+        border-radius: 999px;
+        background: var(--pale-sand);
+        border: 1px dashed var(--warm-line);
+        flex-shrink: 0;
+      }
+      .adm-settings-name {
+        margin: 0;
+        font-size: 1.15rem;
+        font-weight: 600;
+      }
+      .adm-settings-tagline {
+        margin: 0.15rem 0 0;
+        font-size: 0.875rem;
+        color: var(--stone-soft);
+      }
+      .adm-settings-bio {
         margin: 0.5rem 0 0;
         font-size: 0.875rem;
-        color: var(--adm-muted);
+        color: var(--stone-soft);
+        line-height: 1.45;
       }
-      .adm-grid {
+      .adm-settings-form {
+        margin-top: 0.5rem;
+      }
+      .adm-form-group-label {
+        margin: 1.25rem 0 0.5rem;
+        font-size: 0.65rem;
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--stone-soft);
+      }
+      .adm-form-grid {
         display: grid;
-        gap: 1.5rem;
+        gap: 0.65rem;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       }
-      @media (min-width: 768px) {
-        .adm-grid {
-          grid-template-columns: repeat(3, 1fr);
-        }
+      .adm-label {
+        display: flex;
+        flex-direction: column;
+        font-size: 0.78rem;
+        font-weight: 500;
+        gap: 0.25rem;
       }
-      .adm-count {
-        margin: 0.25rem 0 0;
+      .adm-label--full {
+        grid-column: 1 / -1;
+      }
+      .adm-settings-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .adm-stat-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        margin-bottom: 1.5rem;
+      }
+      .adm-stat {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 999px;
+        border: 1px solid var(--warm-line);
+        background: var(--paper-light);
+      }
+      .adm-stat-num {
+        font-family: ui-serif, Georgia, serif;
         font-size: 1.5rem;
         font-weight: 700;
       }
-      .adm-editor-row { display:flex; gap:.5rem; margin:.75rem 0; flex-wrap:wrap; }
-      .adm-input { flex:1; min-width:20rem; border:1px solid var(--adm-border); border-radius:.5rem; padding:.5rem .65rem; }
-      .adm-btn { border:1px solid var(--adm-border); border-radius:.5rem; background:#fff; padding:.45rem .75rem; cursor:pointer; }
-      .adm-btn--primary { background:#0f172a; color:#fff; border-color:#0f172a; }
-      .adm-textarea { width:100%; min-height:18rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:.8rem; border:1px solid var(--adm-border); border-radius:.5rem; padding:.75rem; }
-      .adm-dropzone { border:2px dashed var(--adm-border); border-radius:.75rem; padding:1.25rem; text-align:center; color:var(--adm-muted); cursor:pointer; margin:.5rem 0; }
-      .adm-dropzone.is-over { border-color:#0f172a; color:#0f172a; background:#f8fafc; }
-      .adm-hidden-input { display:none; }
-      .adm-list {
-        margin: 0.75rem 0 0;
-        padding-left: 1.1rem;
-        max-height: 10rem;
-        overflow-y: auto;
+      .adm-stat-label {
+        font-size: 0.8125rem;
+        color: var(--stone-soft);
+      }
+      .adm-list-section {
+        margin-bottom: 2rem;
+      }
+      .adm-list-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-bottom: 0.65rem;
+      }
+      .adm-list-kicker {
+        margin: 0;
+        font-size: 0.65rem;
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--stone-soft);
+      }
+      .adm-list-path {
+        margin: 0.15rem 0 0;
         font-size: 0.75rem;
-        color: var(--adm-muted);
+        font-family: ui-monospace, monospace;
+        color: var(--stone-soft);
+      }
+      .adm-card-list {
+        border: 1px solid var(--warm-line);
+        border-radius: 0.75rem;
+        overflow: hidden;
+        background: var(--paper-light);
+      }
+      .adm-card-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.9rem 1rem;
+      }
+      .adm-card-row--border {
+        border-top: 1px solid var(--warm-line);
+      }
+      .adm-card-row--draft {
+        background: rgb(255 251 235 / 0.5);
+      }
+      .adm-card-main {
+        flex: 1;
+        min-width: 0;
+      }
+      .adm-card-title {
+        margin: 0;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .adm-card-quote {
+        margin: 0.35rem 0 0;
+        font-size: 0.8125rem;
+        color: var(--stone-soft);
+        line-height: 1.4;
+      }
+      .adm-card-meta {
+        margin-top: 0.35rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        align-items: center;
+        font-size: 0.72rem;
+        color: var(--stone-soft);
+      }
+      .adm-pill {
+        display: inline-block;
+        padding: 0.12rem 0.45rem;
+        border-radius: 999px;
+        border: 1px solid var(--warm-line);
+        background: var(--paper);
+        font-size: 0.68rem;
+      }
+      .adm-pill--accent {
+        background: var(--copper);
+        color: #fff;
+        border-color: var(--copper);
+      }
+      .adm-pill--warn {
+        border-color: #fbbf24;
+        background: #fffbeb;
+        color: #92400e;
+      }
+      .adm-btn {
+        border-radius: 0.5rem;
+        border: 1px solid var(--warm-line);
+        background: var(--paper-light);
+        padding: 0.4rem 0.85rem;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        cursor: pointer;
+        color: var(--ink);
+      }
+      .adm-btn--primary {
+        background: var(--ink);
+        color: #fff;
+        border-color: var(--ink);
+      }
+      .adm-btn--ghost {
+        background: transparent;
+        color: var(--copper);
+        border-color: var(--warm-line);
+      }
+      .adm-btn--danger {
+        border-color: #fecaca;
+        color: #b91c1c;
+        background: #fff;
+      }
+      .adm-btn--danger:hover {
+        background: #fef2f2;
+      }
+      .adm-inline-list {
+        margin: 0.5rem 0 0;
+        padding-left: 1.1rem;
+        font-size: 0.875rem;
+        color: var(--stone-soft);
+      }
+      .adm-editor-row {
+        display: flex;
+        gap: 0.5rem;
+        margin: 0.65rem 0;
+        flex-wrap: wrap;
+      }
+      .adm-input {
+        flex: 1;
+        min-width: 12rem;
+        border: 1px solid var(--warm-line);
+        border-radius: 0.5rem;
+        padding: 0.45rem 0.6rem;
+        font: inherit;
+      }
+      .adm-textarea {
+        width: 100%;
+        min-height: 14rem;
+        font-family: ui-monospace, monospace;
+        font-size: 0.8rem;
+        border: 1px solid var(--warm-line);
+        border-radius: 0.5rem;
+        padding: 0.65rem;
+      }
+      .adm-dropzone {
+        border: 2px dashed var(--warm-line);
+        border-radius: 0.75rem;
+        padding: 1.1rem;
+        text-align: center;
+        color: var(--stone-soft);
+        cursor: pointer;
+      }
+      .adm-dropzone.is-over {
+        border-color: var(--copper);
+        color: var(--copper);
+        background: var(--paper);
+      }
+      .adm-hidden-input {
+        display: none;
+      }
+      .adm-upload-list {
+        margin: 0.5rem 0 0;
+        padding-left: 1.1rem;
+        font-size: 0.75rem;
+        color: var(--stone-soft);
+      }
+
+      .adm-drawer-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgb(0 0 0 / 0.35);
+        z-index: 40;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+      }
+      .adm-drawer-backdrop--open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .adm-drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        width: min(36rem, 100vw);
+        z-index: 50;
+        background: var(--paper-light);
+        box-shadow: -4px 0 24px rgb(0 0 0 / 0.08);
+        transform: translateX(100%);
+        transition: transform 0.25s ease;
+        display: flex;
+        flex-direction: column;
+      }
+      .adm-drawer--open {
+        transform: translateX(0);
+      }
+      .adm-drawer-inner {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+      }
+      .adm-drawer-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 1rem 1.1rem;
+        border-bottom: 1px solid var(--warm-line);
+        background: var(--pale-sand);
+      }
+      .adm-drawer-title {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 700;
+      }
+      .adm-drawer-subtitle {
+        margin: 0.2rem 0 0;
+        font-size: 0.72rem;
+        font-family: ui-monospace, monospace;
+        color: var(--stone-soft);
+        word-break: break-all;
+      }
+      .adm-icon-btn {
+        border: 1px solid var(--warm-line);
+        background: var(--paper-light);
+        border-radius: 999px;
+        width: 2rem;
+        height: 2rem;
+        cursor: pointer;
+        font-size: 1.25rem;
+        line-height: 1;
+        color: var(--stone-soft);
+      }
+      .adm-drawer-fields {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem 1.1rem 1.5rem;
+      }
+      .adm-drawer-section {
+        margin-bottom: 1.25rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--warm-line);
+      }
+      .adm-drawer-section:last-child {
+        border-bottom: none;
+      }
+      .adm-drawer-section-label {
+        margin: 0 0 0.65rem;
+        font-size: 0.65rem;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--stone-soft);
+      }
+      .adm-drawer-field {
+        margin-bottom: 0.85rem;
+      }
+      .adm-drawer-label {
+        display: block;
+        font-size: 0.78rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+      .adm-drawer-check {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.875rem;
+        cursor: pointer;
+      }
+      .adm-drawer-input {
+        width: 100%;
+        border: 1px solid var(--warm-line);
+        border-radius: 0.5rem;
+        padding: 0.45rem 0.55rem;
+        font: inherit;
+        box-sizing: border-box;
+      }
+      .adm-drawer-input:focus {
+        outline: 2px solid rgb(154 90 46 / 0.25);
+        border-color: var(--copper);
+      }
+      .adm-drawer-textarea {
+        min-height: 6rem;
+        resize: vertical;
+      }
+      .adm-drawer-textarea--body {
+        min-height: 16rem;
+        font-family: ui-monospace, monospace;
+        font-size: 0.8rem;
+      }
+      .adm-img-drop {
+        margin-top: 0.35rem;
+        padding: 0.65rem;
+        border: 1px dashed var(--warm-line);
+        border-radius: 0.5rem;
+        text-align: center;
+        cursor: pointer;
+        position: relative;
+        background: var(--paper);
+      }
+      .adm-img-drop--over {
+        border-color: var(--copper);
+        background: var(--pale-sand);
+      }
+      .adm-img-drop--busy {
+        opacity: 0.6;
+        pointer-events: none;
+      }
+      .adm-img-drop-hint {
+        font-size: 0.78rem;
+        color: var(--stone-soft);
+      }
+      .adm-img-drop-input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+      .adm-img-preview {
+        margin-top: 0.35rem;
+      }
+      .adm-img-preview-img {
+        max-height: 7rem;
+        border-radius: 0.35rem;
+        border: 1px solid var(--warm-line);
+      }
+      .adm-drawer-foot {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.85rem 1rem;
+        border-top: 1px solid var(--warm-line);
+        background: var(--pale-sand);
+      }
+      .adm-drawer-foot-actions {
+        margin-left: auto;
+        display: flex;
+        gap: 0.5rem;
+      }
+      .adm-toast {
+        position: fixed;
+        bottom: 1.25rem;
+        left: 50%;
+        transform: translateX(-50%) translateY(120%);
+        padding: 0.55rem 1.1rem;
+        border-radius: 999px;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        z-index: 60;
+        opacity: 0;
+        transition:
+          transform 0.2s ease,
+          opacity 0.2s ease;
+        pointer-events: none;
+      }
+      .adm-toast--show {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+      .adm-toast--ok {
+        background: var(--ink);
+        color: #fff;
+      }
+      .adm-toast--err {
+        background: #b91c1c;
+        color: #fff;
       }
     </style>
 
-    <script>
-      const logoutBtn = document.getElementById('logout-btn')!;
-      logoutBtn.addEventListener('click', async () => {
-        const url = logoutBtn.getAttribute('data-logout-url');
-        const home = logoutBtn.getAttribute('data-home-url');
-        if (!url || !home) return;
-        await fetch(url, { method: 'POST', credentials: 'include' });
-        window.location.href = home;
-      });
-
-      const contentApiUrl = (document.getElementById('adm-editor-section') as HTMLElement)?.dataset.contentApiUrl ?? '/api/content';
-      const fileInput = document.getElementById('adm-file') as HTMLInputElement | null;
-      const contentArea = document.getElementById('adm-content') as HTMLTextAreaElement | null;
-      const status = document.getElementById('adm-status');
-      document.getElementById('adm-load')?.addEventListener('click', async () => {
-        const file = fileInput?.value?.trim();
-        if (!file || !status) return;
-        status.textContent = 'Loading…';
-        const res = await fetch(`${contentApiUrl}?file=${encodeURIComponent(file)}`, { credentials: 'include' });
-        const data = await res.json();
-        if (!res.ok) { status.textContent = `Load failed: ${data.error ?? res.status}`; return; }
-        if (contentArea) contentArea.value = data.content ?? '';
-        status.textContent = `Loaded ${file}`;
-      });
-      document.getElementById('adm-save')?.addEventListener('click', async () => {
-        const file = fileInput?.value?.trim();
-        if (!file || !status) return;
-        status.textContent = 'Saving…';
-        const res = await fetch(contentApiUrl, { method: 'PUT', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ file, content: contentArea?.value ?? '' }) });
-        const data = await res.json();
-        status.textContent = res.ok ? `Saved ${file} (${data.mode})` : `Save failed: ${data.error ?? res.status}`;
-      });
-
-      const dropzone = document.getElementById('adm-dropzone');
-      const uploadInput = document.getElementById('adm-upload-input') as HTMLInputElement | null;
-      const uploadList = document.getElementById('adm-upload-list');
-      const uploadStatus = document.getElementById('adm-upload-status');
-      const targetDirInput = document.getElementById('adm-target-dir') as HTMLInputElement | null;
-
-      const renderFiles = (files: FileList) => {
-        if (!uploadList) return;
-        uploadList.innerHTML = '';
-        [...files].forEach((f) => {
-          const li = document.createElement('li');
-          li.textContent = `${f.name} (${f.type || 'binary'}, ${f.size} bytes)`;
-          uploadList.appendChild(li);
-        });
-      };
-
-      const doUpload = async (fileList: FileList | null) => {
-        if (!fileList || fileList.length === 0) return;
-        renderFiles(fileList);
-        if (uploadStatus) uploadStatus.textContent = 'Uploading…';
-        const fd = new FormData();
-        const dir = targetDirInput?.value?.trim() || '';
-        fd.append('targetDir', dir);
-        [...fileList].forEach((f) => fd.append('files', f));
-        const res = await fetch(contentApiUrl, { method: 'POST', credentials: 'include', body: fd });
-        const data = await res.json();
-        if (uploadStatus) uploadStatus.textContent = res.ok ? `Uploaded: ${(data.saved || []).join(', ')}` : `Upload failed: ${data.error || res.status}`;
-      };
-
-      dropzone?.addEventListener('click', () => uploadInput?.click());
-      uploadInput?.addEventListener('change', () => doUpload(uploadInput?.files ?? null));
-      ['dragenter', 'dragover'].forEach((evt) => dropzone?.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.add('is-over'); }));
-      ['dragleave', 'drop'].forEach((evt) => dropzone?.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.remove('is-over'); }));
-      dropzone?.addEventListener('drop', (e) => {
-        const dt = e.dataTransfer;
-        if (!dt?.files) return;
-        doUpload(dt.files);
-      });
-
+    <script define:vars={{ contentApiUrl }}>
+      import { initAdminApp } from '../client/admin-app.ts';
+      initAdminApp(contentApiUrl);
     </script>
   </body>
 </html>

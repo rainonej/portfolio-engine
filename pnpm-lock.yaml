@@ -103,6 +103,9 @@ importers:
 
   packages/admin-tools:
     dependencies:
+      '@portfolio-engine/editorial-theme':
+        specifier: workspace:*
+        version: link:../editorial-theme
       '@portfolio-engine/engine-core':
         specifier: workspace:*
         version: link:../engine-core

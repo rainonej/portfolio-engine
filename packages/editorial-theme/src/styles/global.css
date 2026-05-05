@@ -1,25 +1,111 @@
+@import "./design-tokens.css";
 @import "tailwindcss";
 
-@layer base {
-  :root {
-    /* Brand palette — warm editorial academic */
-    --paper: #f7f4ef;
-    --paper-light: #fcfbf8;
-    --ink: #1e1a17;
-    --stone-soft: #6b625b;
-    --copper: #9a5a2e;
-    --clay: #b87c5a;
-    --warm-line: #e6ded3;
-    --pale-sand: #efe6da;
-    --olive: #5c6650;
-  }
+@theme {
+  --font-sans: var(--font-sans-stack);
+  --font-serif: var(--font-serif-stack);
+}
 
+@layer base {
   html {
     scroll-behavior: smooth;
   }
 }
 
 @layer components {
+  /* ── Admin design preview (mirrors common theme patterns; processed with this CSS file) ── */
+  .admin-shell {
+    @apply min-h-screen antialiased;
+    background: var(--pale-sand);
+    color: var(--ink);
+    font-family: var(--font-sans-stack);
+  }
+
+  .admin-preview-typography-stack {
+    @apply flex flex-col gap-4;
+  }
+
+  .admin-preview-panel {
+    @apply flex flex-col gap-4 rounded-2xl border p-8;
+    border-color: var(--warm-line);
+    background: var(--paper-light);
+  }
+
+  .admin-preview-actions {
+    @apply flex flex-wrap gap-4;
+  }
+
+  .admin-preview-eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.14em];
+    color: var(--copper);
+  }
+
+  .admin-preview-serif-aa {
+    @apply font-serif text-6xl font-bold italic leading-none;
+    color: var(--ink);
+  }
+
+  .admin-preview-serif-title {
+    @apply font-serif text-3xl font-bold;
+    color: var(--ink);
+  }
+
+  .admin-preview-serif-italic {
+    @apply font-serif text-2xl italic;
+    color: var(--ink);
+  }
+
+  .admin-preview-serif-section {
+    @apply font-serif text-xl;
+    color: var(--ink);
+  }
+
+  .admin-preview-sans-aa {
+    @apply text-6xl font-semibold leading-none;
+    color: var(--ink);
+  }
+
+  .admin-preview-sans-strong {
+    @apply text-lg font-semibold;
+    color: var(--ink);
+  }
+
+  .admin-preview-body {
+    @apply text-base leading-relaxed;
+    color: var(--stone-soft);
+  }
+
+  .admin-preview-meta {
+    @apply text-sm;
+    color: var(--stone-soft);
+  }
+
+  .admin-preview-meta-spaced {
+    @apply mb-3 text-sm;
+    color: var(--stone-soft);
+  }
+
+  .admin-preview-link {
+    @apply text-sm font-medium underline underline-offset-4;
+    color: var(--copper);
+  }
+
+  .admin-preview-btn-primary {
+    @apply inline-flex rounded-full px-8 py-3 text-sm font-medium text-white;
+    background: var(--ink);
+  }
+
+  .admin-preview-btn-secondary {
+    @apply inline-flex rounded-full border px-8 py-3 text-sm font-medium;
+    border-color: var(--warm-line);
+    color: var(--ink);
+  }
+
+  .admin-preview-interactive-label {
+    @apply mb-1 text-sm;
+    color: var(--stone-soft);
+  }
+
   /* Ambient background — paper atmosphere, not visual feature */
   .ambient-blob {
     @apply absolute rounded-full;
