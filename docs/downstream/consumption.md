@@ -136,6 +136,58 @@ In `pnpm-workspace.yaml` include the consumer path, then use `workspace:*` in `p
 
 Run `pnpm install` from the monorepo root. `pnpm -r run build` will include the consumer.
 
+## Scheduling / Booking Embeds
+
+Portfolio Engine supports a provider-light scheduling block that renders a booking URL as a **button**, **link**, or **iframe embed**.
+
+- Works well with Calendly for v1, while remaining compatible with other providers.
+- Requires only a public HTTPS booking URL.
+- Does **not** connect calendars directly, create events, or inject provider SDK scripts.
+
+### Human setup
+
+Portfolio Engine only renders your public booking URL. The scheduling provider controls availability, approvals, calendar sync, invites, reminders, and cancel/reschedule flows.
+
+1. Create an account with a scheduling provider. Calendly is the easiest v1 path.
+2. Connect your calendar inside the provider dashboard.
+3. Create an event type.
+4. Configure duration, availability, buffers, minimum notice, location, and intake questions.
+5. Publish and copy your public booking URL.
+6. Add that URL to downstream `src/config/site.json` under `contact.scheduling`.
+7. Test end-to-end in incognito.
+
+### Example config
+
+```json
+{
+  "contact": {
+    "heading": "Let's work together",
+    "body": "Reach out and let's find what's possible.",
+    "scheduling": {
+      "enabled": true,
+      "provider": "calendly",
+      "mode": "button",
+      "url": "https://calendly.com/example/intro-call",
+      "label": "Book an intro call"
+    }
+  }
+}
+```
+
+### Button vs embed
+
+Use `mode: "button"` for compact contact sections and homepage CTAs.
+
+Use `mode: "embed"` on pages dedicated to booking.
+
+### Security note
+
+Only use trusted HTTPS URLs. Portfolio Engine intentionally avoids provider SDKs and third-party script injection for v1.
+
+### Legacy `bookingUrl`
+
+Some older sites may still use top-level `bookingUrl` in `src/config/site.json`. The contact page continues to support it as a fallback, but new sites should prefer `contact.scheduling`.
+
 ## Switching between modes
 
 To switch a consumer repo from workspace-link to semver:

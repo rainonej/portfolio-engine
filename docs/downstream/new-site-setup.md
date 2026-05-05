@@ -152,6 +152,8 @@ mkdir -p src/config src/content/projects src/content/writing src/content/profile
 }
 ```
 
+For optional Calendly/booking integration, see the Scheduling / Booking Embeds section in [`consumption.md`](consumption.md).
+
 **`src/config/navigation.json`**
 
 ```json
