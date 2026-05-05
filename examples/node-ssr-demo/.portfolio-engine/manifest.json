@@ -135,6 +135,7 @@
   "capabilities": {
     "routeRemap": true,
     "routeDisable": true,
-    "namedOverrides": true
+    "namedOverrides": true,
+    "consumerLocalRoutes": false
   }
 }

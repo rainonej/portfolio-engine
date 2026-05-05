@@ -17,3 +17,12 @@ export type { OverrideConfig } from './override-resolution.js';
 
 export { discoverRoutes, resolveThemePagesDir } from './route-discovery.js';
 export type { DiscoveredRoute } from './route-discovery.js';
+
+export {
+  assertNoThemeLocalRouteCollision,
+  assertResolvedFileInsidePagesLocal,
+  buildConsumerLocalDiscoveredRoutes,
+  DEFAULT_PAGES_LOCAL_RELATIVE_DIR,
+  loadConsumerRegistryFromDisk,
+} from './consumer-local-routes.js';
+export type { LoadConsumerRegistryOptions } from './consumer-local-routes.js';

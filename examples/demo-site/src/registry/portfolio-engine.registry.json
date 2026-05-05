@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "localRoutes": [
+    {
+      "pattern": "/how-i-think",
+      "page": "how-i-think.astro",
+      "label": "How I Think",
+      "section": null,
+      "visibility": "public"
+    }
+  ]
+}

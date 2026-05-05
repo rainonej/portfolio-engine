@@ -53,6 +53,10 @@ Exposes resolved config and build context to theme components without filesystem
 
 Scans the `editorial-theme` package's pages directory and injects those routes into the consumer project via Astro's `injectRoute` integration hook.
 
+### Consumer registry (local routes)
+
+Loads optional `src/registry/portfolio-engine.registry.json`, validates it with `@portfolio-engine/schema`, and injects matching `.astro` pages from `src/pages-local`. Duplicate URLs versus injected theme routes fail the build with a clear error. Local routes are labeled in `.portfolio-engine/manifest.json` (`routeOrigin: consumer-local`). See repo docs: `docs/downstream/custom-page-via-registry.md`.
+
 ### Route remap / enable / disable
 
 Consumers can disable or remap individual routes via config. Semantics defined in Task 3.5.

@@ -31,6 +31,9 @@ const TAILWIND_SSR_EXTERNAL = [
  * Astro accepts arrays in its integrations list and flattens them, so consumers
  * can use this exactly like a single integration:
  *   integrations: [editorialTheme({ ... })]
+ *
+ * Consumer-local routes: optional `src/registry/portfolio-engine.registry.json` +
+ * `src/pages-local/*.astro` — see `docs/downstream/custom-page-via-registry.md`.
  */
 export function editorialTheme(options: EditorialThemeOptions): AstroIntegration[] {
   const tailwindIntegration: AstroIntegration = {
