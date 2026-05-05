@@ -6,6 +6,7 @@ echo "[7/7] Seeding optional agent tooling files"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOWNSTREAM_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 TEMPLATE_DIR="$DOWNSTREAM_DIR/templates/agent"
+VSCODE_TEMPLATE_DIR="$DOWNSTREAM_DIR/templates/vscode"
 
 install_if_missing() {
   local src="$1"
@@ -31,6 +32,7 @@ install_if_missing() {
 install_if_missing "$TEMPLATE_DIR/mcp.example.json" ".cursor/mcp.example.json"
 install_if_missing "$TEMPLATE_DIR/CLAUDE.md" "CLAUDE.md"
 install_if_missing "$TEMPLATE_DIR/copilot-instructions.md" ".github/copilot-instructions.md"
+install_if_missing "$VSCODE_TEMPLATE_DIR/tasks.json" ".vscode/tasks.json"
 
 touch .gitignore
 grep -q '^\.cursor/mcp\.json$' .gitignore || printf '\n.cursor/mcp.json\n' >> .gitignore

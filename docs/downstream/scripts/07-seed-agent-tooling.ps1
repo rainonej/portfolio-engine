@@ -5,6 +5,7 @@ Write-Host '[7/7] Seeding optional agent tooling files'
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $DownstreamDir = Split-Path -Parent $ScriptDir
 $TemplateDir = Join-Path $DownstreamDir 'templates/agent'
+$VscodeTemplateDir = Join-Path $DownstreamDir 'templates/vscode'
 
 function Install-IfMissing($src, $dest) {
   $parent = Split-Path -Parent $dest
@@ -28,6 +29,7 @@ if (-not (Test-Path $TemplateDir)) {
 Install-IfMissing (Join-Path $TemplateDir 'mcp.example.json') '.cursor/mcp.example.json'
 Install-IfMissing (Join-Path $TemplateDir 'CLAUDE.md') 'CLAUDE.md'
 Install-IfMissing (Join-Path $TemplateDir 'copilot-instructions.md') '.github/copilot-instructions.md'
+Install-IfMissing (Join-Path $VscodeTemplateDir 'tasks.json') '.vscode/tasks.json'
 
 if (-not (Test-Path '.gitignore')) {
   New-Item -ItemType File -Path '.gitignore' | Out-Null
