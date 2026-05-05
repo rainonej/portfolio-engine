@@ -1,5 +1,35 @@
 # Upgrade Path
 
+## One-click upgrade (VS Code task)
+
+If you seeded agent tooling during setup, a **VS Code task** is already available at `.vscode/tasks.json`.
+
+Open the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`), run **Tasks: Run Task**, and choose **Upgrade portfolio-engine packages**. The task discovers every `@portfolio-engine/*` entry in your `package.json` and upgrades each to `@latest`.
+
+If you skipped agent-tooling seeding, copy the template manually:
+
+```bash
+mkdir -p .vscode
+cp docs/downstream/templates/vscode/tasks.json .vscode/tasks.json
+```
+
+Or run the upgrade script directly:
+
+```bash
+# macOS / Linux
+bash docs/downstream/scripts/upgrade-portfolio-engine.sh
+
+# Windows
+./docs/downstream/scripts/upgrade-portfolio-engine.ps1
+```
+
+To upgrade to the `@next` pre-release dist-tag instead:
+
+```bash
+DIST_TAG=next bash docs/downstream/scripts/upgrade-portfolio-engine.sh
+# Windows: ./docs/downstream/scripts/upgrade-portfolio-engine.ps1 -DistTag next
+```
+
 ## Normal upgrades
 
 1. Check the [changelog](../../packages/editorial-theme/CHANGELOG.md) for breaking changes.
