@@ -2,7 +2,7 @@
 export const prerender = false;
 
 import '@portfolio-engine/editorial-theme/styles/global.css';
-import ThemeTypographyOverrides from '@portfolio-engine/editorial-theme/components/ThemeTypographyOverrides.astro';
+import ThemeTokenOverrides from '@portfolio-engine/editorial-theme/components/ThemeTokenOverrides.astro';
 import { EDITORIAL_GOOGLE_FONTS_STYLESHEET_HREF } from '@portfolio-engine/editorial-theme';
 import { getCollection } from 'astro:content';
 import { config } from '@portfolio-engine:config';
@@ -11,6 +11,7 @@ import SiteMapTree from '../components/SiteMapTree.astro';
 import { parseCookies, verifySession } from '../server/session.js';
 import { siteHomeUrl, sitePathUrl } from '../server/paths.js';
 import { EDITORIAL_THEME_TOKEN_GROUPS } from '../lib/design-token-groups.js';
+import { buildDesignSnapshot } from '@portfolio-engine/schema';
 
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
@@ -128,6 +129,7 @@ const missingAreas = [
 ].filter(Boolean);
 
 const themeColorsJson = JSON.stringify(config.theme?.colors ?? {});
+const designSnapshotJson = JSON.stringify(buildDesignSnapshot(config.theme));
 ---
 
 <!doctype html>
@@ -142,8 +144,9 @@ const themeColorsJson = JSON.stringify(config.theme?.colors ?? {});
     <link href={EDITORIAL_GOOGLE_FONTS_STYLESHEET_HREF} rel="stylesheet" />
   </head>
   <body class="admin-shell">
-    <ThemeTypographyOverrides />
+    <ThemeTokenOverrides />
     <script type="application/json" id="admin-token-json" set:html={JSON.stringify(EDITORIAL_THEME_TOKEN_GROUPS)} />
+    <script type="application/json" id="admin-design-snapshot" set:html={designSnapshotJson} />
 
     <div id="admin-root" data-content-api={contentApiUrl} data-theme-colors={themeColorsJson}>
       <div class="adm-wrap">
@@ -707,6 +710,13 @@ const themeColorsJson = JSON.stringify(config.theme?.colors ?? {});
         font-size: 0.7rem;
         font-family: ui-monospace, monospace;
         color: var(--stone-soft);
+      }
+      .adm-token-source {
+        margin: 0.35rem 0 0;
+        font-size: 0.68rem;
+        font-family: ui-monospace, monospace;
+        color: var(--copper);
+        line-height: 1.35;
       }
       .adm-token-usage {
         margin: 0.45rem 0 0;

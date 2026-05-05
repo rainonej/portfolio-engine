@@ -72,4 +72,30 @@ export const EDITORIAL_THEME_TOKEN_GROUPS: DesignTokenGroup[] = [
       },
     ],
   },
+  {
+    id: 'typography',
+    title: 'Typography tokens',
+    tokens: [
+      {
+        cssVar: '--font-serif-stack',
+        label: 'Serif stack',
+        usage: 'Headings and display type (theme.typography.fonts.heading or fontFamily)',
+      },
+      {
+        cssVar: '--font-sans-stack',
+        label: 'Sans stack',
+        usage: 'Body UI (theme.typography.fonts.body)',
+      },
+      {
+        cssVar: '--text-body',
+        label: 'Body size',
+        usage: 'Base reading size (theme.typography.scale.body or preset)',
+      },
+      {
+        cssVar: '--text-title',
+        label: 'Title size',
+        usage: 'Page titles (theme.typography.scale.title or preset)',
+      },
+    ],
+  },
 ];

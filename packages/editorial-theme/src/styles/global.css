@@ -36,73 +36,86 @@
   }
 
   .admin-preview-eyebrow {
-    @apply text-xs font-semibold uppercase tracking-[0.14em];
+    font-size: var(--text-label);
+    @apply font-semibold uppercase tracking-[0.14em];
     color: var(--copper);
   }
 
   .admin-preview-serif-aa {
-    @apply font-serif text-6xl font-bold italic leading-none;
+    font-size: var(--text-display);
+    @apply font-serif font-bold italic leading-none;
     color: var(--ink);
   }
 
   .admin-preview-serif-title {
-    @apply font-serif text-3xl font-bold;
+    font-size: var(--text-title);
+    @apply font-serif font-bold;
     color: var(--ink);
   }
 
   .admin-preview-serif-italic {
-    @apply font-serif text-2xl italic;
+    font-size: var(--text-heading);
+    @apply font-serif italic;
     color: var(--ink);
   }
 
   .admin-preview-serif-section {
-    @apply font-serif text-xl;
+    font-size: var(--text-subheading);
+    @apply font-serif;
     color: var(--ink);
   }
 
   .admin-preview-sans-aa {
-    @apply text-6xl font-semibold leading-none;
+    font-size: var(--text-display);
+    @apply font-semibold leading-none;
     color: var(--ink);
   }
 
   .admin-preview-sans-strong {
-    @apply text-lg font-semibold;
+    font-size: var(--text-subheading);
+    @apply font-semibold;
     color: var(--ink);
   }
 
   .admin-preview-body {
-    @apply text-base leading-relaxed;
+    font-size: var(--text-body);
+    @apply leading-relaxed;
     color: var(--stone-soft);
   }
 
   .admin-preview-meta {
-    @apply text-sm;
+    font-size: var(--text-small);
     color: var(--stone-soft);
   }
 
   .admin-preview-meta-spaced {
-    @apply mb-3 text-sm;
+    @apply mb-3;
+    font-size: var(--text-small);
     color: var(--stone-soft);
   }
 
   .admin-preview-link {
-    @apply text-sm font-medium underline underline-offset-4;
+    font-size: var(--text-small);
+    @apply font-medium underline underline-offset-4;
     color: var(--copper);
   }
 
   .admin-preview-btn-primary {
-    @apply inline-flex rounded-full px-8 py-3 text-sm font-medium text-white;
+    font-size: var(--text-small);
+    @apply inline-flex rounded-full px-8 py-3 font-medium text-white;
     background: var(--ink);
   }
 
   .admin-preview-btn-secondary {
-    @apply inline-flex rounded-full border px-8 py-3 text-sm font-medium;
+    font-size: var(--text-small);
+    @apply inline-flex rounded-full border px-8 py-3 font-medium;
     border-color: var(--warm-line);
     color: var(--ink);
   }
 
   .admin-preview-interactive-label {
-    @apply mb-1 text-sm;
+    font-size: var(--text-small);
+    @apply mb-1;
     color: var(--stone-soft);
   }
 

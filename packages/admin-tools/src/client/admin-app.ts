@@ -44,6 +44,22 @@ function parseTokenGroups(): DesignTokenGroup[] {
   }
 }
 
+/** Resolved token sources from server (matches `.portfolio-engine/design-snapshot.json` shape). */
+function parseDesignSnapshotCss(): Record<string, { value: string; source: string }> | null {
+  const el = document.getElementById('admin-design-snapshot');
+  if (!el?.textContent) return null;
+  try {
+    const raw = JSON.parse(el.textContent) as { cssVariables?: Record<string, { value: string; source: string }> };
+    return raw.cssVariables ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function peTokenFromCssVar(cssVar: string): string {
+  return cssVar.replace(/^--/, '');
+}
+
 function parseThemeConfigColors(): Record<string, string> {
   const raw = document.getElementById('admin-root')?.dataset.themeColors;
   if (!raw) return {};
@@ -59,6 +75,7 @@ function initTokenSwatches(): void {
   if (!root) return;
   const style = getComputedStyle(document.documentElement);
   const groups = parseTokenGroups();
+  const snapshotCss = parseDesignSnapshotCss();
 
   for (const group of groups) {
     const wrap = document.createElement('div');
@@ -71,14 +88,21 @@ function initTokenSwatches(): void {
     grid.className = 'adm-token-grid';
     for (const t of group.tokens) {
       const value = style.getPropertyValue(t.cssVar).trim() || '(not set)';
+      const looksLikeColor =
+        /^#([0-9a-f]{3,8})$/i.test(value) || /^rgb/i.test(value) || /^hsl/i.test(value);
+      const swatchBg = looksLikeColor && !value.startsWith('(') ? value : 'transparent';
       const card = document.createElement('div');
       card.className = 'adm-token-card';
+      card.dataset.peToken = peTokenFromCssVar(t.cssVar);
+      const src = snapshotCss?.[t.cssVar]?.source;
+      const sourceLine = src ? `<p class="adm-token-source">${escapeHtml(src)}</p>` : '';
       card.innerHTML = `
-        <div class="adm-token-swatch" style="background:${value.startsWith('(') ? 'transparent' : value}"></div>
+        <div class="adm-token-swatch" style="background:${swatchBg}"></div>
         <div class="adm-token-meta">
           <p class="adm-token-label">${escapeHtml(t.label)}</p>
           <p class="adm-token-value">${escapeHtml(value)}</p>
           <p class="adm-token-var">${escapeHtml(t.cssVar)}</p>
+          ${sourceLine}
           <p class="adm-token-usage">${escapeHtml(t.usage)}</p>
         </div>`;
       grid.appendChild(card);

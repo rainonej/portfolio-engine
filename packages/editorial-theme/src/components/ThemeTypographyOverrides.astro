@@ -1,26 +1,5 @@
 ---
-/**
- * Applies optional typography from src/config/theme.json so the public site and
- * admin preview stay aligned with consumer configuration.
- */
-import { config } from '@portfolio-engine:config';
-
-const typo = config.theme?.typography;
-
-/** Strip characters that could break a single CSS declaration block. */
-function sanitizeFragment(v: string): string {
-  return v.replace(/[;{}<>]/g, '').trim();
-}
-
-const lines: string[] = [];
-if (typo?.fontFamily) {
-  lines.push(`  --font-serif-stack: ${sanitizeFragment(typo.fontFamily)}, ui-serif, Georgia, serif;`);
-}
-if (typo?.fontSize) {
-  lines.push(`  font-size: ${sanitizeFragment(typo.fontSize)};`);
-}
-
-const css = lines.length > 0 ? `:root {\n${lines.join('\n')}\n}` : '';
+import ThemeTokenOverrides from './ThemeTokenOverrides.astro';
 ---
 
-{css && <style is:global set:html={css} />}
+<ThemeTokenOverrides />

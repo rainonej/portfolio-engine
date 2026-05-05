@@ -109,6 +109,9 @@ importers:
       '@portfolio-engine/engine-core':
         specifier: workspace:*
         version: link:../engine-core
+      '@portfolio-engine/schema':
+        specifier: workspace:*
+        version: link:../schema
     devDependencies:
       astro:
         specifier: ^6.2.2

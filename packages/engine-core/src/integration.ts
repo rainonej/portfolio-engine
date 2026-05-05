@@ -1,4 +1,6 @@
 import type { AstroIntegration } from 'astro';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { EngineConfig } from './config-loader.js';
 import { loadConfig } from './config-loader.js';
@@ -10,7 +12,12 @@ import type { OverrideConfig } from './override-resolution.js';
 import { createVirtualModulesPlugin } from './virtual-modules.js';
 import type { BuildContext } from './types.js';
 import { writeManifest } from './manifest.js';
-import type { ManifestRouteEntry, OverrideSurfaceEntry, RouteRegistryEntry } from '@portfolio-engine/schema';
+import {
+  buildDesignSnapshot,
+  type ManifestRouteEntry,
+  type OverrideSurfaceEntry,
+  type RouteRegistryEntry,
+} from '@portfolio-engine/schema';
 
 export interface EngineIntegrationOptions extends EngineConfig {
   /** Remap or disable individual routes before injection. */
@@ -24,11 +31,16 @@ export interface EngineIntegrationOptions extends EngineConfig {
 }
 
 export function createEngineIntegration(options: EngineIntegrationOptions): AstroIntegration {
+  /** Resolved site config from setup — reused when emitting design snapshot after builds. */
+  let cachedResolvedConfig: Awaited<ReturnType<typeof loadConfig>> | undefined;
+  let cachedRootDir: string | undefined;
+
   return {
     name: '@portfolio-engine/engine-core',
     hooks: {
       'astro:config:setup': async ({ config, command, injectRoute, updateConfig }) => {
         const rootDir = fileURLToPath(config.root);
+        cachedRootDir = rootDir;
         const registries = options.registries ?? { routes: [], overrideSurfaces: [] };
 
         // 1. Load and validate config files
@@ -41,6 +53,7 @@ export function createEngineIntegration(options: EngineIntegrationOptions): Astr
           },
           config.root,
         );
+        cachedResolvedConfig = resolvedConfig;
 
         // 2. Discover routes from editorial-theme pages directory
         const pagesDir = resolveThemePagesDir(rootDir);
@@ -101,6 +114,17 @@ export function createEngineIntegration(options: EngineIntegrationOptions): Astr
             ],
           },
         });
+      },
+
+      'astro:build:done': async () => {
+        const root = cachedRootDir;
+        const resolved = cachedResolvedConfig;
+        if (!root || !resolved) return;
+
+        const peDir = resolve(root, '.portfolio-engine');
+        await mkdir(peDir, { recursive: true });
+        const snapshot = buildDesignSnapshot(resolved.theme);
+        await writeFile(resolve(peDir, 'design-snapshot.json'), `${JSON.stringify(snapshot, null, 2)}\n`, 'utf-8');
       },
 
       'astro:config:done': ({ injectTypes }) => {

@@ -27,7 +27,8 @@
   },
   "dependencies": {
     "@portfolio-engine/editorial-theme": "workspace:*",
-    "@portfolio-engine/engine-core": "workspace:*"
+    "@portfolio-engine/engine-core": "workspace:*",
+    "@portfolio-engine/schema": "workspace:*"
   },
   "devDependencies": {
     "astro": "^6.2.2",

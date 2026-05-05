@@ -30,27 +30,12 @@ export const NavigationConfigSchema = z.object({
   ),
 });
 
-export const ThemeConfigSchema = z.object({
-  typography: z
-    .object({
-      fontFamily: z.string().optional(),
-      fontSize: z.string().optional(),
-    })
-    .optional(),
-  colors: z
-    .object({
-      primary: z.string().optional(),
-      secondary: z.string().optional(),
-      background: z.string().optional(),
-      text: z.string().optional(),
-    })
-    .optional(),
-  layout: z
-    .object({
-      maxWidth: z.string().optional(),
-    })
-    .optional(),
-});
+export {
+  ThemeConfigSchema,
+  SemanticColorsSchema,
+  type ThemeConfig,
+  type SemanticColors,
+} from './theme-config.js';
 
 export const FeaturesConfigSchema = z.object({
   blog: z.boolean().default(true),
@@ -71,6 +56,7 @@ export const FeaturesConfigSchema = z.object({
 
 export type SiteConfig = z.infer<typeof SiteConfigSchema>;
 export type NavigationConfig = z.infer<typeof NavigationConfigSchema>;
-export type ThemeConfig = z.infer<typeof ThemeConfigSchema>;
 export type FeaturesConfig = z.infer<typeof FeaturesConfigSchema>;
+
+export * from './design-resolve.js';
 export type { EngineManifest, ManifestRouteEntry, OverrideSurfaceEntry, RouteRegistryEntry } from './registry.js';
