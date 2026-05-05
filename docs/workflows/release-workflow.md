@@ -49,7 +49,7 @@ Squash-merging **`dev` → `main`** normally keeps `.changeset/*.md` files as lo
 
 `.github/workflows/changeset-pr-guard.yml` runs on PRs targeting **`dev`**. File detection uses `git diff` **`base...head`** (merge-base range), so only changes introduced by the PR count—not unrelated drift on `dev`. If that scoped diff touches **`packages/`**, the PR must either:
 
-- include changes under **`.changeset/`**, or
+- add or modify a **`.changeset/*.md`** entry (excluding `README.md`; config-only edits do not satisfy the guard), or
 - carry the **`skip-changeset`** label (explicit opt-out).
 
 ## Packages published

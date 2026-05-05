@@ -19,29 +19,15 @@ jobs:
     permissions:
       contents: write
     outputs:
-      skip_publish: ${{ steps.version.outputs.skip_publish }}
+      skip_publish: ${{ steps.export_gate.outputs.skip_publish }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.RELEASE_BOT_TOKEN || secrets.GITHUB_TOKEN }}
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Apply changesets (push) or pass through to publish
-        id: version
-        env:
-          PUSH_TOKEN: ${{ secrets.RELEASE_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+      - name: Detect pending changesets (no install)
+        id: detect
         run: |
           set -euo pipefail
           pending=0
@@ -55,13 +41,30 @@ jobs:
             break
           done
           shopt -u nullglob
+          echo "pending=${pending}" >> "$GITHUB_OUTPUT"
 
-          if [ "$pending" -eq 0 ]; then
-            echo "No pending changesets — publishing phase may run."
-            echo "skip_publish=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
+      - uses: pnpm/action-setup@v4
+        if: steps.detect.outputs.pending == '1'
+        with:
+          version: 10
 
+      - uses: actions/setup-node@v4
+        if: steps.detect.outputs.pending == '1'
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        if: steps.detect.outputs.pending == '1'
+        run: pnpm install --frozen-lockfile
+
+      - name: Apply changesets (push)
+        id: version
+        if: steps.detect.outputs.pending == '1'
+        env:
+          PUSH_TOKEN: ${{ secrets.RELEASE_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
           echo "Pending changesets detected — running changeset version."
           before=$(git rev-parse HEAD)
           git config user.name "github-actions[bot]"
@@ -80,6 +83,28 @@ jobs:
           git push "https://x-access-token:${PUSH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:${GITHUB_REF_NAME}"
           echo "Version commit pushed — npm publish runs on the next workflow run."
           echo "skip_publish=true" >> "$GITHUB_OUTPUT"
+
+      - name: No pending changesets — publish may run
+        id: version_pass
+        if: steps.detect.outputs.pending == '0'
+        run: |
+          echo "No pending changesets — publishing phase may run."
+          echo "skip_publish=false" >> "$GITHUB_OUTPUT"
+
+      - name: Export skip_publish for publish job
+        id: export_gate
+        if: success()
+        env:
+          PENDING: ${{ steps.detect.outputs.pending }}
+          FROM_VERSION: ${{ steps.version.outputs.skip_publish }}
+          FROM_PASS: ${{ steps.version_pass.outputs.skip_publish }}
+        run: |
+          set -euo pipefail
+          if [ "$PENDING" = "0" ]; then
+            echo "skip_publish=${FROM_PASS}" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip_publish=${FROM_VERSION}" >> "$GITHUB_OUTPUT"
+          fi
 
   publish:
     name: Publish to npm
