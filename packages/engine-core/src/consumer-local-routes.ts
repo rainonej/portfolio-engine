@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { relative, resolve } from 'node:path';
+import { normalize, resolve, sep } from 'node:path';
 import {
   CONSUMER_REGISTRY_DEFAULT_RELATIVE_PATH,
   parseConsumerPortfolioEngineRegistry,
@@ -8,6 +8,26 @@ import {
 import type { DiscoveredRoute } from './route-discovery.js';
 
 export const DEFAULT_PAGES_LOCAL_RELATIVE_DIR = 'src/pages-local';
+
+/**
+ * Ensure `resolvedFile` lies under `pagesLocalAbs` (defense in depth vs malicious / surprising registry paths).
+ */
+export function assertResolvedFileInsidePagesLocal(
+  pagesLocalAbs: string,
+  resolvedFile: string,
+  pageFieldForMessage: string,
+  pagesLocalRelativeDir: string,
+): void {
+  const root = normalize(resolve(pagesLocalAbs));
+  const file = normalize(resolve(resolvedFile));
+  const prefix = root.endsWith(sep) ? root : root + sep;
+  const inside = file.toLowerCase().startsWith(prefix.toLowerCase());
+  if (!inside || file === root) {
+    throw new Error(
+      `[portfolio-engine] Local page "${pageFieldForMessage}" resolves outside ${pagesLocalRelativeDir} (resolved: ${file}).`,
+    );
+  }
+}
 
 export interface LoadConsumerRegistryOptions {
   /** When true, a missing file is an error (used when `consumerRegistryPath` is set explicitly). */
@@ -72,12 +92,7 @@ export function buildConsumerLocalDiscoveredRoutes(
     seenPatterns.add(pattern);
 
     const entrypoint = resolve(pagesLocalAbs, entry.page.replace(/\\/g, '/'));
-    const relToPagesLocal = relative(pagesLocalAbs, entrypoint);
-    if (relToPagesLocal.startsWith('..') || relToPagesLocal.includes('..')) {
-      throw new Error(
-        `[portfolio-engine] Local page "${entry.page}" resolves outside ${pagesLocalRelativeDir}.`,
-      );
-    }
+    assertResolvedFileInsidePagesLocal(pagesLocalAbs, entrypoint, entry.page, pagesLocalRelativeDir);
     if (!existsSync(entrypoint)) {
       throw new Error(
         `[portfolio-engine] Consumer registry references missing page file for "${pattern}": expected ${entrypoint}`,

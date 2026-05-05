@@ -62,6 +62,7 @@ export * from './design-resolve.js';
 export type { EngineManifest, ManifestRouteEntry, OverrideSurfaceEntry, RouteRegistryEntry } from './registry.js';
 export {
   CONSUMER_REGISTRY_DEFAULT_RELATIVE_PATH,
+  CONSUMER_REGISTRY_SUPPORTED_VERSION,
   ConsumerLocalRouteEntrySchema,
   ConsumerPortfolioEngineRegistrySchema,
   parseConsumerPortfolioEngineRegistry,

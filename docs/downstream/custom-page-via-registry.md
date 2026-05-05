@@ -28,8 +28,10 @@ Minimal shape:
 }
 ```
 
+Only **`version: 1`** is accepted today; future formats must bump this deliberately alongside engine support.
+
 - **`pattern`** — URL path Astro injects (must start with `/`).
-- **`page`** — Path relative to `src/pages-local`, must end in `.astro`, no `..`.
+- **`page`** — Path relative to `src/pages-local`, must end in `.astro`, no `..` path segments, no Windows drive / UNC paths.
 - **`label`**, **`section`**, **`visibility`** — Optional metadata for manifests and `@portfolio-engine:routes`.
 
 The Zod schemas live in `@portfolio-engine/schema` (`ConsumerPortfolioEngineRegistrySchema`, `ConsumerLocalRouteEntrySchema`) so you can validate this file in your own tooling if needed.

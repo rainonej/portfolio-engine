@@ -28,8 +28,11 @@ export interface OverrideSurfaceEntry {
 export interface ManifestRouteEntry extends RouteRegistryEntry {
   /** Actual injected URL pattern after any consumer remap (equals `pattern` when not remapped) */
   resolved: string;
-  /** Present for routes declared via the consumer registry (`src/registry/portfolio-engine.registry.json`). */
-  routeOrigin?: 'theme' | 'consumer-local';
+  /**
+   * When set to `'consumer-local'`, this route was injected from the consumer registry / `src/pages-local`.
+   * Omitted for editorial-theme routes (consumers should treat absence as theme-injected).
+   */
+  routeOrigin?: 'consumer-local';
 }
 
 export interface EngineManifest {

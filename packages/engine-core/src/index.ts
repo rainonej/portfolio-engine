@@ -20,6 +20,7 @@ export type { DiscoveredRoute } from './route-discovery.js';
 
 export {
   assertNoThemeLocalRouteCollision,
+  assertResolvedFileInsidePagesLocal,
   buildConsumerLocalDiscoveredRoutes,
   DEFAULT_PAGES_LOCAL_RELATIVE_DIR,
   loadConsumerRegistryFromDisk,
