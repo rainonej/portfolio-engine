@@ -3,7 +3,7 @@
   "tasks": [
     {
       "label": "Promote dev → main",
-      "detail": "dev→main PR, CI, merge, then workflow_dispatch Release so npm publish runs (gh CLI + auth)",
+      "detail": "Open dev→main PR, wait CI, merge, run Release on main until publish finishes (gh CLI). Search: promote or dev-main",
       "type": "shell",
       "options": {
         "cwd": "${workspaceFolder}",
@@ -37,6 +37,9 @@
         "panel": "dedicated",
         "showReuseMessage": false,
         "clear": true
+      },
+      "runOptions": {
+        "instanceLimit": 1
       }
     }
   ]

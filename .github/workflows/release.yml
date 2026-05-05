@@ -160,3 +160,19 @@ jobs:
         run: pnpm release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # When every package is already on npm, `changeset publish` no-ops and does not create tags.
+      # Still run `changeset tag` so Git Graph / tooling match registry versions.
+      - name: Push package version tags to Git
+        env:
+          PUSH_TOKEN: ${{ secrets.RELEASE_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          pnpm exec changeset tag || true
+          url="https://x-access-token:${PUSH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          while IFS= read -r t; do
+            [ -n "${t}" ] || continue
+            git push "${url}" "refs/tags/${t}" 2>/dev/null || true
+          done < <(git tag --list '@portfolio-engine/*')
