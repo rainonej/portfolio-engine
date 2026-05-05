@@ -1,5 +1,12 @@
 # @portfolio-engine/admin-tools
 
+## 0.0.11
+
+### Patch Changes
+
+- Fix broken `/admin` client script: replace `define:vars` + ESM `import` in the same `<script>` (invalid in browsers) with a plain module script that reads `contentApiUrl` from `#admin-root`'s `data-content-api` dataset attribute.
+- Fix missing `dist/client/` in published npm tarball: add `'client'` to the `copyAstroAndApiTree` directory list in `tsup.config.ts` so `dist/client/admin-app.ts`, `content-api.ts`, and `yaml-frontmatter.ts` are included on publish.
+
 ## 0.0.10
 
 ### Patch Changes

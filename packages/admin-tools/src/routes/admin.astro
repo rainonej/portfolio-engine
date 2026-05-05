@@ -1215,9 +1215,11 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
       }
     </style>
 
-    <script define:vars={{ contentApiUrl }}>
+    <script>
       import { initAdminApp } from '../client/admin-app.ts';
-      initAdminApp(contentApiUrl);
+      const root = document.getElementById('admin-root');
+      const contentApiUrl = root?.dataset.contentApi ?? '';
+      if (contentApiUrl) initAdminApp(contentApiUrl);
     </script>
   </body>
 </html>
