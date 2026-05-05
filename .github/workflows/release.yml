@@ -1,3 +1,8 @@
+# Two-phase release on main:
+# 1) Pending `.changeset/*.md` (from dev→main promotion) → `changeset version` + push (triggers this workflow again).
+# 2) No pending changesets → build + `changeset publish` to npm.
+#
+# Use RELEASE_BOT_TOKEN when GitHub Actions cannot push to protected `main` (see docs/workflows/release-workflow.md).
 name: Release
 
 on:
@@ -8,12 +13,106 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  release:
-    name: Release
+  version:
+    name: Version packages (Changesets)
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pull-requests: write
+    outputs:
+      skip_publish: ${{ steps.export_gate.outputs.skip_publish }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Detect pending changesets (no install)
+        id: detect
+        run: |
+          set -euo pipefail
+          pending=0
+          shopt -s nullglob
+          for f in .changeset/*.md; do
+            base=$(basename "$f")
+            if [ "$base" = "README.md" ]; then
+              continue
+            fi
+            pending=1
+            break
+          done
+          shopt -u nullglob
+          echo "pending=${pending}" >> "$GITHUB_OUTPUT"
+
+      - uses: pnpm/action-setup@v4
+        if: steps.detect.outputs.pending == '1'
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        if: steps.detect.outputs.pending == '1'
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        if: steps.detect.outputs.pending == '1'
+        run: pnpm install --frozen-lockfile
+
+      - name: Apply changesets (push)
+        id: version
+        if: steps.detect.outputs.pending == '1'
+        env:
+          PUSH_TOKEN: ${{ secrets.RELEASE_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          echo "Pending changesets detected — running changeset version."
+          before=$(git rev-parse HEAD)
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          pnpm exec changeset version
+          pnpm install --no-frozen-lockfile
+          git add pnpm-lock.yaml
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: sync lockfile after version bump"
+          fi
+          after=$(git rev-parse HEAD)
+          if [ "$before" = "$after" ]; then
+            echo "::error::changeset version did not create a commit — check .changeset/config.json commit settings."
+            exit 1
+          fi
+          git push "https://x-access-token:${PUSH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:${GITHUB_REF_NAME}"
+          echo "Version commit pushed — npm publish runs on the next workflow run."
+          echo "skip_publish=true" >> "$GITHUB_OUTPUT"
+
+      - name: No pending changesets — publish may run
+        id: version_pass
+        if: steps.detect.outputs.pending == '0'
+        run: |
+          echo "No pending changesets — publishing phase may run."
+          echo "skip_publish=false" >> "$GITHUB_OUTPUT"
+
+      - name: Export skip_publish for publish job
+        id: export_gate
+        if: success()
+        env:
+          PENDING: ${{ steps.detect.outputs.pending }}
+          FROM_VERSION: ${{ steps.version.outputs.skip_publish }}
+          FROM_PASS: ${{ steps.version_pass.outputs.skip_publish }}
+        run: |
+          set -euo pipefail
+          if [ "$PENDING" = "0" ]; then
+            echo "skip_publish=${FROM_PASS}" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip_publish=${FROM_VERSION}" >> "$GITHUB_OUTPUT"
+          fi
+
+  publish:
+    name: Publish to npm
+    needs: version
+    if: needs.version.outputs.skip_publish != 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
         with:
@@ -55,12 +154,7 @@ jobs:
             exit 1
           fi
 
-      - name: Create release PR or publish
-        uses: changesets/action@v1
-        with:
-          publish: pnpm release
-          title: 'chore: version packages'
-          commit: 'chore: version packages'
+      - name: Publish packages
+        run: pnpm release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

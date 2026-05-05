@@ -1,0 +1,35 @@
+# After a successful Release on main, merge main into dev so dev picks up version bumps and changelog.
+name: Sync main into dev
+
+on:
+  workflow_run:
+    workflows:
+      - Release
+    types:
+      - completed
+
+jobs:
+  merge-main-into-dev:
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Merge main into dev
+        env:
+          PUSH_TOKEN: ${{ secrets.RELEASE_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main dev
+          git checkout dev
+          git merge origin/main --no-edit -m "chore: sync main into dev [automated]"
+          git push "https://x-access-token:${PUSH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:dev"
