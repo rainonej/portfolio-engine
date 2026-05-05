@@ -17,6 +17,7 @@ export function writeManifest(
       routeRemap: true,
       routeDisable: true,
       namedOverrides: true,
+      consumerLocalRoutes: routes.some((r) => r.routeOrigin === 'consumer-local'),
     },
   };
   const dir = join(rootDir, '.portfolio-engine');

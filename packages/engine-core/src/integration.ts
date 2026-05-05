@@ -13,11 +13,18 @@ import { createVirtualModulesPlugin } from './virtual-modules.js';
 import type { BuildContext } from './types.js';
 import { writeManifest } from './manifest.js';
 import {
+  CONSUMER_REGISTRY_DEFAULT_RELATIVE_PATH,
   buildDesignSnapshot,
   type ManifestRouteEntry,
   type OverrideSurfaceEntry,
   type RouteRegistryEntry,
 } from '@portfolio-engine/schema';
+import {
+  assertNoThemeLocalRouteCollision,
+  buildConsumerLocalDiscoveredRoutes,
+  DEFAULT_PAGES_LOCAL_RELATIVE_DIR,
+  loadConsumerRegistryFromDisk,
+} from './consumer-local-routes.js';
 
 export interface EngineIntegrationOptions extends EngineConfig {
   /** Remap or disable individual routes before injection. */
@@ -28,6 +35,14 @@ export interface EngineIntegrationOptions extends EngineConfig {
     routes: RouteRegistryEntry[];
     overrideSurfaces: OverrideSurfaceEntry[];
   };
+  /**
+   * Relative path to consumer registry JSON (declares local routes).
+   * Defaults to `src/registry/portfolio-engine.registry.json`. When omitted and that file is absent, no local routes load.
+   * When set explicitly, the file must exist.
+   */
+  consumerRegistryPath?: string;
+  /** Relative directory for registry-backed Astro pages. Defaults to `src/pages-local`. */
+  consumerPagesLocalDir?: string;
 }
 
 export function createEngineIntegration(options: EngineIntegrationOptions): AstroIntegration {
@@ -62,11 +77,25 @@ export function createEngineIntegration(options: EngineIntegrationOptions): Astr
         // 3. Apply route remaps / disables from downstream config
         const { routes: activeRoutes } = applyRouteOverrides(discovered, options.routes ?? {});
 
+        const registryRelative =
+          options.consumerRegistryPath ?? CONSUMER_REGISTRY_DEFAULT_RELATIVE_PATH;
+        const consumerRegistry = loadConsumerRegistryFromDisk(rootDir, registryRelative, {
+          required: options.consumerRegistryPath !== undefined,
+        });
+        const pagesLocalDir = options.consumerPagesLocalDir ?? DEFAULT_PAGES_LOCAL_RELATIVE_DIR;
+        const localRoutes =
+          consumerRegistry !== null
+            ? buildConsumerLocalDiscoveredRoutes(rootDir, consumerRegistry, pagesLocalDir)
+            : [];
+        assertNoThemeLocalRouteCollision(activeRoutes, localRoutes);
+
+        const injectedRoutes = [...activeRoutes, ...localRoutes];
+
         // 4. Inject each active route into the consumer's Astro config.
         // Use routeRecord.resolved (the post-remap injected path) rather than
         // route.pattern (canonical name), so remapped routes are injected at
         // their new URL.
-        for (const route of activeRoutes) {
+        for (const route of injectedRoutes) {
           injectRoute({ pattern: route.routeRecord.resolved, entrypoint: route.entrypoint });
         }
 
@@ -78,11 +107,13 @@ export function createEngineIntegration(options: EngineIntegrationOptions): Astr
         // layer in any optional metadata (agentGuidance, adminDescription) from
         // the canonical registry entry if it exists.
         const registryMap = new Map(registries.routes.map((r) => [r.pattern, r]));
-        const manifestRoutes: ManifestRouteEntry[] = activeRoutes.map((r) => {
+        const consumerLocalEntrypoints = new Set(localRoutes.map((lr) => lr.entrypoint));
+        const manifestRoutes: ManifestRouteEntry[] = injectedRoutes.map((r) => {
           const registryEntry = registryMap.get(r.routeRecord.pattern);
           const entry: ManifestRouteEntry = { ...r.routeRecord };
           if (registryEntry?.agentGuidance !== undefined) entry.agentGuidance = registryEntry.agentGuidance;
           if (registryEntry?.adminDescription !== undefined) entry.adminDescription = registryEntry.adminDescription;
+          if (consumerLocalEntrypoints.has(r.entrypoint)) entry.routeOrigin = 'consumer-local';
           return entry;
         });
         writeManifest(rootDir, manifestRoutes, registries.overrideSurfaces);
@@ -104,7 +135,7 @@ export function createEngineIntegration(options: EngineIntegrationOptions): Astr
               createVirtualModulesPlugin({
                 resolvedConfig,
                 context,
-                routes: activeRoutes.map((r) => r.routeRecord),
+                routes: injectedRoutes.map((r) => r.routeRecord),
                 overrides,
               }) as Parameters<typeof updateConfig>[0]['vite'] extends {
                 plugins?: (infer P)[] | undefined;
