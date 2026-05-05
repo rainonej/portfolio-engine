@@ -1,6 +1,6 @@
 {
-  "buildCommand": "pnpm --filter demo-site build",
-  "outputDirectory": "examples/demo-site/dist",
+  "buildCommand": "pnpm --filter \"./packages/*\" run build && pnpm --filter demo-site build",
+  "outputDirectory": "examples/demo-site/.vercel/output",
   "installCommand": "pnpm install --frozen-lockfile",
   "framework": null
 }

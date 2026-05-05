@@ -3,27 +3,33 @@
   "version": "0.1.2",
   "description": "Route registry, config loader, virtual modules, and override resolution for portfolio-engine",
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./src/*": "./src/*",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
     "./client": {
-      "types": "./src/client.d.ts"
+      "types": "./dist/client.d.ts"
     }
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "build": "tsup && node ./scripts/copy-client-dts.mjs",
+    "dev": "tsup --watch --onSuccess \"node ./scripts/copy-client-dts.mjs\"",
     "check": "tsc --noEmit"
   },
   "dependencies": {
     "@portfolio-engine/schema": "workspace:*",
-    "zod": "^3.25.76"
+    "zod": "^4.4.3"
   },
   "peerDependencies": {
-    "astro": ">=5.0.0"
+    "astro": "^6.0.0"
   },
   "devDependencies": {
-    "astro": "^5.18.1",
-    "typescript": "^5.0.0"
+    "astro": "^6.2.2",
+    "typescript": "^6.0.0"
   }
 }

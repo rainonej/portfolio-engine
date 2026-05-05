@@ -11,7 +11,7 @@ import {
   type ThemeConfig,
   type FeaturesConfig,
 } from '@portfolio-engine/schema';
-import type { ZodError, ZodType, ZodTypeDef } from 'zod';
+import type { ZodError, ZodType } from 'zod';
 
 export interface EngineConfig {
   siteConfigPath: string;
@@ -55,7 +55,7 @@ function formatZodError(error: ZodError, filePath: string): string {
   return [`[portfolio-engine] Invalid config in "${filePath}":`, ...issues].join('\n');
 }
 
-function validate<T>(schema: ZodType<T, ZodTypeDef, unknown>, raw: unknown, filePath: string): T {
+function validate<T>(schema: ZodType<T, unknown>, raw: unknown, filePath: string): T {
   const result = schema.safeParse(raw);
   if (!result.success) {
     throw new Error(formatZodError(result.error as ZodError, filePath));

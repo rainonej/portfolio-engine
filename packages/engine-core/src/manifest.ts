@@ -9,7 +9,8 @@ export function writeManifest(
 ): void {
   const manifest: EngineManifest = {
     generatedAt: new Date().toISOString(),
-    rootDir,
+    // Stable, portable project root (manifest lives at `<root>/.portfolio-engine/`)
+    rootDir: '.',
     routes,
     overrideSurfaces,
     capabilities: {

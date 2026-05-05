@@ -7,8 +7,9 @@
       "url": "https://mcp.context7.com/mcp"
     },
     "playwright": {
+      "type": "stdio",
       "command": "npx",
-      "args": ["@playwright/mcp@latest"]
+      "args": ["@playwright/mcp@0.0.73"]
     }
   }
 }

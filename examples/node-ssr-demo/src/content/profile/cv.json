@@ -1,0 +1,23 @@
+{
+  "awards": [
+    {
+      "title": "Design Excellence Award",
+      "context": "AIGA, 2023",
+      "description": "Recognized for outstanding contribution to accessible interface design."
+    }
+  ],
+  "education": [
+    {
+      "degree": "MFA Interaction Design",
+      "institution": "School of Visual Arts",
+      "location": "New York, NY",
+      "year": "2017"
+    },
+    {
+      "degree": "BA Computer Science",
+      "institution": "University of Michigan",
+      "location": "Ann Arbor, MI",
+      "year": "2014"
+    }
+  ]
+}
