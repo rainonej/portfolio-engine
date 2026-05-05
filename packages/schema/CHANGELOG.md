@@ -1,5 +1,11 @@
 # @portfolio-engine/schema
 
+## 0.2.0
+
+### Minor Changes
+
+- 0aca192: **Consumer registry MVP** ([Epic #81](https://github.com/rainonej/portfolio-engine/issues/81)): Zod-validated `src/registry/portfolio-engine.registry.json`, inject Astro routes from `src/pages-local`, fail on URL collisions with injected theme routes (after remaps), manifest fields `routeOrigin` and `capabilities.consumerLocalRoutes`, and package export `@portfolio-engine/editorial-theme/layouts/Layout.astro` for consumer-local pages.
+
 ## 0.1.4
 
 ### Patch Changes
