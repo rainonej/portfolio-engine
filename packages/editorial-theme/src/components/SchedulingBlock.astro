@@ -1,8 +1,10 @@
 ---
+import type { SchedulingProvider, SchedulingMode } from '@portfolio-engine/schema';
+
 export interface Props {
   enabled?: boolean;
-  provider?: 'calendly' | 'cal' | 'google-calendar' | 'microsoft-bookings' | 'custom';
-  mode?: 'button' | 'link' | 'embed';
+  provider?: SchedulingProvider;
+  mode?: SchedulingMode;
   url?: string;
   label?: string;
   heading?: string;
@@ -64,6 +66,8 @@ const rel = openInNewTab ? 'noopener noreferrer' : undefined;
             width="100%"
             height={height}
             loading="lazy"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
+            allowfullscreen
           />
         </div>
       ) : (
