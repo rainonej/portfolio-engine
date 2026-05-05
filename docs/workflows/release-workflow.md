@@ -8,6 +8,14 @@ portfolio-engine uses [Changesets](https://github.com/changesets/changesets) for
 2. **Changesets bot** — automatically opens a "Version Packages" PR accumulating all changesets
 3. **Merge to main** — merging the version PR triggers `.github/workflows/release.yml`, which publishes all bumped packages to npm
 
+### Critical: `[skip ci]` blocks npm publishing
+
+GitHub Actions **does not run** on pushes whose **HEAD commit message/body** contains `[skip ci]` (case-insensitive). The Changesets CLI’s version commit can include that marker when `skipCI` is enabled for **version** commits.
+
+This repo sets **`"commit": ["@changesets/cli/commit", { "skipCI": false }]`** in `.changeset/config.json` so `pnpm changeset version` commits **still trigger** the Release workflow.
+
+If packages were version-bumped on `main` but never appeared on npm, check Actions for a missing Release run; you can re-run publishing via **Actions → Release → Run workflow** (`workflow_dispatch`).
+
 ## Packages published
 
 - `@portfolio-engine/engine-core`
