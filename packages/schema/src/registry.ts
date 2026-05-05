@@ -32,6 +32,7 @@ export interface ManifestRouteEntry extends RouteRegistryEntry {
 
 export interface EngineManifest {
   generatedAt: string;
+  /** Consumer site root, always `.` (relative to the directory containing `.portfolio-engine/`). */
   rootDir: string;
   /** Active route set after applying consumer remaps/disables — not the raw canonical registry */
   routes: ManifestRouteEntry[];

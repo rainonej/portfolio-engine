@@ -55,9 +55,9 @@ Recommended **Option A** (pnpm workspace–friendly):
 
 1. Create a Vercel project linked to **`rainonej/portfolio-engine`**.
 2. **Root Directory:** repository root (`.`), _not_ only `examples/demo-site`, so `workspace:*` resolves during install.
-3. **Install Command:** `pnpm install`
-4. **Build Command:** `pnpm --filter demo-site run build`
-5. **Output Directory:** follow [`@astrojs/vercel` output](https://docs.astro.build/en/guides/integrations-guide/vercel/) (adapter emits the correct layout; do not point only at a flat `dist/` unless you know you are fully static with no server routes).
+3. **Install Command:** `pnpm install` (or `pnpm install --frozen-lockfile` to match [`vercel.json`](../../vercel.json))
+4. **Build Command:** `pnpm --filter "./packages/*" run build && pnpm --filter demo-site build` — workspace packages must emit `dist/` before Astro loads `astro.config.mjs` (see [`vercel.json`](../../vercel.json)).
+5. **Output Directory:** `examples/demo-site/.vercel/output` — [`@astrojs/vercel`](https://docs.astro.build/en/guides/integrations-guide/vercel/) writes the Build Output API layout here, not a flat `dist/`.
 6. **Production branch:** `main` (or your release branch). **Preview:** all other branches and PRs (including `dev`) so every push gets a URL.
 
 If you instead set Root Directory to `examples/demo-site`, you must run install from the monorepo root (e.g. custom install command); Option A avoids that foot-gun.

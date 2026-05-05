@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-05-05T04:40:07.361Z",
-  "rootDir": "C:\\Users\\raino\\GitHub\\portfolio-engine\\examples\\node-ssr-demo\\",
+  "generatedAt": "2026-05-05T04:45:35.871Z",
+  "rootDir": ".",
   "routes": [
     {
       "pattern": "/about",

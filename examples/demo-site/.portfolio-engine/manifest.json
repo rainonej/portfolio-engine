@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-05-05T04:40:07.355Z",
-  "rootDir": "C:\\Users\\raino\\GitHub\\portfolio-engine\\examples\\demo-site\\",
+  "generatedAt": "2026-05-05T04:45:35.871Z",
+  "rootDir": ".",
   "routes": [
     {
       "pattern": "/about",
