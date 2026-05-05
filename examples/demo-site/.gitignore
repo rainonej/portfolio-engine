@@ -3,3 +3,6 @@ dist
 .vercel
 node_modules
 
+# Build artifact from @portfolio-engine/engine-core (regenerated each build)
+.portfolio-engine/design-snapshot.json
+
