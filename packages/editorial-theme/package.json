@@ -12,6 +12,7 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./layouts/Layout.astro": "./dist/layouts/Layout.astro",
     "./styles/global.css": "./dist/styles/global.css",
     "./styles/design-tokens.css": "./dist/styles/design-tokens.css",
     "./components/ThemeTypographyOverrides.astro": "./dist/components/ThemeTypographyOverrides.astro",
