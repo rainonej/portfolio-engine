@@ -70,10 +70,10 @@ If a **`localRoutes[].pattern`** matches the **injected URL** of an editorial-th
 
 Pass these to `editorialTheme()` / `createEngineIntegration()`:
 
-| Option                   | Purpose                                                                                                  |
-| ------------------------ | -------------------------------------------------------------------------------------------------------- |
-| `consumerRegistryPath`   | Alternate JSON path (relative to site root). If set, the file **must** exist.                            |
-| `consumerPagesLocalDir`  | Alternate directory for page files (default `src/pages-local`).                                        |
+| Option                  | Purpose                                                                       |
+| ----------------------- | ----------------------------------------------------------------------------- |
+| `consumerRegistryPath`  | Alternate JSON path (relative to site root). If set, the file **must** exist. |
+| `consumerPagesLocalDir` | Alternate directory for page files (default `src/pages-local`).               |
 
 ## Manifest
 
