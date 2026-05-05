@@ -2,14 +2,11 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Promote dev → main",
-      "detail": "dev→main PR, CI, merge, then workflow_dispatch Release so npm publish runs (gh CLI + auth)",
+      "label": "Upgrade portfolio-engine packages",
+      "detail": "Upgrade all @portfolio-engine/* dependencies to their latest published version (DIST_TAG=next for pre-release)",
       "type": "shell",
       "options": {
-        "cwd": "${workspaceFolder}",
-        "env": {
-          "GIT_TERMINAL_PROMPT": "0"
-        }
+        "cwd": "${workspaceFolder}"
       },
       "windows": {
         "command": "powershell.exe",
@@ -18,16 +15,20 @@
           "-ExecutionPolicy",
           "Bypass",
           "-File",
-          "${workspaceFolder}/scripts/promote-dev-to-main.ps1"
+          "${workspaceFolder}/docs/downstream/scripts/upgrade-portfolio-engine.ps1"
         ]
       },
       "linux": {
         "command": "bash",
-        "args": ["${workspaceFolder}/scripts/promote-dev-to-main.sh"]
+        "args": [
+          "${workspaceFolder}/docs/downstream/scripts/upgrade-portfolio-engine.sh"
+        ]
       },
       "osx": {
         "command": "bash",
-        "args": ["${workspaceFolder}/scripts/promote-dev-to-main.sh"]
+        "args": [
+          "${workspaceFolder}/docs/downstream/scripts/upgrade-portfolio-engine.sh"
+        ]
       },
       "problemMatcher": [],
       "presentation": {

@@ -1,5 +1,25 @@
 # @portfolio-engine/admin-tools
 
+## 0.0.13
+
+### Patch Changes
+
+- Fix token swatch rendering for modern CSS color functions (`color(srgb…)`, `oklch(…)`): prefer server-side design-token snapshot when available so swatches display correct colors regardless of how `getComputedStyle` serializes them.
+
+## 0.0.12
+
+### Patch Changes
+
+- Fix release workflow: add `contents: write` permission and push git tags after `changeset publish` so `@portfolio-engine/*@x.y.z` tags appear in Git history even when publish no-ops.
+- Fix promote script: queue a follow-up `workflow_dispatch` Release after the dev→main merge so npm publish always runs (default `GITHUB_TOKEN` does not re-trigger workflows on push).
+
+## 0.0.11
+
+### Patch Changes
+
+- Fix broken `/admin` client script: replace invalid `define:vars` + ESM `import` combination (which Astro wraps in an IIFE, making `import` illegal) with a plain module `<script>` that reads `contentApiUrl` from `#admin-root`'s `data-content-api` dataset attribute.
+- Fix missing `dist/client/` in published npm tarball: add `'client'` to the `copyAstroAndApiTree` directory list in `tsup.config.ts` so `dist/client/admin-app.ts`, `content-api.ts`, and `yaml-frontmatter.ts` are included on publish.
+
 ## 0.0.10
 
 ### Patch Changes
