@@ -1,0 +1,47 @@
+/**
+ * Shared semantic tokens for the editorial theme and the admin design preview.
+ * Imported by global.css (public site) and may be imported standalone where
+ * Tailwind is not needed.
+ */
+:root {
+  /* Brand palette — warm editorial academic */
+  --paper: #f7f4ef;
+  --paper-light: #fcfbf8;
+  --ink: #1e1a17;
+  --stone-soft: #6b625b;
+  --copper: #9a5a2e;
+  --clay: #b87c5a;
+  --warm-line: #e6ded3;
+  --pale-sand: #efe6da;
+  --olive: #5c6650;
+
+  /**
+   * Font stacks — loaded via Google Fonts in Layout + admin (see google-fonts.ts).
+   * theme.json typography overrides --font-* and --text-* via ThemeTokenOverrides.
+   */
+  --font-sans-stack: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+  --font-serif-stack: "Cormorant Garamond", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono-stack: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+
+  /**
+   * Type scale — mirrors schema TYPO_SCALE_COMFORTABLE / ThemeTokenOverrides defaults.
+   * theme.json typography.scale / preset override these.
+   */
+  --text-display: clamp(2.75rem, 6vw, 4rem);
+  --text-title: clamp(2rem, 4vw, 3rem);
+  --text-heading: clamp(1.5rem, 3vw, 2rem);
+  --text-subheading: clamp(1.125rem, 2vw, 1.35rem);
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-label: 0.6875rem;
+
+  /* Site map / admin chrome aliases (consumers use var(--adm-*) with fallbacks) */
+  --adm-ink: var(--ink);
+  --adm-muted: var(--stone-soft);
+  --adm-border: var(--warm-line);
+  --adm-paper: var(--paper-light);
+  --adm-paper-2: var(--pale-sand);
+  --adm-accent: var(--copper);
+  --adm-stone: var(--stone-soft);
+}
