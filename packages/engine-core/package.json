@@ -19,7 +19,8 @@
   "scripts": {
     "build": "tsup && node ./scripts/copy-client-dts.mjs",
     "dev": "tsup --watch --onSuccess \"node ./scripts/copy-client-dts.mjs\"",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
     "@portfolio-engine/schema": "workspace:*",

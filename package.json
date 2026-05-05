@@ -15,7 +15,10 @@
     "release": "changeset publish"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild", "sharp"]
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.0",

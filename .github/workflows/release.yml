@@ -31,6 +31,20 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build packages
+        run: pnpm build
+
+      - name: Verify dist/ presence for publishable packages
+        run: |
+          fail=0
+          for pkg in packages/schema packages/engine-core packages/editorial-theme packages/admin-tools; do
+            if [ ! -f "$pkg/dist/index.js" ]; then
+              echo "::error::$pkg/dist/index.js is missing — build must produce dist/ before publish"
+              fail=1
+            fi
+          done
+          [ "$fail" = "0" ] || exit 1
+
       - name: Require npm publish token
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
