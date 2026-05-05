@@ -1,5 +1,14 @@
 # @portfolio-engine/editorial-theme
 
+## 0.1.5
+
+### Patch Changes
+
+- b10cfd6: Republish all core packages after release pipeline hardening so tarballs consistently include built dist artifacts.
+- Updated dependencies [b10cfd6]
+  - @portfolio-engine/schema@0.1.4
+  - @portfolio-engine/engine-core@0.1.5
+
 ## 0.1.4
 
 ### Patch Changes

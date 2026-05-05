@@ -1,5 +1,15 @@
 # node-ssr-demo
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies [b10cfd6]
+  - @portfolio-engine/schema@0.1.4
+  - @portfolio-engine/engine-core@0.1.5
+  - @portfolio-engine/editorial-theme@0.1.5
+  - @portfolio-engine/admin-tools@0.0.8
+
 ## 0.0.5
 
 ### Patch Changes

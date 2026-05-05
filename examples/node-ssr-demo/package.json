@@ -1,7 +1,7 @@
 {
   "name": "node-ssr-demo",
   "private": true,
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "SSR fixture: @astrojs/node + output server (contrast with demo-site static+Vercel)",
   "type": "module",
   "scripts": {
