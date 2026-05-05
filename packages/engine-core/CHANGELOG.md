@@ -1,5 +1,13 @@
 # @portfolio-engine/engine-core
 
+## 0.1.4
+
+### Patch Changes
+
+- c84249e: Ship `dist/` package exports, real `admin-tools` build (Astro routes + API copied to `dist`), Astro peer `^6.0.0`, and publishable `@portfolio-engine/admin-tools` with `publishConfig.access: public`.
+- Updated dependencies [c84249e]
+  - @portfolio-engine/schema@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes

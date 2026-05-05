@@ -1,5 +1,15 @@
 # demo-site
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [c84249e]
+  - @portfolio-engine/schema@0.1.3
+  - @portfolio-engine/engine-core@0.1.4
+  - @portfolio-engine/editorial-theme@0.1.4
+  - @portfolio-engine/admin-tools@0.0.7
+
 ## 0.0.4
 
 ### Patch Changes
