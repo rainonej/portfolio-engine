@@ -2,8 +2,8 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Promote dev → main",
-      "detail": "dev→main PR, CI, merge, then workflow_dispatch Release so npm publish runs (gh CLI + auth)",
+      "label": "dev-main: Promote + Release (GitHub)",
+      "detail": "PR dev→main, CI, merge, gh workflow Release, wait for publish. Needs gh CLI. Find via Ctrl+Shift+P → Tasks: Run Task → type dev-main",
       "type": "shell",
       "options": {
         "cwd": "${workspaceFolder}",
@@ -37,6 +37,50 @@
         "panel": "dedicated",
         "showReuseMessage": false,
         "clear": true
+      },
+      "runOptions": {
+        "instanceLimit": 1
+      }
+    },
+    {
+      "label": "Promote dev → main",
+      "detail": "Same as dev-main: Promote + Release (GitHub). Ctrl+Shift+P → Tasks: Run Task",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "GIT_TERMINAL_PROMPT": "0"
+        }
+      },
+      "windows": {
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}/scripts/promote-dev-to-main.ps1"
+        ]
+      },
+      "linux": {
+        "command": "bash",
+        "args": ["${workspaceFolder}/scripts/promote-dev-to-main.sh"]
+      },
+      "osx": {
+        "command": "bash",
+        "args": ["${workspaceFolder}/scripts/promote-dev-to-main.sh"]
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "runOptions": {
+        "instanceLimit": 1
       }
     }
   ]
