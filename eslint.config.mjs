@@ -7,7 +7,13 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   eslintConfigPrettier,
   {
-    ignores: ['**/node_modules/**', '**/dist/**', '**/.astro/**', 'pnpm-lock.yaml'],
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/.astro/**',
+      '**/.vercel/**',
+      'pnpm-lock.yaml',
+    ],
   },
   {
     files: ['packages/**/*.ts', 'examples/**/*.ts'],
@@ -31,6 +37,17 @@ export default tseslint.config(
         console: 'readonly',
         process: 'readonly',
         URL: 'readonly',
+      },
+    },
+  },
+  {
+    files: ['scripts/**/*.mjs', 'examples/**/astro.config.mjs'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        console: 'readonly',
+        process: 'readonly',
       },
     },
   },

@@ -10,13 +10,14 @@
     "format": "prettier --check \"**/*.{md,json,yml,yaml,mjs}\" --ignore-path .prettierignore",
     "format:write": "prettier --write \"**/*.{md,json,yml,yaml,mjs}\" --ignore-path .prettierignore",
     "build:audit-report-shells": "node portfolio_engine_v3_audit_pack/write-report-shells.mjs",
-    "check": "pnpm -r run check",
+    "check": "pnpm --filter \"./packages/*\" run build && pnpm -r run check",
+    "smoke:packed": "node scripts/smoke-packed-consumer.mjs",
     "release": "changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.0",
     "@eslint/js": "^9.17.0",
-    "@types/node": "^22.0.0",
+    "@types/node": "^24.0.0",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
     "marked": "^15",

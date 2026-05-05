@@ -75,13 +75,15 @@ Example:
 
 Different tools read **different files**. Putting the same stdio server in every file does **not** help; it can spawn extra processes and makes debugging harder.
 
-| Host | File for this repo | Notes |
-|------|-------------------|--------|
-| **Cursor** (Agent / chat MCP) | **`.cursor/mcp.json`** only for this workspace | Optional global: `%USERPROFILE%\.cursor\mcp.json`. Cursor does **not** read repo-root `.mcp.json`. |
+| Host                          | File for this repo                                                                                       | Notes                                                                                                                                                      |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Cursor** (Agent / chat MCP) | **`.cursor/mcp.json`** only for this workspace                                                           | Optional global: `%USERPROFILE%\.cursor\mcp.json`. Cursor does **not** read repo-root `.mcp.json`.                                                         |
 | **Claude Code** (CLI / panel) | **`%USERPROFILE%\.claude.json`** under your project path when using **`claude mcp add … --scope local`** | Team-shared alternative: repo-root `.mcp.json` (`--scope project`). `claude mcp list` spawns stdio from `.mcp.json` for health checks—keep that file lean. |
-| **Other** | `%USERPROFILE%\.claude\mcp.json` may exist for separate entries | Do not assume it is merged with Cursor’s config; treat it as Claude Code–side only. |
+| **Other**                     | `%USERPROFILE%\.claude\mcp.json` may exist for separate entries                                          | Do not assume it is merged with Cursor’s config; treat it as Claude Code–side only.                                                                        |
 
-For **portfolio-engine**, prefer **`.cursor/mcp.json` + local-scoped `claude mcp add`** and skip committed `.mcp.json` unless the whole team agrees.
+For **portfolio-engine**, use **`.cursor/mcp.json`** for Cursor and **repo-root `.mcp.json`** (gitignored) for **Claude Code** project MCP, or `claude mcp add --scope local` only—avoid duplicating the same stdio server in both `.claude.json` and `.mcp.json` unless you intend to.
+
+Committed reference template: [`docs/downstream/templates/agent/mcp.example.json`](templates/agent/mcp.example.json). **Do not commit** active `.mcp.json` or `.cursor/mcp.json` (both are in [`.gitignore`](../../.gitignore)); see **[`docs/contributing/gitignored-local-files.md`](../contributing/gitignored-local-files.md)**.
 
 ## Agent operating rules
 

@@ -3,15 +3,21 @@
   "version": "0.1.2",
   "description": "Route registry, config loader, virtual modules, and override resolution for portfolio-engine",
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./src/*": "./src/*",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
     "./client": {
-      "types": "./src/client.d.ts"
+      "types": "./dist/client.d.ts"
     }
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && node ./scripts/copy-client-dts.mjs",
     "dev": "tsup --watch",
     "check": "tsc --noEmit"
   },
@@ -20,7 +26,7 @@
     "zod": "^4.4.3"
   },
   "peerDependencies": {
-    "astro": ">=6.0.0"
+    "astro": "^6.0.0"
   },
   "devDependencies": {
     "astro": "^6.2.2",

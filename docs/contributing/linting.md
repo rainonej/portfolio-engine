@@ -24,8 +24,20 @@ Configuration: [`.prettierrc`](../../.prettierrc) and [`.prettierignore`](../../
 
 ## CI enforcement
 
-Both checks run as the first CI job (before typecheck and build), so a formatting or lint failure blocks the whole pipeline fast. Fix locally before pushing:
+Lint and Prettier run first in CI, then **`pnpm check`** (builds all `packages/*`, then recursive typecheck / `astro check`), then a full **`pnpm build`**, **`pnpm --filter node-ssr-demo run build`**, and **`pnpm smoke:packed`** (packed tarball install smoke test). CI uses **Node 24** and **pnpm 10** (see [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml)).
+
+Fix locally before pushing:
 
 ```bash
 pnpm lint:fix && pnpm format:write
 ```
+
+For a full CI-like run locally (needs Node 24+ for a clean match with `engines`):
+
+```bash
+pnpm check
+pnpm build
+pnpm smoke:packed
+```
+
+On **Windows**, `pnpm smoke:packed` still validates **`astro check`** against packed tarballs but **skips `astro build`** (Vercel symlink limitation); use **WSL or CI** for the full build step inside smoke.

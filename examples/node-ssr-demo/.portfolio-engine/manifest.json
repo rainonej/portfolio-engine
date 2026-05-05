@@ -1,0 +1,140 @@
+{
+  "generatedAt": "2026-05-05T04:40:07.361Z",
+  "rootDir": "C:\\Users\\raino\\GitHub\\portfolio-engine\\examples\\node-ssr-demo\\",
+  "routes": [
+    {
+      "pattern": "/about",
+      "label": "About",
+      "section": null,
+      "visibility": "public",
+      "remappable": true,
+      "disableable": true,
+      "agentGuidance": "Prefer About for public-facing navigation tasks.",
+      "resolved": "/about"
+    },
+    {
+      "pattern": "/contact",
+      "label": "Contact",
+      "section": null,
+      "visibility": "public",
+      "remappable": true,
+      "disableable": true,
+      "agentGuidance": "Prefer Contact for public-facing navigation tasks.",
+      "resolved": "/contact"
+    },
+    {
+      "pattern": "/",
+      "label": "Home",
+      "section": null,
+      "visibility": "public",
+      "remappable": true,
+      "disableable": false,
+      "agentGuidance": "Prefer Home for public-facing navigation tasks.",
+      "resolved": "/"
+    },
+    {
+      "pattern": "/work/[slug]",
+      "label": "Work detail",
+      "section": null,
+      "visibility": "hidden",
+      "remappable": false,
+      "disableable": false,
+      "agentGuidance": "Prefer Work detail for internal navigation tasks.",
+      "resolved": "/work/[slug]"
+    },
+    {
+      "pattern": "/work",
+      "label": "Work",
+      "section": null,
+      "visibility": "public",
+      "remappable": true,
+      "disableable": true,
+      "agentGuidance": "Prefer Work for public-facing navigation tasks.",
+      "resolved": "/work"
+    },
+    {
+      "pattern": "/writing/[slug]",
+      "label": "Writing detail",
+      "section": null,
+      "visibility": "hidden",
+      "remappable": false,
+      "disableable": false,
+      "agentGuidance": "Prefer Writing detail for internal navigation tasks.",
+      "resolved": "/writing/[slug]"
+    },
+    {
+      "pattern": "/writing",
+      "label": "Writing",
+      "section": null,
+      "visibility": "public",
+      "remappable": true,
+      "disableable": true,
+      "agentGuidance": "Prefer Writing for public-facing navigation tasks.",
+      "resolved": "/writing"
+    }
+  ],
+  "overrideSurfaces": [
+    {
+      "name": "Hero",
+      "props": [
+        "person",
+        "bookingUrl",
+        "pillars",
+        "base",
+        "tagline"
+      ],
+      "defaultComponentPath": "src/components/sections/HeroSection.astro",
+      "hostPage": "src/pages/index.astro",
+      "docsUrl": "/admin",
+      "guidance": "Use Hero for downstream customization before proposing upstream edits."
+    },
+    {
+      "name": "FeaturedWriting",
+      "props": [
+        "posts",
+        "base"
+      ],
+      "defaultComponentPath": "src/components/sections/FeaturedWritingSection.astro",
+      "hostPage": "src/pages/index.astro",
+      "docsUrl": "/admin",
+      "guidance": "Use FeaturedWriting for downstream customization before proposing upstream edits."
+    },
+    {
+      "name": "TestimonialSection",
+      "props": [
+        "testimonials"
+      ],
+      "defaultComponentPath": "src/components/sections/TestimonialSection.astro",
+      "hostPage": "src/pages/index.astro",
+      "docsUrl": "/admin",
+      "guidance": "Use TestimonialSection for downstream customization before proposing upstream edits."
+    },
+    {
+      "name": "CollaborationSection",
+      "props": [
+        "base",
+        "ctaBody"
+      ],
+      "defaultComponentPath": "src/components/sections/CollaborationSection.astro",
+      "hostPage": "src/pages/index.astro",
+      "docsUrl": "/admin",
+      "guidance": "Use CollaborationSection for downstream customization before proposing upstream edits."
+    },
+    {
+      "name": "Footer",
+      "props": [
+        "adminHref",
+        "siteTitle"
+      ],
+      "defaultComponentPath": "src/components/Footer.astro",
+      "hostPage": "src/layouts/Layout.astro",
+      "docsUrl": "/admin",
+      "guidance": "Use Footer for downstream customization before proposing upstream edits."
+    }
+  ],
+  "capabilities": {
+    "routeRemap": true,
+    "routeDisable": true,
+    "namedOverrides": true
+  }
+}
