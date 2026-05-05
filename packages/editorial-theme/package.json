@@ -29,7 +29,7 @@
   "dependencies": {
     "@portfolio-engine/engine-core": "workspace:*",
     "@portfolio-engine/schema": "workspace:*",
-    "@tailwindcss/vite": "^4.2.4",
+    "@tailwindcss/postcss": "^4.2.4",
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
