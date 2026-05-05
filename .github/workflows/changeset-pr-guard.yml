@@ -31,12 +31,13 @@ jobs:
           HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
           set -euo pipefail
-          if git diff --name-only "${BASE}" "${HEAD}" | grep -q '^packages/'; then
+          # Three-dot diff (BASE...HEAD): changes on HEAD since merge-base with BASE — matches PR scope.
+          if git diff --name-only "${BASE}...${HEAD}" | grep -q '^packages/'; then
             echo "packages_changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "packages_changed=false" >> "$GITHUB_OUTPUT"
           fi
-          if git diff --name-only "${BASE}" "${HEAD}" | grep -q '^\.changeset/'; then
+          if git diff --name-only "${BASE}...${HEAD}" | grep -q '^\.changeset/'; then
             echo "changeset_changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "changeset_changed=false" >> "$GITHUB_OUTPUT"
