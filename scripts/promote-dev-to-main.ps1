@@ -41,11 +41,43 @@ gh pr checks $pr --watch
 Write-Host "Merging PR #$pr ..."
 gh pr merge $pr --merge --delete-branch=false
 
-# The merge push starts Release (changeset version). That job pushes the RELEASING commit
-# with GITHUB_TOKEN, which does not trigger a second workflow — so npm publish would not
-# run until another Release trigger. Queue publish explicitly (waits behind the in-flight
-# Release run due to workflow concurrency on main).
+# The merge push starts Release (changeset version when .changeset/*.md exist). That job
+# pushes the RELEASING commit with GITHUB_TOKEN, which does not trigger a second workflow,
+# so npm publish would not run until another Release trigger. Always queue a follow-up
+# Release (waits behind the in-flight run due to workflow concurrency on main).
 Write-Host ''
-Write-Host 'Queuing Release publish phase (workflow_dispatch on main)...'
+Write-Host 'Queuing follow-up Release on main (workflow_dispatch)...'
+$dispatchAfter = [datetime]::UtcNow.AddSeconds(-30)
 gh workflow run Release --ref main
-Write-Host 'Done. Watch Actions -> Release on main; when the follow-up run finishes, run: git fetch origin main --tags'
+
+Write-Host 'Waiting for the workflow_dispatch Release run to finish...'
+$runId = $null
+for ($k = 0; $k -lt 120; $k++) {
+  $rows = gh run list --workflow Release --branch main --limit 15 --json databaseId,event,status,createdAt | ConvertFrom-Json
+  $candidates = @()
+  foreach ($row in $rows) {
+    if ($row.event -ne 'workflow_dispatch') { continue }
+    try {
+      $created = [datetime]::Parse($row.createdAt, $null, [System.Globalization.DateTimeStyles]::RoundtripKind)
+    } catch {
+      continue
+    }
+    if ($created -ge $dispatchAfter) {
+      $candidates += [pscustomobject]@{ Id = $row.databaseId; Created = $created }
+    }
+  }
+  if ($candidates.Count -gt 0) {
+    $runId = ($candidates | Sort-Object Created -Descending | Select-Object -First 1).Id
+    break
+  }
+  Start-Sleep -Seconds 3
+}
+
+if ($null -eq $runId) {
+  Write-Warning 'Could not resolve the workflow_dispatch Release run. Check Actions -> Release on main.'
+  exit 0
+}
+
+gh run watch $runId --exit-status
+Write-Host "Release run $runId completed."
+Write-Host 'Tip: git fetch origin main --tags  (then refresh Git Graph)'
