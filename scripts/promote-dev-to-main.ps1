@@ -41,4 +41,11 @@ gh pr checks $pr --watch
 Write-Host "Merging PR #$pr ..."
 gh pr merge $pr --merge --delete-branch=false
 
-Write-Host 'Done. main should update shortly; Release runs on push to main.'
+# The merge push starts Release (changeset version). That job pushes the RELEASING commit
+# with GITHUB_TOKEN, which does not trigger a second workflow — so npm publish would not
+# run until another Release trigger. Queue publish explicitly (waits behind the in-flight
+# Release run due to workflow concurrency on main).
+Write-Host ''
+Write-Host 'Queuing Release publish phase (workflow_dispatch on main)...'
+gh workflow run Release --ref main
+Write-Host 'Done. Watch Actions -> Release on main; when the follow-up run finishes, run: git fetch origin main --tags'

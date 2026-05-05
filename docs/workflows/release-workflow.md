@@ -14,6 +14,10 @@ portfolio-engine uses [Changesets](https://github.com/changesets/changesets) for
 
 Manual rescue: **Actions → Release → Run workflow** (`workflow_dispatch`) on `main` re-runs versioning logic (if changesets remain) or publish (when none remain).
 
+The **Promote dev → main** VS Code task (`scripts/promote-dev-to-main.*`) merges the promotion PR and then **queues `Release` via `workflow_dispatch`**, so the npm publish phase always runs even when the automated `RELEASING` push does not start a follow-up workflow (default `GITHUB_TOKEN` limitation).
+
+**Git tags:** `changeset publish` creates tags like `@portfolio-engine/schema@0.3.0`. The **Publish to npm** job uses **`contents: write`** so those tags can be pushed. After a release, refresh locally with `git fetch origin main --tags` if Git Graph does not show new tags.
+
 ## What runs on `main` (`.github/workflows/release.yml`)
 
 Two-phase behavior:

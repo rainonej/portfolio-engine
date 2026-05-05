@@ -112,11 +112,13 @@ jobs:
     if: needs.version.outputs.skip_publish != 'true'
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      # changeset publish creates @scope/pkg@x.y.z git tags — contents:write is required to push them.
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.RELEASE_BOT_TOKEN || secrets.GITHUB_TOKEN }}
 
       - uses: pnpm/action-setup@v4
         with:
