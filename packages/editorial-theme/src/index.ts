@@ -10,7 +10,7 @@ export {
   splitBioParagraphs,
   resolveHeroBio,
   type ProfilePerson,
-} from './lib/load-profile-person.js';
+} from './lib/profile-person.js';
 
 export { editorialTheme } from './integration.js';
 export type { EditorialThemeOptions } from './integration.js';
