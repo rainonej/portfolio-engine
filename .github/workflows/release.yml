@@ -74,6 +74,21 @@ jobs:
           git fetch origin "${ref}"
           git reset --hard "origin/${ref}"
 
+          # Re-check after syncing — a concurrent run may have already consumed the changesets.
+          pending_after_sync=0
+          shopt -s nullglob
+          for f in .changeset/*.md; do
+            base=$(basename "$f")
+            [ "$base" = "README.md" ] && continue
+            pending_after_sync=1; break
+          done
+          shopt -u nullglob
+          if [ "$pending_after_sync" = "0" ]; then
+            echo "Changesets already consumed by a concurrent run — proceeding to publish."
+            echo "skip_publish=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
           before=$(git rev-parse HEAD)
           pnpm exec changeset version
           pnpm install --no-frozen-lockfile
