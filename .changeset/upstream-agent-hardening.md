@@ -13,7 +13,7 @@ Upstream hardening: nav CSS baseline, manifest diagnostics, profile schemas, doc
 
 **Manifest diagnostics (P0)**
 
-- `ManifestRouteEntry` now includes a required `routeOrigin` (`"theme" | "consumer-local" | "consumer-pages" | "unknown"`) and `entrypoint` (relative path) for every route, making it immediately clear which file owns each URL.
+- `ManifestRouteEntry` now includes a required `routeOrigin` and `entrypoint` (relative path from consumer root) for every route. The engine emits `"theme"` for editorial-theme routes and `"consumer-local"` for registry routes. `"consumer-pages"` and `"unknown"` are reserved type values for future use and are not emitted in this release.
 - `EngineManifest` now includes `portfolioEngine` (package versions), `consumerRegistry` (load state and route count), `routeOverrides` (disabled and remapped patterns), and an optional `navWarnings` array.
 - Engine integration validates nav items against active injected routes and emits warnings for items that cannot be matched. Pass `diagnostics: { strictNavRoutes: true }` to `editorialTheme()` to fail the build on nav/route mismatches.
 
@@ -32,4 +32,4 @@ Upstream hardening: nav CSS baseline, manifest diagnostics, profile schemas, doc
 
 **Doctor script (P2)**
 
-- `portfolio-engine doctor` (or `pnpm pe:doctor`) reads `.portfolio-engine/manifest.json` and prints a structured diagnostic report: package versions, consumer registry state, route origins and entrypoints, nav warnings, and capabilities.
+- `portfolio-engine` (or `pnpm pe:doctor`) runs the doctor CLI, which reads `.portfolio-engine/manifest.json` and prints a structured diagnostic report: package versions, consumer registry state, route origins and entrypoints, nav warnings, and capabilities. The `portfolio-engine` bin maps directly to the doctor script — no subcommand is needed.

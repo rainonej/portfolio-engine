@@ -7,6 +7,7 @@
  *
  * Usage (from a consumer site root):
  *   pnpm pe:doctor
+ *   portfolio-engine
  *   node node_modules/@portfolio-engine/engine-core/dist/doctor.js
  */
 

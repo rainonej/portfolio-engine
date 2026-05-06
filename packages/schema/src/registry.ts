@@ -33,7 +33,7 @@ export interface ManifestRouteEntry extends RouteRegistryEntry {
   resolved: string;
   /** Source of the route's page file. */
   routeOrigin: RouteOrigin;
-  /** Absolute path to the page file that serves this route. */
+  /** Path to the page file that serves this route, relative to the consumer project root. */
   entrypoint: string;
 }
 

@@ -40,9 +40,11 @@ Portfolio Engine supports three route ownership modes:
    it will warn but not fail unless `diagnostics.strictNavRoutes: true`.
 
 After every build, `.portfolio-engine/manifest.json` lists all active routes
-with their `routeOrigin` (`theme`, `consumer-local`, or `consumer-pages`) and
-the relative `entrypoint` path, so you can immediately see which file owns
-each URL.
+with their `routeOrigin` (`"theme"` or `"consumer-local"`) and the relative
+`entrypoint` path, so you can immediately see which file owns each URL.
+Ordinary `src/pages` routes are not injected by the engine and do not appear
+in the manifest. (`"consumer-pages"` and `"unknown"` are reserved type values
+for future use.)
 
 For **`theme.json`** (colors, typography, tokens) and how they map to CSS variables, see **[`design-tokens-and-theme.md`](design-tokens-and-theme.md)**.
 

@@ -78,6 +78,13 @@ const ENGINE_CORE_VERSION = tryReadVersion(_engineCoreDir);
  * nav items whose hrefs don't match any active injected route.
  * External URLs and hash-only links are skipped.
  */
+/** Strip trailing slash, fragment, and query string from an internal href for route comparison. */
+function normalizeNavHref(href: string): string {
+  // Remove fragment and query string, then strip trailing slash (but keep root "/")
+  const clean = href.split('#')[0].split('?')[0];
+  return clean.length > 1 ? clean.replace(/\/$/, '') : clean;
+}
+
 function buildNavWarnings(
   navItems: { label: string; href: string; visible?: boolean }[],
   activeResolvedPaths: Set<string>,
@@ -88,7 +95,7 @@ function buildNavWarnings(
     const href = item.href;
     if (!href || href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) continue;
     if (href.startsWith('#')) continue;
-    if (!activeResolvedPaths.has(href)) {
+    if (!activeResolvedPaths.has(normalizeNavHref(href))) {
       warnings.push(
         `Nav item "${item.label}" → "${href}" does not match any active injected route. ` +
           `Check: (1) route is not disabled in astro.config.mjs, (2) a consumer-local registry entry exists for this pattern, ` +
