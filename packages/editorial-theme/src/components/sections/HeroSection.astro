@@ -70,6 +70,11 @@ const linkCtas = [
 ];
 
 const isDev = import.meta.env.DEV;
+/**
+ * The CTA count warning fires during server-side rendering / build time (Astro component
+ * frontmatter runs on the server). It will not fire in a browser console because the
+ * HeroSection produces static markup. Check your build/dev-server output for this warning.
+ */
 if (isDev && effectiveCtas.length > 3) {
   console.warn(
     `[editorial-theme] HeroSection has ${effectiveCtas.length} CTAs. Recommend no more than 3 to avoid decision overload.`,
