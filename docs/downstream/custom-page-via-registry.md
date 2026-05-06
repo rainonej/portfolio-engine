@@ -10,7 +10,7 @@ This recipe matches the MVP in [Epic: consumer registry](https://github.com/rain
 
 The contract on disk is **JSON** under `src/registry/`; **`@portfolio-engine/schema`** provides Zod validation and inferred types (`parseConsumerPortfolioEngineRegistry`). Rationale, versioning, and admin-tools considerations are recorded in **ADR-005** (`portfolio_engine_v5_report_pack/source/decisions/ADR-005-consumer-extension-registry-format.md`).
 
-**Admin-tools:** with the default admin-tools setup, `src/registry/portfolio-engine.registry.json` is an allowed path for inventory, read, and save (local `devBypass` or GitHub API mode), so editors do not need a separate “registry editor” to adjust routes.
+**Admin-tools:** `src/registry/` is an allowed root. In **local `devBypass` development**, registry file **listing**, read, and save all use your working tree on disk. In **OAuth (GitHub Contents API) mode**, **read and save** for a known file path (for example `src/registry/portfolio-engine.registry.json`) go through GitHub; **directory listings** for the registry section still use `node:fs` under `process.cwd()` (see `packages/admin-tools/src/routes/api/content.ts`), so they only reflect files present on that server—typically your laptop when running `astro dev`, not a remote tree listing from GitHub.
 
 ## Steps
 
