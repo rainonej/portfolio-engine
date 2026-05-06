@@ -170,10 +170,11 @@ export function resolveTypographyVariables(theme: ThemeConfig | undefined): Map<
   const headingEntry = typo.fonts?.heading ?? typo.fontFamily;
   const rawHeadingFamily =
     typeof headingEntry === 'object' ? resolveFontFamily(headingEntry) : headingEntry;
-  const headingFallback =
+  const headingFallbackRaw =
     typeof headingEntry === 'object'
       ? (resolveFontFallback(headingEntry) ?? 'ui-serif, Georgia, serif')
       : 'ui-serif, Georgia, serif';
+  const headingFallback = sanitizeCssValue(headingFallbackRaw);
 
   const serifStack = rawHeadingFamily
     ? `${sanitizeCssValue(rawHeadingFamily)}, ${headingFallback}`
@@ -183,10 +184,11 @@ export function resolveTypographyVariables(theme: ThemeConfig | undefined): Map<
   const bodyEntry = typo.fonts?.body;
   const rawBodyFamily =
     typeof bodyEntry === 'object' ? resolveFontFamily(bodyEntry) : bodyEntry;
-  const bodyFallback =
+  const bodyFallbackRaw =
     typeof bodyEntry === 'object'
       ? (resolveFontFallback(bodyEntry) ?? 'ui-sans-serif, system-ui, sans-serif')
       : 'ui-sans-serif, system-ui, sans-serif';
+  const bodyFallback = sanitizeCssValue(bodyFallbackRaw);
 
   const sansStack = rawBodyFamily
     ? `${sanitizeCssValue(rawBodyFamily)}, ${bodyFallback}`
@@ -215,10 +217,11 @@ export function resolveTypographyVariables(theme: ThemeConfig | undefined): Map<
   const monoEntry = typo.fonts?.mono;
   const rawMonoFamily =
     typeof monoEntry === 'object' ? resolveFontFamily(monoEntry) : monoEntry;
-  const monoFallback =
+  const monoFallbackRaw =
     typeof monoEntry === 'object'
       ? (resolveFontFallback(monoEntry) ?? 'ui-monospace, monospace')
       : 'ui-monospace, monospace';
+  const monoFallback = sanitizeCssValue(monoFallbackRaw);
 
   const monoStack = rawMonoFamily
     ? `${sanitizeCssValue(rawMonoFamily)}, ${monoFallback}`

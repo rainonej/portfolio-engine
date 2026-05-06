@@ -83,7 +83,7 @@ if (isDev && effectiveCtas.length > 3) {
 ---
 
 {Override ? (
-  <Override person={person} bookingUrl={bookingUrl} pillars={pillars} base={base} tagline={tagline} />
+  <Override person={person} bookingUrl={bookingUrl} pillars={pillars} base={base} tagline={tagline} ctas={effectiveCtas} />
 ) : (
   <>
     <!-- Hero -->
@@ -100,23 +100,22 @@ if (isDev && effectiveCtas.length > 3) {
             </p>
           )}
           <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
-            {buttonCtas.map((cta, i) =>
-              i === 0 ? (
+            {buttonCtas.map((cta, index) => {
+              const tier = cta.variant ?? (index === 0 ? 'primary' : 'secondary');
+              const isPrimary = tier === 'primary';
+              return (
                 <a
                   href={cta.href}
-                  class="rounded-full bg-[var(--ink)] px-8 py-3.5 text-sm font-medium text-white transition-colors hover:bg-[var(--stone-soft)]"
+                  class={
+                    isPrimary
+                      ? 'rounded-full bg-[var(--ink)] px-8 py-3.5 text-sm font-medium text-white transition-colors hover:bg-[var(--stone-soft)]'
+                      : 'rounded-full border border-[var(--warm-line)] px-8 py-3.5 text-sm font-medium text-[var(--ink)] transition-colors hover:border-[var(--stone-soft)]'
+                  }
                 >
                   {cta.label}
                 </a>
-              ) : (
-                <a
-                  href={cta.href}
-                  class="rounded-full border border-[var(--warm-line)] px-8 py-3.5 text-sm font-medium text-[var(--ink)] transition-colors hover:border-[var(--stone-soft)]"
-                >
-                  {cta.label}
-                </a>
-              )
-            )}
+              );
+            })}
           </div>
           {linkCtas.length > 0 && (
             <div class="mt-4 flex flex-wrap gap-4">

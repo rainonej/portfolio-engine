@@ -51,7 +51,10 @@ export const FontEntrySchema = z.union([
     family: z.string(),
     /** Explicit fallback stack appended after the primary family (e.g. "Georgia, serif"). */
     fallback: z.string().optional(),
-    /** Hint for automatic stylesheet loading; currently only "google" is acted on. */
+    /**
+     * Controls inclusion in the theme's automatic Google Fonts stylesheet (`editorialGoogleFontsStylesheetHref`).
+     * `google` or omitted: eligible; `system` and `custom`: excluded from that URL (host loads fonts separately).
+     */
     provider: z.enum(['google', 'system', 'custom']).optional(),
   }),
 ]);

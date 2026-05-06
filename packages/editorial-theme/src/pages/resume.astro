@@ -3,10 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import Reveal from '../components/Reveal.astro';
 import SectionIntro from '../components/SectionIntro.astro';
 import { getEntry } from 'astro:content';
-import { getBase } from '../lib/utils';
 import { loadProfilePerson, splitBioParagraphs } from '../lib/load-profile-person';
 
-const base = getBase();
 const person = await loadProfilePerson();
 
 const cvEntry = await getEntry('profile', 'cv');
