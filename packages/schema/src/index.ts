@@ -105,7 +105,27 @@ export type NavigationConfig = z.infer<typeof NavigationConfigSchema>;
 export type FeaturesConfig = z.infer<typeof FeaturesConfigSchema>;
 
 export * from './design-resolve.js';
-export type { EngineManifest, ManifestRouteEntry, OverrideSurfaceEntry, RouteRegistryEntry } from './registry.js';
+export type {
+  EngineManifest,
+  ManifestRouteEntry,
+  OverrideSurfaceEntry,
+  RouteOrigin,
+  RouteRegistryEntry,
+} from './registry.js';
+export {
+  ProfilePersonSchema,
+  ProfileCvSchema,
+  ProfileExperienceSchema,
+  ProfileEducationSchema,
+  ProfileAwardSchema,
+  type ProfilePerson,
+  type ProfileCv,
+  type ProfileExperience,
+  type ProfileEducation,
+  type ProfileAward,
+  type ValueCard,
+  type WorkingPrinciple,
+} from './profile.js';
 export {
   CONSUMER_REGISTRY_DEFAULT_RELATIVE_PATH,
   CONSUMER_REGISTRY_SUPPORTED_VERSION,
