@@ -65,7 +65,8 @@ _Product MVP is **not** reached until both consumers are real, buildable sites o
 
 ## Phase 7 — Consumer extension registry
 
-- 🔄 **Shipped for local routes:** JSON registry + Zod (`packages/schema/src/consumer-registry.ts`), load + inject in `engine-core` (`consumer-local-routes.ts`, `integration.ts` options), demo `src/registry/portfolio-engine.registry.json` + `src/pages-local/how-i-think.astro`
+- ✅ **Registry format decision:** ADR-005 (`portfolio_engine_v5_report_pack/source/decisions/ADR-005-consumer-extension-registry-format.md`) — JSON on disk + Zod in schema; admin-tools can edit `src/registry/*.json`.
+- ✅ **Local route extensions:** JSON registry + Zod (`packages/schema/src/consumer-registry.ts`), load + inject in `engine-core` (`consumer-local-routes.ts`, `integration.ts` options); verified on `examples/demo-site` and `examples/node-ssr-demo` (`src/registry/portfolio-engine.registry.json` + `src/pages-local/`).
 - ⬜ Registry entries for **local components/embeds** (epic tickets still open)
 - ⬜ Framed YouTube / richer showcase (overlaps demo-site teaching goals)
 

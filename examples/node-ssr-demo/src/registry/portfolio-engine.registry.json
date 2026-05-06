@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "localRoutes": [
+    {
+      "pattern": "/ssr-registry-smoke",
+      "page": "ssr-registry-smoke.astro",
+      "label": "Registry smoke (SSR)",
+      "section": null,
+      "visibility": "public"
+    }
+  ]
+}

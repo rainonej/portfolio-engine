@@ -20,15 +20,11 @@
       },
       "linux": {
         "command": "bash",
-        "args": [
-          "${workspaceFolder}/docs/downstream/scripts/upgrade-portfolio-engine.sh"
-        ]
+        "args": ["${workspaceFolder}/docs/downstream/scripts/upgrade-portfolio-engine.sh"]
       },
       "osx": {
         "command": "bash",
-        "args": [
-          "${workspaceFolder}/docs/downstream/scripts/upgrade-portfolio-engine.sh"
-        ]
+        "args": ["${workspaceFolder}/docs/downstream/scripts/upgrade-portfolio-engine.sh"]
       },
       "problemMatcher": [],
       "presentation": {
