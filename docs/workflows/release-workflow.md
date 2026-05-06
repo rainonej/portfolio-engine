@@ -24,10 +24,10 @@ The **Promote dev → main** VS Code task (`scripts/promote-dev-to-main.*`) merg
 
 Two-phase behavior:
 
-| Phase   | Trigger                                                                      | What happens                                                                                                                                      |
-| ------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Phase   | Trigger                                                                      | What happens                                                                                                                                                                   |
+| ------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Version | Push / dispatch on `main`, pending `.changeset/*.md` (excluding `README.md`) | Sync `HEAD` to remote tip, `pnpm exec changeset version`, lockfile refresh (`pnpm install --no-frozen-lockfile` + lockfile commit if needed), **rebase onto remote**, **push** |
-| Publish | Next push on `main` when no pending changesets                               | `pnpm build`, verify `dist/`, then **`pnpm release`** with `NODE_AUTH_TOKEN`                                                                      |
+| Publish | Next push on `main` when no pending changesets                               | `pnpm build`, verify `dist/`, then **`pnpm release`** with `NODE_AUTH_TOKEN`                                                                                                   |
 
 `changeset publish` no-ops when local versions already match the registry.
 
