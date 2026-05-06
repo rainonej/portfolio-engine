@@ -158,6 +158,46 @@
     transform: translateY(0);
   }
 
+  /* ── Nav structural baseline — Tailwind-independent fallback ── */
+  .pe-site-header {
+    position: fixed;
+    inset-inline: 0;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid var(--warm-line);
+    background: var(--paper);
+  }
+
+  .pe-site-nav {
+    max-width: 64rem;
+    min-height: 4rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .pe-site-brand {
+    white-space: nowrap;
+    text-decoration: none;
+  }
+
+  .pe-site-nav-list {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .pe-site-nav-link {
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
   .pe-scheduling-block {
     margin-block: 3rem;
   }
@@ -260,5 +300,20 @@
 @media (width <= 768px) {
   .ambient-blob {
     animation: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .pe-site-nav {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+    padding-block: 0.75rem;
+  }
+
+  .pe-site-nav-list {
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
   }
 }
