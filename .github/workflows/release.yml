@@ -10,7 +10,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   version:
@@ -66,9 +68,13 @@ jobs:
         run: |
           set -euo pipefail
           echo "Pending changesets detected — running changeset version."
-          before=$(git rev-parse HEAD)
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          ref="${GITHUB_REF_NAME}"
+          git fetch origin "${ref}"
+          git reset --hard "origin/${ref}"
+
+          before=$(git rev-parse HEAD)
           pnpm exec changeset version
           pnpm install --no-frozen-lockfile
           git add pnpm-lock.yaml
@@ -80,7 +86,14 @@ jobs:
             echo "::error::changeset version did not create a commit — check .changeset/config.json commit settings."
             exit 1
           fi
-          git push "https://x-access-token:${PUSH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:${GITHUB_REF_NAME}"
+
+          git fetch origin "${ref}"
+          if ! git rebase "origin/${ref}"; then
+            echo "::error::Could not rebase version commits onto origin/${ref}. Another push landed on ${ref}; re-run Release after resolving."
+            exit 1
+          fi
+
+          git push "https://x-access-token:${PUSH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:${ref}"
           echo "Version commit pushed — npm publish runs on the next workflow run."
           echo "skip_publish=true" >> "$GITHUB_OUTPUT"
 
