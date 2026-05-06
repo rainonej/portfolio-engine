@@ -66,7 +66,7 @@ The injected `dist/routes/admin.astro` file uses Astro virtual modules (`@portfo
 {
   "extends": "astro/tsconfigs/strict",
   // TypeScript does NOT merge `exclude` across `extends` — list everything you need here.
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist"],
 }
 ```
 
@@ -78,7 +78,7 @@ The `dist/routes/admin.astro` file also carries a `// @ts-nocheck` directive in 
 
 If you need to patch `dist/routes/admin.astro` via `pnpm patch` (or a plain `git apply` patch), keep in mind:
 
-- The **exact lines** from the published tarball must appear in the unified diff.  Use `pnpm pack --pack-destination /tmp` to create the tarball, then `tar -tf <tarball>` to list its contents and `tar -xf <tarball> -C /tmp/pkg` to extract and inspect individual files before authoring the patch.
+- The **exact lines** from the published tarball must appear in the unified diff. Use `pnpm pack --pack-destination /tmp` to create the tarball, then `tar -tf <tarball>` to list its contents and `tar -xf <tarball> -C /tmp/pkg` to extract and inspect individual files before authoring the patch.
 - Run `git apply --check` against the extracted file on both LF and CRLF checkouts before committing a patch file.
 - Patches that mark a line as **context** (` ` prefix) but use the post-change content will be rejected by `git apply`.
 
