@@ -85,7 +85,72 @@ Pass these to `editorialTheme()` / `createEngineIntegration()`:
 
 ## Manifest
 
-Routes from the registry appear in `.portfolio-engine/manifest.json` with `"routeOrigin": "consumer-local"`. `capabilities.consumerLocalRoutes` is `true` when at least one such route is active.
+Routes from the registry appear in `.portfolio-engine/manifest.json` with `"routeOrigin": "consumer-local"` and the relative `entrypoint` path. `capabilities.consumerLocalRoutes` is `true` when at least one such route is active.
+
+## Replacing a default theme page
+
+To replace a theme route (e.g. `/writing`) with a consumer-local version:
+
+**1. Disable the theme route** in `astro.config.mjs`:
+
+```js
+editorialTheme({
+  routes: { '/writing': { enabled: false } },
+  // ...
+})
+```
+
+**2. Add a registry entry** in `src/registry/portfolio-engine.registry.json`:
+
+```json
+{
+  "version": 1,
+  "localRoutes": [
+    {
+      "pattern": "/writing",
+      "page": "writing/index.astro",
+      "label": "Research & Ideas",
+      "visibility": "public"
+    }
+  ]
+}
+```
+
+**3. Add the page file** at `src/pages-local/writing/index.astro`:
+
+```astro
+---
+import Layout from '@portfolio-engine/editorial-theme/layouts/Layout.astro';
+---
+
+<Layout title="Research & Ideas">
+  <main class="mx-auto max-w-3xl px-6 pb-24 pt-40">
+    <h1>Research & Ideas</h1>
+    <!-- your custom content here -->
+  </main>
+</Layout>
+```
+
+**4. Verify the nav item** in `src/config/navigation.json` points to `/writing`:
+
+```json
+{ "label": "Research & Ideas", "href": "/writing", "visible": true }
+```
+
+**5. Build and inspect** `.portfolio-engine/manifest.json`. The `/writing` entry
+should show `"routeOrigin": "consumer-local"` and the entrypoint path.
+
+### src/pages vs src/pages-local
+
+| Directory        | Routing owner | Use case                                                     |
+| ---------------- | ------------- | ------------------------------------------------------------ |
+| `src/pages-local/` | Engine (registry) | Replace a theme page while keeping the theme shell       |
+| `src/pages/`       | Astro (file-based) | Fully custom pages that don't replace a theme route     |
+
+Use `src/pages/` (ordinary Astro routing) for pages that have no theme
+equivalent and don't need to be registered — e.g. `src/pages/resume.astro`.
+Use `src/pages-local/` + registry when you want the engine to know about the
+route (nav validation, manifest, collision checks).
 
 ## Verified examples
 

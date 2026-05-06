@@ -7,13 +7,42 @@ The canonical `src/` directory contract for any consumer site:
 ```
 your-site/
   src/
-    config/     JSON config files consumed by editorialTheme()
-    content/    Astro content collections
-    context/    Site-owner identity and brand voice (agent use)
-    overrides/  Component overrides (named surfaces only)
+    config/       JSON config files consumed by editorialTheme()
+    content/      Astro content collections
+    context/      Site-owner identity and brand voice (agent use)
+    overrides/    Component overrides (named surfaces only)
+    pages-local/  Consumer-local pages (registry-backed, optional)
+    registry/     portfolio-engine.registry.json (optional)
+    pages/        Ordinary Astro file routes (optional)
 ```
 
 These directories are contract-stable. The build always reads `config/` and `content/`. Files under `src/overrides/` change the site **when** you wire them through `editorialTheme({ overrides })` (the integration resolves paths at config time and theme components load them at render time). `context/` is not read by the build—it is for AI-assisted workflows only.
+
+## Route ownership modes
+
+Portfolio Engine supports three route ownership modes:
+
+1. **Theme-injected routes** — `/`, `/work`, `/work/[slug]`, `/writing`,
+   `/writing/[slug]`, `/about`, `/contact`, `/resume`. You supply content;
+   the theme renders the page.
+
+2. **Consumer-local registry routes** — declare in
+   `src/registry/portfolio-engine.registry.json`; page files live under
+   `src/pages-local/`. Useful for replacing a theme page while keeping the
+   theme shell (Layout, Nav, styles). Disable the corresponding theme route
+   first so there is no collision.
+
+3. **Ordinary Astro file routes** — page files under `src/pages/`. Astro
+   owns these via file-based routing. Useful for fully custom pages that
+   don't need to replace a theme route (e.g. `src/pages/resume.astro`).
+   The engine does not inject these — Astro discovers them automatically.
+   The engine cannot verify nav items pointing at ordinary Astro routes;
+   it will warn but not fail unless `diagnostics.strictNavRoutes: true`.
+
+After every build, `.portfolio-engine/manifest.json` lists all active routes
+with their `routeOrigin` (`theme`, `consumer-local`, or `consumer-pages`) and
+the relative `entrypoint` path, so you can immediately see which file owns
+each URL.
 
 For **`theme.json`** (colors, typography, tokens) and how they map to CSS variables, see **[`design-tokens-and-theme.md`](design-tokens-and-theme.md)**.
 

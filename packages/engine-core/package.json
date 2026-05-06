@@ -7,6 +7,9 @@
     "dist"
   ],
   "types": "./dist/index.d.ts",
+  "bin": {
+    "portfolio-engine": "./dist/doctor.js"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -14,6 +17,9 @@
     },
     "./client": {
       "types": "./dist/client.d.ts"
+    },
+    "./doctor": {
+      "import": "./dist/doctor.js"
     }
   },
   "scripts": {
