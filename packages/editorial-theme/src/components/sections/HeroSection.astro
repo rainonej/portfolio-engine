@@ -103,9 +103,11 @@ if (isDev && effectiveCtas.length > 3) {
             {buttonCtas.map((cta, index) => {
               const tier = cta.variant ?? (index === 0 ? 'primary' : 'secondary');
               const isPrimary = tier === 'primary';
+              const isBookingLink = Boolean(bookingUrl && cta.href === bookingUrl);
               return (
                 <a
                   href={cta.href}
+                  id={isBookingLink ? 'hero-booking-calendly' : undefined}
                   class={
                     isPrimary
                       ? 'rounded-full bg-[var(--ink)] px-8 py-3.5 text-sm font-medium text-white transition-colors hover:bg-[var(--stone-soft)]'
@@ -117,6 +119,19 @@ if (isDev && effectiveCtas.length > 3) {
               );
             })}
           </div>
+          {bookingUrl && (
+            <script is:inline define:vars={{ calendlyUrl: bookingUrl }}>
+              document.getElementById('hero-booking-calendly')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                const w = window;
+                if (typeof w.Calendly !== 'undefined' && calendlyUrl) {
+                  w.Calendly.initPopupWidget({ url: calendlyUrl });
+                } else {
+                  w.location.href = calendlyUrl;
+                }
+              });
+            </script>
+          )}
           {linkCtas.length > 0 && (
             <div class="mt-4 flex flex-wrap gap-4">
               {linkCtas.map((cta) => (

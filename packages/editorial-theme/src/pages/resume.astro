@@ -8,8 +8,10 @@ import { loadProfilePerson, splitBioParagraphs } from '../lib/load-profile-perso
 const person = await loadProfilePerson();
 
 const cvEntry = await getEntry('profile', 'cv');
-if (!cvEntry) {
-  throw new Error('[editorial-theme] Missing content entry profile/cv');
+if (import.meta.env.DEV && !cvEntry) {
+  console.warn(
+    '[editorial-theme] Missing content entry profile/cv — résumé sections will be empty until you add it.',
+  );
 }
 
 type CvExperience = {
@@ -43,16 +45,38 @@ type CvProfileData = {
   awards?: CvAward[];
 };
 
-const cv = cvEntry.data as CvProfileData;
+const cv = (cvEntry?.data ?? {}) as CvProfileData;
 
-// For the resume summary, prefer longBio or summary over shortBio
+/** Prefer longBio paragraphs, then a single summary paragraph, then legacy bio split. */
 const summaryParagraphs: string[] =
   person.longBio && person.longBio.length > 0
     ? person.longBio
-    : splitBioParagraphs(person.bio);
+    : person.summary?.trim()
+      ? [person.summary.trim()]
+      : splitBioParagraphs(person.bio);
 
-const metaDescription =
-  person.summary ?? person.shortBio ?? (summaryParagraphs[0] ?? '');
+const metaDescriptionRaw =
+  person.summary?.trim() ||
+  person.shortBio?.trim() ||
+  summaryParagraphs[0]?.trim() ||
+  '';
+const metaDescription = metaDescriptionRaw ? metaDescriptionRaw : undefined;
+
+function formatExperienceDateRange(role: CvExperience): string | null {
+  const startRaw = role.startYear;
+  const endRaw = role.endYear;
+  const hasStart = startRaw !== undefined && startRaw !== null && String(startRaw).trim() !== '';
+  const hasEnd = endRaw !== undefined && endRaw !== null && String(endRaw).trim() !== '';
+  const start = hasStart ? String(startRaw) : '';
+  if (role.current) {
+    return start ? `${start} – Present` : 'Present';
+  }
+  const end = hasEnd ? String(endRaw) : '';
+  if (start && end) return `${start} – ${end}`;
+  if (start) return start;
+  if (end) return end;
+  return null;
+}
 ---
 
 <Layout title={`Résumé — ${person.name}`} description={metaDescription}>
@@ -98,6 +122,18 @@ const metaDescription =
       )}
     </div>
 
+    {
+      !cvEntry && (
+        <div class="mb-16 rounded-xl border border-[var(--warm-line)] bg-[var(--paper-light)] px-6 py-5 text-sm leading-relaxed text-[var(--stone-soft)]">
+          <p class="font-medium text-[var(--ink)]">Résumé details not configured</p>
+          <p class="mt-2">
+            Add a <code class="rounded bg-[var(--paper)] px-1.5 py-0.5 text-[var(--ink)]">profile/cv</code>{' '}
+            content entry to show experience, education, and awards.
+          </p>
+        </div>
+      )
+    }
+
     <!-- Credentials / Core Competencies -->
     {
       person.credentials && person.credentials.length > 0 && (
@@ -120,16 +156,15 @@ const metaDescription =
         <div class="mb-16 border-t border-stone-100 pt-10">
           <h2 class="mb-8 font-serif text-2xl font-bold">Experience</h2>
           <div class="space-y-10">
-            {cv.experience.map((role: CvExperience) => (
+            {cv.experience.map((role: CvExperience) => {
+              const dateRange = formatExperienceDateRange(role);
+              return (
               <div>
                 <div class="mb-2 flex flex-wrap items-baseline justify-between gap-2">
                   <h3 class="font-serif text-xl font-bold">{role.title}</h3>
-                  <span class="text-sm text-stone-400">
-                    {role.startYear}
-                    {role.endYear || role.current
-                      ? ` – ${role.current ? 'Present' : role.endYear}`
-                      : ''}
-                  </span>
+                  {dateRange && (
+                    <span class="text-sm text-stone-400">{dateRange}</span>
+                  )}
                 </div>
                 <p class="mb-3 font-medium text-amber-800">
                   {role.organization}
@@ -148,7 +183,8 @@ const metaDescription =
                   </ul>
                 )}
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )
