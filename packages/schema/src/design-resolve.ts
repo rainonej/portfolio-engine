@@ -1,4 +1,5 @@
 import type { ThemeConfig } from './theme-config.js';
+import { resolveFontFamily, resolveFontFallback } from './theme-config.js';
 
 export interface ResolvedCssVariable {
   value: string;
@@ -165,19 +166,37 @@ export function resolveTypographyVariables(theme: ThemeConfig | undefined): Map<
     return out;
   }
 
-  const rawHeading = typo.fonts?.heading ?? typo.fontFamily;
-  const serifStack = rawHeading
-    ? `${sanitizeCssValue(rawHeading)}, ui-serif, Georgia, serif`
+  // Resolve heading font — supports both legacy string and new structured FontEntry.
+  const headingEntry = typo.fonts?.heading ?? typo.fontFamily;
+  const rawHeadingFamily =
+    typeof headingEntry === 'object' ? resolveFontFamily(headingEntry) : headingEntry;
+  const headingFallback =
+    typeof headingEntry === 'object'
+      ? (resolveFontFallback(headingEntry) ?? 'ui-serif, Georgia, serif')
+      : 'ui-serif, Georgia, serif';
+
+  const serifStack = rawHeadingFamily
+    ? `${sanitizeCssValue(rawHeadingFamily)}, ${headingFallback}`
     : FONT_SERIF_DEFAULT;
-  const sansStack = typo.fonts?.body
-    ? `${sanitizeCssValue(typo.fonts.body)}, ui-sans-serif, system-ui, sans-serif`
+
+  // Resolve body font
+  const bodyEntry = typo.fonts?.body;
+  const rawBodyFamily =
+    typeof bodyEntry === 'object' ? resolveFontFamily(bodyEntry) : bodyEntry;
+  const bodyFallback =
+    typeof bodyEntry === 'object'
+      ? (resolveFontFallback(bodyEntry) ?? 'ui-sans-serif, system-ui, sans-serif')
+      : 'ui-sans-serif, system-ui, sans-serif';
+
+  const sansStack = rawBodyFamily
+    ? `${sanitizeCssValue(rawBodyFamily)}, ${bodyFallback}`
     : FONT_SANS_DEFAULT;
 
   out.set(
     '--font-serif-stack',
     resolvedEntry(
       serifStack,
-      rawHeading
+      rawHeadingFamily
         ? typo.fonts?.heading
           ? 'theme.typography.fonts.heading'
           : 'theme.typography.fontFamily'
@@ -187,17 +206,26 @@ export function resolveTypographyVariables(theme: ThemeConfig | undefined): Map<
   out.set(
     '--font-sans-stack',
     resolvedEntry(
-      typo.fonts?.body ? sansStack : FONT_SANS_DEFAULT,
-      typo.fonts?.body ? 'theme.typography.fonts.body' : 'default',
+      rawBodyFamily ? sansStack : FONT_SANS_DEFAULT,
+      rawBodyFamily ? 'theme.typography.fonts.body' : 'default',
     ),
   );
 
-  const monoStack = typo.fonts?.mono
-    ? `${sanitizeCssValue(typo.fonts.mono)}, ui-monospace, monospace`
+  // Resolve mono font
+  const monoEntry = typo.fonts?.mono;
+  const rawMonoFamily =
+    typeof monoEntry === 'object' ? resolveFontFamily(monoEntry) : monoEntry;
+  const monoFallback =
+    typeof monoEntry === 'object'
+      ? (resolveFontFallback(monoEntry) ?? 'ui-monospace, monospace')
+      : 'ui-monospace, monospace';
+
+  const monoStack = rawMonoFamily
+    ? `${sanitizeCssValue(rawMonoFamily)}, ${monoFallback}`
     : FONT_MONO_DEFAULT;
   out.set(
     '--font-mono-stack',
-    resolvedEntry(monoStack, typo.fonts?.mono ? 'theme.typography.fonts.mono' : 'default'),
+    resolvedEntry(monoStack, rawMonoFamily ? 'theme.typography.fonts.mono' : 'default'),
   );
 
   const presetMap =

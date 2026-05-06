@@ -1,4 +1,5 @@
 import type { ThemeConfig } from '@portfolio-engine/schema';
+import { resolveFontFamily } from '@portfolio-engine/schema';
 
 const GENERIC_FAMILIES = new Set([
   'serif',
@@ -31,9 +32,12 @@ function firstFontFamily(stack: string | undefined | null): string | null {
  */
 export function editorialGoogleFontsStylesheetHref(theme?: ThemeConfig): string {
   const typo = theme?.typography;
-  const serifName = firstFontFamily(typo?.fonts?.heading ?? typo?.fontFamily) ?? 'Cormorant Garamond';
-  const sansName = firstFontFamily(typo?.fonts?.body) ?? 'Inter';
-  const monoName = firstFontFamily(typo?.fonts?.mono);
+  // Support both legacy string values and new structured FontEntry objects
+  const serifName =
+    firstFontFamily(resolveFontFamily(typo?.fonts?.heading) ?? typo?.fontFamily) ??
+    'Cormorant Garamond';
+  const sansName = firstFontFamily(resolveFontFamily(typo?.fonts?.body)) ?? 'Inter';
+  const monoName = firstFontFamily(resolveFontFamily(typo?.fonts?.mono));
 
   /** Prefer heading stack first so duplicate font names keep display-oriented axis specs. */
   const slots: { name: string; spec: string }[] = [

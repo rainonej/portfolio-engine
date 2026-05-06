@@ -75,8 +75,12 @@ export const NavigationConfigSchema = z.object({
 export {
   ThemeConfigSchema,
   SemanticColorsSchema,
+  FontEntrySchema,
+  resolveFontFamily,
+  resolveFontFallback,
   type ThemeConfig,
   type SemanticColors,
+  type FontEntry,
 } from './theme-config.js';
 
 export const FeaturesConfigSchema = z.object({
