@@ -5,7 +5,7 @@ import SectionIntro from '../components/SectionIntro.astro';
 import ImageOrFallback from '../components/ImageOrFallback.astro';
 import { getEntry } from 'astro:content';
 import { getBase, resolveAssetUrl } from '../lib/utils';
-import { loadProfilePerson, splitBioParagraphs } from '../lib/load-profile-person';
+import { loadProfilePerson, resolveLongBioParagraphs } from '../lib/load-profile-person';
 
 const base = getBase();
 const person = await loadProfilePerson();
@@ -39,9 +39,9 @@ type CvProfileData = {
 
 const cv = (cvEntry?.data ?? {}) as CvProfileData;
 
-// Resolve bio paragraphs — prefer longBio array, fall back to splitting legacy bio string.
+// Resolve bio paragraphs — use longBio content when present.
 const bioParagraphs: string[] =
-  person.longBio && person.longBio.length > 0 ? person.longBio : splitBioParagraphs(person.bio);
+  resolveLongBioParagraphs(person);
 
 const metaDescriptionRaw =
   person.shortBio?.trim() ||

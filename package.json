@@ -9,10 +9,11 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --check \"**/*.{md,json,yml,yaml,mjs}\" --ignore-path .prettierignore",
     "format:write": "prettier --write \"**/*.{md,json,yml,yaml,mjs}\" --ignore-path .prettierignore",
-    "build:audit-report-shells": "node portfolio_engine_v3_audit_pack/write-report-shells.mjs",
     "check": "pnpm --filter \"./packages/*\" run build && pnpm -r run check",
     "smoke:packed": "node scripts/smoke-packed-consumer.mjs",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "typecheck": "pnpm -r run check",
+    "test": "pnpm -r --if-present run test"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
