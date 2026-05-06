@@ -1,7 +1,9 @@
 import type { AstroIntegration } from 'astro';
+import { existsSync, readFileSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { resolve, relative, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import type { EngineConfig } from './config-loader.js';
 import { loadConfig } from './config-loader.js';
 import { discoverRoutes, resolveThemePagesDir } from './route-discovery.js';
@@ -26,6 +28,14 @@ import {
   loadConsumerRegistryFromDisk,
 } from './consumer-local-routes.js';
 
+export interface DiagnosticsOptions {
+  /**
+   * When true, nav items that cannot be matched to an active route cause a build error.
+   * Default: false (warnings only).
+   */
+  strictNavRoutes?: boolean;
+}
+
 export interface EngineIntegrationOptions extends EngineConfig {
   /** Remap or disable individual routes before injection. */
   routes?: RouteOverrides;
@@ -43,6 +53,57 @@ export interface EngineIntegrationOptions extends EngineConfig {
   consumerRegistryPath?: string;
   /** Relative directory for registry-backed Astro pages. Defaults to `src/pages-local`. */
   consumerPagesLocalDir?: string;
+  /** Diagnostic and validation options. */
+  diagnostics?: DiagnosticsOptions;
+}
+
+/** Read a package.json version from a directory, returning 'unknown' on any failure. */
+function tryReadVersion(pkgDir: string): string {
+  const pkgPath = resolve(pkgDir, 'package.json');
+  if (!existsSync(pkgPath)) return 'unknown';
+  try {
+    const pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as { version?: string };
+    return pkg.version ?? 'unknown';
+  } catch {
+    return 'unknown';
+  }
+}
+
+// engine-core's own package root: src/ (or dist/) → one level up
+const _engineCoreDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const ENGINE_CORE_VERSION = tryReadVersion(_engineCoreDir);
+
+/**
+ * Resolve nav warnings: returns a list of human-readable warning strings for
+ * nav items whose hrefs don't match any active injected route.
+ * External URLs and hash-only links are skipped.
+ */
+/** Strip trailing slash, fragment, and query string from an internal href for route comparison. */
+function normalizeNavHref(href: string): string {
+  // Remove fragment and query string, then strip trailing slash (but keep root "/")
+  const clean = href.split('#')[0].split('?')[0];
+  return clean.length > 1 ? clean.replace(/\/$/, '') : clean;
+}
+
+function buildNavWarnings(
+  navItems: { label: string; href: string; visible?: boolean }[],
+  activeResolvedPaths: Set<string>,
+): string[] {
+  const warnings: string[] = [];
+  for (const item of navItems) {
+    if (item.visible === false) continue;
+    const href = item.href;
+    if (!href || href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) continue;
+    if (href.startsWith('#')) continue;
+    if (!activeResolvedPaths.has(normalizeNavHref(href))) {
+      warnings.push(
+        `Nav item "${item.label}" → "${href}" does not match any active injected route. ` +
+          `Check: (1) route is not disabled in astro.config.mjs, (2) a consumer-local registry entry exists for this pattern, ` +
+          `or (3) the href matches an ordinary Astro src/pages route (not verified by the engine).`,
+      );
+    }
+  }
+  return warnings;
 }
 
 export function createEngineIntegration(options: EngineIntegrationOptions): AstroIntegration {
@@ -53,7 +114,7 @@ export function createEngineIntegration(options: EngineIntegrationOptions): Astr
   return {
     name: '@portfolio-engine/engine-core',
     hooks: {
-      'astro:config:setup': async ({ config, command, injectRoute, updateConfig }) => {
+      'astro:config:setup': async ({ config, command, injectRoute, updateConfig, logger }) => {
         const rootDir = fileURLToPath(config.root);
         cachedRootDir = rootDir;
         const registries = options.registries ?? { routes: [], overrideSurfaces: [] };
@@ -75,7 +136,7 @@ export function createEngineIntegration(options: EngineIntegrationOptions): Astr
         const discovered = discoverRoutes(pagesDir, registries.routes);
 
         // 3. Apply route remaps / disables from downstream config
-        const { routes: activeRoutes } = applyRouteOverrides(discovered, options.routes ?? {});
+        const { routes: activeRoutes, disabled, remapped } = applyRouteOverrides(discovered, options.routes ?? {});
 
         const registryRelative =
           options.consumerRegistryPath ?? CONSUMER_REGISTRY_DEFAULT_RELATIVE_PATH;
@@ -92,9 +153,6 @@ export function createEngineIntegration(options: EngineIntegrationOptions): Astr
         const injectedRoutes = [...activeRoutes, ...localRoutes];
 
         // 4. Inject each active route into the consumer's Astro config.
-        // Use routeRecord.resolved (the post-remap injected path) rather than
-        // route.pattern (canonical name), so remapped routes are injected at
-        // their new URL.
         for (const route of injectedRoutes) {
           injectRoute({ pattern: route.routeRecord.resolved, entrypoint: route.entrypoint });
         }
@@ -102,33 +160,67 @@ export function createEngineIntegration(options: EngineIntegrationOptions): Astr
         // 5. Resolve component and style overrides
         const overrides = resolveOverrides(options.overrides ?? {}, rootDir, registries.overrideSurfaces);
 
-        // Build manifest route entries from the active (post-remap) route set.
-        // Start from routeRecord (which already has all required fields), then
-        // layer in any optional metadata (agentGuidance, adminDescription) from
-        // the canonical registry entry if it exists.
+        // Build manifest route entries: include explicit routeOrigin and entrypoint for every route.
         const registryMap = new Map(registries.routes.map((r) => [r.pattern, r]));
         const consumerLocalEntrypoints = new Set(localRoutes.map((lr) => lr.entrypoint));
         const manifestRoutes: ManifestRouteEntry[] = injectedRoutes.map((r) => {
           const registryEntry = registryMap.get(r.routeRecord.pattern);
-          const entry: ManifestRouteEntry = { ...r.routeRecord };
+          const isConsumerLocal = consumerLocalEntrypoints.has(r.entrypoint);
+          const entry: ManifestRouteEntry = {
+            ...r.routeRecord,
+            routeOrigin: isConsumerLocal ? 'consumer-local' : 'theme',
+            entrypoint: relative(rootDir, r.entrypoint).replace(/\\/g, '/'),
+          };
           if (registryEntry?.agentGuidance !== undefined) entry.agentGuidance = registryEntry.agentGuidance;
           if (registryEntry?.adminDescription !== undefined) entry.adminDescription = registryEntry.adminDescription;
-          if (consumerLocalEntrypoints.has(r.entrypoint)) entry.routeOrigin = 'consumer-local';
           return entry;
         });
-        writeManifest(rootDir, manifestRoutes, registries.overrideSurfaces);
 
-        // 6. Build context for virtual modules
+        // 6. Nav validation — warn (or fail) for nav items that point at unknown routes.
+        const activeResolvedPaths = new Set(injectedRoutes.map((r) => r.routeRecord.resolved));
+        const navWarnings = buildNavWarnings(resolvedConfig.navigation.items, activeResolvedPaths);
+        if (navWarnings.length > 0) {
+          for (const warning of navWarnings) {
+            logger.warn(`[portfolio-engine] ${warning}`);
+          }
+          if (options.diagnostics?.strictNavRoutes) {
+            throw new Error(
+              `[portfolio-engine] strictNavRoutes: ${navWarnings.length} nav item(s) could not be matched to an active route. See warnings above.`,
+            );
+          }
+        }
+
+        // 7. Resolve editorial-theme version from consumer context
+        let editorialThemeVersion = 'unknown';
+        try {
+          const req = createRequire(resolve(rootDir, 'package.json'));
+          const themeEntry = req.resolve('@portfolio-engine/editorial-theme');
+          const themePkgDir = resolve(themeEntry, '..', '..');
+          editorialThemeVersion = tryReadVersion(themePkgDir);
+        } catch {
+          // Version resolution is best-effort
+        }
+
+        writeManifest(rootDir, manifestRoutes, registries.overrideSurfaces, {
+          engineCoreVersion: ENGINE_CORE_VERSION,
+          editorialThemeVersion,
+          consumerRegistry: {
+            path: registryRelative,
+            loaded: consumerRegistry !== null,
+            routeCount: consumerRegistry?.localRoutes.length ?? 0,
+          },
+          routeOverrides: { disabled, remapped },
+          navWarnings: navWarnings.length > 0 ? navWarnings : undefined,
+        });
+
+        // 8. Build context for virtual modules
         const context: BuildContext = {
           env: command === 'build' ? 'production' : 'development',
           mode: command === 'build' ? 'production' : 'development',
           base: config.base,
         };
 
-        // 7. Register virtual modules plugin
-        // Cast needed: our local VitePlugin is a structural subset of Vite's Plugin
-        // type; the shapes are compatible at runtime but TypeScript can't verify
-        // this across the astro/vite type boundary without adding vite as a dep.
+        // 9. Register virtual modules plugin
         updateConfig({
           vite: {
             plugins: [
@@ -159,8 +251,6 @@ export function createEngineIntegration(options: EngineIntegrationOptions): Astr
       },
 
       'astro:config:done': ({ injectTypes }) => {
-        // Inject the virtual module type declarations into the consumer's TS
-        // environment automatically — no manual reference directive needed.
         injectTypes({
           filename: 'types/portfolio-engine.d.ts',
           content: '/// <reference types="@portfolio-engine/engine-core/client" />\n',
