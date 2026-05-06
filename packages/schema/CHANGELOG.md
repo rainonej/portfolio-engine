@@ -1,5 +1,11 @@
 # @portfolio-engine/schema
 
+## 0.3.1
+
+### Patch Changes
+
+- 51ed888: Structured profile and typography (font entry schema), resume page, hero CTA improvements, Google Fonts `provider` handling, sanitized font fallback stacks in CSS variables, and review follow-ups.
+
 ## 0.3.0
 
 ### Minor Changes

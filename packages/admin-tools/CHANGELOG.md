@@ -1,5 +1,15 @@
 # @portfolio-engine/admin-tools
 
+## 0.0.15
+
+### Patch Changes
+
+- 51c8a0c: Improve admin route ergonomics for consumers: extensionless client script import, `@ts-nocheck` on the published route, and README guidance for tsconfig `exclude` and tarball patching workflows.
+- Updated dependencies [51ed888]
+  - @portfolio-engine/schema@0.3.1
+  - @portfolio-engine/editorial-theme@0.3.1
+  - @portfolio-engine/engine-core@0.2.2
+
 ## 0.0.13
 
 ### Patch Changes
