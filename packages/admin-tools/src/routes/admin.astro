@@ -560,7 +560,8 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
 
     <div id="adm-toast" class="adm-toast" role="status" aria-live="polite"></div>
 
-    <style>
+    <!-- Client JS (token swatches, drawer fields, etc.) injects nodes without Astro's scoped data attributes; default scoped CSS would not match. -->
+    <style is:global>
       .adm-wrap {
         max-width: 52rem;
         margin: 0 auto;
