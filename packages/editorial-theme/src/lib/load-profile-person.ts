@@ -1,14 +1,8 @@
 import { getEntry } from 'astro:content';
+import type { ProfilePerson } from './profile-person.js';
 
-/** Mirrors `profile/person` in the consumer content schema (union collection narrows poorly in types). */
-export type ProfilePerson = {
-  name: string;
-  bio: string;
-  photo?: string;
-  email?: string;
-  linkedin?: string;
-  instagram?: string;
-};
+export type { ProfilePerson } from './profile-person.js';
+export { splitBioParagraphs, resolveHeroBio } from './profile-person.js';
 
 export async function loadProfilePerson(): Promise<ProfilePerson> {
   const personEntry = await getEntry('profile', 'person');

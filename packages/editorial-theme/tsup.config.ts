@@ -17,5 +17,7 @@ export default defineConfig({
   dts: true,
   clean: true,
   outDir: 'dist',
+  /** Virtual Astro modules — only resolved at consumer build time. */
+  external: ['astro:content'],
   onSuccess: copyAssets,
 });

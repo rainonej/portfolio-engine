@@ -6,6 +6,11 @@ export {
   editorialGoogleFontsStylesheetHref,
   EDITORIAL_GOOGLE_FONTS_STYLESHEET_HREF,
 } from './lib/google-fonts.js';
+export {
+  splitBioParagraphs,
+  resolveHeroBio,
+  type ProfilePerson,
+} from './lib/profile-person.js';
 
 export { editorialTheme } from './integration.js';
 export type { EditorialThemeOptions } from './integration.js';

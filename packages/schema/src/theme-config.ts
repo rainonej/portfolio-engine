@@ -33,6 +33,47 @@ export const SemanticColorsSchema = z
   })
   .optional();
 
+/**
+ * Structured font definition that includes an explicit fallback stack and provider hint.
+ * Accepts either a plain family-name string (legacy) or a structured object.
+ *
+ * @example
+ * // Legacy string (still supported)
+ * { "heading": "Newsreader" }
+ *
+ * // Structured object (preferred)
+ * { "heading": { "family": "Newsreader", "fallback": "Georgia, serif", "provider": "google" } }
+ */
+export const FontEntrySchema = z.union([
+  z.string(),
+  z.object({
+    /** Primary font family name (e.g. "Newsreader"). */
+    family: z.string(),
+    /** Explicit fallback stack appended after the primary family (e.g. "Georgia, serif"). */
+    fallback: z.string().optional(),
+    /**
+     * Controls inclusion in the theme's automatic Google Fonts stylesheet (`editorialGoogleFontsStylesheetHref`).
+     * `google` or omitted: eligible; `system` and `custom`: excluded from that URL (host loads fonts separately).
+     */
+    provider: z.enum(['google', 'system', 'custom']).optional(),
+  }),
+]);
+
+export type FontEntry = z.infer<typeof FontEntrySchema>;
+
+/** Extract the family name string from a FontEntry (string or object). */
+export function resolveFontFamily(entry: FontEntry | undefined): string | undefined {
+  if (!entry) return undefined;
+  if (typeof entry === 'string') return entry || undefined;
+  return entry.family || undefined;
+}
+
+/** Extract the explicit fallback stack from a FontEntry, or undefined if none. */
+export function resolveFontFallback(entry: FontEntry | undefined): string | undefined {
+  if (!entry || typeof entry === 'string') return undefined;
+  return entry.fallback || undefined;
+}
+
 export const ThemeConfigSchema = z.object({
   typography: z
     .object({
@@ -42,9 +83,9 @@ export const ThemeConfigSchema = z.object({
       fontSize: z.string().optional(),
       fonts: z
         .object({
-          heading: z.string().optional(),
-          body: z.string().optional(),
-          mono: z.string().optional(),
+          heading: FontEntrySchema.optional(),
+          body: FontEntrySchema.optional(),
+          mono: FontEntrySchema.optional(),
         })
         .optional(),
       /** Named sizes (CSS lengths). Omit keys to use preset defaults. */

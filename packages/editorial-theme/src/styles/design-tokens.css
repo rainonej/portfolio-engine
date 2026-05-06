@@ -36,6 +36,19 @@
   --text-small: 0.875rem;
   --text-label: 0.6875rem;
 
+  /**
+   * Spacing rhythm — governs page margins, section vertical cadence, and card gaps.
+   * Components reference these tokens so dense pages (resume) and generous pages
+   * (hero/landing) can differ without ad-hoc overrides.
+   */
+  --space-page-x: clamp(1.25rem, 3vw, 2rem);
+  --space-hero-y: clamp(4.5rem, 8vw, 7rem);
+  --space-section-y: clamp(3.5rem, 7vw, 6rem);
+  --space-section-compact-y: clamp(2.5rem, 5vw, 4rem);
+  --space-card-gap: clamp(1rem, 2vw, 1.5rem);
+  --measure-readable: 68ch;
+  --measure-hero: 58ch;
+
   /* Site map / admin chrome aliases (consumers use var(--adm-*) with fallbacks) */
   --adm-ink: var(--ink);
   --adm-muted: var(--stone-soft);

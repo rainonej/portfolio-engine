@@ -4,6 +4,7 @@ import Reveal from '../Reveal.astro';
 import SectionIntro from '../SectionIntro.astro';
 import FeaturePillars from '../FeaturePillars.astro';
 import { resolveAssetUrl } from '../../lib/utils';
+import { resolveHeroBio } from '../../lib/load-profile-person';
 
 interface Pillar {
   heading: string;
@@ -13,8 +14,20 @@ interface Pillar {
 
 interface Person {
   name: string;
-  bio: string;
+  bio?: string;
+  shortBio?: string;
+  summary?: string;
+  longBio?: string[];
   photo?: string;
+}
+
+/** Structured CTA entry for the hero. */
+interface HeroCta {
+  label: string;
+  href: string;
+  /** Rendering tier: 'primary' = solid button, 'secondary' = outline button, 'link' = plain text link. */
+  variant?: 'primary' | 'secondary' | 'link';
+  priority?: number;
 }
 
 interface Props {
@@ -23,13 +36,54 @@ interface Props {
   pillars: Pillar[];
   base: string;
   tagline?: string;
+  /** Structured CTA list. When provided, renders up to 2 button-style CTAs and the rest as links. */
+  ctas?: HeroCta[];
 }
 
-const { person, bookingUrl, pillars, base, tagline } = Astro.props;
+const { person, bookingUrl, pillars, base, tagline, ctas } = Astro.props;
+
+const heroBio = resolveHeroBio(person);
+
+/**
+ * Build the effective CTA list from either the structured `ctas` prop or the legacy
+ * `bookingUrl` + hard-coded "Explore my work" approach. At most 2 button-style CTAs
+ * are rendered; additional items become plain text links.
+ */
+const effectiveCtas: HeroCta[] = (() => {
+  if (ctas && ctas.length > 0) {
+    return [...ctas].sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0));
+  }
+  const defaultCtas: HeroCta[] = [
+    { label: 'Explore my work', href: `${base}/work`, variant: 'primary', priority: 1 },
+  ];
+  if (bookingUrl) {
+    defaultCtas.push({ label: 'Book a conversation', href: bookingUrl, variant: 'secondary', priority: 2 });
+  }
+  return defaultCtas;
+})();
+
+// Separate button-style CTAs (primary/secondary) from link-style ones
+const buttonCtas = effectiveCtas.filter((c) => c.variant !== 'link').slice(0, 2);
+const linkCtas = [
+  ...effectiveCtas.filter((c) => c.variant !== 'link').slice(2),
+  ...effectiveCtas.filter((c) => c.variant === 'link'),
+];
+
+const isDev = import.meta.env.DEV;
+/**
+ * The CTA count warning fires during server-side rendering / build time (Astro component
+ * frontmatter runs on the server). It will not fire in a browser console because the
+ * HeroSection produces static markup. Check your build/dev-server output for this warning.
+ */
+if (isDev && effectiveCtas.length > 3) {
+  console.warn(
+    `[editorial-theme] HeroSection has ${effectiveCtas.length} CTAs. Recommend no more than 3 to avoid decision overload.`,
+  );
+}
 ---
 
 {Override ? (
-  <Override person={person} bookingUrl={bookingUrl} pillars={pillars} base={base} tagline={tagline} />
+  <Override person={person} bookingUrl={bookingUrl} pillars={pillars} base={base} tagline={tagline} ctas={effectiveCtas} />
 ) : (
   <>
     <!-- Hero -->
@@ -40,39 +94,53 @@ const { person, bookingUrl, pillars, base, tagline } = Astro.props;
             <span class="text-[var(--copper)]">{person.name}</span>
             {tagline && <>{' '}{tagline}</>}
           </h1>
-          <p class="mb-10 max-w-2xl text-lg leading-relaxed text-[var(--stone-soft)] md:text-xl">
-            {person.bio}
-          </p>
-          <div class="flex flex-wrap gap-4">
-            <a
-              href={`${base}/work`}
-              class="rounded-full bg-[var(--ink)] px-8 py-3.5 text-sm font-medium text-white transition-colors hover:bg-[var(--stone-soft)]"
-            >
-              Explore my work
-            </a>
-            {bookingUrl && (
-              <>
+          {heroBio && (
+            <p class="mb-10 max-w-2xl text-lg leading-relaxed text-[var(--stone-soft)] md:text-xl">
+              {heroBio}
+            </p>
+          )}
+          <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+            {buttonCtas.map((cta, index) => {
+              const tier = cta.variant ?? (index === 0 ? 'primary' : 'secondary');
+              const isPrimary = tier === 'primary';
+              const isBookingLink = Boolean(bookingUrl && cta.href === bookingUrl);
+              return (
                 <a
-                  href={bookingUrl}
-                  id="hero-booking-calendly"
-                  class="rounded-full border border-[var(--warm-line)] px-8 py-3.5 text-sm font-medium text-[var(--ink)] transition-colors hover:border-[var(--stone-soft)]"
+                  href={cta.href}
+                  id={isBookingLink ? 'hero-booking-calendly' : undefined}
+                  class={
+                    isPrimary
+                      ? 'rounded-full bg-[var(--ink)] px-8 py-3.5 text-sm font-medium text-white transition-colors hover:bg-[var(--stone-soft)]'
+                      : 'rounded-full border border-[var(--warm-line)] px-8 py-3.5 text-sm font-medium text-[var(--ink)] transition-colors hover:border-[var(--stone-soft)]'
+                  }
                 >
-                  Book a conversation
+                  {cta.label}
                 </a>
-                <script is:inline define:vars={{ calendlyUrl: bookingUrl }}>
-                  document.getElementById('hero-booking-calendly')?.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const w = window;
-                    if (typeof w.Calendly !== 'undefined' && calendlyUrl) {
-                      w.Calendly.initPopupWidget({ url: calendlyUrl });
-                    } else {
-                      w.location.href = calendlyUrl;
-                    }
-                  });
-                </script>
-              </>
-            )}
+              );
+            })}
           </div>
+          {bookingUrl && (
+            <script is:inline define:vars={{ calendlyUrl: bookingUrl }}>
+              document.getElementById('hero-booking-calendly')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                const w = window;
+                if (typeof w.Calendly !== 'undefined' && calendlyUrl) {
+                  w.Calendly.initPopupWidget({ url: calendlyUrl });
+                } else {
+                  w.location.href = calendlyUrl;
+                }
+              });
+            </script>
+          )}
+          {linkCtas.length > 0 && (
+            <div class="mt-4 flex flex-wrap gap-4">
+              {linkCtas.map((cta) => (
+                <a href={cta.href} class="text-sm font-medium text-[var(--copper)] underline underline-offset-4 transition-colors hover:text-[var(--stone-soft)]">
+                  {cta.label}
+                </a>
+              ))}
+            </div>
+          )}
         </div>
         {person.photo && (
           <div class="hidden md:col-span-2 md:block">
