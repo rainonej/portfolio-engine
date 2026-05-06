@@ -6,7 +6,7 @@ This recipe matches the MVP in [Epic: consumer registry](https://github.com/rain
 
 ## Prerequisites
 
-- Astro site using `editorialTheme()` from `@portfolio-engine/editorial-theme` (same setup as [new-site-setup](./new-site-setup.md)).
+- Astro site using `editorialTheme()` from `@portfolio-engine/editorial-theme/integration` (same setup as [new-site-setup](./new-site-setup.md)).
 
 ## Registry format (Phase 7)
 

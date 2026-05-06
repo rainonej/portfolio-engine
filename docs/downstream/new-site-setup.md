@@ -98,7 +98,7 @@ pnpm add @portfolio-engine/editorial-theme @portfolio-engine/admin-tools @astroj
 // @ts-check
 import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
-import { editorialTheme } from '@portfolio-engine/editorial-theme';
+import { editorialTheme } from '@portfolio-engine/editorial-theme/integration';
 import { adminTools } from '@portfolio-engine/admin-tools';
 
 // Production sets SITE_URL in Vercel env vars. Previews fall back to VERCEL_URL.

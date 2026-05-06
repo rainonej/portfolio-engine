@@ -66,7 +66,7 @@ pnpm add @portfolio-engine/editorial-theme@latest
 
 ```js
 import { defineConfig } from 'astro/config';
-import { editorialTheme } from '@portfolio-engine/editorial-theme';
+import { editorialTheme } from '@portfolio-engine/editorial-theme/integration';
 
 export default defineConfig({
   integrations: [
@@ -259,7 +259,7 @@ You may also pass `styles` (array of CSS file paths) to append extra CSS after t
 
 ```js
 import { defineConfig } from 'astro/config';
-import { editorialTheme } from '@portfolio-engine/editorial-theme';
+import { editorialTheme } from '@portfolio-engine/editorial-theme/integration';
 
 export default defineConfig({
   integrations: [
