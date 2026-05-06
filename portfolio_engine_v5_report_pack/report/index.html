@@ -1,117 +1,94 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Portfolio Engine v5 Audit</title><link rel="stylesheet" href="assets/styles.css"></head><body><div class="app"><aside class="sidebar"><div class="brand">Portfolio Engine<br><span>v5 audit pack</span></div><nav><a href="#status">✅ Status</a><a href="#goals">Goals</a><a href="#packages">Packages</a><a href="#graph">Dependency graph</a><a href="#upstream">Upstream repo</a><a href="#consumer">Consumer repo</a><a href="#audit">Current vs target</a><a href="#roadmap">MVP roadmap</a><a href="#board">Board reconciliation</a><a href="#products">Product tracks</a><a href="#gap">Gap plan</a><a href="#epics">Epics &amp; tickets</a><a href="#sources">Source files</a></nav></aside><main><section class="hero"><div class="eyebrow">Source-driven architecture report</div><h1>Portfolio Engine Target Architecture Audit and Roadmap</h1><p></p><div class="hero-badges"><span>Required Astro/npm runtime</span><span>Optional Python/MCP workflow-kit</span><span>Optional admin UI</span><span>★ Backbone / Product MVP markers</span></div></section><section id="status" class="panel"><h1>Project Status Checklist</h1>
-<p>Last updated: 2026-05-03. Reflects actual repo state on <code>dev</code> branch. Items marked ✅ are verified in code; ⬜ are not yet started or incomplete.</p>
-
-<div class="milestone-banner"><span class="milestone-star">★</span><div><div class="milestone-title">Backbone MVP — REACHED <span class="milestone-after">Phase 3 complete</span></div><div class="milestone-summary">Runtime packages build and publish. Consumer layout contract proven on demo-site. Override bridge working. MVP docs complete.</div></div></div>
-
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Portfolio Engine v5 Audit</title><link rel="stylesheet" href="assets/styles.css"></head><body><div class="app"><aside class="sidebar"><div class="brand">Portfolio Engine<br><span>v5 audit pack</span></div><nav><a href="#status">Status</a><a href="#goals">Goals</a><a href="#packages">Packages</a><a href="#graph">Dependency graph</a><a href="#upstream">Upstream repo</a><a href="#consumer">Consumer repo</a><a href="#audit">Current vs target</a><a href="#roadmap">MVP roadmap</a><a href="#board">Board reconciliation</a><a href="#products">Product tracks</a><a href="#gap">Gap plan</a><a href="#epics">Epics & tickets</a><a href="#sources">Source files</a></nav></aside><main><section class="hero"><div class="eyebrow">Source-driven architecture report</div><h1>Portfolio Engine Target Architecture Audit and Roadmap</h1><p></p><div class="hero-badges"><span>Required Astro/npm runtime</span><span>Optional Python/MCP workflow-kit</span><span>Optional admin UI</span><span>★ Backbone / Product MVP markers</span></div></section><section id="status" class="panel"><h1>Project status checklist</h1>
+<p>Last updated: <strong>2026-05-05</strong>. Verified against the <code>portfolio-engine</code> repo on branch <strong><code>dev</code></strong> (sample commit <code>4485cf9</code>). <strong>✅</strong> means implemented or verified in this tree; <strong>⬜</strong> means not done, not merged here, or still open; <strong>🔄</strong> means partially delivered (see sub-bullets).</p>
+<h2>★ Backbone MVP — reached (Phases 1–3)</h2>
+<p>Runtime packages build and publish; consumer layout contract is demonstrated on <code>examples/demo-site</code>; override bridge works; MVP-level docs and CI are in place. Published line today: <code>@portfolio-engine/schema@0.3.0</code>, <code>engine-core@0.2.1</code>, <code>editorial-theme@0.3.0</code> (npm <code>latest</code> matches workspace versions).</p>
 <h2>Phase 0 — Planning, governance, and debt visibility</h2>
 <ul>
 <li>✅ Governance files: <code>GOVERNANCE.md</code>, <code>AI_USAGE.md</code>, <code>SECURITY.md</code>, <code>LICENSE</code> (Apache-2.0), <code>CITATION.cff</code>, <code>NOTICE</code>, <code>DCO.md</code>, <code>TRADEMARK.md</code></li>
 <li>✅ <code>CONTRIBUTING.md</code> and <code>docs/governance/</code> contributing guides</li>
-<li>✅ PR template (<code>.github/PULL_REQUEST_TEMPLATE.md</code>) and issue templates (bug, feature, decision, downstream feature request, temporary patch)</li>
-<li>✅ <code>copilot-instructions.md</code> in <code>.github/</code></li>
-<li>✅ <code>docs/issue-labels.md</code> and <code>docs/governance/recommended-labels.md</code> written</li>
-<li>✅ This v5 audit report generated and hosted</li>
-<li>⬜ GitHub label migration — <code>area:*</code> and <code>agent:*</code> labels need to be created in GitHub UI and open issues retagged (human task)</li>
+<li>✅ PR template (<code>.github/PULL_REQUEST_TEMPLATE.md</code>) and issue templates</li>
+<li>✅ <code>copilot-instructions.md</code> under <code>.github/</code></li>
+<li>✅ <code>docs/issue-labels.md</code> and <code>docs/governance/recommended-labels.md</code></li>
+<li>✅ This v5 report pack under <code>portfolio_engine_v5_report_pack/</code></li>
+<li>⬜ GitHub label migration — <code>area:*</code> and <code>agent:*</code> labels applied consistently on live issues (human / board hygiene)</li>
 </ul>
-
 <h2>Phase 1 — Runtime backbone buildability</h2>
 <ul>
-<li>✅ Real <code>tsup</code> build scripts in <code>schema</code>, <code>engine-core</code>, <code>editorial-theme</code> (no more no-op echo scripts)</li>
-<li>✅ CI pipeline: lint → check → build (<code>.github/workflows/ci.yml</code>, <code>release.yml</code>)</li>
-<li>✅ demo-site builds and deploys to Vercel</li>
-<li>✅ ESLint + Prettier configured with <code>public/</code> guard on packages</li>
-<li>✅ Changesets release workflow wired</li>
+<li>✅ <code>tsup</code> build scripts in <code>packages/schema</code>, <code>packages/engine-core</code>, <code>packages/editorial-theme</code></li>
+<li>✅ CI: lint → <code>pnpm check</code> → build (<code>.github/workflows/ci.yml</code>); packed smoke downstream of build</li>
+<li>✅ <code>examples/demo-site</code> is the primary static + Vercel teaching consumer</li>
+<li>✅ <code>examples/node-ssr-demo</code> — Astro <code>@astrojs/node</code> SSR fixture using workspace packages (including admin-tools) for server-output coverage</li>
+<li>✅ ESLint + Prettier; guard against <code>public/</code> inside <code>packages/</code></li>
+<li>✅ Changesets + <code>release.yml</code> for package releases</li>
 </ul>
-
 <h2>Phase 2 — Consumer layout contract, publish, demo migration</h2>
 <ul>
-<li>✅ Consumer layout contract: demo-site has <code>src/config/</code>, <code>src/content/</code>, <code>src/context/</code>, <code>src/overrides/</code>, <code>public/</code>, <code>.portfolio-engine/</code></li>
-<li>✅ Config migrated from top-level <code>config/</code> to <code>src/config/</code></li>
-<li>✅ Context layer placeholder files in demo-site: <code>site-owner.json</code>, <code>brand-voice.json</code>, <code>agent-rules.md</code></li>
-<li>✅ Packages published to npm: <code>schema@0.1.1</code>, <code>engine-core@0.1.2</code>, <code>editorial-theme@0.1.2</code></li>
-<li>✅ Downstream docs: <code>consumption.md</code>, <code>new-site-setup.md</code>, <code>setup-with-claude.md</code>, <code>upgrade-path.md</code></li>
-<li>⬜ Context Zod schemas not yet in <code>@portfolio-engine/schema</code> — <code>site-owner.json</code> and <code>brand-voice.json</code> exist in demo-site but are untyped (new gap)</li>
-<li>⬜ agreni-site semver wiring (Phase 4 target)</li>
+<li>✅ Target layout on demo-site: <code>src/config/</code>, <code>src/content/</code>, <code>src/context/</code>, <code>src/overrides/</code>, <code>src/registry/</code>, <code>public/</code>, <code>.portfolio-engine/</code></li>
+<li>✅ Config under <code>src/config/</code> (not top-level <code>config/</code>)</li>
+<li>✅ Context placeholders: <code>site-owner.json</code>, <code>brand-voice.json</code>, <code>agent-rules.md</code></li>
+<li>✅ Packages published to npm at current semver (see Backbone MVP banner)</li>
+<li>✅ Downstream docs: <code>consumption.md</code>, <code>new-site-setup.md</code>, <code>setup-with-claude.md</code>, <code>upgrade-path.md</code>, <code>docs/packages/*</code></li>
+<li>⬜ Typed <strong>context</strong> layer in <code>@portfolio-engine/schema</code> — no Zod schemas yet for <code>site-owner.json</code> / <code>brand-voice.json</code> (files exist; validation is still a gap)</li>
+<li>⬜ <strong>agreni-site</strong> / <strong>jordan-site</strong> as clean private repos on semver (Phase 4 / Product MVP)</li>
 </ul>
-
 <h2>Phase 3 — Override proof and MVP documentation</h2>
 <ul>
-<li>✅ Override bridge: working <code>Hero.astro</code> override in <code>examples/demo-site/src/overrides/</code></li>
-<li>✅ <code>override-resolution.ts</code> uses dynamic surface registry (not hardcoded <code>Set&lt;string&gt;</code>)</li>
-<li>✅ README clearly separates required vs optional packages</li>
-<li>✅ Per-package docs in <code>docs/packages/</code> for all five packages</li>
-<li>✅ Two-mode docs (workspace vs semver) in downstream consumption docs</li>
+<li>✅ Override bridge: e.g. <code>Hero.astro</code> under <code>examples/demo-site/src/overrides/</code></li>
+<li>✅ <code>override-resolution.ts</code> driven from registries (not a hardcoded surface set)</li>
+<li>✅ README separates required vs optional packages</li>
+<li>✅ Per-package docs under <code>docs/packages/</code></li>
+<li>✅ Two-mode docs (workspace vs published) in consumption guides</li>
 </ul>
-
-<div class="milestone-banner"><span class="milestone-star">★</span><div><div class="milestone-title">Backbone MVP — REACHED</div><div class="milestone-summary">All Phase 1–3 work complete as of v0.1.2 release (2026-03).</div></div></div>
-
 <h2>Phase 4 — First consumer products (★ Product MVP gate)</h2>
 <ul>
-<li>⬜ agreni-site: clean private repo on target layout consuming published packages</li>
-<li>⬜ jordan-site: scaffolded as clean private consumer repo</li>
+<li>⬜ <strong>agreni-site</strong> — private consumer on target layout, building on published packages (tracked outside this repo)</li>
+<li>⬜ <strong>jordan-site</strong> — same</li>
 </ul>
-<p><em>Product MVP is not yet reached. Both consumer repos must build and preview on published semver packages (or a documented exception must be filed).</em></p>
-
-<h2>Phase 5 — Registries and manifest ✅ COMPLETE (shipped ahead of schedule)</h2>
+<p>_Product MVP is <strong>not</strong> reached until both consumers are real, buildable sites on the contract (or a documented exception is filed)._</p>
+<h2>Phase 5 — Registries and manifest</h2>
 <ul>
-<li>✅ <code>schema</code>: <code>RouteRegistryEntry</code>, <code>OverrideSurfaceEntry</code>, <code>ManifestRouteEntry</code>, <code>EngineManifest</code> types in <code>src/registry.ts</code></li>
+<li>✅ Schema: <code>RouteRegistryEntry</code>, <code>OverrideSurfaceEntry</code>, manifest types in <code>packages/schema/src/registry.ts</code></li>
 <li>✅ <code>engine-core</code>: <code>manifest.ts</code> writes <code>.portfolio-engine/manifest.json</code> at integration build time</li>
-<li>✅ <code>engine-core</code>: <code>route-discovery.ts</code> replaced hardcoded <code>ROUTE_METADATA</code> with <code>RouteRegistryEntry</code>-typed registry</li>
-<li>✅ <code>engine-core</code>: <code>override-resolution.ts</code> replaced hardcoded <code>SUPPORTED_COMPONENT_SURFACES</code> with dynamic registry</li>
-<li>✅ demo-site: <code>.portfolio-engine/manifest.json</code> generated at build time</li>
+<li>✅ Route discovery and override surfaces sourced from typed registries (not ad-hoc lists)</li>
+<li>✅ demo-site generates manifest at build</li>
 </ul>
-
-<h2>Phase 6 — Admin-tools extraction ⬜ IN PROGRESS (extraction shipped; npm publish pending)</h2>
+<h2>Phase 6 — Admin-tools extraction</h2>
 <ul>
-<li>✅ <code>@portfolio-engine/admin-tools</code>: Astro integration (<code>integration.ts</code>)</li>
-<li>✅ Admin UI route (<code>src/routes/admin.astro</code>) with full content/config/registry view</li>
-<li>✅ <code>SiteMapTree</code> component renders live route map</li>
-<li>✅ <code>/api/content</code> endpoint for local and GitHub-backed content writes</li>
-<li>✅ GitHub OAuth flow: auth/callback, session management, logout</li>
-<li>✅ File audit UI</li>
-<li>⬜ Publish to npm as <code>@portfolio-engine/admin-tools</code> — package is still <code>private: true</code> at <code>0.0.5</code>; npm publish not yet done</li>
-<li>✅ <code>docs/packages/admin-tools.md</code> updated with integration and setup instructions</li>
+<li>✅ <code>@portfolio-engine/admin-tools</code> integration (<code>integration.ts</code>), admin route, sitemap, <code>/api/content</code>, GitHub OAuth, file audit UI</li>
+<li>✅ <strong>Published to npm</strong> — <code>@portfolio-engine/admin-tools@0.0.14</code> (<code>private</code> removed; <code>publishConfig.access: public</code>)</li>
+<li>✅ <code>docs/packages/admin-tools.md</code> updated</li>
 </ul>
-
 <h2>Phase 7 — Consumer extension registry</h2>
 <ul>
-<li>⬜ <code>src/registry/portfolio-engine.registry.ts</code> pattern for consumers (not yet defined)</li>
-<li>⬜ engine-core support for reading consumer registry declarations</li>
-<li>⬜ demo-site registry example</li>
+<li>🔄 <strong>Shipped for local routes:</strong> JSON registry + Zod (<code>packages/schema/src/consumer-registry.ts</code>), load + inject in <code>engine-core</code> (<code>consumer-local-routes.ts</code>, <code>integration.ts</code> options), demo <code>src/registry/portfolio-engine.registry.json</code> + <code>src/pages-local/how-i-think.astro</code></li>
+<li>⬜ Registry entries for <strong>local components/embeds</strong> (epic tickets still open)</li>
+<li>⬜ Framed YouTube / richer showcase (overlaps demo-site teaching goals)</li>
 </ul>
-
-<h2>Phase 8 — Python/MCP workflow-kit</h2>
+<h2>Phase 8 — Python / MCP workflow-kit</h2>
 <ul>
-<li>⬜ <code>workflow-kit</code> stub comment still uses old description ("GitHub workflow templates and engine-aware change classifier") — Mismatch 1 from audit is still open</li>
-<li>⬜ Python package (<code>pyproject.toml</code>, <code>mcp_server.py</code>)</li>
-<li>⬜ MCP tools: <code>inspect_site</code>, <code>plan_request</code>, <code>validate_plan</code>, <code>plan_upstream</code>, <code>patch_ledger</code></li>
+<li>⬜ <code>packages/workflow-kit/src/index.ts</code> still describes the <strong>old</strong> GitHub Actions / classifier approach — should be updated before MCP implementation</li>
+<li>⬜ Python package (<code>pyproject.toml</code>, MCP server) and tools: <code>inspect_site</code>, <code>plan_request</code>, <code>validate_plan</code>, <code>plan_upstream</code>, <code>patch_ledger</code></li>
 </ul>
-
-<h2>Phase 9 — Consumer bootstrap/setup script</h2>
+<h2>Phase 9 — Consumer bootstrap / setup script</h2>
 <ul>
-<li>⬜ Bootstrap script (dry-run, MCP optional wiring, printed Vercel/GitHub guidance)</li>
+<li>⬜ Single bootstrap script (dry-run, optional MCP hints, printed Vercel/GitHub guidance)</li>
 </ul>
-
 <h2>Phase 10 — Demo-site showcase expansion</h2>
 <ul>
-<li>⬜ Teaching pages showing each layer (config, content, context, overrides, registry, workflow-kit) with rendered output + source side-by-side</li>
+<li>⬜ Teaching pages per layer (config, content, context, overrides, registry, workflow-kit) with rendered output + source side-by-side</li>
 </ul>
-
 <h2>Phase 11 — Contribution safety and admin publishing</h2>
 <ul>
-<li>⬜ Layer-boundary guards in CI / PR review automation</li>
+<li>⬜ Layer-boundary guards in CI / PR automation</li>
 <li>⬜ AI review prompts for upstream-originated PRs</li>
 <li>⬜ Admin-tools: preview vs production publishing semantics</li>
 </ul>
-
-<h2>New gaps revealed during execution (not in original audit)</h2>
+<h2>Gaps noticed while auditing (not all in original v5 text)</h2>
 <ul>
-<li><strong>Context Zod schemas missing.</strong> <code>src/context/site-owner.json</code> and <code>brand-voice.json</code> exist in demo-site but <code>@portfolio-engine/schema</code> has no typed Zod schemas for them. Agent and tool reads are unvalidated. Should be added in Phase 2 follow-up.</li>
-<li><strong>workflow-kit stub comment stale.</strong> <code>packages/workflow-kit/src/index.ts</code> still describes the old GitHub Actions approach. Phase 8 must update this before any Python/MCP work begins.</li>
-<li><strong>admin-tools <code>private</code> flag.</strong> Package remains <code>"private": true</code> at <code>0.0.5</code>; it has not been published to npm yet. Removing the flag and publishing is a prerequisite for Phase 6 to be considered complete.</li>
-<li><strong>No consumer registry in demo-site.</strong> <code>src/registry/</code> does not exist yet — Phase 7 prerequisite, but worth noting as a visible gap when reading the target layout docs.</li>
-</ul>
-</section><section id="goals" class="panel"><h1>Big Picture Goals</h1>
+<li><strong>Context JSON untyped</strong> — add Zod in <code>schema</code> when the context contract stabilizes.</li>
+<li><strong>workflow-kit stub</strong> — comment drift vs ADR-002 / Phase 8 direction.</li>
+<li><strong>Product MVP</strong> — engine ahead of schedule on registries, admin-tools, and consumer local routes; external consumer repos remain the gate.</li>
+</ul></section><section id="goals" class="panel"><h1>Big Picture Goals</h1>
 <p>Work is organized into <strong>seven product tracks (A–G)</strong>: the runtime engine (A), demo-site reference (B), <strong>agreni-site</strong> (C) and <strong>jordan-site</strong> (D) as first consumer products, optional <strong>admin-tools</strong> (E) and <strong>workflow-kit</strong> (F), and <strong>governance, labels, and safety</strong> (G). The roadmap uses two gates — <strong>Backbone MVP</strong> after Phase 3 and <strong>Product MVP</strong> after Phase 4 — detailed in the MVP roadmap and product tracks sections.</p>
 <h2>Executive purpose</h2>
 <p><code>portfolio-engine</code> is meant to become a reusable open-source backbone for personal, portfolio, and editorial websites. It should let Jordan maintain one shared engine while keeping <code>agreni-site</code>, <code>jordan-site</code>, and future consumer sites cleanly separated.</p>
@@ -493,7 +470,7 @@ agreni-site + jordan-site (Phase 4)
 <table class="md-table"><thead><tr><th>Repo</th><th>Open issues</th><th>What they represent</th></tr></thead><tbody><tr><td><code>rainonej/portfolio-engine</code></td><td>14</td><td>Phase 1 sprint tail — runtime buildability + package publishing follow-through</td></tr><tr><td><code>rainonej/agreni-site</code></td><td>7</td><td>Phase 4 — Product MVP consumer (maps to <a href="#epic-agreni-site-mvp">agreni-site MVP</a> + <a href="#epic-package-publishing">Package publishing</a>)</td></tr><tr><td><code>rainonej/profesional_site</code></td><td>40</td><td>Origin repo: old epics, done tasks, content blockers, governance</td></tr></tbody></table>
 <p>The <code>profesional_site</code> repo is the origin monorepo. It predates the portfolio-engine split and contains parent epics (4–10) that generated the work now tracked in <code>portfolio-engine</code>. It also holds content-only tasks blocked on the site owner.</p>
 <h2>portfolio-engine issues — disposition</h2>
-<table class="md-table"><thead><tr><th>#</th><th>Title</th><th>Phase</th><th>Disposition</th></tr></thead><tbody><tr><td>#16</td><td>Fix editorial-theme pnpm check + TypeScript</td><td>Phase 1 ★</td><td>Keep — critical blocker</td></tr><tr><td>#28</td><td>CI: Staged workflow lint → check → build</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#29</td><td>CI: astro check + demo-site build in pipeline</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#30</td><td>ESLint + Prettier + lint:fix docs</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#31</td><td>Vercel: Connect portfolio-engine repo</td><td>Phase 1 ★</td><td>Keep — human required</td></tr><tr><td>#32</td><td>Docs: Root README + board links</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#33</td><td>editorial-theme: PostCSS Tailwind migration</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#34</td><td>Vercel: Optional CLI deploy / preview bot</td><td>Phase 9</td><td>Defer — add mvp:post</td></tr><tr><td>#35</td><td>Docs: GitHub Project docs + project-views ported</td><td>Phase 0</td><td>Verify done → close</td></tr><tr><td>#36</td><td>Copilot: Rulesets for PRs into dev and epic/*</td><td>Phase 7</td><td>Defer — add mvp:post</td></tr><tr><td>#37</td><td>Copilot: Document PR feedback loop</td><td>Phase 7</td><td>Defer — add mvp:post</td></tr><tr><td>#38</td><td>theme: PR #17 follow-ups (base URL + schema)</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#40</td><td>Vercel: Update demo-site config/site.json baseUrl</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#41</td><td>Docs: Add live demo badge/link to README</td><td>Phase 1 ★</td><td>Keep</td></tr></tbody></table>
+<table class="md-table"><thead><tr><th>#</th><th>Title</th><th>Phase</th><th>Disposition</th></tr></thead><tbody><tr><td>#16</td><td>Fix editorial-theme pnpm check + TypeScript</td><td>Phase 1 ★</td><td>Keep — critical blocker</td></tr><tr><td>#28</td><td>CI: Staged workflow lint → check → build</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#29</td><td>CI: astro check + demo-site build in pipeline</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#30</td><td>ESLint + Prettier + lint:fix docs</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#31</td><td>Vercel: Connect portfolio-engine repo</td><td>Phase 1 ★</td><td>Keep — human required</td></tr><tr><td>#32</td><td>Docs: Root README + board links</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#33</td><td>editorial-theme: PostCSS Tailwind migration</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#34</td><td>Vercel: Optional CLI deploy / preview bot</td><td>Phase 9</td><td>Defer — add mvp:post</td></tr><tr><td>#35</td><td>Docs: GitHub Project docs + project-views ported</td><td>Phase 0</td><td>Verify done → close</td></tr><tr><td>#36</td><td>Copilot: Rulesets for PRs into dev and epic/\*</td><td>Phase 7</td><td>Defer — add mvp:post</td></tr><tr><td>#37</td><td>Copilot: Document PR feedback loop</td><td>Phase 7</td><td>Defer — add mvp:post</td></tr><tr><td>#38</td><td>theme: PR #17 follow-ups (base URL + schema)</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#40</td><td>Vercel: Update demo-site config/site.json baseUrl</td><td>Phase 1 ★</td><td>Keep</td></tr><tr><td>#41</td><td>Docs: Add live demo badge/link to README</td><td>Phase 1 ★</td><td>Keep</td></tr></tbody></table>
 <h2>agreni-site issues — disposition</h2>
 <p>All 7 issues map to report <a href="#epic-agreni-site-mvp">agreni-site MVP</a> (agreni-site MVP) and <a href="#epic-package-publishing">Package publishing</a> (package publishing / semver). They align with <strong>Phase 4 Product MVP</strong> after the Backbone MVP (Phases 1–3) and published packages.</p>
 <table class="md-table"><thead><tr><th>#</th><th>Title</th><th>Phase</th><th>Notes</th></tr></thead><tbody><tr><td>#2</td><td>Epic 5 — Scaffold and Populate agreni-site</td><td>Phase 2+</td><td>Parent epic</td></tr><tr><td>#1</td><td>Task 5.5 — Reconnect secrets and deployments</td><td>Phase 2+</td><td>Human required (Vercel/GitHub secrets)</td></tr><tr><td>#3</td><td>Task 5.3 — Wire to local workspace/path packages</td><td>Phase 2+</td><td>—</td></tr><tr><td>#4</td><td>Task 5.1 — Scaffold agreni-site repo structure</td><td>Phase 2+</td><td>—</td></tr><tr><td>#5</td><td>Task 5.6 — Post-split parity verification</td><td>Phase 2+</td><td>—</td></tr><tr><td>#6</td><td>Task 5.4 — Preserve preview/auth/admin behavior</td><td>Phase 2+</td><td>—</td></tr><tr><td>#7</td><td>Task 5.2 — Migrate all Agreni content/config/media</td><td>Phase 2+</td><td>Depends on consumer layout finalized</td></tr></tbody></table>
@@ -902,7 +879,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <p><strong>Defer to post–Product-MVP:</strong></p>
 <ul>
 <li>portfolio-engine #34: Vercel CLI deploy/preview bot → Phase 11 (<a href="#epic-admin-publishing">Admin publishing</a>)</li>
-<li>portfolio-engine #36: Copilot rulesets for PRs into dev/epic/* → Phase 11 (<a href="#epic-contribution-safety">Contribution safety</a>)</li>
+<li>portfolio-engine #36: Copilot rulesets for PRs into dev/epic/\* → Phase 11 (<a href="#epic-contribution-safety">Contribution safety</a>)</li>
 <li>portfolio-engine #37: Copilot document PR feedback loop → Phase 11 (<a href="#epic-contribution-safety">Contribution safety</a>)</li>
 </ul>
 <p><strong>Verify and close:</strong></p>
@@ -1183,7 +1160,7 @@ agent:blocked           — agent cannot continue without human input</code></pr
 <p>Product MVP is defined by two real products; agreni-site is the first. Success proves the engine and docs work outside the monorepo.</p>
 <h2>Board mapping</h2>
 <ul>
-<li>agreni-site GitHub issues #1–#7  </li>
+<li>agreni-site GitHub issues #1–#7</li>
 <li>profesional_site #219 (switch to semver packages) — coordinates with <a href="#epic-package-publishing">Package publishing</a></li>
 </ul>
 <h2>Tickets</h2>
@@ -1809,6 +1786,7 @@ templates/consumer/</code></pre>
 <li><code>source\epics\epic_runtime_buildability.md</code></li>
 <li><code>source\epics\epic_workflow_kit.md</code></li>
 <li><code>source\project_model.json</code></li>
+<li><code>source\sections\00_repo_status_checklist.md</code></li>
 <li><code>source\sections\01_big_picture_goals.md</code></li>
 <li><code>source\sections\02_current_vs_target.md</code></li>
 <li><code>source\sections\03_upstream_layout.md</code></li>

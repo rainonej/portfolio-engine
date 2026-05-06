@@ -24,6 +24,7 @@ if (!html.includes('<!doctype html>')) {
 }
 
 for (const id of [
+  'status',
   'goals',
   'packages',
   'graph',
