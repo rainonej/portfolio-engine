@@ -6,6 +6,12 @@ This recipe matches the MVP in [Epic: consumer registry](https://github.com/rain
 
 - Astro site using `editorialTheme()` from `@portfolio-engine/editorial-theme` (same setup as [new-site-setup](./new-site-setup.md)).
 
+## Registry format (Phase 7)
+
+The contract on disk is **JSON** under `src/registry/`; **`@portfolio-engine/schema`** provides Zod validation and inferred types (`parseConsumerPortfolioEngineRegistry`). Rationale, versioning, and admin-tools considerations are recorded in **ADR-005** (`portfolio_engine_v5_report_pack/source/decisions/ADR-005-consumer-extension-registry-format.md`).
+
+**Admin-tools:** with the default admin-tools setup, `src/registry/portfolio-engine.registry.json` is an allowed path for inventory, read, and save (local `devBypass` or GitHub API mode), so editors do not need a separate “registry editor” to adjust routes.
+
 ## Steps
 
 ### 1. Registry file
@@ -81,6 +87,7 @@ Pass these to `editorialTheme()` / `createEngineIntegration()`:
 
 Routes from the registry appear in `.portfolio-engine/manifest.json` with `"routeOrigin": "consumer-local"`. `capabilities.consumerLocalRoutes` is `true` when at least one such route is active.
 
-## Verified example
+## Verified examples
 
-`examples/demo-site` in this repo implements `/how-i-think` using the steps above.
+- `examples/demo-site` — static output; route `/how-i-think`.
+- `examples/node-ssr-demo` — `output: 'server'` with `@astrojs/node`; route `/ssr-registry-smoke`.

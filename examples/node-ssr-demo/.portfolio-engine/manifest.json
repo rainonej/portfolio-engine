@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-05T15:51:55.006Z",
+  "generatedAt": "2026-05-06T01:18:39.483Z",
   "rootDir": ".",
   "routes": [
     {
@@ -71,6 +71,16 @@
       "disableable": true,
       "agentGuidance": "Prefer Writing for public-facing navigation tasks.",
       "resolved": "/writing"
+    },
+    {
+      "pattern": "/ssr-registry-smoke",
+      "resolved": "/ssr-registry-smoke",
+      "label": "Registry smoke (SSR)",
+      "section": null,
+      "visibility": "public",
+      "remappable": false,
+      "disableable": false,
+      "routeOrigin": "consumer-local"
     }
   ],
   "overrideSurfaces": [
@@ -136,6 +146,6 @@
     "routeRemap": true,
     "routeDisable": true,
     "namedOverrides": true,
-    "consumerLocalRoutes": false
+    "consumerLocalRoutes": true
   }
 }
