@@ -173,14 +173,8 @@ export function createEngineIntegration(options: EngineIntegrationOptions): Astr
         const activeResolvedPaths = new Set(injectedRoutes.map((r) => r.routeRecord.resolved));
         const navWarnings = buildNavWarnings(resolvedConfig.navigation.items, activeResolvedPaths);
         if (navWarnings.length > 0) {
-          const strictNavRoutes = options.diagnostics?.strictNavRoutes ?? false;
           for (const warning of navWarnings) {
-            if (strictNavRoutes) {
-              // Let the first failure throw via the logger; collect all first.
-              logger.warn(`[portfolio-engine] ${warning}`);
-            } else {
-              logger.warn(`[portfolio-engine] ${warning}`);
-            }
+            logger.warn(`[portfolio-engine] ${warning}`);
           }
           if (options.diagnostics?.strictNavRoutes) {
             throw new Error(
