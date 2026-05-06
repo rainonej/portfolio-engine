@@ -5,8 +5,8 @@ import { adminTools } from '@portfolio-engine/admin-tools';
 import {
   DEFAULT_OVERRIDE_SURFACES,
   DEFAULT_ROUTE_REGISTRY,
-  editorialTheme,
 } from '@portfolio-engine/editorial-theme';
+import { editorialTheme } from '@portfolio-engine/editorial-theme/integration';
 
 const routeRegistry = DEFAULT_ROUTE_REGISTRY.map((route) => ({
   ...route,

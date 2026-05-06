@@ -14,7 +14,7 @@ Optional Astro integration that injects a **private `/admin` dashboard** and **G
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
-import { editorialTheme } from '@portfolio-engine/editorial-theme';
+import { editorialTheme } from '@portfolio-engine/editorial-theme/integration';
 import { adminTools } from '@portfolio-engine/admin-tools';
 
 export default defineConfig({

@@ -10,7 +10,7 @@ theme provides — all from one call in your `astro.config.mjs`.
 ```js
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
-import { editorialTheme } from '@portfolio-engine/editorial-theme';
+import { editorialTheme } from '@portfolio-engine/editorial-theme/integration';
 
 export default defineConfig({
   integrations: [
