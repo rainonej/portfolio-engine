@@ -108,12 +108,12 @@ See that package for the canonical Zod schemas. A minimal set:
 Add `src/content.config.ts` with these four collections (the page routes
 expect them):
 
-| Collection     | Type      | Required entries / shape                                                                                                     |
-| -------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `profile`      | `data`    | `person` (`ProfilePersonSchema`) and `cv` (`ProfileCvSchema`) — import from `@portfolio-engine/schema`                      |
-| `projects`     | `content` | title, description, featured?, image?, tags?, link?, date                                                                    |
-| `writing`      | `content` | title, date, description?, image?, draft?, tags?                                                                             |
-| `testimonials` | `data`    | quote, author, role, featured?                                                                                               |
+| Collection     | Type      | Required entries / shape                                                                               |
+| -------------- | --------- | ------------------------------------------------------------------------------------------------------ |
+| `profile`      | `data`    | `person` (`ProfilePersonSchema`) and `cv` (`ProfileCvSchema`) — import from `@portfolio-engine/schema` |
+| `projects`     | `content` | title, description, featured?, image?, tags?, link?, date                                              |
+| `writing`      | `content` | title, date, description?, image?, draft?, tags?                                                       |
+| `testimonials` | `data`    | quote, author, role, featured?                                                                         |
 
 For the `profile` collection, prefer `shortBio`/`summary`/`longBio` over
 dumping everything into `bio`. The `bio` field is still accepted but deprecated:

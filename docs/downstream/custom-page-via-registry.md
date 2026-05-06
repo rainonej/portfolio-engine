@@ -97,7 +97,7 @@ To replace a theme route (e.g. `/writing`) with a consumer-local version:
 editorialTheme({
   routes: { '/writing': { enabled: false } },
   // ...
-})
+});
 ```
 
 **2. Add a registry entry** in `src/registry/portfolio-engine.registry.json`:
@@ -142,10 +142,10 @@ should show `"routeOrigin": "consumer-local"` and the entrypoint path.
 
 ### src/pages vs src/pages-local
 
-| Directory        | Routing owner | Use case                                                     |
-| ---------------- | ------------- | ------------------------------------------------------------ |
-| `src/pages-local/` | Engine (registry) | Replace a theme page while keeping the theme shell       |
-| `src/pages/`       | Astro (file-based) | Fully custom pages that don't replace a theme route     |
+| Directory          | Routing owner      | Use case                                            |
+| ------------------ | ------------------ | --------------------------------------------------- |
+| `src/pages-local/` | Engine (registry)  | Replace a theme page while keeping the theme shell  |
+| `src/pages/`       | Astro (file-based) | Fully custom pages that don't replace a theme route |
 
 Use `src/pages/` (ordinary Astro routing) for pages that have no theme
 equivalent and don't need to be registered — e.g. `src/pages/resume.astro`.
