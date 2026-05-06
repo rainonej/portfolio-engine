@@ -55,6 +55,33 @@ The signed session cookie follows the same MVP shape as `professional_site` (Git
 
 The default dashboard expects collections named **`writing`**, **`projects`**, **`testimonials`**, and **`profile`** (same shape as `examples/demo-site`). Sites with different names will need a tailored admin page in a follow-up.
 
+## TypeScript / IDE configuration
+
+The injected `dist/routes/admin.astro` file uses Astro virtual modules (`@portfolio-engine:config`, `@portfolio-engine:routes`) that are only resolvable at **Astro build time** via the integrations. If your `tsconfig.json` uses a glob that covers `node_modules`, the TypeScript language service may flag false positives for these imports.
+
+**Recommended fix — exclude `node_modules` from your consumer `tsconfig.json`:**
+
+```jsonc
+// tsconfig.json
+{
+  "extends": "astro/tsconfigs/strict",
+  // TypeScript does NOT merge `exclude` across `extends` — list everything you need here.
+  "exclude": ["node_modules", "dist"],
+}
+```
+
+> **Note:** `exclude` is not merged from `extends` presets. If you already have an `exclude` array, add `"node_modules"` to it rather than replacing it, to avoid accidentally re-including previously excluded paths (e.g. `dist`).
+
+The `dist/routes/admin.astro` file also carries a `// @ts-nocheck` directive in its frontmatter so that IDEs that do include `node_modules` do not surface spurious errors from virtual module imports.
+
+## Downstream patching
+
+If you need to patch `dist/routes/admin.astro` via `pnpm patch` (or a plain `git apply` patch), keep in mind:
+
+- The **exact lines** from the published tarball must appear in the unified diff. Use `pnpm pack --pack-destination /tmp` to create the tarball, then `tar -tf <tarball>` to list its contents and `tar -xf <tarball> -C /tmp/pkg` to extract and inspect individual files before authoring the patch.
+- Run `git apply --check` against the extracted file on both LF and CRLF checkouts before committing a patch file.
+- Patches that mark a line as **context** (` ` prefix) but use the post-change content will be rejected by `git apply`.
+
 ## Status
 
 MVP overview, auth plumbing, and a basic in-browser file editor are shipped. `/api/content` now supports inventory + file reads and saves (local writes in `devBypass`, GitHub Contents API writes in OAuth mode) across content/config/context/registry/public paths. Includes drag-and-drop/browse upload for `public/` assets (with optional subfolder target) so non-technical users can add images/files and reference them in pages. Rich schema-aware drawers and polished editing UX remain a follow-up extraction step from `professional_site`.
