@@ -5,7 +5,23 @@ import type { DesignTokenGroup } from '../lib/design-token-groups.js';
 const PERSON_PATH = 'src/content/profile/person.json';
 const SITE_PATH = 'src/config/site.json';
 
-const PERSON_FIELDS = ['name', 'email', 'linkedin', 'instagram', 'photo', 'bio'] as const;
+const PERSON_TEXT_FIELDS = ['name', 'email', 'linkedin', 'instagram', 'photo', 'shortBio', 'summary'] as const;
+
+function formatLongBioForForm(value: unknown): string {
+  if (!Array.isArray(value)) return '';
+  return value
+    .filter((p): p is string => typeof p === 'string' && p.trim().length > 0)
+    .map((p) => p.trim())
+    .join('\n\n');
+}
+
+function parseLongBioInput(raw: string): string[] | undefined {
+  const paras = raw
+    .split(/\n\s*\n/)
+    .map((p) => p.replace(/\n/g, ' ').trim())
+    .filter(Boolean);
+  return paras.length > 0 ? paras : undefined;
+}
 
 type FieldDef = {
   name: string;
@@ -703,7 +719,7 @@ function initSettingsEditor(
     formEl.hidden = false;
     try {
       const [personRaw, siteRaw] = await Promise.all([api.getText(PERSON_PATH), api.getText(SITE_PATH)]);
-      const person = JSON.parse(personRaw.content) as Record<string, string>;
+      const person = JSON.parse(personRaw.content) as Record<string, unknown>;
       const site = JSON.parse(siteRaw.content) as Record<string, unknown>;
       formEl.dataset.personJson = JSON.stringify(person);
       formEl.dataset.siteJson = JSON.stringify(site);
@@ -712,7 +728,14 @@ function initSettingsEditor(
           ? (site.contact as Record<string, string>)
           : { heading: '', body: '' };
       const flat: Record<string, string> = {
-        ...person,
+        name: String(person.name ?? ''),
+        email: String(person.email ?? ''),
+        linkedin: String(person.linkedin ?? ''),
+        instagram: String(person.instagram ?? ''),
+        photo: String(person.photo ?? ''),
+        shortBio: String(person.shortBio ?? ''),
+        summary: String(person.summary ?? ''),
+        longBio: formatLongBioForForm(person.longBio),
         title: String(site.title ?? ''),
         tagline: String(site.tagline ?? ''),
         description: String(site.description ?? ''),
@@ -738,10 +761,14 @@ function initSettingsEditor(
 
   formEl.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const personData = JSON.parse(formEl.dataset.personJson ?? '{}') as Record<string, string>;
+    const personData = JSON.parse(formEl.dataset.personJson ?? '{}') as Record<string, unknown>;
     const siteData = JSON.parse(formEl.dataset.siteJson ?? '{}') as Record<string, unknown>;
     const fd = new FormData(formEl);
-    for (const k of PERSON_FIELDS) personData[k] = String(fd.get(k) ?? '');
+    for (const k of PERSON_TEXT_FIELDS) personData[k] = String(fd.get(k) ?? '');
+    const longBioParsed = parseLongBioInput(String(fd.get('longBio') ?? ''));
+    if (longBioParsed) personData.longBio = longBioParsed;
+    else delete personData.longBio;
+    delete personData.bio;
     siteData.title = String(fd.get('title') ?? '');
     siteData.tagline = String(fd.get('tagline') ?? '');
     siteData.description = String(fd.get('description') ?? '');

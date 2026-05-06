@@ -26,12 +26,12 @@ That path does not exist.
 
 Different pages mixed `shortBio`, `summary`, `longBio`, and deprecated legacy-string fallback behavior.
 
-**Resolution:** standardized on one model everywhere:
+**Resolution:** one biography model everywhere (see `ProfilePersonSchema` + `ProfilePerson` in editorial-theme):
 
-- `shortBio` for hero/meta preference
-- `summary` as second fallback
-- `longBio[]` as the only paragraph source
-- no legacy `bio` fallback behavior
+- `shortBio` for hero/meta
+- `summary` as second hero/meta fallback
+- `longBio[]` for about/resume paragraphs
+- the old `bio` string is not in the Zod schema (`.strict()` rejects it). The TS type keeps `@deprecated bio?` so agents get a warning if code still references it; the theme never reads it.
 
 ### 3) Missing conventional root scripts
 

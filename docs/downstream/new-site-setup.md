@@ -209,6 +209,7 @@ Create `src/content.config.ts`:
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'zod';
+import { ProfilePersonSchema, ProfileCvSchema } from '@portfolio-engine/schema';
 
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
@@ -244,13 +245,7 @@ const testimonials = defineCollection({
 
 const profile = defineCollection({
   loader: glob({ pattern: '**/*.json', base: './src/content/profile' }),
-  schema: z
-    .object({
-      name: z.string().optional(),
-      bio: z.string().optional(),
-      email: z.string().optional(),
-    })
-    .passthrough(),
+  schema: z.union([ProfilePersonSchema, ProfileCvSchema]),
 });
 
 export const collections = { projects, writing, testimonials, profile };
@@ -294,7 +289,8 @@ Replace this with a real post.
 ```json
 {
   "name": "Your Full Name",
-  "bio": "One paragraph about you.",
+  "shortBio": "One line for the hero and meta.",
+  "longBio": ["First paragraph about you.", "Optional second paragraph."],
   "email": "you@example.com"
 }
 ```

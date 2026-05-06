@@ -1,5 +1,9 @@
 # @portfolio-engine/schema
 
+## Unreleased
+
+- **Breaking:** `ProfilePersonSchema` no longer allows `bio`. Use `shortBio`, `summary`, and `longBio` instead. The schema is now `.strict()` so unknown keys (including `bio`) fail validation.
+
 ## 0.4.0
 
 ### Minor Changes
