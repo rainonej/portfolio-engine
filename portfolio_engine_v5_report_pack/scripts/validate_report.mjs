@@ -65,7 +65,10 @@ if (epics.length < 18) {
 
 if (sections.length < 9) {
   ok = false;
-  msgs.push('ERROR: expected >=9 section files (00–08 incl. 00_repo_status_checklist), found ' + sections.length);
+  msgs.push(
+    'ERROR: expected >=9 section files (00–08 incl. 00_repo_status_checklist), found ' +
+      sections.length,
+  );
 } else {
   msgs.push('OK: found ' + sections.length + ' section source files.');
 }
