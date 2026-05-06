@@ -695,7 +695,20 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         background: var(--paper-light);
       }
       .adm-token-swatch {
+        width: 100%;
+        min-height: 4.5rem;
         height: 4.5rem;
+        box-sizing: border-box;
+        border-bottom: 1px solid var(--warm-line);
+      }
+      .adm-token-swatch--empty {
+        background: repeating-linear-gradient(
+          -45deg,
+          color-mix(in srgb, var(--warm-line) 55%, transparent),
+          color-mix(in srgb, var(--warm-line) 55%, transparent) 1px,
+          transparent 1px,
+          transparent 8px
+        );
       }
       .adm-token-meta {
         padding: 0.65rem 0.75rem;

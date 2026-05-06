@@ -65,9 +65,10 @@ function parseTokenGroups(): DesignTokenGroup[] {
 /** Resolved token sources from server (matches `.portfolio-engine/design-snapshot.json` shape). */
 function parseDesignSnapshotCss(): Record<string, { value: string; source: string }> | null {
   const el = document.getElementById('admin-design-snapshot');
-  if (!el?.textContent) return null;
+  const txt = el?.textContent?.trim() ?? el?.innerHTML?.trim();
+  if (!txt) return null;
   try {
-    const raw = JSON.parse(el.textContent) as { cssVariables?: Record<string, { value: string; source: string }> };
+    const raw = JSON.parse(txt) as { cssVariables?: Record<string, { value: string; source: string }> };
     return raw.cssVariables ?? null;
   } catch {
     return null;
@@ -78,11 +79,12 @@ function peTokenFromCssVar(cssVar: string): string {
   return cssVar.replace(/^--/, '');
 }
 
-/** True if `s` looks like a concrete CSS color browsers accept in `background`. */
+/** True if `s` looks like a concrete CSS color browsers accept in `background-color`. */
 function looksLikeCssColor(s: string): boolean {
   const v = s.trim();
   if (!v || v === '(not set)') return false;
-  if (/^#([0-9a-f]{3,8})$/i.test(v)) return true;
+  // Hex: #rgb, #rgba, #rrggbb, #rrggbbaa (theme + snapshot use these)
+  if (/^#([0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(v)) return true;
   if (/^(rgb|rgba|hsl|hsla|lab|lch|oklch|oklab|color)\(/i.test(v)) return true;
   return false;
 }
@@ -141,7 +143,7 @@ function initTokenSwatches(): void {
       const src = snapshotCss?.[t.cssVar]?.source;
       const sourceLine = src ? `<p class="adm-token-source">${escapeHtml(src)}</p>` : '';
       card.innerHTML = `
-        <div class="adm-token-swatch" style="background:${swatchBg}"></div>
+        <div class="adm-token-swatch"></div>
         <div class="adm-token-meta">
           <p class="adm-token-label">${escapeHtml(t.label)}</p>
           <p class="adm-token-value">${escapeHtml(value)}</p>
@@ -149,6 +151,11 @@ function initTokenSwatches(): void {
           ${sourceLine}
           <p class="adm-token-usage">${escapeHtml(t.usage)}</p>
         </div>`;
+      const swEl = card.querySelector<HTMLElement>('.adm-token-swatch');
+      if (swEl) {
+        if (swatchBg !== 'transparent') swEl.style.backgroundColor = swatchBg;
+        else swEl.classList.add('adm-token-swatch--empty');
+      }
       grid.appendChild(card);
     }
     wrap.appendChild(grid);
@@ -187,13 +194,19 @@ function initTokenSwatches(): void {
     const card = document.createElement('div');
     card.className = 'adm-token-card';
     card.innerHTML = `
-      <div class="adm-token-swatch" style="background:${escapeHtml(val)}"></div>
+      <div class="adm-token-swatch"></div>
       <div class="adm-token-meta">
         <p class="adm-token-label">${escapeHtml(labels[key] ?? key)}</p>
         <p class="adm-token-value">${escapeHtml(val)}</p>
         <p class="adm-token-var">theme.colors.${escapeHtml(key)}</p>
         <p class="adm-token-usage">${escapeHtml(usage[key] ?? 'From theme config')}</p>
       </div>`;
+    const sw = card.querySelector<HTMLElement>('.adm-token-swatch');
+    if (sw) {
+      const v = val.trim();
+      if (looksLikeCssColor(v)) sw.style.backgroundColor = v;
+      else sw.classList.add('adm-token-swatch--empty');
+    }
     grid.appendChild(card);
   }
   wrap.appendChild(grid);
