@@ -3,6 +3,7 @@ OK: doctype present.
 OK: stylesheet exists.
 OK: found 18 epic source files.
 OK: found 9 section source files.
+OK: 00_repo_status_checklist.md present.
 OK: phase timeline rendered.
 OK: 2 milestone banners present.
 OK: 18 epic anchor IDs present.

@@ -63,11 +63,18 @@ if (epics.length < 18) {
   msgs.push('OK: found ' + epics.length + ' epic source files.');
 }
 
-if (sections.length < 8) {
+if (sections.length < 9) {
   ok = false;
-  msgs.push('ERROR: expected >=8 section files, found ' + sections.length);
+  msgs.push('ERROR: expected >=9 section files (00–08 incl. 00_repo_status_checklist), found ' + sections.length);
 } else {
   msgs.push('OK: found ' + sections.length + ' section source files.');
+}
+
+if (!sections.includes('00_repo_status_checklist.md')) {
+  ok = false;
+  msgs.push('ERROR: missing required section source/sections/00_repo_status_checklist.md');
+} else {
+  msgs.push('OK: 00_repo_status_checklist.md present.');
 }
 
 if (!html.includes('class="phase-timeline"')) {
