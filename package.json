@@ -11,6 +11,7 @@
     "format:write": "prettier --write \"**/*.{md,json,yml,yaml,mjs}\" --ignore-path .prettierignore",
     "check": "pnpm --filter \"./packages/*\" run build && pnpm -r run check",
     "smoke:packed": "node scripts/smoke-packed-consumer.mjs",
+    "pe:doctor": "node packages/engine-core/dist/doctor.js",
     "release": "changeset publish",
     "typecheck": "pnpm -r run check",
     "test": "pnpm -r --if-present run test"

@@ -34,7 +34,25 @@ That single call:
 - Injects all theme page routes (`/`, `/about`, `/contact`, `/work`,
   `/work/[slug]`, `/writing`, `/writing/[slug]`)
 
-You write no page files yourself — every route comes from the theme.
+## Route ownership modes
+
+Portfolio Engine supports three route ownership modes:
+
+1. **Theme-injected routes** — the default. `/`, `/work`, `/work/[slug]`,
+   `/writing`, `/writing/[slug]`, `/about`, `/contact`, `/resume` are all
+   owned by the theme. You supply content; the theme renders the page.
+
+2. **Consumer-local registry routes** — declare a route in
+   `src/registry/portfolio-engine.registry.json` and put the page file under
+   `src/pages-local/`. Useful for replacing a theme page while keeping the
+   theme shell (Layout, Nav, styles). Disable the theme route first so there
+   is no collision.
+
+3. **Ordinary Astro file routes** — page files under your `src/pages/`
+   directory. Astro owns these via its file-based routing. Useful for fully
+   custom pages (e.g. `src/pages/resume.astro`) that don't need to replace a
+   theme route. The engine does not inject these — Astro discovers them
+   automatically.
 
 ## Required config files
 
@@ -90,12 +108,18 @@ See that package for the canonical Zod schemas. A minimal set:
 Add `src/content.config.ts` with these four collections (the page routes
 expect them):
 
-| Collection     | Type      | Required entries / shape                                                                   |
-| -------------- | --------- | ------------------------------------------------------------------------------------------ |
-| `profile`      | `data`    | `person` (name, bio, photo?, email?, linkedin?, instagram?) and `cv` (awards?, education?) |
-| `projects`     | `content` | title, description, featured?, image?, tags?, link?, date                                  |
-| `writing`      | `content` | title, date, description?, image?, draft?, tags?                                           |
-| `testimonials` | `data`    | quote, author, role, featured?                                                             |
+| Collection     | Type      | Required entries / shape                                                                               |
+| -------------- | --------- | ------------------------------------------------------------------------------------------------------ |
+| `profile`      | `data`    | `person` (`ProfilePersonSchema`) and `cv` (`ProfileCvSchema`) — import from `@portfolio-engine/schema` |
+| `projects`     | `content` | title, description, featured?, image?, tags?, link?, date                                              |
+| `writing`      | `content` | title, date, description?, image?, draft?, tags?                                                       |
+| `testimonials` | `data`    | quote, author, role, featured?                                                                         |
+
+For the `profile` collection, prefer `shortBio`/`summary`/`longBio` over
+dumping everything into `bio`. The `bio` field is still accepted but deprecated:
+it is split on blank lines into paragraphs when present. A hero that receives a
+wall of bio text will look unpolished — use `shortBio` (one liner) for the hero
+and `longBio` (array of paragraphs) for about/resume.
 
 See [`examples/demo-site/src/content.config.ts`](../../examples/demo-site/src/content.config.ts)
 for a working reference.

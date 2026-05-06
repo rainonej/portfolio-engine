@@ -14,8 +14,8 @@ const { src, alt, fallbackChar, class: className = '', loading } = Astro.props;
   src ? (
     <img src={src} alt={alt} class={className} loading={loading} />
   ) : (
-    <div class={`flex items-center justify-center bg-amber-50 ${className}`}>
-      <span class="font-serif text-6xl italic text-amber-200">
+    <div class={`flex items-center justify-center bg-amber-50 ${className}`} role="img" aria-label={alt}>
+      <span class="font-serif text-6xl italic text-amber-200" aria-hidden="true">
         {fallbackChar}
       </span>
     </div>
