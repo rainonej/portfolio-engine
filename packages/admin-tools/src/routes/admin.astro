@@ -570,7 +570,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
       .adm-header {
         margin-bottom: 2rem;
         padding-bottom: 1.5rem;
-        border-bottom: 1px solid var(--warm-line);
+        border-bottom: 1px solid var(--color-border-default);
       }
       .adm-kicker {
         margin: 0 0 0.35rem;
@@ -578,7 +578,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         font-weight: 600;
         letter-spacing: 0.2em;
         text-transform: uppercase;
-        color: var(--copper);
+        color: var(--color-accent-primary);
       }
       .adm-h1 {
         margin: 0;
@@ -588,7 +588,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
       }
       .adm-lead {
         margin: 0.5rem 0 0;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
         max-width: 40rem;
       }
       .adm-logout {
@@ -597,12 +597,12 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         border: none;
         background: none;
         font-size: 0.75rem;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
         text-decoration: underline;
         cursor: pointer;
       }
       .adm-logout:hover {
-        color: var(--ink);
+        color: var(--color-text-primary);
       }
       .adm-jump {
         display: flex;
@@ -614,29 +614,29 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         display: inline-block;
         padding: 0.35rem 0.85rem;
         border-radius: 999px;
-        border: 1px solid var(--warm-line);
-        background: var(--paper-light);
+        border: 1px solid var(--color-border-default);
+        background: var(--color-surface-elevated);
         font-size: 0.75rem;
         font-weight: 500;
-        color: var(--copper);
+        color: var(--color-accent-primary);
         text-decoration: none;
       }
       .adm-jump-link:hover {
-        border-color: var(--copper);
+        border-color: var(--color-accent-primary);
       }
       .adm-banner {
         margin-bottom: 1.5rem;
         padding: 0.75rem 1rem;
-        border: 1px solid #fde68a;
+        border: 1px solid color-mix(in srgb, var(--color-accent-primary) 40%, var(--color-border-default));
         border-radius: 0.5rem;
-        background: #fffbeb;
+        background: var(--color-surface-wash);
         font-size: 0.875rem;
-        color: #422006;
+        color: var(--color-text-primary);
       }
       .adm-banner--info {
-        border-color: #bae6fd;
-        background: #f0f9ff;
-        color: #0c4a6e;
+        border-color: color-mix(in srgb, var(--color-accent-muted) 45%, var(--color-border-default));
+        background: var(--color-surface-elevated);
+        color: var(--color-text-primary);
       }
       .adm-section {
         margin-bottom: 3rem;
@@ -647,12 +647,12 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         font-weight: 600;
         letter-spacing: 0.15em;
         text-transform: uppercase;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
       }
       .adm-section-lead {
         margin: 0 0 1rem;
         font-size: 0.875rem;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
         max-width: 44rem;
       }
       .adm-h3 {
@@ -663,14 +663,14 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
       .adm-muted {
         margin: 0;
         font-size: 0.8125rem;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
       }
       .adm-subsection {
         margin-top: 2rem;
         padding: 1.25rem;
-        border: 1px solid var(--warm-line);
+        border: 1px solid var(--color-border-default);
         border-radius: 0.75rem;
-        background: var(--paper-light);
+        background: var(--color-surface-elevated);
       }
       .adm-token-group {
         margin-bottom: 1.75rem;
@@ -683,7 +683,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
       .adm-token-file-hint {
         margin: 0 0 0.75rem;
         font-size: 0.8125rem;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
       }
       .adm-token-grid {
         display: grid;
@@ -691,23 +691,23 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       }
       .adm-token-card {
-        border: 1px solid var(--warm-line);
+        border: 1px solid var(--color-border-default);
         border-radius: 0.65rem;
         overflow: hidden;
-        background: var(--paper-light);
+        background: var(--color-surface-elevated);
       }
       .adm-token-swatch {
         width: 100%;
         min-height: 4.5rem;
         height: 4.5rem;
         box-sizing: border-box;
-        border-bottom: 1px solid var(--warm-line);
+        border-bottom: 1px solid var(--color-border-default);
       }
       .adm-token-swatch--empty {
         background: repeating-linear-gradient(
           -45deg,
-          color-mix(in srgb, var(--warm-line) 55%, transparent),
-          color-mix(in srgb, var(--warm-line) 55%, transparent) 1px,
+          color-mix(in srgb, var(--color-border-default) 55%, transparent),
+          color-mix(in srgb, var(--color-border-default) 55%, transparent) 1px,
           transparent 1px,
           transparent 8px
         );
@@ -725,25 +725,25 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         margin: 0.2rem 0 0;
         font-size: 0.7rem;
         font-family: ui-monospace, monospace;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
       }
       .adm-token-source {
         margin: 0.35rem 0 0;
         font-size: 0.68rem;
         font-family: ui-monospace, monospace;
-        color: var(--copper);
+        color: var(--color-accent-primary);
         line-height: 1.35;
       }
       .adm-token-usage {
         margin: 0.45rem 0 0;
         font-size: 0.72rem;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
         line-height: 1.35;
       }
       .adm-card {
-        border: 1px solid var(--warm-line);
+        border: 1px solid var(--color-border-default);
         border-radius: 0.75rem;
-        background: var(--paper-light);
+        background: var(--color-surface-elevated);
         padding: 1.25rem;
         box-shadow: 0 1px 2px rgb(30 26 23 / 0.04);
       }
@@ -766,7 +766,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         font-weight: 600;
         letter-spacing: 0.18em;
         text-transform: uppercase;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
       }
       .adm-settings-body {
         display: flex;
@@ -778,14 +778,14 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         height: 4rem;
         border-radius: 999px;
         object-fit: cover;
-        border: 1px solid var(--warm-line);
+        border: 1px solid var(--color-border-default);
       }
       .adm-settings-photo-placeholder {
         width: 4rem;
         height: 4rem;
         border-radius: 999px;
-        background: var(--pale-sand);
-        border: 1px dashed var(--warm-line);
+        background: var(--color-surface-wash);
+        border: 1px dashed var(--color-border-default);
         flex-shrink: 0;
       }
       .adm-settings-name {
@@ -796,12 +796,12 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
       .adm-settings-tagline {
         margin: 0.15rem 0 0;
         font-size: 0.875rem;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
       }
       .adm-settings-bio {
         margin: 0.5rem 0 0;
         font-size: 0.875rem;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
         line-height: 1.45;
       }
       .adm-settings-form {
@@ -813,7 +813,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         font-weight: 600;
         letter-spacing: 0.18em;
         text-transform: uppercase;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
       }
       .adm-form-grid {
         display: grid;
@@ -846,8 +846,8 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         gap: 0.5rem;
         padding: 0.5rem 1rem;
         border-radius: 999px;
-        border: 1px solid var(--warm-line);
-        background: var(--paper-light);
+        border: 1px solid var(--color-border-default);
+        background: var(--color-surface-elevated);
       }
       .adm-stat-num {
         font-family: ui-serif, Georgia, serif;
@@ -856,7 +856,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
       }
       .adm-stat-label {
         font-size: 0.8125rem;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
       }
       .adm-list-section {
         margin-bottom: 2rem;
@@ -874,19 +874,19 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         font-weight: 600;
         letter-spacing: 0.18em;
         text-transform: uppercase;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
       }
       .adm-list-path {
         margin: 0.15rem 0 0;
         font-size: 0.75rem;
         font-family: ui-monospace, monospace;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
       }
       .adm-card-list {
-        border: 1px solid var(--warm-line);
+        border: 1px solid var(--color-border-default);
         border-radius: 0.75rem;
         overflow: hidden;
-        background: var(--paper-light);
+        background: var(--color-surface-elevated);
       }
       .adm-card-row {
         display: flex;
@@ -895,7 +895,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         padding: 0.9rem 1rem;
       }
       .adm-card-row--border {
-        border-top: 1px solid var(--warm-line);
+        border-top: 1px solid var(--color-border-default);
       }
       .adm-card-row--draft {
         background: rgb(255 251 235 / 0.5);
@@ -915,7 +915,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
       .adm-card-quote {
         margin: 0.35rem 0 0;
         font-size: 0.8125rem;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
         line-height: 1.4;
       }
       .adm-card-meta {
@@ -925,59 +925,59 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         gap: 0.35rem;
         align-items: center;
         font-size: 0.72rem;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
       }
       .adm-pill {
         display: inline-block;
         padding: 0.12rem 0.45rem;
         border-radius: 999px;
-        border: 1px solid var(--warm-line);
-        background: var(--paper);
+        border: 1px solid var(--color-border-default);
+        background: var(--color-surface-page);
         font-size: 0.68rem;
       }
       .adm-pill--accent {
-        background: var(--copper);
-        color: #fff;
-        border-color: var(--copper);
+        background: var(--color-accent-primary);
+        color: var(--color-text-inverse);
+        border-color: var(--color-accent-primary);
       }
       .adm-pill--warn {
-        border-color: #fbbf24;
-        background: #fffbeb;
-        color: #92400e;
+        border-color: color-mix(in srgb, var(--color-accent-primary) 50%, var(--color-border-default));
+        background: var(--color-surface-wash);
+        color: var(--color-text-primary);
       }
       .adm-btn {
         border-radius: 0.5rem;
-        border: 1px solid var(--warm-line);
-        background: var(--paper-light);
+        border: 1px solid var(--color-border-default);
+        background: var(--color-surface-elevated);
         padding: 0.4rem 0.85rem;
         font-size: 0.8125rem;
         font-weight: 500;
         cursor: pointer;
-        color: var(--ink);
+        color: var(--color-text-primary);
       }
       .adm-btn--primary {
-        background: var(--ink);
-        color: #fff;
-        border-color: var(--ink);
+        background: var(--color-text-primary);
+        color: var(--color-text-inverse);
+        border-color: var(--color-text-primary);
       }
       .adm-btn--ghost {
         background: transparent;
-        color: var(--copper);
-        border-color: var(--warm-line);
+        color: var(--color-accent-primary);
+        border-color: var(--color-border-default);
       }
       .adm-btn--danger {
-        border-color: #fecaca;
-        color: #b91c1c;
-        background: #fff;
+        border-color: color-mix(in srgb, red 38%, var(--color-border-default));
+        color: color-mix(in srgb, red 58%, var(--color-text-primary));
+        background: var(--color-surface-elevated);
       }
       .adm-btn--danger:hover {
-        background: #fef2f2;
+        background: color-mix(in srgb, red 10%, var(--color-surface-elevated));
       }
       .adm-inline-list {
         margin: 0.5rem 0 0;
         padding-left: 1.1rem;
         font-size: 0.875rem;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
       }
       .adm-editor-row {
         display: flex;
@@ -988,7 +988,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
       .adm-input {
         flex: 1;
         min-width: 12rem;
-        border: 1px solid var(--warm-line);
+        border: 1px solid var(--color-border-default);
         border-radius: 0.5rem;
         padding: 0.45rem 0.6rem;
         font: inherit;
@@ -998,22 +998,22 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         min-height: 14rem;
         font-family: ui-monospace, monospace;
         font-size: 0.8rem;
-        border: 1px solid var(--warm-line);
+        border: 1px solid var(--color-border-default);
         border-radius: 0.5rem;
         padding: 0.65rem;
       }
       .adm-dropzone {
-        border: 2px dashed var(--warm-line);
+        border: 2px dashed var(--color-border-default);
         border-radius: 0.75rem;
         padding: 1.1rem;
         text-align: center;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
         cursor: pointer;
       }
       .adm-dropzone.is-over {
-        border-color: var(--copper);
-        color: var(--copper);
-        background: var(--paper);
+        border-color: var(--color-accent-primary);
+        color: var(--color-accent-primary);
+        background: var(--color-surface-page);
       }
       .adm-hidden-input {
         display: none;
@@ -1022,7 +1022,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         margin: 0.5rem 0 0;
         padding-left: 1.1rem;
         font-size: 0.75rem;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
       }
 
       .adm-drawer-backdrop {
@@ -1045,7 +1045,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         height: 100vh;
         width: min(36rem, 100vw);
         z-index: 50;
-        background: var(--paper-light);
+        background: var(--color-surface-elevated);
         box-shadow: -4px 0 24px rgb(0 0 0 / 0.08);
         transform: translateX(100%);
         transition: transform 0.25s ease;
@@ -1067,8 +1067,8 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         justify-content: space-between;
         gap: 0.75rem;
         padding: 1rem 1.1rem;
-        border-bottom: 1px solid var(--warm-line);
-        background: var(--pale-sand);
+        border-bottom: 1px solid var(--color-border-default);
+        background: var(--color-surface-wash);
       }
       .adm-drawer-title {
         margin: 0;
@@ -1079,19 +1079,19 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         margin: 0.2rem 0 0;
         font-size: 0.72rem;
         font-family: ui-monospace, monospace;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
         word-break: break-all;
       }
       .adm-icon-btn {
-        border: 1px solid var(--warm-line);
-        background: var(--paper-light);
+        border: 1px solid var(--color-border-default);
+        background: var(--color-surface-elevated);
         border-radius: 999px;
         width: 2rem;
         height: 2rem;
         cursor: pointer;
         font-size: 1.25rem;
         line-height: 1;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
       }
       .adm-drawer-fields {
         flex: 1;
@@ -1101,7 +1101,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
       .adm-drawer-section {
         margin-bottom: 1.25rem;
         padding-bottom: 1rem;
-        border-bottom: 1px solid var(--warm-line);
+        border-bottom: 1px solid var(--color-border-default);
       }
       .adm-drawer-section:last-child {
         border-bottom: none;
@@ -1112,7 +1112,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         font-weight: 600;
         letter-spacing: 0.16em;
         text-transform: uppercase;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
       }
       .adm-drawer-field {
         margin-bottom: 0.85rem;
@@ -1132,7 +1132,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
       }
       .adm-drawer-input {
         width: 100%;
-        border: 1px solid var(--warm-line);
+        border: 1px solid var(--color-border-default);
         border-radius: 0.5rem;
         padding: 0.45rem 0.55rem;
         font: inherit;
@@ -1140,7 +1140,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
       }
       .adm-drawer-input:focus {
         outline: 2px solid rgb(154 90 46 / 0.25);
-        border-color: var(--copper);
+        border-color: var(--color-accent-primary);
       }
       .adm-drawer-textarea {
         min-height: 6rem;
@@ -1154,16 +1154,16 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
       .adm-img-drop {
         margin-top: 0.35rem;
         padding: 0.65rem;
-        border: 1px dashed var(--warm-line);
+        border: 1px dashed var(--color-border-default);
         border-radius: 0.5rem;
         text-align: center;
         cursor: pointer;
         position: relative;
-        background: var(--paper);
+        background: var(--color-surface-page);
       }
       .adm-img-drop--over {
-        border-color: var(--copper);
-        background: var(--pale-sand);
+        border-color: var(--color-accent-primary);
+        background: var(--color-surface-wash);
       }
       .adm-img-drop--busy {
         opacity: 0.6;
@@ -1171,7 +1171,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
       }
       .adm-img-drop-hint {
         font-size: 0.78rem;
-        color: var(--stone-soft);
+        color: var(--color-text-muted);
       }
       .adm-img-drop-input {
         position: absolute;
@@ -1185,15 +1185,15 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
       .adm-img-preview-img {
         max-height: 7rem;
         border-radius: 0.35rem;
-        border: 1px solid var(--warm-line);
+        border: 1px solid var(--color-border-default);
       }
       .adm-drawer-foot {
         display: flex;
         align-items: center;
         gap: 0.5rem;
         padding: 0.85rem 1rem;
-        border-top: 1px solid var(--warm-line);
-        background: var(--pale-sand);
+        border-top: 1px solid var(--color-border-default);
+        background: var(--color-surface-wash);
       }
       .adm-drawer-foot-actions {
         margin-left: auto;
@@ -1221,12 +1221,12 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         opacity: 1;
       }
       .adm-toast--ok {
-        background: var(--ink);
-        color: #fff;
+        background: var(--color-text-primary);
+        color: var(--color-text-inverse);
       }
       .adm-toast--err {
-        background: #b91c1c;
-        color: #fff;
+        background: color-mix(in srgb, red 70%, var(--color-text-primary));
+        color: var(--color-text-inverse);
       }
     </style>
 

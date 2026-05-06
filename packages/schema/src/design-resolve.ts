@@ -8,15 +8,16 @@ export interface ResolvedCssVariable {
 
 /** Default editorial palette — aligned with editorial-theme `design-tokens.css`. */
 export const EDITORIAL_CSS_DEFAULTS: Record<string, string> = {
-  '--paper': '#f7f4ef',
-  '--paper-light': '#fcfbf8',
-  '--ink': '#1e1a17',
-  '--stone-soft': '#6b625b',
-  '--copper': '#9a5a2e',
-  '--clay': '#b87c5a',
-  '--warm-line': '#e6ded3',
-  '--pale-sand': '#efe6da',
-  '--olive': '#5c6650',
+  '--color-surface-page': '#f7f4ef',
+  '--color-surface-elevated': '#fcfbf8',
+  '--color-surface-wash': '#efe6da',
+  '--color-text-primary': '#1e1a17',
+  '--color-text-muted': '#6b625b',
+  '--color-text-inverse': '#fafaf9',
+  '--color-accent-primary': '#9a5a2e',
+  '--color-accent-secondary': '#b87c5a',
+  '--color-accent-muted': '#5c6650',
+  '--color-border-default': '#e6ded3',
 };
 
 const FONT_SANS_DEFAULT =
@@ -79,74 +80,86 @@ export function resolveCssVariables(theme: ThemeConfig | undefined): Map<string,
   const D = EDITORIAL_CSS_DEFAULTS;
 
   out.set(
-    '--paper',
+    '--color-surface-page',
     pickColor(
       sem?.surface?.page,
       'theme.semanticColors.surface.page',
       leg?.background,
       'theme.colors.background',
-      D['--paper'],
+      D['--color-surface-page'],
     ),
   );
   out.set(
-    '--paper-light',
+    '--color-surface-elevated',
     sem?.surface?.elevated
       ? resolvedEntry(sanitizeCssValue(sem.surface.elevated), 'theme.semanticColors.surface.elevated')
-      : resolvedEntry(D['--paper-light'], 'default'),
+      : resolvedEntry(D['--color-surface-elevated'], 'default'),
   );
   out.set(
-    '--ink',
+    '--color-text-primary',
     pickColor(
       sem?.text?.primary,
       'theme.semanticColors.text.primary',
       leg?.text,
       'theme.colors.text',
-      D['--ink'],
+      D['--color-text-primary'],
     ),
   );
   out.set(
-    '--stone-soft',
+    '--color-text-muted',
     sem?.text?.muted
       ? resolvedEntry(sanitizeCssValue(sem.text.muted), 'theme.semanticColors.text.muted')
-      : resolvedEntry(D['--stone-soft'], 'default'),
+      : resolvedEntry(D['--color-text-muted'], 'default'),
   );
   out.set(
-    '--copper',
+    '--color-text-inverse',
+    sem?.text?.inverse
+      ? resolvedEntry(sanitizeCssValue(sem.text.inverse), 'theme.semanticColors.text.inverse')
+      : resolvedEntry(D['--color-text-inverse'], 'default'),
+  );
+  out.set(
+    '--color-accent-primary',
     pickColor(
       sem?.accent?.primary,
       'theme.semanticColors.accent.primary',
       leg?.primary,
       'theme.colors.primary',
-      D['--copper'],
+      D['--color-accent-primary'],
     ),
   );
   out.set(
-    '--clay',
+    '--color-accent-secondary',
     pickColor(
       sem?.accent?.secondary,
       'theme.semanticColors.accent.secondary',
       leg?.secondary,
       'theme.colors.secondary',
-      D['--clay'],
+      D['--color-accent-secondary'],
     ),
   );
   out.set(
-    '--warm-line',
+    '--color-border-default',
     sem?.border?.default
       ? resolvedEntry(sanitizeCssValue(sem.border.default), 'theme.semanticColors.border.default')
-      : resolvedEntry(D['--warm-line'], 'default'),
+      : resolvedEntry(D['--color-border-default'], 'default'),
   );
+  if (sem?.border?.strong) {
+    out.set(
+      '--color-border-strong',
+      resolvedEntry(sanitizeCssValue(sem.border.strong), 'theme.semanticColors.border.strong'),
+    );
+  }
   out.set(
-    '--pale-sand',
+    '--color-surface-wash',
     sem?.surface?.wash
       ? resolvedEntry(sanitizeCssValue(sem.surface.wash), 'theme.semanticColors.surface.wash')
-      : resolvedEntry(D['--pale-sand'], 'default'),
+      : resolvedEntry(D['--color-surface-wash'], 'default'),
   );
   out.set(
-    '--olive',
+    '--color-accent-muted',
     sem?.accent?.muted
       ? resolvedEntry(sanitizeCssValue(sem.accent.muted), 'theme.semanticColors.accent.muted')
-      : resolvedEntry(D['--olive'], 'default'),
+      : resolvedEntry(D['--color-accent-muted'], 'default'),
   );
 
   return out;

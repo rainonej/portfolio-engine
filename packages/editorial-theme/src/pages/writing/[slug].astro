@@ -30,12 +30,12 @@ const base = getBase();
   <article class="mx-auto max-w-3xl px-6 pb-24 pt-40">
     <a
       href={`${base}/writing`}
-      class="mb-8 inline-block text-sm text-stone-400 transition-colors hover:text-stone-900"
+      class="mb-8 inline-block text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
     >
       ← Back to Writing
     </a>
 
-    <div class="mb-10 aspect-[21/9] overflow-hidden rounded-2xl bg-stone-100">
+    <div class="mb-10 aspect-[21/9] overflow-hidden rounded-2xl bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))]">
       <ImageOrFallback
         src={p.image ? resolveAssetUrl(p.image, base) : null}
         alt={p.title}
@@ -46,12 +46,12 @@ const base = getBase();
     </div>
 
     <div class="mb-4 flex flex-wrap items-center gap-3">
-      <time class="text-xs text-stone-400" datetime={p.date.toISOString()}>
+      <time class="text-xs text-[var(--color-text-muted)]" datetime={p.date.toISOString()}>
         {formatDate(p.date)}
       </time>
       {
         p.tags?.map((tag: string) => (
-          <span class="text-xs font-medium uppercase tracking-widest text-amber-800">
+          <span class="text-xs font-medium uppercase tracking-widest text-[var(--color-accent-primary)]">
             {tag}
           </span>
         ))
@@ -64,14 +64,14 @@ const base = getBase();
 
     {
       p.description && (
-        <p class="mb-10 text-xl leading-relaxed text-stone-500">
+        <p class="mb-10 text-xl leading-relaxed text-[var(--color-text-muted)]">
           {p.description}
         </p>
       )
     }
 
     <div
-      class="prose prose-stone prose-headings:font-serif prose-a:text-amber-800 prose-a:underline-offset-4 max-w-none"
+      class="prose prose-stone prose-headings:font-serif prose-a:text-[var(--color-accent-primary)] prose-a:underline-offset-4 max-w-none"
     >
       <Content />
     </div>

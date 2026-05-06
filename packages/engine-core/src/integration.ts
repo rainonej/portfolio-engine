@@ -98,8 +98,9 @@ function buildNavWarnings(
     if (!activeResolvedPaths.has(normalizeNavHref(href))) {
       warnings.push(
         `Nav item "${item.label}" → "${href}" does not match any active injected route. ` +
-          `Check: (1) route is not disabled in astro.config.mjs, (2) a consumer-local registry entry exists for this pattern, ` +
-          `or (3) the href matches an ordinary Astro src/pages route (not verified by the engine).`,
+          `For replacing a theme route such as /about, /writing, or /contact, prefer consumer-local registry routes under src/pages-local and disable the theme route first. ` +
+          `Use ordinary src/pages only when you deliberately want an Astro-owned route that Portfolio Engine does not inject or diagnose. ` +
+          `Also verify the href is not disabled in astro.config.mjs.`,
       );
     }
   }

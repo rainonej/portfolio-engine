@@ -18,14 +18,14 @@ const isDev = import.meta.env.DEV;
   <section class="mx-auto max-w-5xl px-6 pb-24 pt-40">
     <div class="max-w-xl">
       <p
-        class="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-amber-800"
+        class="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-[var(--color-accent-primary)]"
       >
         Get in touch
       </p>
       <h1 class="mb-6 font-serif text-5xl font-bold leading-tight md:text-6xl">
         {contactHeading}
       </h1>
-      <p class="mb-14 text-lg leading-relaxed text-stone-500">
+      <p class="mb-14 text-lg leading-relaxed text-[var(--color-text-muted)]">
         {contactBody}
       </p>
 
@@ -46,10 +46,10 @@ const isDev = import.meta.env.DEV;
       {
         person.email && (
           <div class="mt-10">
-            <p class="mb-3 text-sm font-medium text-stone-600">Email</p>
+            <p class="mb-3 text-sm font-medium text-[var(--color-text-muted)]">Email</p>
             <a
               href={`mailto:${person.email}`}
-              class="text-base font-medium text-stone-900 underline underline-offset-4 transition-colors hover:text-amber-800"
+              class="text-base font-medium text-[var(--color-text-primary)] underline underline-offset-4 transition-colors hover:text-[var(--color-accent-primary)]"
             >
               {person.email}
             </a>
@@ -59,9 +59,9 @@ const isDev = import.meta.env.DEV;
 
       {
         !person.email && !hasConfiguredScheduling && !bookingUrl && isDev && (
-          <div class="rounded-2xl border border-dashed border-stone-200 bg-stone-50 px-8 py-10 text-center text-stone-400">
+          <div class="rounded-2xl border border-dashed border-[var(--color-border-default)] bg-[var(--color-surface-wash)] px-8 py-10 text-center text-[var(--color-text-muted)]">
             <p class="text-sm">
-              [dev] No contact method configured. Add <code class="rounded bg-stone-100 px-1">email</code> to <code class="rounded bg-stone-100 px-1">profile/person.json</code> or configure <code class="rounded bg-stone-100 px-1">bookingUrl</code> in <code class="rounded bg-stone-100 px-1">site.json</code>.
+              [dev] No contact method configured. Add <code class="rounded bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))] px-1">email</code> to <code class="rounded bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))] px-1">profile/person.json</code> or configure <code class="rounded bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))] px-1">bookingUrl</code> in <code class="rounded bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))] px-1">site.json</code>.
             </p>
           </div>
         )

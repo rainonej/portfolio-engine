@@ -16,14 +16,14 @@ const { testimonials } = Astro.props;
   {
     testimonials.map((t) => (
       <blockquote class="flex flex-col">
-        <p class="relative mb-6 flex-1 pt-5 font-serif text-xl italic leading-relaxed text-[var(--ink)] before:absolute before:left-0 before:top-0 before:h-px before:w-8 before:bg-[var(--copper)] before:content-['']">
+        <p class="relative mb-6 flex-1 pt-5 font-serif text-xl italic leading-relaxed text-[var(--color-text-primary)] before:absolute before:left-0 before:top-0 before:h-px before:w-8 before:bg-[var(--color-accent-primary)] before:content-['']">
           {t.quote}
         </p>
         <footer>
-          <span class="block text-sm font-semibold text-stone-900">
+          <span class="block text-sm font-semibold text-[var(--color-text-primary)]">
             {t.author}
           </span>
-          {t.role && <span class="block text-xs text-stone-400">{t.role}</span>}
+          {t.role && <span class="block text-xs text-[var(--color-text-muted)]">{t.role}</span>}
         </footer>
       </blockquote>
     ))

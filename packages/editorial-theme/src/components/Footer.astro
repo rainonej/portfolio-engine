@@ -10,28 +10,28 @@ const adminOrigin = adminOriginEnv || (base !== '' ? config.site.baseUrl : '');
 const adminHref = adminOrigin ? `${adminOrigin}/admin` : `${base}/admin`;
 
 /**
- * Admin link visibility:
+ * Admin link visibility (discoverability only — not authentication):
  * - Always visible in development.
- * - In production: visible only when `PUBLIC_SHOW_ADMIN_LINK=true` is set.
- * Consumers can pass `PUBLIC_SHOW_ADMIN_LINK=true` in their `.env.production`
- * to explicitly surface the admin link on their live site.
+ * - In production: when `PUBLIC_SHOW_ADMIN_LINK=true`, or when `site.json` sets `admin.showPublicLink: true`.
  */
 const isDev = import.meta.env.DEV;
 const showAdminLinkEnv = import.meta.env.PUBLIC_SHOW_ADMIN_LINK;
-const showAdminLink = isDev || showAdminLinkEnv === 'true';
+const showAdminLinkSite = config.site.admin?.showPublicLink === true;
+const showAdminLink = isDev || showAdminLinkEnv === 'true' || showAdminLinkSite;
+const adminLinkLabel = (config.site.admin?.publicLinkLabel ?? '').trim() || 'Admin';
 ---
 
 {
   Override ? (
-    <Override adminHref={adminHref} siteTitle={config.site.title} />
+    <Override adminHref={adminHref} siteTitle={config.site.title} adminLinkLabel={adminLinkLabel} />
   ) : (
-    <footer class="mt-24 border-t border-stone-100 px-6 py-10 text-center text-sm text-stone-400">
+    <footer class="mt-24 border-t border-[var(--color-border-default)] px-6 py-10 text-center text-sm text-[var(--color-text-muted)]">
       <p>
         © {new Date().getFullYear()}
         {config.site.title} &middot; Made with{' '}
         <a
           href="https://github.com/rainonej/portfolio-engine"
-          class="transition-colors hover:text-stone-600"
+          class="transition-colors hover:text-[var(--color-text-muted)]"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -40,8 +40,8 @@ const showAdminLink = isDev || showAdminLinkEnv === 'true';
         {showAdminLink && (
           <>
             {' '}&middot;{' '}
-            <a href={adminHref} class="transition-colors hover:text-stone-600">
-              Admin
+            <a href={adminHref} class="transition-colors hover:text-[var(--color-text-muted)]">
+              {adminLinkLabel}
             </a>
           </>
         )}

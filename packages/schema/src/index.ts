@@ -46,6 +46,17 @@ export const SiteConfigSchema = z.object({
   description: z.string(),
   baseUrl: z.url(),
   tagline: z.string(),
+  /**
+   * Optional public footer link to `/admin`. Visibility is independent of auth:
+   * anyone can see the URL; GitHub OAuth still gates access. Prefer `PUBLIC_SHOW_ADMIN_LINK=true`
+   * for env-driven production, or set `showPublicLink` here for config-as-code.
+   */
+  admin: z
+    .object({
+      showPublicLink: z.boolean().optional(),
+      publicLinkLabel: z.string().optional(),
+    })
+    .optional(),
   bookingUrl: z.url().optional(),
   contact: z.object({
     heading: z.string(),

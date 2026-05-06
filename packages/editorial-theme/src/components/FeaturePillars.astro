@@ -17,7 +17,7 @@ const { pillars } = Astro.props;
     pillars.map((pillar) => (
       <div>
         {pillar.image && (
-          <div class="mb-5 aspect-[4/3] overflow-hidden rounded-xl bg-stone-100">
+          <div class="mb-5 aspect-[4/3] overflow-hidden rounded-xl bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))]">
             <img
               src={pillar.image}
               alt={pillar.heading}
@@ -26,11 +26,11 @@ const { pillars } = Astro.props;
             />
           </div>
         )}
-        <div class="mb-5 h-px w-8 bg-[var(--copper)]" />
+        <div class="mb-5 h-px w-8 bg-[var(--color-accent-primary)]" />
         <h3 class="mb-3 font-serif text-lg font-bold leading-snug">
           {pillar.heading}
         </h3>
-        <p class="text-sm leading-relaxed text-[var(--stone-soft)]">
+        <p class="text-sm leading-relaxed text-[var(--color-text-muted)]">
           {pillar.body}
         </p>
       </div>

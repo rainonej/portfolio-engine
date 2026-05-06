@@ -38,7 +38,7 @@ export const DEFAULT_OVERRIDE_SURFACES: OverrideSurfaceEntry[] = [
   },
   {
     name: 'Footer',
-    props: ['adminHref', 'siteTitle'],
+    props: ['adminHref', 'siteTitle', 'adminLinkLabel'],
     defaultComponentPath: 'src/components/Footer.astro',
     hostPage: 'src/layouts/Layout.astro',
   },

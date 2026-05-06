@@ -7,7 +7,7 @@ export const SemanticColorsSchema = z
       .object({
         page: z.string().optional(),
         elevated: z.string().optional(),
-        /** Warm section fills (maps to `--pale-sand`). */
+        /** Warm section fills (maps to `--color-surface-wash`). */
         wash: z.string().optional(),
       })
       .optional(),
@@ -15,19 +15,22 @@ export const SemanticColorsSchema = z
       .object({
         primary: z.string().optional(),
         muted: z.string().optional(),
+        /** Text on solid primary surfaces (e.g. primary buttons). */
+        inverse: z.string().optional(),
       })
       .optional(),
     accent: z
       .object({
         primary: z.string().optional(),
         secondary: z.string().optional(),
-        /** Supporting accent / tags (maps to `--olive`). */
+        /** Supporting accent / tags (maps to `--color-accent-muted`). */
         muted: z.string().optional(),
       })
       .optional(),
     border: z
       .object({
         default: z.string().optional(),
+        strong: z.string().optional(),
       })
       .optional(),
   })

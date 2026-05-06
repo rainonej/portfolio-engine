@@ -47,6 +47,19 @@ Register the OAuth **callback URL** to match your deployed origin **and** Astro 
 
 The authorize request uses scope **`read:user repo`** so the collaborator check and future GitHub Contents API calls work on private repositories.
 
+## Public “Admin” link in the site footer
+
+The theme footer can show a **discoverable** `/admin` link in production. That is **not** authentication: it only helps visitors (or you) find the dashboard URL. GitHub OAuth still controls who may use the dashboard.
+
+Enable **either**:
+
+- **Environment:** set `PUBLIC_SHOW_ADMIN_LINK=true` in the deployment environment (e.g. Vercel), **or**
+- **Config:** in `src/config/site.json`, set `"admin": { "showPublicLink": true, "publicLinkLabel": "Admin" }` (`publicLinkLabel` is optional; defaults to `Admin`).
+
+In **`astro dev`**, the link stays visible so local workflows stay fast.
+
+To keep the footer minimal in production, omit both toggles (default): the link is hidden outside dev unless you opt in explicitly.
+
 ### Session cookie
 
 The signed session cookie follows the same MVP shape as `professional_site` (GitHub access token is embedded in the signed payload). Prefer an opaque server-side session if you need stronger protection against cookie leakage.
