@@ -23,8 +23,8 @@ Choose TypeScript, JSON, or hybrid for `src/registry/portfolio-engine.registry.*
 
 **Acceptance criteria**
 
-- [ ] Decision recorded.
-- [ ] Admin-tools readability considered.
+- [x] Decision recorded.
+- [x] Admin-tools readability considered.
 
 ### Add local route extension support
 
@@ -34,9 +34,9 @@ Allow registry entries to add local pages backed by `src/pages-local`.
 
 **Acceptance criteria**
 
-- [ ] Local route renders.
-- [ ] Duplicate paths fail clearly.
-- [ ] Manifest includes local route.
+- [x] Local route renders.
+- [x] Duplicate paths fail clearly.
+- [x] Manifest includes local route.
 
 ### Add local component/embed support
 

@@ -6,6 +6,12 @@ This recipe matches the MVP in [Epic: consumer registry](https://github.com/rain
 
 - Astro site using `editorialTheme()` from `@portfolio-engine/editorial-theme` (same setup as [new-site-setup](./new-site-setup.md)).
 
+## Registry format (Phase 7)
+
+The contract on disk is **JSON** under `src/registry/`; **`@portfolio-engine/schema`** provides Zod validation and inferred types (`parseConsumerPortfolioEngineRegistry`). Rationale, versioning, and admin-tools trade-offs are summarized in [ADR-005 (consumer extension registry format)](https://github.com/rainonej/portfolio-engine/blob/main/portfolio_engine_v5_report_pack/source/decisions/ADR-005-consumer-extension-registry-format.md) in the upstream repo (stable URL for copies of this doc).
+
+**Admin-tools:** `src/registry/` is an allowed root. In **local `devBypass` development**, registry file **listing**, read, and save all use your working tree on disk. In **OAuth (GitHub Contents API) mode**, **read and save** for a known file path (for example `src/registry/portfolio-engine.registry.json`) go through GitHub; **directory listings** for the registry section still use `node:fs` under `process.cwd()` in admin-tools (see [content API route source](https://github.com/rainonej/portfolio-engine/blob/main/packages/admin-tools/src/routes/api/content.ts)), so they only reflect files present on that server—typically your laptop when running `astro dev`, not a remote tree listing from GitHub.
+
 ## Steps
 
 ### 1. Registry file
@@ -81,6 +87,7 @@ Pass these to `editorialTheme()` / `createEngineIntegration()`:
 
 Routes from the registry appear in `.portfolio-engine/manifest.json` with `"routeOrigin": "consumer-local"`. `capabilities.consumerLocalRoutes` is `true` when at least one such route is active.
 
-## Verified example
+## Verified examples
 
-`examples/demo-site` in this repo implements `/how-i-think` using the steps above.
+- `examples/demo-site` — static output; route `/how-i-think`.
+- `examples/node-ssr-demo` — `output: 'server'` with `@astrojs/node`; route `/ssr-registry-smoke`.
