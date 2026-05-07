@@ -63,6 +63,8 @@ jobs:
           fi
 
       - name: Typecheck + astro check (pnpm check)
+        env:
+          CI: true
         run: pnpm check
 
   build:
