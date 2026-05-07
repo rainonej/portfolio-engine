@@ -4,6 +4,16 @@ Copy this whole file into Claude Code as your first message.
 
 ---
 
+## Content source-of-truth rule
+
+**Rendered site copy** must come only from the site owner's answers and from **`src/config`**, **`src/content`**, **`src/pages-local`**, and **`src/overrides`**.
+
+**`src/context`** is agent-facing guidance (humans/agents editing the repo); it is **not** consumed by the Astro build, so edits there alone do not change the live site.
+
+Do **not** reuse brand language from upstream examples, pasted transcripts, or other downstream sites. Placeholder values in portfolio-engine docs are not a model identity. If positioning changes later, update runtime sources above **and** any stale **`src/context`** files so nothing obsolete remains.
+
+---
+
 You are helping me set up a new personal portfolio site from scratch using
 `@portfolio-engine/editorial-theme` + `@portfolio-engine/admin-tools`.
 

@@ -2,7 +2,7 @@
 
 ## Mission
 
-Fix the reusable engine/theme issues exposed by the live `jordan-site-kappa.vercel.app` audit. Do **not** hard-code Jordan-specific content upstream. The upstream work should make `@portfolio-engine/editorial-theme` and `@portfolio-engine/engine-core` more robust for all downstream sites, especially sites that mix:
+Fix the reusable engine/theme issues exposed by a live consumer-site audit (preview deployment). Do **not** hard-code any real downstream person’s content upstream. The upstream work should make `@portfolio-engine/editorial-theme` and `@portfolio-engine/engine-core` more robust for all downstream sites, especially sites that mix:
 
 - theme-injected routes,
 - disabled/remapped theme routes,
@@ -11,9 +11,9 @@ Fix the reusable engine/theme issues exposed by the live `jordan-site-kappa.verc
 - package-based Tailwind/global CSS,
 - structured profile/resume content.
 
-The live Jordan site is now much better than the first audit suggested, but it exposed two reusable engine problems:
+The audited consumer site improved after the first pass, but it exposed two reusable engine problems:
 
-1. The top nav can render as glued text (`Jordan Rainone, PhDWorkResearch & IdeasHow I ThinkResumeContact`) when the expected flex/gap styling is not applied.
+1. The top nav can render as glued text (e.g. `Alex ChenWorkWritingAboutContact`) when the expected flex/gap styling is not applied.
 2. Route/deployment debugging is too opaque: the repo may have correct route disabling + local route registry, while production still appears to serve stale/default route content.
 
 ## External docs to keep in mind
@@ -46,7 +46,7 @@ But the current upstream still needs hardening.
 The live screenshot shows the nav rendered as glued text:
 
 ```text
-Jordan Rainone, PhDWorkResearch & IdeasHow I ThinkResumeContact
+Alex ChenWorkWritingAboutResumeContact
 ```
 
 That means the browser is not receiving or applying the intended layout rules for `Nav.astro`. The current upstream nav depends heavily on Tailwind utility classes in package source. That should work, but the downstream production screenshot proves we need a more defensive baseline.
@@ -146,7 +146,7 @@ Add explicit CSS to `global.css`:
 - On a production build of `examples/demo-site`, nav items are visibly separated even if Tailwind utilities fail to apply.
 - On a downstream consumer build, nav does not collapse into glued inline text.
 - Add a minimal visual/snapshot test or at least a fixture build that confirms `.pe-site-nav-list` CSS appears in the final CSS/HTML.
-- No Jordan-specific names/content appear in upstream code.
+- No real downstream person’s name or private brand copy appears in upstream code.
 
 ---
 
@@ -154,7 +154,7 @@ Add explicit CSS to `global.css`:
 
 ## Problem
 
-Downstream `jordan-site` can have:
+A downstream consumer can have:
 
 - default theme route `/writing` disabled,
 - local registry route `/writing` declared,
@@ -401,7 +401,7 @@ Then update:
 
 ## Problem
 
-The stale live Jordan `/writing` route shows education/curriculum copy. Even if that came from an old package or old content, upstream defaults should avoid domain-specific persona copy.
+A stale `/writing` route can show wrong or outdated copy (for example old placeholder prose) when route ownership or deployment cache is confusing. Even if that came from old content or an old build, upstream defaults should avoid domain-specific persona copy.
 
 ## Required change
 

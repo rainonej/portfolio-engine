@@ -17,15 +17,18 @@ const base = getBase();
     <p
       class="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-[var(--color-accent-primary)]"
     >
-      Portfolio
+      Work
     </p>
-    <h1 class="mb-16 font-serif text-5xl font-bold leading-tight md:text-6xl">
-      My Work
+    <h1 class="mb-6 font-serif text-5xl font-bold leading-tight md:text-6xl">
+      Work
     </h1>
+    <p class="mb-16 text-lg leading-relaxed text-[var(--color-text-muted)]">
+      Selected work and case studies.
+    </p>
 
     {
       sorted.length === 0 ? (
-        <p class="text-lg text-[var(--color-text-muted)]">Projects coming soon.</p>
+        <p class="text-lg text-[var(--color-text-muted)]">No projects yet.</p>
       ) : (
         <div class="grid gap-12 md:grid-cols-2">
           {sorted.map((project) => {

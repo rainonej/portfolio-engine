@@ -54,7 +54,7 @@ There are two modes for consuming portfolio-engine packages, depending on whethe
 
 ## Semver mode (separate consumer repo)
 
-The production mode for `agreni-site` and `jordan-site`. Your consumer repo is a standalone Astro project with no direct knowledge of the monorepo.
+The normal mode for real sites in their own repositories. Your consumer repo is a standalone Astro project with no direct knowledge of the monorepo.
 
 **Install from npm:**
 
@@ -80,7 +80,7 @@ export default defineConfig({
 });
 ```
 
-**Upgrade:** bump the version in `package.json` and run `pnpm install`. Pin to a specific minor to control when you pick up changes.
+**Upgrade:** bump the version in `package.json` and run `pnpm install`. Pin to a specific minor to control when you pick up changes. For changelogs, breaking changes, and **AI/agent** upgrade steps, see **[`upgrade-path.md`](upgrade-path.md)**.
 
 ## Vercel (standalone consumer repo)
 

@@ -27,7 +27,7 @@ An Astro theme for personal portfolio sites. It provides routes, layouts, and st
 Your portfolio is its own private repo. This repo is the engine it consumes.
 
 ```
-Your repo (e.g. jordan-site)        This repo (portfolio-engine)
+Your repo (e.g. my-portfolio)       This repo (portfolio-engine)
 ────────────────────────────        ──────────────────────────────
 src/
   config/    ← your JSON config     @portfolio-engine/editorial-theme
