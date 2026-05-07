@@ -10,7 +10,7 @@ theme provides — all from one call in your `astro.config.mjs`.
 ```js
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
-import { editorialTheme } from '@portfolio-engine/editorial-theme';
+import { editorialTheme } from '@portfolio-engine/editorial-theme/integration';
 
 export default defineConfig({
   integrations: [
@@ -115,11 +115,12 @@ expect them):
 | `writing`      | `content` | title, date, description?, image?, draft?, tags?                                                       |
 | `testimonials` | `data`    | quote, author, role, featured?                                                                         |
 
-For the `profile` collection, prefer `shortBio`/`summary`/`longBio` over
-dumping everything into `bio`. The `bio` field is still accepted but deprecated:
-it is split on blank lines into paragraphs when present. A hero that receives a
-wall of bio text will look unpolished — use `shortBio` (one liner) for the hero
-and `longBio` (array of paragraphs) for about/resume.
+For the `profile` collection, biography copy uses only `shortBio` (hero/meta
+one-liner), optional `summary` (cards and second hero fallback), and `longBio`
+(array of paragraphs for about/resume). `ProfilePersonSchema` rejects the old
+`bio` key (`.strict()`). The TypeScript `ProfilePerson` type still includes a
+`@deprecated` `bio?` field so tooling flags any code that references it — it is
+never read by the theme.
 
 See [`examples/demo-site/src/content.config.ts`](../../examples/demo-site/src/content.config.ts)
 for a working reference.
@@ -135,12 +136,12 @@ it. Both are configured by passing an `overrides` option to
 Replace one of the four named section blocks with your own Astro
 component:
 
-| Surface                | Page | Replaces                               | Props received                                   |
-| ---------------------- | ---- | -------------------------------------- | ------------------------------------------------ |
-| `Hero`                 | `/`  | The home-page hero (name, bio, CTAs)   | `{ person, bookingUrl, pillars, base, tagline }` |
-| `FeaturedWriting`      | `/`  | The "Recent Writing" block on the home | `{ posts, base }`                                |
-| `TestimonialSection`   | `/`  | The testimonials block on the home     | `{ testimonials }`                               |
-| `CollaborationSection` | `/`  | The collaboration CTA at the bottom    | `{ base, ctaBody }`                              |
+| Surface                | Page | Replaces                                                  | Props received                                   |
+| ---------------------- | ---- | --------------------------------------------------------- | ------------------------------------------------ |
+| `Hero`                 | `/`  | The home-page hero (name, shortBio/summary/longBio, CTAs) | `{ person, bookingUrl, pillars, base, tagline }` |
+| `FeaturedWriting`      | `/`  | The "Recent Writing" block on the home                    | `{ posts, base }`                                |
+| `TestimonialSection`   | `/`  | The testimonials block on the home                        | `{ testimonials }`                               |
+| `CollaborationSection` | `/`  | The collaboration CTA at the bottom                       | `{ base, ctaBody }`                              |
 
 ```js
 editorialTheme({

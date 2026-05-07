@@ -1,44 +1,11 @@
 import { defineCollection } from 'astro:content';
 import { z } from 'zod';
 import { glob } from 'astro/loaders';
+import { ProfilePersonSchema, ProfileCvSchema } from '@portfolio-engine/schema';
 
 const profile = defineCollection({
   loader: glob({ pattern: '**/*.json', base: './src/content/profile' }),
-  schema: z.union([
-    // person entry
-    z.object({
-      name: z.string(),
-      bio: z.string(),
-      photo: z.string().optional(),
-      email: z.string().optional(),
-      linkedin: z.url().optional(),
-      instagram: z.url().optional(),
-    }),
-    // cv entry
-    z.object({
-      awards: z
-        .array(
-          z.object({
-            title: z.string(),
-            context: z.string().optional(),
-            description: z.string().optional(),
-            image: z.string().optional(),
-          }),
-        )
-        .optional(),
-      education: z
-        .array(
-          z.object({
-            degree: z.string(),
-            institution: z.string(),
-            location: z.string().optional(),
-            year: z.union([z.string(), z.number()]).optional(),
-            note: z.string().optional(),
-          }),
-        )
-        .optional(),
-    }),
-  ]),
+  schema: z.union([ProfilePersonSchema, ProfileCvSchema]),
 });
 
 const projects = defineCollection({

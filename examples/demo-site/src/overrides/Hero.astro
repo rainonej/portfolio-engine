@@ -1,4 +1,7 @@
 ---
+import type { ProfilePerson } from '@portfolio-engine/editorial-theme';
+import { resolveHeroBio } from '@portfolio-engine/editorial-theme';
+
 /**
  * Demo override for the Hero surface.
  *
@@ -14,11 +17,7 @@ interface Pillar {
   image?: string;
 }
 
-interface Person {
-  name: string;
-  bio: string;
-  photo?: string;
-}
+type Person = Pick<ProfilePerson, 'name' | 'shortBio' | 'summary' | 'longBio' | 'photo'>;
 
 interface Props {
   person: Person;
@@ -29,6 +28,7 @@ interface Props {
 }
 
 const { person, tagline } = Astro.props;
+const heroLine = resolveHeroBio(person);
 ---
 
 <section
@@ -43,6 +43,6 @@ const { person, tagline } = Astro.props;
       {person.name}
       {tagline && <span class="block text-3xl font-normal text-[var(--stone-soft)]">{tagline}</span>}
     </h1>
-    <p class="text-lg leading-relaxed text-[var(--stone-soft)]">{person.bio}</p>
+    <p class="text-lg leading-relaxed text-[var(--stone-soft)]">{heroLine}</p>
   </div>
 </section>

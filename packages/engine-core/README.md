@@ -8,7 +8,7 @@ Consumers call `editorialTheme()` only. Engine-core is mounted internally by the
 
 ```js
 // astro.config.mjs — what the consumer writes
-import { editorialTheme } from '@portfolio-engine/editorial-theme';
+import { editorialTheme } from '@portfolio-engine/editorial-theme/integration';
 export default defineConfig({
   integrations: [
     editorialTheme({

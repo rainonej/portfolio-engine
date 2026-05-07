@@ -1,5 +1,8 @@
 {
   "name": "Alex Morgan",
-  "bio": "Independent designer and technologist working at the intersection of clarity and craft. I help teams ship products that respect people's time and attention.",
+  "shortBio": "Independent designer and technologist at the intersection of clarity and craft.",
+  "longBio": [
+    "Independent designer and technologist working at the intersection of clarity and craft. I help teams ship products that respect people's time and attention."
+  ],
   "email": "alex@demo.example"
 }
