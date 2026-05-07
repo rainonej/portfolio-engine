@@ -28,7 +28,7 @@ When `package.json` or the lockfile changes versions for **`@portfolio-engine/*`
 
 1. Follow **`docs/downstream/upgrade-path.md`** in this repo (if missing, use the same path in the upstream [portfolio-engine](https://github.com/rainonej/portfolio-engine) repo).
 2. For each touched package, read **`CHANGELOG.md`** for the full semver window (previous version → new version), **oldest to newest**. Prefer **`#### Agent migration`** sections for actionable steps; merge them into one checklist. If two releases disagree, **follow the newer release**.
-3. Changelogs are available under `node_modules/@portfolio-engine/<pkg>/CHANGELOG.md` after install, or on GitHub under `packages/<pkg>/CHANGELOG.md`.
+3. Read changelogs from `node_modules/@portfolio-engine/<pkg>/CHANGELOG.md` when present; otherwise use GitHub `rainonej/portfolio-engine` → `packages/<pkg>/CHANGELOG.md`.
 
 Then run `pnpm install` (if needed), `pnpm check`, and `pnpm build`.
 

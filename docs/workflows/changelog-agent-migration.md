@@ -28,6 +28,8 @@ Write the block in the **body** of the same `.changeset/<name>.md` file as the s
    - **Actions:** imperative steps (remove field `bio`; add `shortBio`, `summary`, `longBio`; map old text to new fields with a one-line rule).
    - **Supersedes (optional):** if this release overrides earlier migration advice, add one line: `Supersedes: <short description of obsolete guidance>` so multi-version readers keep the latest intent only.
 
+You may add **extra** bold-labeled bullets when they help agents scan (e.g. **Imports:**, **CSS:**, **Config:**). Prefer folding generic file edits into **Actions**; use separate labels when the topic is a distinct domain (import paths vs. content fields).
+
 Do not rely on vague bullets like “update profile schema” without paths and field names.
 
 ## Multi-version upgrades (humans and agents)

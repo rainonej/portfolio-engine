@@ -57,7 +57,7 @@ Or use the VS Code / script flows in [One-click upgrade](#one-click-upgrade-vs-c
 
 When `@portfolio-engine/*` versions change (or the user asks to upgrade engine packages), agents should **not** infer new APIs from memory.
 
-1. For **each** `@portfolio-engine/*` package in the consumer `package.json`, read that package’s **`CHANGELOG.md`** for every release **after** the version the site previously used **through** the version being installed, in **ascending semver order** (oldest first). After `pnpm install`, use `node_modules/@portfolio-engine/<pkg>/CHANGELOG.md`, or read the same file on GitHub from [`rainonej/portfolio-engine`](https://github.com/rainonej/portfolio-engine) (paths under `packages/<pkg>/CHANGELOG.md`).
+1. For **each** `@portfolio-engine/*` package in the consumer `package.json`, read that package’s **`CHANGELOG.md`** for every release **after** the version the site previously used **through** the version being installed, in **ascending semver order** (oldest first). After `pnpm install`, you can read `node_modules/@portfolio-engine/<pkg>/CHANGELOG.md` if the package ships it; **if that file is missing**, use the canonical copy on GitHub: [`rainonej/portfolio-engine`](https://github.com/rainonej/portfolio-engine) at `packages/<pkg>/CHANGELOG.md` (replace `<pkg>` with `schema`, `engine-core`, `editorial-theme`, or `admin-tools`).
 2. Merge all **`#### Agent migration`** sections from that version window into **one** checklist before editing consumer files. If instructions conflict between releases, **follow the newer release**. Prefer explicit “Supersedes” lines in the changelog when present.
 3. Apply migration steps, then run `pnpm check` and `pnpm build`.
 

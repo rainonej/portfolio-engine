@@ -4,7 +4,7 @@ This directory holds **pending** release notes. When `dev` is merged into `main`
 
 ## Authoring
 
-1. After your change lands on **`dev`**, run `pnpm changeset` (or `pnpm exec changeset add`) and follow the prompts.
+1. Run `pnpm changeset` (or `pnpm exec changeset add`) **in the same PR as your code change** (preferred) so the changeset merges to **`dev`** with the feature. If you truly cannot, land a follow-up on **`dev`** before **`dev` → `main`** promotion—releases need pending `.changeset/*.md` on the `dev` tip you promote (see ship checklist in [`docs/workflows/release-workflow.md`](../docs/workflows/release-workflow.md)).
 2. Pick the correct semver bump for each affected `@portfolio-engine/*` package.
 3. In the **summary body**, write a short human-facing description, then add consumer-facing migration text when needed (see below).
 
