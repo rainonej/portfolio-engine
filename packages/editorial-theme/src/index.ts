@@ -7,7 +7,7 @@ export {
   EDITORIAL_GOOGLE_FONTS_STYLESHEET_HREF,
 } from './lib/google-fonts.js';
 export {
-  splitBioParagraphs,
+  resolveLongBioParagraphs,
   resolveHeroBio,
   type ProfilePerson,
 } from './lib/profile-person.js';

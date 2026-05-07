@@ -43,8 +43,8 @@ export function editorialTheme(options: EditorialThemeOptions): AstroIntegration
         updateConfig({
           vite: {
             /**
-             * PostCSS pipeline keeps Tailwind off Rollup's SSR JS graph. The Vite plugin pulls
-             * `@tailwindcss/oxide` `.node` binaries into the server bundle and breaks Astro builds.
+             * PostCSS runs outside Rollup. Import `editorialTheme` from `@portfolio-engine/editorial-theme/integration`
+             * only (not the package root) so Tailwind/Oxide never enter the SSR JS graph.
              */
             css: {
               postcss: {

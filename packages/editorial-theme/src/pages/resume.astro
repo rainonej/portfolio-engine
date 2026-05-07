@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Reveal from '../components/Reveal.astro';
 import SectionIntro from '../components/SectionIntro.astro';
 import { getEntry } from 'astro:content';
-import { loadProfilePerson, splitBioParagraphs } from '../lib/load-profile-person';
+import { loadProfilePerson, resolveLongBioParagraphs } from '../lib/load-profile-person';
 
 const person = await loadProfilePerson();
 
@@ -47,13 +47,13 @@ type CvProfileData = {
 
 const cv = (cvEntry?.data ?? {}) as CvProfileData;
 
-/** Prefer longBio paragraphs, then a single summary paragraph, then legacy bio split. */
+/** Prefer longBio paragraphs, then a single summary paragraph. */
 const summaryParagraphs: string[] =
   person.longBio && person.longBio.length > 0
     ? person.longBio
     : person.summary?.trim()
       ? [person.summary.trim()]
-      : splitBioParagraphs(person.bio);
+      : resolveLongBioParagraphs(person);
 
 const metaDescriptionRaw =
   person.summary?.trim() ||

@@ -4,7 +4,11 @@ export const prerender = false;
 
 import '@portfolio-engine/editorial-theme/styles/global.css';
 import ThemeTokenOverrides from '@portfolio-engine/editorial-theme/components/ThemeTokenOverrides.astro';
-import { editorialGoogleFontsStylesheetHref } from '@portfolio-engine/editorial-theme';
+import {
+  editorialGoogleFontsStylesheetHref,
+  resolveHeroBio,
+  type ProfilePerson,
+} from '@portfolio-engine/editorial-theme';
 import { getCollection } from 'astro:content';
 import { config } from '@portfolio-engine:config';
 import { routes } from '@portfolio-engine:routes';
@@ -82,13 +86,7 @@ const projects = await tryCollection('projects');
 const testimonials = await tryCollection('testimonials');
 const profile = await tryCollection('profile');
 
-const personEntry = profile.find((e) => 'name' in e.data && 'bio' in e.data);
-const shortBio =
-  personEntry && 'bio' in personEntry.data && typeof personEntry.data.bio === 'string'
-    ? personEntry.data.bio.length > 120
-      ? personEntry.data.bio.slice(0, 120).trimEnd() + '…'
-      : personEntry.data.bio
-    : '';
+const personEntry = profile.find((e) => e.id === 'person');
 
 const writingSorted = [...writing].sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
@@ -107,6 +105,15 @@ const contentApiUrl = sitePathUrl(Astro.request, 'api/content');
 
 const personOnDisk = await readJsonSafe('src/content/profile/person.json');
 const siteOnDisk = await readJsonSafe('src/config/site.json');
+
+function heroLineFromPersonRecord(raw: Record<string, unknown> | null): string {
+  if (!raw || typeof raw.name !== 'string') return '';
+  return resolveHeroBio(raw as ProfilePerson);
+}
+
+const settingsHeroLine =
+  heroLineFromPersonRecord(personOnDisk) ||
+  (personEntry ? resolveHeroBio(personEntry.data as ProfilePerson) : '');
 const settingsAvailable =
   personOnDisk !== null &&
   siteOnDisk !== null &&
@@ -277,7 +284,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
                       <div class="adm-settings-copy">
                         <p class="adm-settings-name">{String(personOnDisk?.['name'] ?? '')}</p>
                         <p class="adm-settings-tagline">{config.site.tagline}</p>
-                        <p class="adm-settings-bio">{shortBio || String(personOnDisk?.['bio'] ?? '')}</p>
+                        <p class="adm-settings-bio">{settingsHeroLine}</p>
                       </div>
                     </div>
                   </div>
@@ -312,7 +319,16 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
                         >Photo path<input class="adm-input" name="photo" type="text" placeholder="/media/portrait.jpg" /></label
                       >
                       <label class="adm-label adm-label--full"
-                        >Bio<textarea class="adm-input adm-textarea" name="bio" rows="4"></textarea></label
+                        >Short bio (hero)<input class="adm-input" name="shortBio" type="text" /></label
+                      >
+                      <label class="adm-label adm-label--full"
+                        >Summary<textarea class="adm-input adm-textarea" name="summary" rows="3"></textarea></label
+                      >
+                      <label class="adm-label adm-label--full"
+                        >Long bio (paragraphs; blank line between)<textarea
+                          class="adm-input adm-textarea"
+                          name="longBio"
+                          rows="6"></textarea></label
                       >
                     </div>
                     <p class="adm-form-group-label">Site</p>

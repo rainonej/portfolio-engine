@@ -13,7 +13,9 @@
     "check:tokens": "node scripts/check-tokens.mjs",
     "smoke:packed": "node scripts/smoke-packed-consumer.mjs",
     "pe:doctor": "node packages/engine-core/dist/doctor.js",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "typecheck": "pnpm -r run check",
+    "test": "pnpm -r --if-present run test"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
