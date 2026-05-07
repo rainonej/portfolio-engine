@@ -24,7 +24,7 @@ Each published package should include:
 ```json
 {
   "license": "Apache-2.0",
-  "author": "Portfolio Engine maintainers",
+  "author": "Jordan Rainone",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rainonej/portfolio-engine.git",

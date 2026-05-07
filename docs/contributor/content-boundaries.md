@@ -23,4 +23,4 @@ If a real downstream site exposes an engine bug, document the bug in generic ter
 
 ## Agents
 
-Upstream setup prompts and examples must not become a substitute for the site owner’s own `src/config`, `src/content`, and `src/context`. See the **Content source-of-truth** sections in `docs/downstream/setup-with-claude.md` and `docs/downstream/new-site-setup.md`.
+Upstream setup prompts and examples must not become a substitute for the site owner's runtime sources (`src/config`, `src/content`, `src/pages-local`, `src/overrides`) or aligned agent notes under `src/context`. See the **Content source-of-truth** sections in `docs/downstream/setup-with-claude.md` and `docs/downstream/new-site-setup.md`.

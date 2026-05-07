@@ -6,9 +6,11 @@ Copy this whole file into Claude Code as your first message.
 
 ## Content source-of-truth rule
 
-The site owner’s answers and their **`src/config`**, **`src/content`**, **`src/context`**, **`src/pages-local`**, and **`src/overrides`** are the only sources for runtime brand copy.
+**Rendered site copy** must come only from the site owner's answers and from **`src/config`**, **`src/content`**, **`src/pages-local`**, and **`src/overrides`**.
 
-Do **not** reuse brand language from upstream examples, pasted transcripts, or other downstream sites. Placeholder values in portfolio-engine docs are not a model identity. If positioning changes later, update both live content and agent-facing context files so nothing obsolete remains.
+**`src/context`** is agent-facing guidance (humans/agents editing the repo); it is **not** consumed by the Astro build, so edits there alone do not change the live site.
+
+Do **not** reuse brand language from upstream examples, pasted transcripts, or other downstream sites. Placeholder values in portfolio-engine docs are not a model identity. If positioning changes later, update runtime sources above **and** any stale **`src/context`** files so nothing obsolete remains.
 
 ---
 

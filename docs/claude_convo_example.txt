@@ -25,7 +25,7 @@ Before touching files, collect the following from the site owner in one message 
 - Location (city and country)
 - Tone (how they write)
 - Audience (who reads the site)
-- Pages to include (Work, Writing, About, Contact, Résumé, etc.)
+- Pages to include (Work, Writing, About, Contact, R?sum?, etc.)
 - Repository name
 - Resume or profile source, if available
 - Social links and optional booking/scheduling URL
@@ -35,7 +35,7 @@ After collecting answers:
 
 1. Scaffold the Astro project and install `@portfolio-engine/editorial-theme` (and optional `@portfolio-engine/admin-tools` if requested).
 2. Create `src/config`, `src/content`, `src/context`, and wire overrides only as needed.
-3. Use **only** the site owner?s answers and uploaded/source materials for **runtime copy**. Do not copy brand language from this template, from other downstream sites, or from old transcripts.
+3. Use **only** the site owner's answers and uploaded/source materials for **runtime copy**. Do not copy brand language from this template, from other downstream sites, or from old transcripts.
 4. Keep a short friction log if something in setup is unclear (e.g. `src/docs/setup-feedback.md`).
 5. Commit the initial site and summarize what was created.
 6. Give exact deployment steps (e.g. Vercel import, Node version, env vars).
@@ -44,7 +44,7 @@ After collecting answers:
 
 ## Content source-of-truth rule
 
-The downstream user?s answers and their `src/config`, `src/content`, `src/context`, `src/pages-local`, and `src/overrides` are the source of truth.
+**Rendered site copy** comes only from the site owner's answers and from `src/config`, `src/content`, `src/pages-local`, and `src/overrides`. **`src/context`** is agent-facing guidance only (not read by the Astro build); keep it aligned when positioning changes so agents do not follow stale briefs.
 
 Example names, roles, taglines, and audiences in upstream docs are **placeholders only**.
 
@@ -60,4 +60,4 @@ Use **only** if the site owner explicitly asks for a minimal demo scaffold with 
 - Audience: hiring managers and collaborators
 - Repository: alex-portfolio
 
-Otherwise, omit these entirely and use the site owner?s real inputs.
+Otherwise, omit these entirely and use the site owner's real inputs.

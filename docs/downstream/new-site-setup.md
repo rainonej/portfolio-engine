@@ -6,15 +6,16 @@ Step-by-step guide for bootstrapping a new standalone portfolio site (for exampl
 
 ## Content source-of-truth rule
 
-The downstream site owner’s answers and their runtime tree are the source of truth for brand copy:
+The downstream site owner's answers and these **runtime-facing** paths are the source of truth for **what visitors see on the site**:
 
 - `src/config`
 - `src/content`
-- `src/context`
 - `src/pages-local`
 - `src/overrides`
 
-Do **not** reuse brand copy from upstream examples, transcripts, or other downstream sites. Placeholder names and taglines in this repo are not recommendations. If positioning changes, update runtime content and any agent context files together so nothing stale remains in active docs.
+**`src/context`** files are **agent-facing** (they are not read by the Astro build); keep them aligned when positioning changes so editors do not follow stale briefs.
+
+Do **not** reuse brand copy from upstream examples, transcripts, or other downstream sites. Placeholder names and taglines in this repo are not recommendations. If positioning changes, update runtime sources above **and** any stale **`src/context`** files together.
 
 ---
 
