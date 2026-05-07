@@ -148,6 +148,18 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.RELEASE_BOT_TOKEN || secrets.GITHUB_TOKEN }}
 
+      - name: Sync checkout to latest origin/main tip
+        run: |
+          set -euo pipefail
+          git fetch origin main --tags
+          checkout_head="$(git rev-parse HEAD)"
+          main_head="$(git rev-parse origin/main)"
+          if [ "$checkout_head" != "$main_head" ]; then
+            echo "::notice::Publish job checkout head ($checkout_head) is behind origin/main ($main_head); resetting to origin/main."
+            git reset --hard "$main_head"
+          fi
+          echo "Publishing from $(git rev-parse HEAD)."
+
       - uses: pnpm/action-setup@v4
         with:
           version: 10
@@ -188,6 +200,30 @@ jobs:
         run: pnpm release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Verify npm registry matches main package versions
+        run: |
+          set -euo pipefail
+          mismatches=()
+          for pkg in schema engine-core editorial-theme admin-tools; do
+            local_ver="$(node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('packages/${pkg}/package.json','utf8'));process.stdout.write(p.version)")"
+            if ! remote_ver="$(npm view "@portfolio-engine/${pkg}" version 2>/dev/null)"; then
+              mismatches+=("@portfolio-engine/${pkg}: main=${local_ver}, npm=<lookup failed>")
+              continue
+            fi
+            if [ "$local_ver" != "$remote_ver" ]; then
+              mismatches+=("@portfolio-engine/${pkg}: main=${local_ver}, npm=${remote_ver}")
+            fi
+          done
+          if [ "${#mismatches[@]}" -gt 0 ]; then
+            echo "::error::Release verification failed: npm is not aligned with versions on main."
+            echo "::error::Mismatched packages:"
+            printf '::error:: - %s\n' "${mismatches[@]}"
+            echo "::error::This usually means publish ran from the wrong commit or npm rejected publish for one or more packages."
+            echo "::error::Re-run Release after checking the Publish to npm job logs and branch tip."
+            exit 1
+          fi
+          echo "npm registry versions match package versions on main."
 
       # When every package is already on npm, `changeset publish` no-ops and does not create tags.
       # Still run `changeset tag` so Git Graph / tooling match registry versions.

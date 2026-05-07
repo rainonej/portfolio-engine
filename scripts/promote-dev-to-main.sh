@@ -6,6 +6,49 @@ if ! command -v gh >/dev/null 2>&1; then
   exit 1
 fi
 
+verify_main_published_versions() {
+  local run_url="$1"
+  local mismatches=()
+  local main_ver npm_ver pkg name
+
+  echo ''
+  echo 'Verifying npm registry matches origin/main package versions...'
+  git fetch origin main --tags >/dev/null
+
+  for pkg in schema engine-core editorial-theme admin-tools; do
+    name="@portfolio-engine/${pkg}"
+    main_ver="$(
+      git show "origin/main:packages/${pkg}/package.json" |
+        node -e 'const fs=require("fs");const s=fs.readFileSync(0,"utf8");process.stdout.write(JSON.parse(s).version)'
+    )"
+    if ! npm_ver="$(npm view "${name}" version 2>/dev/null)"; then
+      npm_ver="<lookup failed>"
+    fi
+    [[ -n "$npm_ver" ]] || npm_ver="<lookup failed>"
+    if [[ "$main_ver" != "$npm_ver" ]]; then
+      mismatches+=("${name}: main=${main_ver}, npm=${npm_ver}")
+    fi
+  done
+
+  if ((${#mismatches[@]} > 0)); then
+    {
+      echo 'Release finished but npm does not match origin/main versions.'
+      echo 'Mismatched packages:'
+      for row in "${mismatches[@]}"; do
+        echo " - ${row}"
+      done
+      echo ''
+      echo "Release run: ${run_url}"
+      echo ''
+      echo 'This indicates publish did not apply the latest version commit (or npm publish failed/no-op unexpectedly).'
+      echo 'Inspect the Release run logs (Publish to npm job) before retrying.'
+    } >&2
+    exit 1
+  fi
+
+  echo 'Registry verification passed: npm versions match origin/main.'
+}
+
 git fetch origin dev main
 
 dev="$(git rev-parse origin/dev)"
@@ -63,10 +106,12 @@ for _ in $(seq 1 120); do
 done
 
 if [[ -z "$run_id" ]]; then
-  echo 'Warning: could not resolve the workflow_dispatch Release run. Check Actions → Release on main.' >&2
-  exit 0
+  echo 'Could not resolve the workflow_dispatch Release run. Check Actions → Release on main and verify workflow_dispatch was accepted.' >&2
+  exit 1
 fi
 
 gh run watch "$run_id" --exit-status
 echo "Release run ${run_id} completed."
 echo 'Tip: git fetch origin main --tags  (then refresh Git Graph)'
+repo="$(gh repo view --json nameWithOwner -q .nameWithOwner | tr -d '[:space:]')"
+verify_main_published_versions "https://github.com/${repo}/actions/runs/${run_id}"
