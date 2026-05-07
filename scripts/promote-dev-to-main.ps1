@@ -9,6 +9,55 @@ function Ensure-Gh {
 
 Ensure-Gh
 
+function Verify-MainPublishedVersions {
+  param(
+    [string]$RunUrl
+  )
+
+  Write-Host ''
+  Write-Host 'Verifying npm registry matches origin/main package versions...'
+  git fetch origin main --tags | Out-Null
+
+  $packages = @(
+    @{ Name = '@portfolio-engine/schema'; Path = 'packages/schema/package.json' },
+    @{ Name = '@portfolio-engine/engine-core'; Path = 'packages/engine-core/package.json' },
+    @{ Name = '@portfolio-engine/editorial-theme'; Path = 'packages/editorial-theme/package.json' },
+    @{ Name = '@portfolio-engine/admin-tools'; Path = 'packages/admin-tools/package.json' }
+  )
+
+  $mismatches = @()
+  foreach ($pkg in $packages) {
+    $mainVersion = (git show "origin/main:$($pkg.Path)").Trim() | ConvertFrom-Json | Select-Object -ExpandProperty version
+    $npmVersion = ''
+    try {
+      $npmVersion = (npm view $pkg.Name version 2>$null).Trim()
+    } catch {
+      $npmVersion = '<lookup failed>'
+    }
+    if ([string]::IsNullOrWhiteSpace($npmVersion)) { $npmVersion = '<lookup failed>' }
+    if ($mainVersion -ne $npmVersion) {
+      $mismatches += "$($pkg.Name): main=$mainVersion, npm=$npmVersion"
+    }
+  }
+
+  if ($mismatches.Count -gt 0) {
+    Write-Host ''
+    Write-Error @"
+Release finished but npm does not match origin/main versions.
+Mismatched packages:
+ - $($mismatches -join "`n - ")
+
+Release run: $RunUrl
+
+This indicates publish did not apply the latest version commit (or npm publish failed/no-op unexpectedly).
+Inspect the Release run logs (Publish to npm job) before retrying.
+"@
+    exit 1
+  }
+
+  Write-Host 'Registry verification passed: npm versions match origin/main.'
+}
+
 # gh -q filter: build in a variable so PowerShell does not parse ".[0]" as member access.
 $prNumberQuery = '.[0].number'
 
@@ -74,10 +123,12 @@ for ($k = 0; $k -lt 120; $k++) {
 }
 
 if ($null -eq $runId) {
-  Write-Warning 'Could not resolve the workflow_dispatch Release run. Check Actions -> Release on main.'
-  exit 0
+  Write-Error 'Could not resolve the workflow_dispatch Release run. Check Actions -> Release on main and verify workflow_dispatch was accepted.'
+  exit 1
 }
 
 gh run watch $runId --exit-status
 Write-Host "Release run $runId completed."
 Write-Host 'Tip: git fetch origin main --tags  (then refresh Git Graph)'
+$runUrl = "https://github.com/$((gh repo view --json nameWithOwner -q .nameWithOwner).Trim())/actions/runs/$runId"
+Verify-MainPublishedVersions -RunUrl $runUrl
