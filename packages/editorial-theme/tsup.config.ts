@@ -12,7 +12,7 @@ function copyAssets() {
 }
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: ['src/index.ts', 'src/integration-public.ts'],
   format: ['esm'],
   dts: true,
   clean: true,

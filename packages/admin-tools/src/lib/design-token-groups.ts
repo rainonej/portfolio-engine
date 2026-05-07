@@ -12,12 +12,12 @@ export const EDITORIAL_THEME_TOKEN_GROUPS: DesignTokenGroup[] = [
     title: 'Primary colors',
     tokens: [
       {
-        cssVar: '--ink',
-        label: 'Ink',
-        usage: 'Headings, primary text, primary buttons, key UI emphasis',
+        cssVar: '--color-text-primary',
+        label: 'Primary text',
+        usage: 'Headings, primary body text, primary buttons, key UI emphasis',
       },
       {
-        cssVar: '--copper',
+        cssVar: '--color-accent-primary',
         label: 'Accent',
         usage: 'Links, eyebrow labels, featured badges, primary interactive highlights',
       },
@@ -25,21 +25,21 @@ export const EDITORIAL_THEME_TOKEN_GROUPS: DesignTokenGroup[] = [
   },
   {
     id: 'secondary',
-    title: 'Secondary text & warmth',
+    title: 'Secondary text & accents',
     tokens: [
       {
-        cssVar: '--stone-soft',
+        cssVar: '--color-text-muted',
         label: 'Muted text',
         usage: 'Supporting copy, captions, dates, metadata, navigation hints',
       },
       {
-        cssVar: '--clay',
-        label: 'Clay',
-        usage: 'Warmer hover states and secondary accent next to copper',
+        cssVar: '--color-accent-secondary',
+        label: 'Secondary accent',
+        usage: 'Warmer secondary accent next to the primary accent',
       },
       {
-        cssVar: '--olive',
-        label: 'Olive',
+        cssVar: '--color-accent-muted',
+        label: 'Muted accent',
         usage: 'Tags, subtle decorative accents, secondary labels',
       },
     ],
@@ -48,15 +48,15 @@ export const EDITORIAL_THEME_TOKEN_GROUPS: DesignTokenGroup[] = [
     id: 'surfaces',
     title: 'Surfaces & backgrounds',
     tokens: [
-      { cssVar: '--paper', label: 'Paper', usage: 'Default page background' },
+      { cssVar: '--color-surface-page', label: 'Page surface', usage: 'Default page background' },
       {
-        cssVar: '--paper-light',
-        label: 'Paper light',
+        cssVar: '--color-surface-elevated',
+        label: 'Elevated surface',
         usage: 'Cards, inset panels, elevated sections',
       },
       {
-        cssVar: '--pale-sand',
-        label: 'Pale sand',
+        cssVar: '--color-surface-wash',
+        label: 'Wash surface',
         usage: 'Soft section fills (e.g. testimonials, callouts)',
       },
     ],
@@ -66,9 +66,14 @@ export const EDITORIAL_THEME_TOKEN_GROUPS: DesignTokenGroup[] = [
     title: 'Borders & dividers',
     tokens: [
       {
-        cssVar: '--warm-line',
-        label: 'Warm line',
+        cssVar: '--color-border-default',
+        label: 'Default border',
         usage: 'Borders, dividers, table rules, card outlines',
+      },
+      {
+        cssVar: '--color-border-strong',
+        label: 'Strong border',
+        usage: 'Higher-contrast rules when default is too quiet',
       },
     ],
   },

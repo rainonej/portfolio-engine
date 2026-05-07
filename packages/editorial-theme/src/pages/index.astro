@@ -11,7 +11,7 @@ import { getCollection } from 'astro:content';
 import type { ResolvedConfig } from '@portfolio-engine/engine-core';
 import { config } from '@portfolio-engine:config';
 import { getBase, resolveAssetUrl, sortByDateDesc } from '../lib/utils';
-import { loadProfilePerson } from '../lib/load-profile-person';
+import { loadProfilePerson, resolveHeroBio } from '../lib/load-profile-person';
 
 type Pillar = NonNullable<ResolvedConfig['features']['pillars']>[number];
 
@@ -42,7 +42,7 @@ const featuredTestimonials = config.features.testimonials
 
 <Layout
   title={`${person.name} — ${config.site.tagline}`}
-  description={person.bio}
+  description={resolveHeroBio(person)}
 >
   {
     bookingUrl && (
@@ -88,7 +88,7 @@ const featuredTestimonials = config.features.testimonials
                 <a href={detailUrl} class="block">
                   <article class="group">
                     {p.image ? (
-                      <div class="mb-5 aspect-[4/3] overflow-hidden rounded-2xl bg-stone-100">
+                      <div class="mb-5 aspect-[4/3] overflow-hidden rounded-2xl bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))]">
                         <img
                           src={resolveAssetUrl(p.image, base) ?? ''}
                           alt={p.title}
@@ -97,21 +97,21 @@ const featuredTestimonials = config.features.testimonials
                         />
                       </div>
                     ) : (
-                      <div class="mb-5 flex aspect-[4/3] items-center justify-center rounded-2xl bg-[var(--pale-sand)]">
-                        <span class="font-serif text-5xl italic text-[var(--clay)]">
+                      <div class="mb-5 flex aspect-[4/3] items-center justify-center rounded-2xl bg-[var(--color-surface-wash)]">
+                        <span class="font-serif text-5xl italic text-[var(--color-accent-secondary)]">
                           {p.title[0]}
                         </span>
                       </div>
                     )}
                     <div class="mb-2 flex flex-wrap gap-3">
                       {p.tags?.map((tag: string) => (
-                        <span class="text-xs font-semibold uppercase tracking-widest text-[var(--copper)]">
+                        <span class="text-xs font-semibold uppercase tracking-widest text-[var(--color-accent-primary)]">
                           {tag}
                         </span>
                       ))}
                     </div>
                     <h3 class="mb-2 font-serif text-xl font-bold">{p.title}</h3>
-                    <p class="text-sm leading-relaxed text-[var(--stone-soft)]">
+                    <p class="text-sm leading-relaxed text-[var(--color-text-muted)]">
                       {p.description}
                     </p>
                   </article>

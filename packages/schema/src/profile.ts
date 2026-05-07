@@ -10,26 +10,30 @@ const WorkingPrincipleSchema = z.object({
   body: z.string(),
 });
 
-export const ProfilePersonSchema = z.object({
-  name: z.string(),
-  roleLine: z.string().optional(),
-  /** Short one-liner for hero and meta. Preferred over `bio`. */
-  shortBio: z.string().optional(),
-  /** One or two sentence summary for cards, meta, and hero fallback. */
-  summary: z.string().optional(),
-  /** @deprecated Prefer `shortBio`/`summary`/`longBio`. Split on blank lines into paragraphs when used. */
-  bio: z.string().optional(),
-  /** Full biography paragraphs for about and resume pages. */
-  longBio: z.array(z.string()).optional(),
-  values: z.array(ValueCardSchema).optional(),
-  workingPrinciples: z.array(WorkingPrincipleSchema).optional(),
-  credentials: z.array(z.string()).optional(),
-  email: z.string().optional(),
-  linkedin: z.url().optional(),
-  github: z.url().optional(),
-  instagram: z.url().optional(),
-  photo: z.string().optional(),
-});
+/**
+ * Canonical `profile/person` shape. Biography copy uses only `shortBio`, `summary`, and `longBio`.
+ * The old `bio` string is not accepted here — use `longBio` (paragraph array) instead.
+ */
+export const ProfilePersonSchema = z
+  .object({
+    name: z.string(),
+    roleLine: z.string().optional(),
+    /** Short one-liner for hero and meta. */
+    shortBio: z.string().optional(),
+    /** One or two sentence summary for cards, meta, and hero fallback. */
+    summary: z.string().optional(),
+    /** Full biography paragraphs for about and resume pages. */
+    longBio: z.array(z.string()).optional(),
+    values: z.array(ValueCardSchema).optional(),
+    workingPrinciples: z.array(WorkingPrincipleSchema).optional(),
+    credentials: z.array(z.string()).optional(),
+    email: z.string().optional(),
+    linkedin: z.url().optional(),
+    github: z.url().optional(),
+    instagram: z.url().optional(),
+    photo: z.string().optional(),
+  })
+  .strict();
 
 export const ProfileExperienceSchema = z.object({
   organization: z.string(),

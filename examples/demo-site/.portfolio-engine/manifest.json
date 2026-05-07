@@ -1,6 +1,19 @@
 {
-  "generatedAt": "2026-05-05T18:31:46.334Z",
+  "generatedAt": "2026-05-06T05:17:56.214Z",
   "rootDir": ".",
+  "portfolioEngine": {
+    "engineCoreVersion": "0.3.0",
+    "editorialThemeVersion": "unknown"
+  },
+  "consumerRegistry": {
+    "path": "src/registry/portfolio-engine.registry.json",
+    "loaded": true,
+    "routeCount": 1
+  },
+  "routeOverrides": {
+    "disabled": [],
+    "remapped": {}
+  },
   "routes": [
     {
       "pattern": "/about",
@@ -10,7 +23,9 @@
       "remappable": true,
       "disableable": true,
       "agentGuidance": "Prefer About for public-facing navigation tasks.",
-      "resolved": "/about"
+      "resolved": "/about",
+      "routeOrigin": "theme",
+      "entrypoint": "node_modules/@portfolio-engine/editorial-theme/dist/pages/about.astro"
     },
     {
       "pattern": "/contact",
@@ -20,7 +35,9 @@
       "remappable": true,
       "disableable": true,
       "agentGuidance": "Prefer Contact for public-facing navigation tasks.",
-      "resolved": "/contact"
+      "resolved": "/contact",
+      "routeOrigin": "theme",
+      "entrypoint": "node_modules/@portfolio-engine/editorial-theme/dist/pages/contact.astro"
     },
     {
       "pattern": "/",
@@ -30,7 +47,21 @@
       "remappable": true,
       "disableable": false,
       "agentGuidance": "Prefer Home for public-facing navigation tasks.",
-      "resolved": "/"
+      "resolved": "/",
+      "routeOrigin": "theme",
+      "entrypoint": "node_modules/@portfolio-engine/editorial-theme/dist/pages/index.astro"
+    },
+    {
+      "pattern": "/resume",
+      "label": "Résumé",
+      "section": null,
+      "visibility": "public",
+      "remappable": true,
+      "disableable": true,
+      "agentGuidance": "Prefer Résumé for public-facing navigation tasks.",
+      "resolved": "/resume",
+      "routeOrigin": "theme",
+      "entrypoint": "node_modules/@portfolio-engine/editorial-theme/dist/pages/resume.astro"
     },
     {
       "pattern": "/work/[slug]",
@@ -40,7 +71,9 @@
       "remappable": false,
       "disableable": false,
       "agentGuidance": "Prefer Work detail for internal navigation tasks.",
-      "resolved": "/work/[slug]"
+      "resolved": "/work/[slug]",
+      "routeOrigin": "theme",
+      "entrypoint": "node_modules/@portfolio-engine/editorial-theme/dist/pages/work/[slug].astro"
     },
     {
       "pattern": "/work",
@@ -50,7 +83,9 @@
       "remappable": true,
       "disableable": true,
       "agentGuidance": "Prefer Work for public-facing navigation tasks.",
-      "resolved": "/work"
+      "resolved": "/work",
+      "routeOrigin": "theme",
+      "entrypoint": "node_modules/@portfolio-engine/editorial-theme/dist/pages/work.astro"
     },
     {
       "pattern": "/writing/[slug]",
@@ -60,7 +95,9 @@
       "remappable": false,
       "disableable": false,
       "agentGuidance": "Prefer Writing detail for internal navigation tasks.",
-      "resolved": "/writing/[slug]"
+      "resolved": "/writing/[slug]",
+      "routeOrigin": "theme",
+      "entrypoint": "node_modules/@portfolio-engine/editorial-theme/dist/pages/writing/[slug].astro"
     },
     {
       "pattern": "/writing",
@@ -70,7 +107,9 @@
       "remappable": true,
       "disableable": true,
       "agentGuidance": "Prefer Writing for public-facing navigation tasks.",
-      "resolved": "/writing"
+      "resolved": "/writing",
+      "routeOrigin": "theme",
+      "entrypoint": "node_modules/@portfolio-engine/editorial-theme/dist/pages/writing/index.astro"
     },
     {
       "pattern": "/how-i-think",
@@ -80,7 +119,8 @@
       "visibility": "public",
       "remappable": false,
       "disableable": false,
-      "routeOrigin": "consumer-local"
+      "routeOrigin": "consumer-local",
+      "entrypoint": "src/pages-local/how-i-think.astro"
     }
   ],
   "overrideSurfaces": [
@@ -91,7 +131,8 @@
         "bookingUrl",
         "pillars",
         "base",
-        "tagline"
+        "tagline",
+        "ctas"
       ],
       "defaultComponentPath": "src/components/sections/HeroSection.astro",
       "hostPage": "src/pages/index.astro",
@@ -134,7 +175,8 @@
       "name": "Footer",
       "props": [
         "adminHref",
-        "siteTitle"
+        "siteTitle",
+        "adminLinkLabel"
       ],
       "defaultComponentPath": "src/components/Footer.astro",
       "hostPage": "src/layouts/Layout.astro",

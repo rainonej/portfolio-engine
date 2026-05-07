@@ -30,11 +30,11 @@ const base = getBase();
   <article class="mx-auto max-w-3xl px-6 pb-24 pt-40">
     <a
       href={`${base}/work`}
-      class="mb-8 inline-block text-sm text-stone-400 transition-colors hover:text-stone-900"
+      class="mb-8 inline-block text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
     >
       ← Back to Work
     </a>
-    <div class="mb-10 aspect-[16/9] overflow-hidden rounded-2xl bg-stone-100">
+    <div class="mb-10 aspect-[16/9] overflow-hidden rounded-2xl bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))]">
       <ImageOrFallback
         src={p.image ? resolveAssetUrl(p.image, base) : null}
         alt={p.title}
@@ -46,7 +46,7 @@ const base = getBase();
     <div class="mb-4 flex flex-wrap gap-3">
       {
         p.tags?.map((tag: string) => (
-          <span class="text-xs font-medium uppercase tracking-widest text-amber-800">
+          <span class="text-xs font-medium uppercase tracking-widest text-[var(--color-accent-primary)]">
             {tag}
           </span>
         ))
@@ -55,7 +55,7 @@ const base = getBase();
     <h1 class="mb-4 font-serif text-4xl font-bold md:text-5xl">{p.title}</h1>
     {
       p.description && (
-        <p class="mb-10 text-lg leading-relaxed text-stone-500">
+        <p class="mb-10 text-lg leading-relaxed text-[var(--color-text-muted)]">
           {p.description}
         </p>
       )
@@ -70,7 +70,7 @@ const base = getBase();
             href={p.link}
             target="_blank"
             rel="noopener noreferrer"
-            class="text-sm font-medium text-amber-800 underline underline-offset-4"
+            class="text-sm font-medium text-[var(--color-accent-primary)] underline underline-offset-4"
           >
             View project →
           </a>

@@ -1,19 +1,19 @@
 /**
- * Shared semantic tokens for the editorial theme and the admin design preview.
- * Imported by global.css (public site) and may be imported standalone where
- * Tailwind is not needed.
+ * Semantic color tokens for the editorial theme and admin preview.
+ * Legacy one-off palette variable names are not supported; use these semantic tokens only.
  */
 :root {
-  /* Brand palette — warm editorial academic */
-  --paper: #f7f4ef;
-  --paper-light: #fcfbf8;
-  --ink: #1e1a17;
-  --stone-soft: #6b625b;
-  --copper: #9a5a2e;
-  --clay: #b87c5a;
-  --warm-line: #e6ded3;
-  --pale-sand: #efe6da;
-  --olive: #5c6650;
+  --color-surface-page: #f7f4ef;
+  --color-surface-elevated: #fcfbf8;
+  --color-surface-wash: #efe6da;
+  --color-text-primary: #1e1a17;
+  --color-text-muted: #6b625b;
+  --color-text-inverse: #fafaf9;
+  --color-accent-primary: #9a5a2e;
+  --color-accent-secondary: #b87c5a;
+  --color-accent-muted: #5c6650;
+  --color-border-default: #e6ded3;
+  --color-border-strong: color-mix(in srgb, var(--color-text-primary) 18%, var(--color-border-default));
 
   /**
    * Font stacks — loaded via Google Fonts in Layout + admin (see google-fonts.ts).
@@ -26,7 +26,6 @@
 
   /**
    * Type scale — mirrors schema TYPO_SCALE_COMFORTABLE / ThemeTokenOverrides defaults.
-   * theme.json typography.scale / preset override these.
    */
   --text-display: clamp(2.75rem, 6vw, 4rem);
   --text-title: clamp(2rem, 4vw, 3rem);
@@ -36,11 +35,6 @@
   --text-small: 0.875rem;
   --text-label: 0.6875rem;
 
-  /**
-   * Spacing rhythm — governs page margins, section vertical cadence, and card gaps.
-   * Components reference these tokens so dense pages (resume) and generous pages
-   * (hero/landing) can differ without ad-hoc overrides.
-   */
   --space-page-x: clamp(1.25rem, 3vw, 2rem);
   --space-hero-y: clamp(4.5rem, 8vw, 7rem);
   --space-section-y: clamp(3.5rem, 7vw, 6rem);
@@ -49,12 +43,18 @@
   --measure-readable: 68ch;
   --measure-hero: 58ch;
 
-  /* Site map / admin chrome aliases (consumers use var(--adm-*) with fallbacks) */
-  --adm-ink: var(--ink);
-  --adm-muted: var(--stone-soft);
-  --adm-border: var(--warm-line);
-  --adm-paper: var(--paper-light);
-  --adm-paper-2: var(--pale-sand);
-  --adm-accent: var(--copper);
-  --adm-stone: var(--stone-soft);
+  --nav-background: var(--color-surface-page);
+  --nav-border: var(--color-border-default);
+  --nav-link-color: var(--color-text-muted);
+  --nav-link-active-color: var(--color-text-primary);
+  --card-background: var(--color-surface-elevated);
+  --card-border: var(--color-border-default);
+
+  --adm-ink: var(--color-text-primary);
+  --adm-muted: var(--color-text-muted);
+  --adm-border: var(--color-border-default);
+  --adm-paper: var(--color-surface-elevated);
+  --adm-paper-2: var(--color-surface-wash);
+  --adm-accent: var(--color-accent-primary);
+  --adm-stone: var(--color-text-muted);
 }

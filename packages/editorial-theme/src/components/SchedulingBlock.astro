@@ -1,4 +1,8 @@
 ---
+/**
+ * Provider-agnostic scheduling surface: HTTPS URL only (no Calendly SDK).
+ * When `enabled` is false or `url` is missing/empty, renders nothing (no error).
+ */
 import type { SchedulingProvider, SchedulingMode } from '@portfolio-engine/schema';
 
 export interface Props {

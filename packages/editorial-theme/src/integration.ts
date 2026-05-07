@@ -30,7 +30,7 @@ const TAILWIND_SSR_EXTERNAL = [
  * Returns an array of integrations: Tailwind CSS (PostCSS, via Vite `css.postcss`) + engine-core.
  * Astro accepts arrays in its integrations list and flattens them, so consumers
  * can use this exactly like a single integration:
- *   integrations: [editorialTheme({ ... })]
+ *   integrations: [editorialTheme({ ... })]  // import from `@portfolio-engine/editorial-theme/integration`
  *
  * Consumer-local routes: optional `src/registry/portfolio-engine.registry.json` +
  * `src/pages-local/*.astro` — see `docs/downstream/custom-page-via-registry.md`.
@@ -43,8 +43,8 @@ export function editorialTheme(options: EditorialThemeOptions): AstroIntegration
         updateConfig({
           vite: {
             /**
-             * PostCSS pipeline keeps Tailwind off Rollup's SSR JS graph. The Vite plugin pulls
-             * `@tailwindcss/oxide` `.node` binaries into the server bundle and breaks Astro builds.
+             * PostCSS runs outside Rollup. Import `editorialTheme` from `@portfolio-engine/editorial-theme/integration`
+             * only (not the package root) so Tailwind/Oxide never enter the SSR JS graph.
              */
             css: {
               postcss: {

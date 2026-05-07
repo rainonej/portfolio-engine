@@ -20,7 +20,7 @@ const {
   <div class="mb-3 flex items-baseline justify-between gap-6">
     {
       eyebrow && (
-        <span class="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--copper)]">
+        <span class="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-primary)]">
           {eyebrow}
         </span>
       )
@@ -29,7 +29,7 @@ const {
       allHref && (
         <a
           href={allHref}
-          class="ml-auto shrink-0 text-sm text-stone-400 transition-colors hover:text-stone-900"
+          class="ml-auto shrink-0 text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
         >
           {allLabel}
         </a>
@@ -39,7 +39,7 @@ const {
   <h2 class="font-serif text-3xl font-bold md:text-4xl">{heading}</h2>
   {
     lead && (
-      <p class="mt-4 max-w-xl text-base leading-relaxed text-stone-500">
+      <p class="mt-4 max-w-xl text-base leading-relaxed text-[var(--color-text-muted)]">
         {lead}
       </p>
     )

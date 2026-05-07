@@ -76,6 +76,11 @@ if (disabledCount > 0 || remappedCount > 0) {
 
 // Routes
 console.log(`\n${BOLD}Routes:${RESET}`);
+console.log(
+  DIM +
+    '  Note: URLs implemented only under src/pages/ are Astro-owned and usually absent from this list.' +
+    RESET,
+);
 for (const route of manifest.routes ?? []) {
   const origin = route.routeOrigin ?? 'unknown';
   const originLabel =
