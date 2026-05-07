@@ -64,7 +64,7 @@ jobs:
 
       - name: Typecheck + astro check (pnpm check)
         env:
-          CI: true
+          CI: "true"
         run: pnpm check
 
   build:
