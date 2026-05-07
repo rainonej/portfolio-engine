@@ -53,6 +53,18 @@ Or use the VS Code / script flows in [One-click upgrade](#one-click-upgrade-vs-c
 4. Run `pnpm check` and `pnpm build` to catch type errors early.
 5. Test the site locally.
 
+### AI / coding agents
+
+When `@portfolio-engine/*` versions change (or the user asks to upgrade engine packages), agents should **not** infer new APIs from memory.
+
+1. For **each** `@portfolio-engine/*` package in the consumer `package.json`, read that package’s **`CHANGELOG.md`** for every release **after** the version the site previously used **through** the version being installed, in **ascending semver order** (oldest first). After `pnpm install`, use `node_modules/@portfolio-engine/<pkg>/CHANGELOG.md`, or read the same file on GitHub from [`rainonej/portfolio-engine`](https://github.com/rainonej/portfolio-engine) (paths under `packages/<pkg>/CHANGELOG.md`).
+2. Merge all **`#### Agent migration`** sections from that version window into **one** checklist before editing consumer files. If instructions conflict between releases, **follow the newer release**. Prefer explicit “Supersedes” lines in the changelog when present.
+3. Apply migration steps, then run `pnpm check` and `pnpm build`.
+
+Maintainers document the shape of **Agent migration** notes in the upstream repo: [`docs/workflows/changelog-agent-migration.md`](../workflows/changelog-agent-migration.md). Consumer repos that only vendor `docs/downstream/` can open that link on GitHub.
+
+**Template refresh:** If this site was set up before upstream added the **Package upgrades** instructions to [`templates/agent/`](templates/agent/) (`CLAUDE.md`, `copilot-instructions.md`), merge that new section from the upstream portfolio-engine repo into your root `CLAUDE.md` and `.github/copilot-instructions.md` if you rely on agents for bumps. The setup seed scripts (`07-seed-agent-tooling.*`) only create those files when they are missing.
+
 ## Patch tracking
 
 When `agreni-site` needs a fix that isn't yet in a portfolio-engine release:

@@ -80,7 +80,7 @@ export default defineConfig({
 });
 ```
 
-**Upgrade:** bump the version in `package.json` and run `pnpm install`. Pin to a specific minor to control when you pick up changes.
+**Upgrade:** bump the version in `package.json` and run `pnpm install`. Pin to a specific minor to control when you pick up changes. For changelogs, breaking changes, and **AI/agent** upgrade steps, see **[`upgrade-path.md`](upgrade-path.md)**.
 
 ## Vercel (standalone consumer repo)
 

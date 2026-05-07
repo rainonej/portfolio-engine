@@ -2,6 +2,10 @@
 
 portfolio-engine uses [Changesets](https://github.com/changesets/changesets) for versioning and npm publishing. Promotion stays **feature branches → `dev` → `main`** (squash merge is fine). Maintainers ship by merging **`dev` into `main`**; CI applies versions and publishes—there is no manual “Version packages” PR step.
 
+## Maintainer: consumer-facing changelog notes
+
+Any changeset that can affect consumer repos should include a `#### Agent migration` block in the changeset body (task-shaped checklist: packages, consumer paths, actions). That text is merged into package `CHANGELOG.md` files when versions are applied. See **[changelog-agent-migration.md](./changelog-agent-migration.md)** for the full convention, multi-version reading order, and a worked example.
+
 ## Ship checklist
 
 1. Confirm `.changeset/*.md` files are on **`dev`** before promotion (see **Squash merges and changesets** below).

@@ -16,6 +16,16 @@ Prefer changes in:
 
 Do not patch upstream package behavior in this consumer repo unless explicitly asked.
 
+## Package upgrades (`@portfolio-engine/*`)
+
+When **`@portfolio-engine/*`** versions change in `package.json` / the lockfile, or when upgrading those dependencies:
+
+1. Read **`docs/downstream/upgrade-path.md`** (or the upstream [portfolio-engine](https://github.com/rainonej/portfolio-engine) copy).
+2. For each engine package, read its **`CHANGELOG.md`** from the previous version through the new one, **in semver order**. Use **`#### Agent migration`** blocks as the primary task list; merge across versions into one plan. If instructions conflict, **the newer release wins**.
+3. Sources: `node_modules/@portfolio-engine/<pkg>/CHANGELOG.md` after install, or GitHub `packages/<pkg>/CHANGELOG.md`.
+
+Then run `pnpm check` and `pnpm build`.
+
 ## Quality bar
 
 Before considering work complete, run:

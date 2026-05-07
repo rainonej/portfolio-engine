@@ -13,6 +13,10 @@ Use the smallest tool that answers the question:
 | Lighthouse CI                   | Optional performance, accessibility, SEO, and best-practice regression checks                                       | Replacing manual design review                             |
 | Vale                            | Optional prose and tone linting                                                                                     | Deciding factual content                                   |
 
+## Upstream contract changes
+
+When `@portfolio-engine/*` versions change, do **not** guess new content fields, config keys, or import paths from memory. Read each package’s **`CHANGELOG.md`** for the version range you are crossing (see **[`upgrade-path.md`](upgrade-path.md)** — especially the **AI / coding agents** subsection), apply **`#### Agent migration`** notes, then confirm with **`pnpm check`** and **`pnpm build`**.
+
 ## Recommended install: Claude Code
 
 Run from the consumer-site repo root.
