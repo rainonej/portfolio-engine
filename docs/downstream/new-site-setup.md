@@ -1,6 +1,21 @@
 # New consumer site setup
 
-Step-by-step guide for bootstrapping a new standalone portfolio site (like `jordan-site`) that consumes `@portfolio-engine/editorial-theme` from npm.
+Step-by-step guide for bootstrapping a new standalone portfolio site (for example `my-portfolio`) that consumes `@portfolio-engine/editorial-theme` from npm.
+
+---
+
+## Content source-of-truth rule
+
+The downstream site owner's answers and these **runtime-facing** paths are the source of truth for **what visitors see on the site**:
+
+- `src/config`
+- `src/content`
+- `src/pages-local`
+- `src/overrides`
+
+**`src/context`** files are **agent-facing** (they are not read by the Astro build); keep them aligned when positioning changes so editors do not follow stale briefs.
+
+Do **not** reuse brand copy from upstream examples, transcripts, or other downstream sites. Placeholder names and taglines in this repo are not recommendations. If positioning changes, update runtime sources above **and** any stale **`src/context`** files together.
 
 ---
 

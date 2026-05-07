@@ -79,6 +79,8 @@ git commit -s
 
 ## Pull request checklist
 
+See also **[`docs/contributor/content-boundaries.md`](docs/contributor/content-boundaries.md)** for what belongs in upstream docs and examples.
+
 Before submitting:
 
 - [ ] I identified the target layer/package.
