@@ -65,7 +65,7 @@ A downstream-originated feature should explain:
 
 ## Releases
 
-The maintainer controls releases. Release candidates should document package versions, migration notes, breaking changes, downstream impact, and changeset entries where applicable.
+The maintainer controls releases. Release candidates should document package versions, migration notes, breaking changes, downstream impact, and changeset entries where applicable. Published changelogs should include **agent-oriented migration notes** (`#### Agent migration` in changeset bodies) when consumers must update content, config, or imports; see [`docs/workflows/changelog-agent-migration.md`](docs/workflows/changelog-agent-migration.md).
 
 ## Security
 
