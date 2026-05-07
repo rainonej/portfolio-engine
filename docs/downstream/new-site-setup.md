@@ -1,6 +1,20 @@
 # New consumer site setup
 
-Step-by-step guide for bootstrapping a new standalone portfolio site (like `jordan-site`) that consumes `@portfolio-engine/editorial-theme` from npm.
+Step-by-step guide for bootstrapping a new standalone portfolio site (for example `my-portfolio`) that consumes `@portfolio-engine/editorial-theme` from npm.
+
+---
+
+## Content source-of-truth rule
+
+The downstream site owner’s answers and their runtime tree are the source of truth for brand copy:
+
+- `src/config`
+- `src/content`
+- `src/context`
+- `src/pages-local`
+- `src/overrides`
+
+Do **not** reuse brand copy from upstream examples, transcripts, or other downstream sites. Placeholder names and taglines in this repo are not recommendations. If positioning changes, update runtime content and any agent context files together so nothing stale remains in active docs.
 
 ---
 

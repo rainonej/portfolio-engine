@@ -54,7 +54,7 @@ There are two modes for consuming portfolio-engine packages, depending on whethe
 
 ## Semver mode (separate consumer repo)
 
-The production mode for `agreni-site` and `jordan-site`. Your consumer repo is a standalone Astro project with no direct knowledge of the monorepo.
+The normal mode for real sites in their own repositories. Your consumer repo is a standalone Astro project with no direct knowledge of the monorepo.
 
 **Install from npm:**
 

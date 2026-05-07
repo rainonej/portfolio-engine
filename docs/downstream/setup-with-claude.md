@@ -4,6 +4,14 @@ Copy this whole file into Claude Code as your first message.
 
 ---
 
+## Content source-of-truth rule
+
+The site owner’s answers and their **`src/config`**, **`src/content`**, **`src/context`**, **`src/pages-local`**, and **`src/overrides`** are the only sources for runtime brand copy.
+
+Do **not** reuse brand language from upstream examples, pasted transcripts, or other downstream sites. Placeholder values in portfolio-engine docs are not a model identity. If positioning changes later, update both live content and agent-facing context files so nothing obsolete remains.
+
+---
+
 You are helping me set up a new personal portfolio site from scratch using
 `@portfolio-engine/editorial-theme` + `@portfolio-engine/admin-tools`.
 

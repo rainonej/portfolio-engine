@@ -108,7 +108,7 @@ The setup prompt asks Claude to strictly execute a **7-phase workflow**. In the 
 
 **Observed behavior:**
 
-- User pasted a PDF filename only (`Jordan_Rainone_Fundamental_standard_dense_resume (2).pdf`), and Claude proceeded as though resume contents were available.
+- User pasted a PDF filename only (`example-candidate-resume.pdf`), and Claude proceeded as though resume contents were available.
 
 **Why this is a mistake:**
 
@@ -244,7 +244,7 @@ Use this as an addendum near the top of your master prompt:
 > 3. **Description:** I build multimodal ML systems and evaluation frameworks for teams that need research-grade rigor and production-ready software.
 > 4. **Pages:** Work, Writing, About, Contact (default)
 > 5. **Tone (temporary default):** Clear, professional, direct (we’ll refine in Phase 5)
-> 6. **Repo name:** jordan-site
+> 6. **Repo name:** my-portfolio
 >
 > Reply with ‘approve’ or send edits inline. **Phase 1 incomplete** until this is confirmed.
 
