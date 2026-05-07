@@ -3,7 +3,7 @@
   "tasks": [
     {
       "label": "Promote dev → main",
-      "detail": "dev→main PR, CI, merge, then workflow_dispatch Release so npm publish runs (gh CLI + auth)",
+      "detail": "dev→main PR, CI, merge, workflow_dispatch Release, then verifies npm versions match origin/main (fails with diagnostics on mismatch)",
       "type": "shell",
       "options": {
         "cwd": "${workspaceFolder}",
