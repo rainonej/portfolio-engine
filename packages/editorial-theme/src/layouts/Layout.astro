@@ -67,7 +67,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
     {extraCss && <style is:global set:html={extraCss} />}
     <slot name="head" />
   </head>
-  <body class="min-h-screen bg-stone-50 text-stone-900">
+  <body class="min-h-screen bg-[var(--color-surface-wash)] text-[var(--color-text-primary)]">
     <AmbientBackground />
     <Nav />
     <main>

@@ -32,8 +32,23 @@ DIST_TAG=next bash docs/downstream/scripts/upgrade-portfolio-engine.sh
 
 ## Normal upgrades
 
-1. Check the [changelog](../../packages/editorial-theme/CHANGELOG.md) for breaking changes.
-2. Bump the version in `agreni-site/package.json`.
+### Bump all `@portfolio-engine/*` packages together
+
+Consumers should keep **`@portfolio-engine/schema`**, **`@portfolio-engine/engine-core`**, **`@portfolio-engine/editorial-theme`**, and (if installed) **`@portfolio-engine/admin-tools`** on **compatible versions**—the integration and virtual modules assume matching contracts.
+
+From a consumer repo:
+
+```bash
+pnpm up "@portfolio-engine/*@latest"
+pnpm install
+pnpm run build
+pnpm run check
+```
+
+Or use the VS Code / script flows in [One-click upgrade](#one-click-upgrade-vs-code-task) so every workspace dependency on `@portfolio-engine/*` moves in lockstep.
+
+1. Check the [changelog](../../packages/editorial-theme/CHANGELOG.md) (and `engine-core` / `schema` / `admin-tools` changelogs) for breaking changes.
+2. Bump versions in the consumer `package.json` (or use the command above).
 3. Run `pnpm install`.
 4. Run `pnpm check` and `pnpm build` to catch type errors early.
 5. Test the site locally.

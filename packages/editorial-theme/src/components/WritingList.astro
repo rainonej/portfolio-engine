@@ -21,7 +21,7 @@ const { posts } = Astro.props;
       <li class="group">
         {post.image && (
           <a href={post.href} class="mb-4 block">
-            <div class="aspect-[21/9] overflow-hidden rounded-xl bg-stone-100">
+            <div class="aspect-[21/9] overflow-hidden rounded-xl bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))]">
               <img
                 src={post.image}
                 alt={post.title}
@@ -32,7 +32,7 @@ const { posts } = Astro.props;
           </a>
         )}
         <time
-          class="mb-1.5 block text-xs text-stone-400"
+          class="mb-1.5 block text-xs text-[var(--color-text-muted)]"
           datetime={post.date.toISOString()}
         >
           {post.date.toLocaleDateString('en-US', {
@@ -43,13 +43,13 @@ const { posts } = Astro.props;
         <h3 class="mb-1.5 font-serif text-xl font-bold leading-snug">
           <a
             href={post.href}
-            class="transition-colors hover:text-[var(--copper)]"
+            class="transition-colors hover:text-[var(--color-accent-primary)]"
           >
             {post.title}
           </a>
         </h3>
         {post.description && (
-          <p class="text-sm leading-relaxed text-stone-500">
+          <p class="text-sm leading-relaxed text-[var(--color-text-muted)]">
             {post.description}
           </p>
         )}

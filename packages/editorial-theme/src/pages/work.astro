@@ -15,7 +15,7 @@ const base = getBase();
 <Layout title={`Work — ${person.name}`}>
   <section class="mx-auto max-w-5xl px-6 pb-24 pt-40">
     <p
-      class="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-amber-800"
+      class="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-[var(--color-accent-primary)]"
     >
       Portfolio
     </p>
@@ -25,7 +25,7 @@ const base = getBase();
 
     {
       sorted.length === 0 ? (
-        <p class="text-lg text-stone-400">Projects coming soon.</p>
+        <p class="text-lg text-[var(--color-text-muted)]">Projects coming soon.</p>
       ) : (
         <div class="grid gap-12 md:grid-cols-2">
           {sorted.map((project) => {
@@ -34,7 +34,7 @@ const base = getBase();
             return (
               <article class="group">
                 <a href={detailUrl} class="block">
-                  <div class="mb-5 aspect-[16/9] overflow-hidden rounded-2xl bg-stone-100">
+                  <div class="mb-5 aspect-[16/9] overflow-hidden rounded-2xl bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))]">
                     <ImageOrFallback
                       src={resolveAssetUrl(p.image, base)}
                       alt={p.title}
@@ -45,7 +45,7 @@ const base = getBase();
                 </a>
                 <div class="mb-2 flex flex-wrap gap-3">
                   {p.tags?.map((tag: string) => (
-                    <span class="text-xs font-medium uppercase tracking-widest text-amber-800">
+                    <span class="text-xs font-medium uppercase tracking-widest text-[var(--color-accent-primary)]">
                       {tag}
                     </span>
                   ))}
@@ -53,12 +53,12 @@ const base = getBase();
                 <h2 class="mb-2 font-serif text-2xl font-bold">
                   <a
                     href={detailUrl}
-                    class="transition-colors hover:text-amber-800"
+                    class="transition-colors hover:text-[var(--color-accent-primary)]"
                   >
                     {p.title}
                   </a>
                 </h2>
-                <p class="mb-4 text-sm leading-relaxed text-stone-500">
+                <p class="mb-4 text-sm leading-relaxed text-[var(--color-text-muted)]">
                   {p.description}
                 </p>
                 {p.link ? (
@@ -66,14 +66,14 @@ const base = getBase();
                     href={p.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="text-sm font-medium underline underline-offset-4 transition-colors hover:text-amber-800"
+                    class="text-sm font-medium underline underline-offset-4 transition-colors hover:text-[var(--color-accent-primary)]"
                   >
                     View project →
                   </a>
                 ) : (
                   <a
                     href={detailUrl}
-                    class="text-sm font-medium underline underline-offset-4 transition-colors hover:text-amber-800"
+                    class="text-sm font-medium underline underline-offset-4 transition-colors hover:text-[var(--color-accent-primary)]"
                   >
                     View project →
                   </a>

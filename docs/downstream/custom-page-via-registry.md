@@ -1,10 +1,12 @@
 # Add a custom page with the consumer registry
 
+For replacing a Portfolio Engine theme route such as `/about`, `/writing`, or `/contact`, prefer **consumer-local registry routes** under **`src/pages-local`** and disable the corresponding theme route first. Use ordinary **`src/pages`** only when you deliberately want an Astro-owned route that Portfolio Engine does not inject or diagnose. See **[route-ownership.md](./route-ownership.md)** for the full comparison table and résumé guidance.
+
 This recipe matches the MVP in [Epic: consumer registry](https://github.com/rainonej/portfolio-engine/issues/81). You add routes **without** new named override surfaces in `@portfolio-engine/editorial-theme`.
 
 ## Prerequisites
 
-- Astro site using `editorialTheme()` from `@portfolio-engine/editorial-theme` (same setup as [new-site-setup](./new-site-setup.md)).
+- Astro site using `editorialTheme()` from `@portfolio-engine/editorial-theme/integration` (same setup as [new-site-setup](./new-site-setup.md)).
 
 ## Registry format (Phase 7)
 
