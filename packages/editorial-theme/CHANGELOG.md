@@ -1,5 +1,11 @@
 # @portfolio-engine/editorial-theme
 
+## 0.5.1
+
+### Patch Changes
+
+- 0ee8cc1: Neutralize default Work and About page copy: generic headings, subtitle on Work, and a persona-neutral About empty state.
+
 ## 0.5.0
 
 ### Minor Changes
