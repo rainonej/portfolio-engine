@@ -1,4 +1,10 @@
 ---
+/**
+ * This file controls the default individual writing item screen.
+ *
+ * It creates one visitor-facing screen for each item in the writing content folder.
+ * It decides where the title, image, date, tags, description, and body text appear.
+ */
 import Layout from '../../layouts/Layout.astro';
 import type { CollectionEntry } from 'astro:content';
 import { getCollection, render } from 'astro:content';
