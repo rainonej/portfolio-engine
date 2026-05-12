@@ -137,8 +137,29 @@ const missingAreas = [
 ].filter(Boolean);
 
 const themeColorsJson = JSON.stringify(config.theme?.colors ?? {});
-const designSnapshotJson = JSON.stringify(buildDesignSnapshot(config.theme));
+const designSnapshot = buildDesignSnapshot(config.theme);
+const designSnapshotJson = JSON.stringify(designSnapshot);
 const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
+
+/**
+ * Pull the first concrete family name out of a CSS font stack like
+ * `"Cormorant Garamond", ui-serif, Georgia, serif` or the unquoted
+ * `Playfair Display, ui-serif, Georgia, serif` that `design-resolve`
+ * may emit.
+ */
+function firstFamilyFromStack(stack: string | undefined): string {
+  if (!stack) return '';
+  const trimmed = stack.trim();
+  const quoted = trimmed.match(/^"([^"]+)"/);
+  if (quoted && quoted[1]) return quoted[1];
+  const firstSegment = trimmed.split(',', 1)[0];
+  return firstSegment ? firstSegment.trim() : '';
+}
+
+const headingFamilyLabel =
+  firstFamilyFromStack(designSnapshot.cssVariables['--font-serif-stack']?.value) || 'system serif';
+const bodyFamilyLabel =
+  firstFamilyFromStack(designSnapshot.cssVariables['--font-sans-stack']?.value) || 'system sans';
 ---
 
 <!doctype html>
@@ -221,14 +242,14 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
             </p>
             <div class="admin-preview-typography-stack">
               <div class="admin-preview-panel">
-                <p class="admin-preview-meta-spaced">font-serif — Cormorant Garamond</p>
+                <p class="admin-preview-meta-spaced">font-serif — {headingFamilyLabel}</p>
                 <p class="admin-preview-serif-aa">Aa</p>
                 <p class="admin-preview-serif-title">Page heading — bold serif</p>
                 <p class="admin-preview-serif-italic">Page heading — italic serif</p>
                 <p class="admin-preview-serif-section">Section heading — regular serif</p>
               </div>
               <div class="admin-preview-panel">
-                <p class="admin-preview-meta-spaced">font-sans — Inter</p>
+                <p class="admin-preview-meta-spaced">font-sans — {bodyFamilyLabel}</p>
                 <p class="admin-preview-sans-aa">Aa</p>
                 <p class="admin-preview-sans-strong">Body text — semibold</p>
                 <p class="admin-preview-body">
@@ -761,7 +782,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         border-radius: 0.75rem;
         background: var(--color-surface-elevated);
         padding: 1.25rem;
-        box-shadow: 0 1px 2px rgb(30 26 23 / 0.04);
+        box-shadow: 0 1px 2px color-mix(in srgb, var(--color-text-primary) 4%, transparent);
       }
       .adm-card--wide {
         padding: 1.5rem;
@@ -1155,7 +1176,7 @@ const googleFontsHref = editorialGoogleFontsStylesheetHref(config.theme);
         box-sizing: border-box;
       }
       .adm-drawer-input:focus {
-        outline: 2px solid rgb(154 90 46 / 0.25);
+        outline: 2px solid color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
         border-color: var(--color-accent-primary);
       }
       .adm-drawer-textarea {

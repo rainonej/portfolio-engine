@@ -9,6 +9,12 @@ This monorepo ships **`@portfolio-engine/*`** packages and a reference app under
 - **Automatic Copilot code review** is enabled via **repository rulesets** for PRs into **`dev`** and **`epic/**`\*\* (GitHub Settings → Rules → Rulesets). That behavior is not defined in workflow YAML.
 - After a review, **apply** inline suggestions or comment **`@copilot`** on the PR if you want the coding agent to push commits. There is no supported fully hands-off “review then auto-commit everything” mode.
 
+## Agent PR workflow
+
+- Do not merge directly from an agent session.
+- Open PRs against **`dev`** unless a human explicitly requests a different base branch.
+- After opening a PR, request review from **`copilot-pull-request-reviewer`** (or trigger `@copilot review`) before merge.
+
 ## Quality bar
 
 - Run **`pnpm lint`**, **`pnpm check`**, and **`pnpm --filter demo-site run build`** (or full **`pnpm build`**) before considering work done.
