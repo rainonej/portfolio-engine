@@ -1,0 +1,175 @@
+---
+/**
+ * Consumer-local route — declared in src/registry/portfolio-engine.registry.json.
+ *
+ * Replaces the personal-site `/contact` page with a contributor-onboarding
+ * surface. Routes different kinds of contributors (Astro devs, designers,
+ * accessibility reviewers, AI-coding-agent users, site owners) to the right
+ * place in the public repo. No booking funnel.
+ */
+import Layout from '@portfolio-engine/editorial-theme/layouts/Layout.astro';
+
+const REPO_URL = 'https://github.com/rainonej/portfolio-engine';
+const ISSUES_URL = `${REPO_URL}/issues`;
+const ARCHITECTURE_URL = `${REPO_URL}/blob/main/docs/architecture/README.md`;
+const AGENTS_URL = `${REPO_URL}/blob/main/AGENTS.md`;
+const GOOD_FIRST_ISSUE_URL = `${REPO_URL}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22`;
+
+interface Lane {
+  audience: string;
+  body: string;
+  links: { label: string; href: string }[];
+}
+
+const lanes: Lane[] = [
+  {
+    audience: 'Astro developers',
+    body: 'Review the engine/consumer boundary, the route-injection model, the package structure, and Astro 6 conventions. Most simple agent tasks live here.',
+    links: [
+      { label: 'Architecture overview', href: ARCHITECTURE_URL },
+      { label: 'Good first issues', href: GOOD_FIRST_ISSUE_URL },
+    ],
+  },
+  {
+    audience: 'Tailwind / design-system reviewers',
+    body: 'Review theme tokens, the override-surface contract, component variants, and where consumer customization should live versus what belongs upstream.',
+    links: [
+      { label: 'Open a design issue', href: ISSUES_URL },
+      { label: 'Feature matrix', href: '/features' },
+    ],
+  },
+  {
+    audience: 'Accessibility reviewers',
+    body: 'Review generated pages, navigation, focus states, heading structure, contrast, embeds, and admin surfaces. Real findings beat hypotheticals.',
+    links: [
+      { label: 'Report an a11y issue', href: ISSUES_URL },
+      { label: 'Live demo', href: '/' },
+    ],
+  },
+  {
+    audience: 'AI-coding-agent users',
+    body: 'Review the issue templates, the label taxonomy, AGENTS.md, the Copilot instructions, and the visual QA loop. The engine is meant to be safe to operate on with an agent.',
+    links: [
+      { label: 'AGENTS.md', href: AGENTS_URL },
+      { label: 'Workflow guide', href: '/workflow' },
+    ],
+  },
+  {
+    audience: 'Site owners',
+    body: 'Open an issue describing a recurring website need. You do not need to propose code. Useful issues include the user need, examples, acceptance criteria, and whether the feature should be reusable in the engine or stay site-specific.',
+    links: [
+      { label: 'Open an issue', href: ISSUES_URL },
+      { label: 'Vision', href: '/vision' },
+    ],
+  },
+];
+---
+
+<Layout
+  title="Contribute — Portfolio Engine"
+  description="Portfolio Engine is open source. Astro developers, design-system reviewers, accessibility reviewers, AI-coding-agent users, and site owners can all plug in — here's where to start."
+>
+  <main class="mx-auto max-w-4xl px-6 pb-24 pt-40">
+    <p
+      class="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]"
+    >
+      Consumer-local route · src/pages-local/contribute.astro
+    </p>
+    <h1 class="mb-6 font-serif text-5xl font-bold leading-tight">
+      Contribute
+    </h1>
+    <p class="mb-12 max-w-3xl text-xl leading-relaxed text-[var(--color-text-muted)]">
+      Portfolio Engine is open source. The project needs different kinds of
+      contributors — pick the lane that fits and start in the public GitHub
+      repo. There is no private booking funnel; everything happens in issues
+      and pull requests.
+    </p>
+
+    <section class="mb-12">
+      <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+        <a
+          href={ISSUES_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-full bg-[var(--color-text-primary)] px-6 py-3 text-sm font-medium text-[var(--color-text-inverse)] transition-colors hover:bg-[var(--color-text-muted)]"
+        >
+          Open an issue
+          <span aria-hidden="true">↗</span>
+        </a>
+        <a
+          href={ARCHITECTURE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-default)] px-6 py-3 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:border-[var(--color-text-muted)]"
+        >
+          Review the architecture
+          <span aria-hidden="true">↗</span>
+        </a>
+        <a
+          href={GOOD_FIRST_ISSUE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-default)] px-6 py-3 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:border-[var(--color-text-muted)]"
+        >
+          Browse good first issues
+          <span aria-hidden="true">↗</span>
+        </a>
+        <a
+          href="/workflow"
+          class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-default)] px-6 py-3 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:border-[var(--color-text-muted)]"
+        >
+          Inspect agent workflow
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2
+        class="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]"
+      >
+        Who plugs in where
+      </h2>
+      <h3 class="mb-8 font-serif text-3xl font-bold">
+        Lanes for different kinds of contributors
+      </h3>
+      <ul class="space-y-6">
+        {lanes.map((lane) => (
+          <li class="rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-surface-wash)] p-6">
+            <h4 class="mb-3 font-serif text-2xl font-semibold leading-tight">
+              For {lane.audience}
+            </h4>
+            <p class="mb-4 text-base leading-relaxed text-[var(--color-text-muted)]">
+              {lane.body}
+            </p>
+            <ul class="flex flex-wrap gap-4 text-sm">
+              {lane.links.map((link) => {
+                const isExternal = link.href.startsWith('https://');
+                return (
+                  <li>
+                    <a
+                      href={link.href}
+                      target={isExternal ? '_blank' : undefined}
+                      rel={isExternal ? 'noopener noreferrer' : undefined}
+                      class="text-[var(--color-accent-primary)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-primary)]"
+                    >
+                      {link.label}{isExternal ? ' ↗' : ' →'}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <aside data-pe-feature-callout>
+      <strong>No booking funnel</strong>
+      Portfolio Engine is a shared open-source project, not a service.
+      Conversations happen in GitHub Issues and pull requests so they are
+      legible to every contributor — humans and agents alike — without a
+      private channel.
+    </aside>
+  </main>
+</Layout>

@@ -55,24 +55,24 @@ const themeVersion = '0.6.0';
         {siteTitle}
       </h3>
       <p class="text-sm leading-relaxed text-[var(--color-text-muted)]">
-        An open-source backbone for personal, portfolio, and editorial
-        sites — published as @portfolio-engine/* on npm.
+        Apache-2.0 Astro/Tailwind backbone for agent-native websites —
+        published as @portfolio-engine/* on npm.
       </p>
     </div>
 
     <div>
       <p class="mb-3 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]">
-        Get started
+        Contribute
       </p>
       <ul class="space-y-2 text-sm">
         <li>
           <a
-            href={setupUrl}
+            href={`${repoUrl}/issues`}
             target="_blank"
             rel="noopener noreferrer"
             class="text-[var(--color-text-muted)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-primary)]"
           >
-            Set up with Claude Code
+            Open an issue
           </a>
         </li>
         <li>
@@ -83,6 +83,16 @@ const themeVersion = '0.6.0';
             class="text-[var(--color-text-muted)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-primary)]"
           >
             Read the docs
+          </a>
+        </li>
+        <li>
+          <a
+            href={setupUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[var(--color-text-muted)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-primary)]"
+          >
+            Set up your own site (Claude Code)
           </a>
         </li>
         {showAdminLink && (
@@ -140,7 +150,7 @@ const themeVersion = '0.6.0';
   <div
     class="mx-auto mt-12 flex max-w-5xl flex-col items-start gap-3 border-t border-[var(--color-border-default)] pt-6 text-xs text-[var(--color-text-muted)] sm:flex-row sm:items-center sm:justify-between"
   >
-    <p>© {year} {siteTitle} · MIT licensed</p>
+    <p>© {year} {siteTitle} · Apache-2.0 licensed</p>
     <p class="font-mono text-[10px] uppercase tracking-[0.18em]">
       Built with{' '}
       <a

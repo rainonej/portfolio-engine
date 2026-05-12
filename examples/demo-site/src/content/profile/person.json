@@ -1,17 +1,17 @@
 {
-  "name": "portfolio-engine",
-  "roleLine": "An open-source backbone for personal, portfolio, and editorial websites.",
-  "shortBio": "An Astro theme system that ships routes, layouts, and a typed config surface so you can focus on your content — and is designed to be set up entirely through Claude Code prompts.",
-  "summary": "portfolio-engine is a layered, first-party (not generic) Astro 6 theme system. Schema, engine-core, editorial-theme, and admin-tools are published as @portfolio-engine/* packages and consumed by your private content repo. Built with Astro 6, Zod 4, Tailwind v4, and pnpm workspaces.",
+  "name": "Portfolio Engine",
+  "roleLine": "Open-source backbone for agent-native personal and professional websites.",
+  "shortBio": "An Apache-2.0 Astro/Tailwind backbone where site owners contribute needs, AI agents implement scoped issues, and humans review the shared foundation. This demo is the project's own showcase — not a generated personal site.",
+  "summary": "Portfolio Engine is a layered Astro theme system. Schema, engine-core, editorial-theme, and admin-tools ship as @portfolio-engine/* packages and are consumed by downstream content repos. Built with Astro 6, Zod 4, Tailwind v4, and pnpm workspaces.",
   "longBio": [
-    "Most theme systems try to do everything for everyone. portfolio-engine does the opposite — it is built first for a single consumer (its author's own site), then opened up just enough to let other people use it the same way. Being open-source is about transparency, not infinite extensibility.",
+    "Portfolio Engine is open source. The goal is a shared commons of Astro/Tailwind capabilities that downstream sites depend on, not a one-off generator that disappears once your website is built.",
     "The engine is split into four strict layers: a pure Zod schema package, an Astro integration (engine-core) that loads config and injects routes, an editorial theme that owns layouts and components, and your consumer site that owns content, config, and overrides. Layers only depend downward. This keeps upgrades boring and breaking changes obvious.",
-    "You don't have to copy a template, fight a generator, or read a 60-page README. The recommended setup is to paste docs/downstream/setup-with-claude.md into Claude Code and answer a handful of questions. The agent runs numbered phase scripts that link the engine, write your config, and verify the build. The result is a working site you can deploy to Vercel in minutes."
+    "Contributors include Astro developers, Tailwind/design-system reviewers, accessibility reviewers, AI-coding-agent users, and site owners with recurring needs. Site owners do not have to write code: a useful issue describes the need, examples, acceptance criteria, and whether the capability should be reusable or site-specific. From there, scoped tasks get picked up by humans or AI agents and reviewed on the shared foundation."
   ],
   "values": [
     {
-      "title": "First-party, not generic",
-      "body": "Designed for one real consumer at a time. No plugin marketplace, no infinite theme variants, no abstract base classes."
+      "title": "Open-source commons",
+      "body": "Every good contribution improves the backbone for everyone. Capabilities that are obviously reusable belong in the engine, not in private one-off forks."
     },
     {
       "title": "Explicit override surfaces",
@@ -33,11 +33,11 @@
     },
     {
       "title": "Content is plain Astro collections",
-      "body": "Profile, projects, writing, testimonials use Astro's native content layer. The engine never touches your markdown."
+      "body": "Profile, projects, writing use Astro's native content layer. The engine never touches your markdown."
     },
     {
-      "title": "Setup runs through Claude Code",
-      "body": "Numbered phase scripts under docs/downstream/scripts let an agent provision your repo with DRY_RUN and SKIP_* flags for safety."
+      "title": "Agent-safe workflow",
+      "body": "Scoped GitHub issues, label taxonomy, AGENTS.md, Copilot instructions, and visual QA loops make AI-assisted implementation reviewable instead of opaque."
     },
     {
       "title": "Three route-ownership modes",
@@ -54,10 +54,9 @@
     "Zod 4",
     "TypeScript 6",
     "pnpm workspaces",
-    "MIT licensed",
+    "Apache-2.0 licensed",
     "Node >= 24"
   ],
-  "email": "hello@portfolio-engine.dev",
   "github": "https://github.com/rainonej/portfolio-engine",
   "photo": "/og-default.svg"
 }

@@ -2,9 +2,16 @@
   "version": 1,
   "localRoutes": [
     {
-      "pattern": "/philosophy",
-      "page": "philosophy.astro",
-      "label": "Philosophy",
+      "pattern": "/vision",
+      "page": "vision.astro",
+      "label": "Vision",
+      "section": null,
+      "visibility": "public"
+    },
+    {
+      "pattern": "/workflow",
+      "page": "workflow.astro",
+      "label": "Workflow",
       "section": null,
       "visibility": "public"
     },
@@ -19,6 +26,13 @@
       "pattern": "/features",
       "page": "features.astro",
       "label": "Features",
+      "section": null,
+      "visibility": "public"
+    },
+    {
+      "pattern": "/contribute",
+      "page": "contribute.astro",
+      "label": "Contribute",
       "section": null,
       "visibility": "public"
     }

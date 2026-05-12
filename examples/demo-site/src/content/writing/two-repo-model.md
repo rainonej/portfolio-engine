@@ -9,7 +9,7 @@ tags: ['Architecture', 'Privacy', 'Workflows']
 
 portfolio-engine has two natural git repos:
 
-- The **engine repo** (this one) — public, MIT-licensed, contains the four `@portfolio-engine/*` packages, the docs, the demo site, and the SSR demo.
+- The **engine repo** (this one) — public, Apache-2.0 licensed, contains the four `@portfolio-engine/*` packages, the docs, the demo site, and the SSR demo.
 - The **consumer repo** — private, contains your config, content, photos, résumé PDF, override components, and the `.env` with your GitHub OAuth client secret.
 
 They share no git history. They share no secrets. They share a clear contract: the consumer repo depends on published npm versions of the engine packages.
