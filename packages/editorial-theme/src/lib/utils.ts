@@ -43,8 +43,10 @@ export const formatDate = (date: Date, style: 'short' | 'long' = 'long') =>
  * `T`, stripping every other field and producing spurious
  * "Property 'X' does not exist" errors.
  *
- * A runtime guard throws early if the first item does not carry
- * `data.date: Date`, catching misuse in non-TypeScript call sites.
+ * A runtime guard inspects the first item and throws early if it lacks
+ * `data.date: Date`, providing a fast-fail signal for misuse in
+ * non-TypeScript call sites.  The check is a heuristic (first-item only)
+ * since all items are expected to share the same shape.
  */
 export function sortByDateDesc<T extends { data: { date: Date } }>(items: readonly T[]): T[];
 export function sortByDateDesc<T>(items: readonly T[]): T[];
