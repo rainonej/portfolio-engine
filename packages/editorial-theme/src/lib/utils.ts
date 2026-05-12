@@ -33,19 +33,26 @@ export const formatDate = (date: Date, style: 'short' | 'long' = 'long') =>
 /**
  * Sort a content collection by date descending (newest first).
  *
- * Items must have a `data.date: Date` field — this is enforced by an
- * in-body assertion rather than a `T extends { data: { date: Date } }`
- * constraint. Using a constraint here causes a TS quirk: when the IDE's
- * Astro language server can't see a consumer's generated `astro:content`
- * types (e.g. when editing pages inside this package directly), the input
- * to this function is `any[]`, and the compiler then pins `T` to the
- * constraint's upper bound `{ data: { date: Date } }`, stripping every
- * other field off the inferred element type and producing spurious
- * "Property 'X' does not exist" errors on later `.title` / `.image` /
- * `.tags` accesses. The build itself is unaffected — see `astro check`.
+ * Items must have a `data.date: Date` field.  The first overload enforces
+ * this constraint at compile time for well-typed callers (e.g. the typed
+ * wrappers in `collections.ts`).  A second unconstrained overload is
+ * provided as a fallback for contexts where the element type cannot be
+ * properly inferred (e.g. IDE sessions where the consumer's
+ * `astro:content` types are not in scope and `getCollection(...)` returns
+ * `any`); without it, the constraint's upper bound would be substituted for
+ * `T`, stripping every other field and producing spurious
+ * "Property 'X' does not exist" errors.
+ *
+ * A runtime guard throws early if the first item does not carry
+ * `data.date: Date`, catching misuse in non-TypeScript call sites.
  */
+export function sortByDateDesc<T extends { data: { date: Date } }>(items: readonly T[]): T[];
+export function sortByDateDesc<T>(items: readonly T[]): T[];
 export function sortByDateDesc<T>(items: readonly T[]): T[] {
   type WithDate = { data: { date: Date } };
+  if (items.length > 0 && !((items[0] as WithDate)?.data?.date instanceof Date)) {
+    throw new TypeError('sortByDateDesc: each item must have a `data.date` property of type Date');
+  }
   return [...items].sort(
     (a, b) => (b as WithDate).data.date.getTime() - (a as WithDate).data.date.getTime()
   );
