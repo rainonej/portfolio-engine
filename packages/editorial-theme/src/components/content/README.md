@@ -2,19 +2,19 @@
 
 Universal, reusable editorial pieces — cards, grids, headers, and tag chips — that downstream screens can import directly without copying markup. Every component is generic by design (no consumer-specific names, brand strings, or one-off values) and styles itself only with CSS custom properties from `../../styles/design-tokens.css`, so a consumer's `theme.json` overrides apply automatically.
 
-| Component                  | One-line purpose                                                                |
-| -------------------------- | ------------------------------------------------------------------------------- |
-| `ContentSectionHeader.astro` | Section-level intro with eyebrow, heading, description, and optional link.    |
-| `LinkCard.astro`           | Clickable card that routes readers to another screen.                           |
-| `FeatureCard.astro`        | Large highlighted card for featured or pinned items, with optional image.       |
-| `EvidenceCard.astro`       | Compact proof block: claim → evidence → outcome, with optional caveat.          |
-| `MetricCard.astro`         | Single metric or status marker (value, label, optional note).                   |
-| `MetricStrip.astro`        | Responsive row of `MetricCard` items.                                           |
-| `QuoteCard.astro`          | Testimonial or reference card with attribution and optional related link.       |
-| `CardGrid.astro`           | Responsive grid container (2 or 3 columns) for any cards in this folder.        |
-| `ArticlePreviewCard.astro` | Long-form preview card with date in monospace and tags via `TagList`.           |
-| `RelatedLinkCard.astro`    | Compact sibling/"see also" link for sidebars and rails.                         |
-| `TagList.astro`            | Chip renderer for tag arrays — consistent styling across every screen.          |
+| Component                    | One-line purpose                                                           |
+| ---------------------------- | -------------------------------------------------------------------------- |
+| `ContentSectionHeader.astro` | Section-level intro with eyebrow, heading, description, and optional link. |
+| `LinkCard.astro`             | Clickable card that routes readers to another screen.                      |
+| `FeatureCard.astro`          | Large highlighted card for featured or pinned items, with optional image.  |
+| `EvidenceCard.astro`         | Compact proof block: claim → evidence → outcome, with optional caveat.     |
+| `MetricCard.astro`           | Single metric or status marker (value, label, optional note).              |
+| `MetricStrip.astro`          | Responsive row of `MetricCard` items.                                      |
+| `QuoteCard.astro`            | Testimonial or reference card with attribution and optional related link.  |
+| `CardGrid.astro`             | Responsive grid container (2 or 3 columns) for any cards in this folder.   |
+| `ArticlePreviewCard.astro`   | Long-form preview card with date in monospace and tags via `TagList`.      |
+| `RelatedLinkCard.astro`      | Compact sibling/"see also" link for sidebars and rails.                    |
+| `TagList.astro`              | Chip renderer for tag arrays — consistent styling across every screen.     |
 
 ## Component usage map
 

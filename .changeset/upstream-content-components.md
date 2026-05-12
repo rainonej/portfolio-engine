@@ -1,5 +1,5 @@
 ---
-"@portfolio-engine/editorial-theme": minor
+'@portfolio-engine/editorial-theme': minor
 ---
 
 Add universal content component library under `components/content/` with 11 generic editorial components
