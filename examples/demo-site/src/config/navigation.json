@@ -5,7 +5,12 @@
     { "label": "Architecture", "href": "/architecture", "order": 3, "visible": true },
     { "label": "Features", "href": "/features", "order": 4, "visible": true },
     { "label": "Examples", "href": "/work", "order": 5, "visible": true },
-    { "label": "GitHub", "href": "https://github.com/rainonej/portfolio-engine", "order": 6, "visible": true },
+    {
+      "label": "GitHub",
+      "href": "https://github.com/rainonej/portfolio-engine",
+      "order": 6,
+      "visible": true
+    },
     { "label": "Contribute", "href": "/contribute", "order": 7, "visible": true },
     { "label": "About", "href": "/about", "order": 8, "visible": false },
     { "label": "Résumé", "href": "/resume", "order": 9, "visible": false },
