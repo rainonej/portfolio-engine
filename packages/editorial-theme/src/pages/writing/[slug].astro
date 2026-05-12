@@ -1,18 +1,18 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import type { CollectionEntry } from 'astro:content';
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import ImageOrFallback from '../../components/ImageOrFallback.astro';
 import { getBase, formatDate, resolveAssetUrl } from '../../lib/utils';
 import { loadProfilePerson } from '../../lib/load-profile-person';
+import { getWritingPosts, type WritingEntry } from '../../lib/collections';
 
 type Props = {
-  entry: CollectionEntry<'writing'>;
+  entry: WritingEntry;
 };
 
 export async function getStaticPaths() {
-  const posts = await getCollection('writing', (entry: CollectionEntry<'writing'>) => !entry.data.draft);
-  return posts.map((entry: CollectionEntry<'writing'>) => ({
+  const posts = await getWritingPosts();
+  return posts.map((entry) => ({
     params: { slug: entry.id },
     props: { entry },
   }));

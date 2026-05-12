@@ -30,8 +30,23 @@ export const formatDate = (date: Date, style: 'short' | 'long' = 'long') =>
     ...(style === 'long' && { day: 'numeric' }),
   });
 
-/** Sort a content collection by date descending (newest first) */
-export const sortByDateDesc = <T extends { data: { date: Date } }>(
-  items: T[]
-): T[] =>
-  [...items].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+/**
+ * Sort a content collection by date descending (newest first).
+ *
+ * Items must have a `data.date: Date` field — this is enforced by an
+ * in-body assertion rather than a `T extends { data: { date: Date } }`
+ * constraint. Using a constraint here causes a TS quirk: when the IDE's
+ * Astro language server can't see a consumer's generated `astro:content`
+ * types (e.g. when editing pages inside this package directly), the input
+ * to this function is `any[]`, and the compiler then pins `T` to the
+ * constraint's upper bound `{ data: { date: Date } }`, stripping every
+ * other field off the inferred element type and producing spurious
+ * "Property 'X' does not exist" errors on later `.title` / `.image` /
+ * `.tags` accesses. The build itself is unaffected — see `astro check`.
+ */
+export function sortByDateDesc<T>(items: readonly T[]): T[] {
+  type WithDate = { data: { date: Date } };
+  return [...items].sort(
+    (a, b) => (b as WithDate).data.date.getTime() - (a as WithDate).data.date.getTime()
+  );
+}

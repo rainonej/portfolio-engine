@@ -1,9 +1,16 @@
 // Ambient type declarations for @portfolio-engine virtual modules.
 // Reference this file in consuming packages:
 //   /// <reference types="@portfolio-engine/engine-core/client" />
+//
+// Imports below MUST resolve from BOTH `src/` (where this file lives during
+// editing) AND from `dist/` (where a verbatim copy is shipped via
+// `scripts/copy-client-dts.mjs` — tsup bundles all types into a single
+// `dist/index.d.ts`, so individual `./config-loader.js` / `./types.js`
+// files do not exist at publish time). Resolving via `./index.js` works in
+// both contexts and prevents "Cannot find module '@portfolio-engine:config'"
+// errors in downstream IDEs.
 
-import type { ResolvedConfig } from './config-loader.js';
-import type { BuildContext, OverrideMap, RouteRegistry } from './types.js';
+import type { ResolvedConfig, BuildContext, OverrideMap, RouteRegistry } from './index.js';
 
 declare module '@portfolio-engine:config' {
   export const config: ResolvedConfig;

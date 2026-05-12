@@ -1,14 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import type { CollectionEntry } from 'astro:content';
-import { getCollection } from 'astro:content';
 import ImageOrFallback from '../../components/ImageOrFallback.astro';
 import { getBase, formatDate, resolveAssetUrl, sortByDateDesc } from '../../lib/utils';
 import { loadProfilePerson } from '../../lib/load-profile-person';
+import { getWritingPosts } from '../../lib/collections';
 
 const person = await loadProfilePerson();
 
-const posts = await getCollection('writing', (entry: CollectionEntry<'writing'>) => !entry.data.draft);
+const posts = await getWritingPosts();
 const sorted = sortByDateDesc(posts);
 const base = getBase();
 ---

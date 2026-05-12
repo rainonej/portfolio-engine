@@ -6,12 +6,11 @@ import HeroSection from '../components/sections/HeroSection.astro';
 import FeaturedWritingSection from '../components/sections/FeaturedWritingSection.astro';
 import TestimonialSection from '../components/sections/TestimonialSection.astro';
 import CollaborationSection from '../components/sections/CollaborationSection.astro';
-import type { CollectionEntry } from 'astro:content';
-import { getCollection } from 'astro:content';
 import type { ResolvedConfig } from '@portfolio-engine/engine-core';
 import { config } from '@portfolio-engine:config';
 import { getBase, resolveAssetUrl, sortByDateDesc } from '../lib/utils';
 import { loadProfilePerson, resolveHeroBio } from '../lib/load-profile-person';
+import { getProjects, getWritingPosts, getTestimonials } from '../lib/collections';
 
 type Pillar = NonNullable<ResolvedConfig['features']['pillars']>[number];
 
@@ -24,19 +23,13 @@ const pillars = (config.features.pillars ?? []).map((p: Pillar) => ({
   image: p.image ? (resolveAssetUrl(p.image, base) ?? undefined) : undefined,
 }));
 
-const projects = await getCollection('projects');
-const featured = sortByDateDesc(
-  projects.filter((p: CollectionEntry<'projects'>) => p.data.featured),
-).slice(0, 3);
+const projects = await getProjects();
+const featured = sortByDateDesc(projects.filter((p) => p.data.featured)).slice(0, 3);
 
-const recentPosts = sortByDateDesc(
-  await getCollection('writing', (entry: CollectionEntry<'writing'>) => !entry.data.draft),
-).slice(0, 3);
+const recentPosts = sortByDateDesc(await getWritingPosts()).slice(0, 3);
 
 const featuredTestimonials = config.features.testimonials
-  ? (await getCollection('testimonials'))
-      .filter((t: CollectionEntry<'testimonials'>) => t.data.featured)
-      .slice(0, 2)
+  ? (await getTestimonials({ featuredOnly: true })).slice(0, 2)
   : [];
 ---
 
@@ -145,7 +138,7 @@ const featuredTestimonials = config.features.testimonials
   {
     featuredTestimonials.length > 0 && (
       <TestimonialSection
-        testimonials={featuredTestimonials.map((t: CollectionEntry<'testimonials'>) => ({
+        testimonials={featuredTestimonials.map((t) => ({
           quote: t.data.quote,
           author: t.data.author,
           role: t.data.role,
