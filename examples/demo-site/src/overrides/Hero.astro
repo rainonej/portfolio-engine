@@ -47,12 +47,14 @@ const photoSrc = person.photo
   ? (resolveAssetUrl(person.photo, base) ?? person.photo)
   : null;
 
-// Only attach the popup script if the configured booking URL parses as a
-// safe absolute https:// URL. The schema validates bookingUrl as a generic
-// URL, which would let a misconfigured site.json sneak `javascript:` or
-// other unexpected schemes into `window.location.href` /
-// `Calendly.initPopupWidget`. When the URL fails the check we still render
-// the CTA — it just falls through to plain link behavior, no JS hook.
+// Only treat the configured booking URL as usable if it parses as a safe
+// absolute https:// URL. The schema validates bookingUrl as a generic URL,
+// which would let a misconfigured site.json sneak `javascript:` or other
+// unexpected schemes into `window.location.href` /
+// `Calendly.initPopupWidget`. When the URL fails the check, the popup
+// script is not attached AND any CTA whose href matches the unsafe
+// bookingUrl is dropped from `sanitizedCtas` below — we never let an
+// unvalidated bookingUrl reach a rendered <a href> or a JS call.
 const safeBookingUrl: string | null = (() => {
   if (!bookingUrl) return null;
   try {
