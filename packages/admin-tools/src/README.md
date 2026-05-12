@@ -21,3 +21,11 @@ This package is optional. A site works without it.
 ## Authentication
 
 The admin area uses GitHub OAuth. Any GitHub account in the configured allowed list can log in. The `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, and `SESSION_SECRET` environment variables must be set.
+
+## Current collection expectations and limits
+
+The default admin dashboard is built around a fixed set of content collection names. Knowing what's wired and what isn't helps when a downstream site adds a custom collection.
+
+- The default dashboard expects collections named `writing`, `projects`, `testimonials`, and `profile`. Per-collection counts, recent-entry lists, and "open this file" links target those four by name.
+- The file editor can read and write any file under `content/`, `config/`, `registry/`, and `public/`. Restricted to those roots — see `server/paths.ts` for the allowlist.
+- If a downstream site adds a custom collection (e.g., `case-studies`), its files appear in the file browser and can be edited like any other tracked file, but no dedicated dashboard widget is generated automatically. Editing is possible; a tailored admin section for that collection requires code changes in `routes/admin.astro` and the corresponding API endpoints.

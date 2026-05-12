@@ -16,5 +16,6 @@ A "component" is a self-contained piece of the screen — a navigation bar, a ca
 | `sections/CollaborationSection.astro`   | The call-to-action section on the home screen                 |
 | `ImageOrFallback.astro`                 | Displays an image, or a letter placeholder if no image exists |
 | `WritingList.astro`                     | A list of writing cards                                       |
+| `content/`                              | Universal, reusable editorial pieces (cards, grids, headers, tags) that downstream screens can import directly via `@portfolio-engine/editorial-theme/components/content/*`. See `content/README.md` for the full list and per-component usage. |
 
 Some of these components (`Hero`, `FeaturedWriting`, `TestimonialSection`, `CollaborationSection`, `Footer`) can be replaced by a downstream site through the override surface system. See `../registry.ts`.
