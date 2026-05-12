@@ -73,7 +73,7 @@ Use this prompt in Copilot/Claude after upgrading \`@portfolio-engine/*\`.
 ## Context
 
 - Dist tag used: \`$DIST_TAG\`
-- Upgraded packages: \`$pkgs\`
+- Upgraded packages: \`$pe\`
 - Check exit code: \`$check_status\`
 - Build exit code: \`$build_status\`
 - Check log: \`$check_log\`
@@ -84,7 +84,7 @@ Use this prompt in Copilot/Claude after upgrading \`@portfolio-engine/*\`.
 Create a new branch from the current branch to handle any issues introduced by this upgrade.
 
 1. Read \`docs/downstream/upgrade-path.md\` in this repo and follow the **AI / coding agents** section.
-2. For each upgraded package, read \`CHANGELOG.md\` and merge every \`#### Agent migration\` block in the semver window into one checklist.
+2. For each upgraded package, read \`node_modules/@portfolio-engine/<pkg>/CHANGELOG.md\`; if it is missing, use \`https://github.com/rainonej/portfolio-engine/tree/main/packages/<pkg>/CHANGELOG.md\`. Merge every \`#### Agent migration\` block in the semver window into one checklist.
 3. Resolve issues surfaced by \`pnpm check\` and \`pnpm build\` logs.
 4. Re-run \`pnpm check\` and \`pnpm build\` until both pass.
 5. Open a PR into \`origin/dev\` that summarizes:
