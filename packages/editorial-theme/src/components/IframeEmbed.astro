@@ -7,19 +7,25 @@
  *     from the consumer's `public/` directory), or
  *   - absolute https:// URLs.
  *
- * Anything else (http://, javascript:, data:, protocol-relative `//host`)
- * is rejected at render time. An optional `allowedHosts` array enforces a
- * host allowlist for absolute URLs.
+ * Anything else (http://, javascript:, data:, protocol-relative `//host`,
+ * backslash-bearing paths like "/\evil.com/x" that WHATWG URL parsers
+ * normalize cross-origin, or paths containing control characters) is
+ * rejected at render time. An optional `allowedHosts` array enforces a
+ * hostname allowlist for absolute URLs (compared against `URL.hostname`,
+ * lowercased — port is intentionally not part of host matching).
  *
  * Sizing precedence:
- *   1. `height` (fixed pixels / CSS length) — preferred for non-responsive
+ *   1. `height` (positive number → "Npx", or a validated CSS length token
+ *      with no semicolons / whitespace) — preferred for non-responsive
  *      embedded content like Plotly dashboards.
- *   2. `aspectRatio` — responsive width:height for content that scales.
+ *   2. `aspectRatio` — responsive width:height as a CSS `aspect-ratio`
+ *      value (`<number>` or `<number>/<number>`).
  *   3. Default fallback: a fixed 720px height (matches `SchedulingBlock`).
  *
- * `sandbox`, `allow`, and `referrerpolicy` are passed through verbatim when
- * provided and omitted otherwise — consumers opt in to the security posture
- * they want for the specific embed.
+ * `sandbox`, `allow`, and `referrerpolicy` are typed props passed through
+ * to the underlying `<iframe>` verbatim when provided, omitted otherwise —
+ * consumers opt in to the security posture they want for the specific
+ * embed (no default is applied).
  */
 export interface Props {
   src: string;
@@ -61,15 +67,58 @@ if (typeof src !== 'string' || src.trim().length === 0) {
   throw new Error('IframeEmbed: `src` is required and must be a non-empty string.');
 }
 if (typeof title !== 'string' || title.trim().length === 0) {
-  throw new Error('IframeEmbed: `title` is required for accessibility and must be a non-empty string.');
+  throw new Error(
+    'IframeEmbed: `title` is required for accessibility and must be a non-empty string.',
+  );
 }
 
 const trimmedSrc = src.trim();
+
+// Control characters (U+0000–U+001F plus DEL) are dangerous in URLs — some
+// parsers strip them, others don't, and the divergence can cause an apparent
+// same-origin path to resolve cross-origin after normalization.
+// eslint-disable-next-line no-control-regex
+const CONTROL_CHAR_RE = /[\u0000-\u001F\u007F]/;
+if (CONTROL_CHAR_RE.test(trimmedSrc)) {
+  throw new Error('IframeEmbed: `src` must not contain control characters.');
+}
+
+const SAME_ORIGIN_BASE = 'https://portfolio-engine.invalid';
 let isSameOrigin = false;
 let parsedUrl: URL | null = null;
 
-if (trimmedSrc.startsWith('/') && !trimmedSrc.startsWith('//')) {
-  // Same-origin path (e.g. "/assets/demos/...html"). Accepted.
+if (trimmedSrc.startsWith('/')) {
+  // Protocol-relative `//host/...` is rejected outright — it would resolve to
+  // an arbitrary cross-origin host on the consumer's scheme.
+  if (trimmedSrc.startsWith('//')) {
+    throw new Error(
+      'IframeEmbed: protocol-relative `src` (starting with "//") is not allowed; use an absolute https:// URL or a single-slash same-origin path.',
+    );
+  }
+  // Backslashes are normalized to forward slashes by WHATWG URL parsing in
+  // the authority component, so "/\evil.com/x" resolves cross-origin against
+  // any base. Reject them outright before attempting resolution.
+  if (trimmedSrc.includes('\\')) {
+    throw new Error(
+      'IframeEmbed: same-origin `src` must not contain backslashes (URL parsers normalize "\\" to "/" and can redirect the iframe cross-origin).',
+    );
+  }
+  // Belt-and-braces: parse against a sentinel base and confirm the resolved
+  // origin equals the base origin. Any path that resolves anywhere else is
+  // not actually same-origin and must be rejected.
+  let resolved: URL;
+  try {
+    resolved = new URL(trimmedSrc, SAME_ORIGIN_BASE);
+  } catch {
+    throw new Error(
+      `IframeEmbed: same-origin \`src\` is not a valid relative URL (got ${JSON.stringify(trimmedSrc)}).`,
+    );
+  }
+  if (resolved.origin !== SAME_ORIGIN_BASE) {
+    throw new Error(
+      `IframeEmbed: same-origin \`src\` resolved to a different origin (${resolved.origin}); refusing to render.`,
+    );
+  }
   isSameOrigin = true;
 } else {
   try {
@@ -87,30 +136,78 @@ if (trimmedSrc.startsWith('/') && !trimmedSrc.startsWith('//')) {
 }
 
 if (Array.isArray(allowedHosts) && allowedHosts.length > 0) {
+  // Normalize entries: trim whitespace, lowercase, drop empties. Port is
+  // intentionally not part of host matching — consumers wanting per-port
+  // policy should keep the hostnames in `allowedHosts` and apply their own
+  // port checks in the surrounding page if necessary.
+  const normalizedAllowedHosts = allowedHosts
+    .filter((h): h is string => typeof h === 'string')
+    .map((h) => h.trim().toLowerCase())
+    .filter((h) => h.length > 0);
+
   if (isSameOrigin) {
-    // Same-origin paths are not subject to host allowlists — they are served
-    // from the consumer's own origin and cannot escape it.
-  } else if (parsedUrl && !allowedHosts.includes(parsedUrl.host)) {
-    throw new Error(
-      `IframeEmbed: src host "${parsedUrl.host}" is not in \`allowedHosts\`: [${allowedHosts.join(', ')}].`,
-    );
+    // Same-origin paths are served from the consumer's own origin and cannot
+    // escape it — the allowlist does not apply.
+  } else if (parsedUrl) {
+    const actualHostname = parsedUrl.hostname.toLowerCase();
+    if (!normalizedAllowedHosts.includes(actualHostname)) {
+      throw new Error(
+        `IframeEmbed: src hostname "${actualHostname}" is not in \`allowedHosts\`: [${normalizedAllowedHosts.join(', ')}].`,
+      );
+    }
   }
 }
 
+// Accept only narrow, unambiguous CSS forms for `height` and `aspectRatio`
+// to keep these inputs safe even if a consumer ever wires them to a content
+// collection field. No semicolons, no whitespace inside values, no escape
+// sequences — the regex grammar is intentionally restrictive.
+const CSS_LENGTH_RE =
+  /^[0-9]+(?:\.[0-9]+)?(?:px|em|rem|vh|vw|svh|svw|dvh|dvw|lvh|lvw|%|ch|ex)$/i;
+const CSS_ASPECT_RATIO_RE = /^[0-9]+(?:\.[0-9]+)?(?:\s*\/\s*[0-9]+(?:\.[0-9]+)?)?$/;
+
+function validateHeightInput(value: number | string): string {
+  if (typeof value === 'number') {
+    if (!Number.isFinite(value) || value <= 0) {
+      throw new Error(
+        `IframeEmbed: \`height\` number must be finite and > 0 (got ${value}).`,
+      );
+    }
+    return `${value}px`;
+  }
+  const trimmed = value.trim();
+  if (!CSS_LENGTH_RE.test(trimmed)) {
+    throw new Error(
+      `IframeEmbed: \`height\` string must be a CSS length like "820px" or "60vh" (got ${JSON.stringify(value)}).`,
+    );
+  }
+  return trimmed;
+}
+
+function validateAspectRatioInput(value: string): string {
+  const trimmed = value.trim();
+  if (!CSS_ASPECT_RATIO_RE.test(trimmed)) {
+    throw new Error(
+      `IframeEmbed: \`aspectRatio\` must be a CSS aspect-ratio like "16/9" or "1.778" (got ${JSON.stringify(value)}).`,
+    );
+  }
+  return trimmed;
+}
+
 const hasFixedHeight = height !== undefined && height !== null;
-const fixedHeightCss = hasFixedHeight
-  ? typeof height === 'number'
-    ? `${height}px`
-    : String(height)
-  : null;
-const useAspectRatio = !hasFixedHeight && typeof aspectRatio === 'string' && aspectRatio.length > 0;
-const aspectRatioCss = useAspectRatio ? aspectRatio : null;
+const fixedHeightCss = hasFixedHeight ? validateHeightInput(height as number | string) : null;
+const useAspectRatio =
+  !hasFixedHeight && typeof aspectRatio === 'string' && aspectRatio.trim().length > 0;
+const aspectRatioCss = useAspectRatio ? validateAspectRatioInput(aspectRatio as string) : null;
 const defaultFixedHeightCss = !hasFixedHeight && !useAspectRatio ? '720px' : null;
 
 const shellMode: 'fixed' | 'aspect' = useAspectRatio ? 'aspect' : 'fixed';
-const shellStyle = useAspectRatio
-  ? `aspect-ratio: ${aspectRatioCss};`
-  : `--pe-iframe-embed-height: ${fixedHeightCss ?? defaultFixedHeightCss};`;
+// Build the style as an object so Astro safely serializes attribute values.
+// All inputs feeding into this object passed the regex validators above.
+const shellStyle: Record<string, string> =
+  useAspectRatio && aspectRatioCss
+    ? { 'aspect-ratio': aspectRatioCss }
+    : { '--pe-iframe-embed-height': (fixedHeightCss ?? defaultFixedHeightCss) as string };
 
 const wrapperClass = ['pe-iframe-embed', className].filter(Boolean).join(' ');
 ---

@@ -79,7 +79,7 @@ If neither is set, the frame falls back to a fixed 720px height (matches `Schedu
 
 ### Security props (opt-in)
 
-`IframeEmbed` does **not** apply a `sandbox`, `allow`, or `referrerpolicy` by default. The component instead validates the `src` (HTTPS-only for absolute URLs, no `http://` / `javascript:` / `data:` / protocol-relative URLs) and gives you typed slots for each of those attributes so you can choose the right posture per embed:
+`IframeEmbed` does **not** apply a `sandbox`, `allow`, or `referrerpolicy` by default. The component instead validates the `src` (HTTPS-only for absolute URLs, no `http://` / `javascript:` / `data:` / protocol-relative URLs) and exposes typed props for each of those attributes so you can choose the right posture per embed:
 
 ```astro
 <IframeEmbed
@@ -99,23 +99,45 @@ If neither is set, the frame falls back to a fixed 720px height (matches `Schedu
 
 ## 3. Embed from `.md` content (raw `<iframe>`)
 
-Astro's Markdown renderer passes raw HTML through, so `<iframe>` works inside a content-collection `.md` file. You cannot use the `IframeEmbed` component from `.md` (content collections support component imports only in `.mdx`), so write the iframe by hand and apply the same hygiene `IframeEmbed` enforces:
+Astro's Markdown renderer passes raw HTML through, so `<iframe>` works inside a content-collection `.md` file. You **cannot** use the `IframeEmbed` component from `.md` (content collections support component imports only in `.mdx`), so write the iframe by hand and apply the same hygiene `IframeEmbed` would have enforced for you.
+
+> **Important.** When you take the raw-`<iframe>` path, the engine does not validate the `src` or the security attributes for you — every check `IframeEmbed` runs (HTTPS-only, no protocol-relative `//host`, no backslash bypass, host allowlist, sized inputs) is now your responsibility as the content author. Prefer the `IframeEmbed` component (from an `.astro` page or an `.mdx` entry) whenever possible.
+
+Same-origin example (a static demo from `public/`):
 
 ```md
 <iframe
   src="/assets/demos/orbital/transfer-simulator.html"
   title="Low-thrust transfer simulator with live audit-equation readout"
   loading="lazy"
+  referrerpolicy="strict-origin-when-cross-origin"
   style="display:block;width:100%;height:820px;border:1px solid var(--color-border-default);border-radius:1rem;background:var(--color-surface-elevated);"
 ></iframe>
 ```
 
-Notes:
+Cross-origin example (third-party widget you do not fully trust — opt in to `sandbox` and `allow`):
 
-- Always set `title` (screen-reader label).
-- Always set `loading="lazy"` for embeds that aren't above the fold.
-- Use a string `style="..."` attribute — JSX expression syntax (`style={{...}}`) is `.mdx`-only.
-- Reference theme tokens (`--color-border-default`, `--color-surface-elevated`) so the embed picks up the consumer's theme.
+```md
+<iframe
+  src="https://example.com/widget"
+  title="Third-party widget"
+  loading="lazy"
+  sandbox="allow-scripts"
+  allow="clipboard-read; clipboard-write"
+  referrerpolicy="strict-origin-when-cross-origin"
+  style="display:block;width:100%;height:480px;border:1px solid var(--color-border-default);border-radius:1rem;background:var(--color-surface-elevated);"
+></iframe>
+```
+
+Hygiene checklist for hand-written iframes in `.md`:
+
+- **`src`:** use only an absolute `https://` URL or a single-slash same-origin path (e.g. `/assets/...`). Never `http://`, `javascript:`, `data:`, protocol-relative `//host/...`, or any path containing `\` — WHATWG URL parsers normalize backslashes to forward slashes and can redirect the iframe cross-origin.
+- **`title`:** required for screen-reader users.
+- **`loading="lazy"`:** for any embed that is not above the fold.
+- **`sandbox`:** set for embeds you do not fully trust. `"allow-scripts"` is usually the minimum a JS-driven demo needs; add `"allow-same-origin"` only when the demo legitimately requires it (the two together effectively defeat the sandbox for same-origin content). Omit only when the embed is your own static page from `public/` and you intentionally want full browser behavior.
+- **`allow`:** Permissions Policy directives (`clipboard-read`, `fullscreen`, …). Omit unless the embed genuinely needs a non-default permission.
+- **`referrerpolicy`:** for cross-origin embeds, `strict-origin-when-cross-origin` is a reasonable default; tune for your privacy posture.
+- **`style`:** use a string `style="..."` attribute — JSX expression syntax (`style={{...}}`) is `.mdx`-only. Reference theme tokens (`--color-border-default`, `--color-surface-elevated`) so the embed picks up the consumer's theme.
 
 ## 4. Optional: enable MDX content (`@astrojs/mdx`)
 
