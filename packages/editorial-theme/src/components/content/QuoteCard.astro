@@ -6,7 +6,13 @@
  * and an optional "Related" link out to a longer write-up. Designed to be reused
  * anywhere a screen needs a single quote — testimonials sections, case study
  * sidebars, or inline pull-quotes.
+ *
+ * Image URL handling: `logoSrc` is resolved through `resolveAssetUrl(getBase())`
+ * so that root-relative or relative asset paths render correctly when a
+ * downstream site is deployed under an Astro `base` subpath.
  */
+import { getBase, resolveAssetUrl } from '../../lib/utils';
+
 interface Props {
   quote: string;
   attribution: string;
@@ -26,6 +32,8 @@ const {
   relatedHref,
   relatedLabel = 'Related →',
 } = Astro.props;
+
+const resolvedLogoSrc = resolveAssetUrl(logoSrc, getBase()) ?? logoSrc;
 ---
 
 <figure
@@ -43,7 +51,7 @@ const {
     {
       logoSrc && (
         <img
-          src={logoSrc}
+          src={resolvedLogoSrc}
           alt={logoAlt ?? attribution}
           class="h-10 w-10 shrink-0 rounded-full object-cover"
           loading="lazy"
