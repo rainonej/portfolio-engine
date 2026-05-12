@@ -5,7 +5,13 @@
  * Renders an optional image, an optional meta line (e.g. date, status),
  * a title, a required description, and a "View →" affordance. Pass
  * `accent` to draw the border in the theme's accent color.
+ *
+ * Image URL handling: `imageSrc` is resolved through `resolveAssetUrl(getBase())`
+ * so that root-relative or relative asset paths render correctly when a
+ * downstream site is deployed under an Astro `base` subpath.
  */
+import { getBase, resolveAssetUrl } from '../../lib/utils';
+
 interface Props {
   title: string;
   description: string;
@@ -26,6 +32,8 @@ const {
   accent = false,
 } = Astro.props;
 
+const resolvedImageSrc = resolveAssetUrl(imageSrc, getBase()) ?? imageSrc;
+
 const borderColorVar = accent
   ? 'var(--color-accent-primary)'
   : 'var(--color-border-default)';
@@ -40,7 +48,7 @@ const borderColorVar = accent
       <a href={href} class="block">
         <div class="aspect-[16/9] overflow-hidden bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))]">
           <img
-            src={imageSrc}
+            src={resolvedImageSrc}
             alt={imageAlt ?? title}
             class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
