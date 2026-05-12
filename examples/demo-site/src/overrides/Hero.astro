@@ -2,9 +2,11 @@
 /**
  * Demo override for the `Hero` surface.
  *
- * Declared in `packages/editorial-theme/src/registry.ts`. This override uses
- * every declared prop (`person`, `bookingUrl`, `pillars`, `base`, `tagline`, `ctas`)
- * so the showcase is a working reference for downstream consumers.
+ * Declared in `packages/editorial-theme/src/registry.ts`. The demo-site is
+ * the showcase for the *project*, not a generated personal portfolio, so
+ * the hero CTAs route visitors to the open-source positioning content
+ * (`/vision`, `/workflow`) and to the GitHub repository instead of to a
+ * booking widget.
  *
  * See: docs/downstream/consumption.md
  */
@@ -41,49 +43,28 @@ interface Props {
   ctas?: HeroCta[];
 }
 
-const { person, bookingUrl, pillars, base, tagline, ctas } = Astro.props;
+const { person, pillars, base, tagline } = Astro.props;
 const heroLine = resolveHeroBio(person);
 const photoSrc = person.photo
   ? (resolveAssetUrl(person.photo, base) ?? person.photo)
   : null;
 
-// Only treat the configured booking URL as usable if it parses as a safe
-// absolute https:// URL. The schema validates bookingUrl as a generic URL,
-// which would let a misconfigured site.json sneak `javascript:` or other
-// unexpected schemes into `window.location.href` /
-// `Calendly.initPopupWidget`. When the URL fails the check, the popup
-// script is not attached AND any CTA whose href matches the unsafe
-// bookingUrl is dropped from `sanitizedCtas` below — we never let an
-// unvalidated bookingUrl reach a rendered <a href> or a JS call.
-const safeBookingUrl: string | null = (() => {
-  if (!bookingUrl) return null;
-  try {
-    const parsed = new URL(bookingUrl);
-    if (parsed.protocol !== 'https:') return null;
-    return parsed.toString();
-  } catch {
-    return null;
-  }
-})();
+// Demo-site hero CTAs route to the project's positioning pages and the
+// GitHub repo. Booking / scheduling links are intentionally absent — the
+// site is a contributor-onboarding showcase, not a service funnel. The
+// `bookingUrl` and `ctas` props from the theme are ignored on purpose so
+// the demo's hero stays predictable for AI agents reading the docs.
+const REPO_URL = 'https://github.com/rainonej/portfolio-engine';
+const ISSUES_URL = `${REPO_URL}/issues`;
 
-const effectiveCtas: HeroCta[] = (() => {
-  if (ctas && ctas.length > 0) {
-    return [...ctas].sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0));
-  }
-  const out: HeroCta[] = [
-    { label: 'Read the architecture', href: `${base}/architecture`, variant: 'primary', priority: 1 },
-    { label: 'Browse features', href: `${base}/work`, variant: 'secondary', priority: 2 },
-  ];
-  if (safeBookingUrl) {
-    out.push({ label: 'Book a walkthrough', href: safeBookingUrl, variant: 'link', priority: 3 });
-  }
-  return out;
-})();
+const demoCtas: HeroCta[] = [
+  { label: 'Read the vision', href: `${base}/vision`, variant: 'primary', priority: 1 },
+  { label: 'See the workflow', href: `${base}/workflow`, variant: 'secondary', priority: 2 },
+  { label: 'Inspect the code', href: REPO_URL, variant: 'link', priority: 3 },
+  { label: 'Open an issue', href: ISSUES_URL, variant: 'link', priority: 4 },
+];
 
-// The CTA list may come from the theme (which is allowed to forward
-// `bookingUrl` and other config-driven hrefs unchanged) or directly from
-// consumer overrides, neither of which is bound by our https-only gate
-// above. Sanitize every href to one of two safe shapes before it reaches
+// Sanitize every href to one of two safe shapes before it reaches
 // `<a href>`:
 //   1. Same-origin absolute paths starting with a single `/`.
 //   2. Fully-qualified https:// URLs.
@@ -118,15 +99,7 @@ function isSafeCtaHref(href: string): boolean {
   }
 }
 
-const sanitizedCtas: HeroCta[] = effectiveCtas
-  .map((cta): HeroCta | null => {
-    if (bookingUrl && cta.href === bookingUrl) {
-      if (!safeBookingUrl) return null;
-      return { ...cta, href: safeBookingUrl };
-    }
-    return isSafeCtaHref(cta.href) ? cta : null;
-  })
-  .filter((c): c is HeroCta => c !== null);
+const sanitizedCtas: HeroCta[] = demoCtas.filter((cta) => isSafeCtaHref(cta.href));
 
 const buttonCtas = sanitizedCtas.filter((c) => c.variant !== 'link').slice(0, 2);
 const linkCtas = [
@@ -172,11 +145,12 @@ const linkCtas = [
         {buttonCtas.map((cta, index) => {
           const tier = cta.variant ?? (index === 0 ? 'primary' : 'secondary');
           const isPrimary = tier === 'primary';
-          const isBookingLink = Boolean(safeBookingUrl && cta.href === safeBookingUrl);
+          const isExternal = cta.href.startsWith('https://');
           return (
             <a
               href={cta.href}
-              data-pe-booking-cta={isBookingLink ? '' : undefined}
+              target={isExternal ? '_blank' : undefined}
+              rel={isExternal ? 'noopener noreferrer' : undefined}
               class={
                 isPrimary
                   ? 'rounded-full bg-[var(--color-text-primary)] px-8 py-3.5 text-sm font-medium text-[var(--color-text-inverse)] transition-colors hover:bg-[var(--color-text-muted)]'
@@ -192,11 +166,12 @@ const linkCtas = [
       {linkCtas.length > 0 && (
         <div class="mt-5 flex flex-wrap gap-5">
           {linkCtas.map((cta) => {
-            const isBookingLink = Boolean(safeBookingUrl && cta.href === safeBookingUrl);
+            const isExternal = cta.href.startsWith('https://');
             return (
               <a
                 href={cta.href}
-                data-pe-booking-cta={isBookingLink ? '' : undefined}
+                target={isExternal ? '_blank' : undefined}
+                rel={isExternal ? 'noopener noreferrer' : undefined}
                 class="text-sm font-medium text-[var(--color-accent-primary)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-muted)]"
               >
                 {cta.label} →
@@ -204,41 +179,6 @@ const linkCtas = [
             );
           })}
         </div>
-      )}
-
-      {safeBookingUrl && (
-        <script is:inline define:vars={{ calendlyUrl: safeBookingUrl }}>
-          // Bind to every booking-CTA on this hero. Using a data attribute
-          // (not an id) so the consumer can have the booking URL referenced
-          // by both a button CTA and a link CTA without breaking HTML's
-          // unique-id rule, and so the script doesn't depend on DOM order.
-          document.addEventListener('DOMContentLoaded', () => {
-            const targets = document.querySelectorAll('[data-pe-booking-cta]');
-            targets.forEach((el) => {
-              el.addEventListener('click', (e) => {
-                // Only intercept plain left-clicks. Let the browser handle
-                // Ctrl/Cmd/Shift/middle-click so users can open the booking
-                // URL in a new tab or window like any other link.
-                if (
-                  e.button !== 0 ||
-                  e.ctrlKey ||
-                  e.metaKey ||
-                  e.shiftKey ||
-                  e.altKey
-                ) {
-                  return;
-                }
-                e.preventDefault();
-                const w = window;
-                if (typeof w.Calendly !== 'undefined' && calendlyUrl) {
-                  w.Calendly.initPopupWidget({ url: calendlyUrl });
-                } else {
-                  w.location.href = calendlyUrl;
-                }
-              });
-            });
-          });
-        </script>
       )}
     </div>
 

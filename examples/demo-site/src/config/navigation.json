@@ -1,11 +1,14 @@
 {
   "items": [
-    { "label": "Projects", "href": "/work", "order": 1, "visible": true },
-    { "label": "Writing", "href": "/writing", "order": 2, "visible": true },
+    { "label": "Vision", "href": "/vision", "order": 1, "visible": true },
+    { "label": "Workflow", "href": "/workflow", "order": 2, "visible": true },
     { "label": "Architecture", "href": "/architecture", "order": 3, "visible": true },
-    { "label": "Philosophy", "href": "/philosophy", "order": 4, "visible": true },
-    { "label": "About", "href": "/about", "order": 5, "visible": true },
-    { "label": "Résumé", "href": "/resume", "order": 6, "visible": true },
-    { "label": "Contact", "href": "/contact", "order": 7, "visible": true }
+    { "label": "Features", "href": "/features", "order": 4, "visible": true },
+    { "label": "Examples", "href": "/work", "order": 5, "visible": true },
+    { "label": "GitHub", "href": "https://github.com/rainonej/portfolio-engine", "order": 6, "visible": true },
+    { "label": "Contribute", "href": "/contribute", "order": 7, "visible": true },
+    { "label": "About", "href": "/about", "order": 8, "visible": false },
+    { "label": "Résumé", "href": "/resume", "order": 9, "visible": false },
+    { "label": "Contact", "href": "/contact", "order": 10, "visible": false }
   ]
 }

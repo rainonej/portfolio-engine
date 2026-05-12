@@ -3,9 +3,9 @@
  * Consumer-local route — declared in src/registry/portfolio-engine.registry.json.
  *
  * Demonstrates: a consumer-local page reading content collections.
- * The four design-principle cards are NOT hard-coded here — they're loaded
- * from the same `profile/person.json` that drives the home + about pages,
- * so the philosophy stays in one place across the site.
+ * The principle cards are NOT hard-coded here — they're loaded from the same
+ * `profile/person.json` that drives the home and contribute pages, so the
+ * project's positioning stays in one place across the site.
  */
 import Layout from '@portfolio-engine/editorial-theme/layouts/Layout.astro';
 import { getEntry } from 'astro:content';
@@ -14,7 +14,7 @@ import { ProfilePersonSchema } from '@portfolio-engine/schema';
 
 const personEntry = await getEntry('profile', 'person');
 if (!personEntry) {
-  throw new Error('philosophy.astro: profile/person.json is required.');
+  throw new Error('vision.astro: profile/person.json is required.');
 }
 
 const person = ProfilePersonSchema.parse(personEntry.data);
@@ -23,26 +23,40 @@ const principles: WorkingPrinciple[] = person.workingPrinciples ?? [];
 ---
 
 <Layout
-  title="Philosophy — portfolio-engine"
-  description="The four design principles behind portfolio-engine, in long form. Loaded from the same profile/person.json that drives every other page."
+  title="Vision — Portfolio Engine"
+  description="Why Portfolio Engine exists, who it's for, and what makes it agent-native. Read by the same profile/person.json that drives every other page."
 >
   <main class="mx-auto max-w-3xl px-6 pb-24 pt-40">
     <p
       class="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]"
     >
-      Consumer-local route · src/pages-local/philosophy.astro
+      Consumer-local route · src/pages-local/vision.astro
     </p>
     <h1 class="mb-6 font-serif text-5xl font-bold leading-tight">
-      Philosophy
+      Vision
     </h1>
-    <p class="mb-12 text-xl leading-relaxed text-[var(--color-text-muted)]">
-      portfolio-engine is built around four design principles. They aren't
-      slogans — they're choices we made instead of other choices, and each one
-      has a cost. The cards below are loaded from the same
-      <code class="rounded bg-[var(--color-surface-wash)] px-1.5 py-0.5 font-mono text-sm">profile/person.json</code>
-      that drives the home and about pages, so the philosophy is the same
-      everywhere it shows up.
-    </p>
+
+    <section class="mb-16 space-y-5 text-lg leading-relaxed text-[var(--color-text-muted)]">
+      <p>
+        Portfolio Engine is an open-source backbone for personal and
+        professional websites. The goal is a shared commons of Astro/Tailwind
+        capabilities that downstream sites depend on — not a one-off generator
+        that disappears once your site is shipped.
+      </p>
+      <p>
+        Site owners contribute needs. AI coding agents implement scoped issues
+        against typed contracts. Humans review the shared foundation. The
+        engine is the artifact every contributor is improving at the same
+        time.
+      </p>
+      <p>
+        This demo is the project's own showcase — Apache-2.0 licensed, built
+        from the same @portfolio-engine/* packages a downstream site would
+        install. It is intentionally <strong class="font-semibold text-[var(--color-text-primary)]">not</strong> a generated
+        personal website. If you are here to evaluate the engine, read the
+        cards below and follow the workflow guide.
+      </p>
+    </section>
 
     {values.length > 0 && (
       <section class="mb-16">
@@ -52,7 +66,7 @@ const principles: WorkingPrinciple[] = person.workingPrinciples ?? [];
           Design principles
         </h2>
         <h3 class="mb-8 font-serif text-3xl font-bold">
-          Four choices we made on purpose
+          Choices made on purpose
         </h3>
         <ol class="space-y-8">
           {values.map((value, index) => (
@@ -107,7 +121,7 @@ const principles: WorkingPrinciple[] = person.workingPrinciples ?? [];
       <strong>Demo note</strong>
       This page is a consumer-local route. Its URL is declared in
       <code>src/registry/portfolio-engine.registry.json</code>, the source
-      file lives at <code>src/pages-local/philosophy.astro</code>, and the
+      file lives at <code>src/pages-local/vision.astro</code>, and the
       engine injects it via Astro's <code>injectRoute</code> hook. The cards
       above come from <code>src/content/profile/person.json</code> via
       <code>getEntry('profile', 'person')</code>.

@@ -9,7 +9,7 @@ tags: ['Stack', 'Astro', 'Decisions']
 
 We picked Astro for three reasons.
 
-**Static-first, with islands when you need them.** Most portfolio pages are pure content. Astro renders them as static HTML by default and lets specific components opt into client-side hydration. The home page of this demo ships almost zero JavaScript except for the Calendly widget — but the `/admin` dashboard runs as an SSR route in the same project, no second framework required.
+**Static-first, with islands when you need them.** Most content pages are pure markup. Astro renders them as static HTML by default and lets specific components opt into client-side hydration. The home page of this demo ships almost zero JavaScript — but the `/admin` dashboard runs as an SSR route in the same project, no second framework required.
 
 **The integration API is composable.** `editorialTheme()` is itself an Astro integration that internally mounts another integration (`engine-core`) and configures Vite virtual modules, PostCSS, and route injection. The consumer's `astro.config.mjs` stays small, the engine does the work.
 

@@ -1,6 +1,0 @@
-{
-  "quote": "I shipped a launch-week microsite by adding two pages to src/pages-local/ and a one-line entry to the registry JSON. No theme fork, no plugin gymnastics — just the page I needed, side-by-side with the theme routes that already worked.",
-  "author": "Priya Kavanagh",
-  "role": "Founder, small studio",
-  "featured": false
-}
