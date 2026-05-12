@@ -1,5 +1,11 @@
 # @portfolio-engine/engine-core
 
+## 0.3.2
+
+### Patch Changes
+
+- 4094a9d: Fix IDE type errors in editorial-theme and engine-core: add typed collection wrappers (`getProjects`, `getWritingPosts`, `getTestimonials`), add constrained overload + runtime guard to `sortByDateDesc`, publish `client.d.ts` at package root for reliable IDE virtual-module resolution, and mark the root file as generated.
+
 ## 0.3.1
 
 ### Patch Changes

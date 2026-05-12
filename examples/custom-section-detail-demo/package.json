@@ -1,7 +1,7 @@
 {
   "name": "custom-section-detail-demo",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Example Astro site that disables all four replaceable theme screens (/work, /work/[slug], /writing, /writing/[slug]) and provides consumer-local replacements using the universal content components.",
   "type": "module",
   "scripts": {

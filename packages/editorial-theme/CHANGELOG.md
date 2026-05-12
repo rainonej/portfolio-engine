@@ -1,5 +1,20 @@
 # @portfolio-engine/editorial-theme
 
+## 0.7.0
+
+### Minor Changes
+
+- d623afc: Add universal content component library under `components/content/` with 11 generic editorial components
+  (ContentSectionHeader, LinkCard, FeatureCard, EvidenceCard, MetricCard, MetricStrip, QuoteCard, CardGrid,
+  ArticlePreviewCard, RelatedLinkCard, TagList). Export all components through stable public package paths.
+
+### Patch Changes
+
+- 4094a9d: Fix IDE type errors in editorial-theme and engine-core: add typed collection wrappers (`getProjects`, `getWritingPosts`, `getTestimonials`), add constrained overload + runtime guard to `sortByDateDesc`, publish `client.d.ts` at package root for reliable IDE virtual-module resolution, and mark the root file as generated.
+- b7c2c97: Unlock `/work/[slug]` and `/writing/[slug]` in the default registry (`remappable: true, disableable: true`) so downstream sites can fully replace the individual work and writing item screens.
+- Updated dependencies [4094a9d]
+  - @portfolio-engine/engine-core@0.3.2
+
 ## 0.6.0
 
 ### Minor Changes
