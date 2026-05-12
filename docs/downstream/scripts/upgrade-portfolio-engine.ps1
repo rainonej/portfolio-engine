@@ -42,7 +42,7 @@ if ($pe.Count -eq 0) {
 $pkgArgs = $pe | ForEach-Object { "${_}@${DistTag}" }
 
 Write-Host "[upgrade] Upgrading to @${DistTag}: $($pkgArgs -join ' ')"
-& pnpm add @pkgArgs
+& pnpm add $pkgArgs
 
 if (-not $AgentHandoff) {
   Write-Host "[upgrade] Done. Run 'pnpm check' and 'pnpm build' to verify no breaking changes."

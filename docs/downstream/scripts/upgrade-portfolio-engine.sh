@@ -55,14 +55,14 @@ prompt_file="$handoff_dir/agent-upgrade-prompt.md"
 
 echo "[upgrade] AGENT_HANDOFF=1 -> running pnpm check..."
 set +e
-pnpm check 2>&1 | tee "$check_log"
-check_status=${PIPESTATUS[0]}
+pnpm check > >(tee "$check_log") 2>&1
+check_status=$?
 set -e
 
 echo "[upgrade] AGENT_HANDOFF=1 -> running pnpm build..."
 set +e
-pnpm build 2>&1 | tee "$build_log"
-build_status=${PIPESTATUS[0]}
+pnpm build > >(tee "$build_log") 2>&1
+build_status=$?
 set -e
 
 cat > "$prompt_file" <<EOF
@@ -73,7 +73,7 @@ Use this prompt in Copilot/Claude after upgrading \`@portfolio-engine/*\`.
 ## Context
 
 - Dist tag used: \`$DIST_TAG\`
-- Upgraded packages: \`$pe\`
+- Upgraded packages: \`$pkgs\`
 - Check exit code: \`$check_status\`
 - Build exit code: \`$build_status\`
 - Check log: \`$check_log\`
