@@ -1,0 +1,8 @@
+dist
+.astro
+.vercel
+node_modules
+
+# Build artifacts from @portfolio-engine/engine-core (regenerated each build)
+.portfolio-engine/design-snapshot.json
+.portfolio-engine/manifest.json

@@ -1,0 +1,141 @@
+---
+/**
+ * Preview card for long-form content (essays, posts, notes).
+ *
+ * Renders an optional cover image, an article-type eyebrow, the published
+ * date in monospace, the title, an optional description, tags via TagList,
+ * and an optional reading-time chip. Designed to be the default card type
+ * for any writing list screen.
+ *
+ * Image URL handling: `imageSrc` is resolved through `resolveAssetUrl(getBase())`
+ * so that root-relative or relative asset paths render correctly when a
+ * downstream site is deployed under an Astro `base` subpath.
+ */
+import TagList from './TagList.astro';
+import { getBase, resolveAssetUrl } from '../../lib/utils';
+
+interface Props {
+  articleType?: string;
+  title: string;
+  description?: string;
+  date: Date | string;
+  tags?: string[];
+  href: string;
+  readingTime?: string;
+  imageSrc?: string;
+  imageAlt?: string;
+}
+
+const {
+  articleType,
+  title,
+  description,
+  date,
+  tags,
+  href,
+  readingTime,
+  imageSrc,
+  imageAlt,
+} = Astro.props;
+
+/**
+ * Date-only strings like "2026-01-01" are parsed by `new Date()` as UTC
+ * midnight. In negative-UTC time zones (e.g. America/Los_Angeles) this
+ * renders as the previous calendar day. To keep card dates stable across
+ * time zones for the common CMS/frontmatter date-only format, detect
+ * `YYYY-MM-DD` strings up front and format them in UTC; pass other inputs
+ * through unchanged so `Date` instances and full ISO timestamps keep
+ * their local-time semantics.
+ */
+const isDateOnlyString =
+  typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date);
+const dateObj = date instanceof Date ? date : new Date(date);
+const isValidDate = !Number.isNaN(dateObj.getTime());
+const formatOptions: Intl.DateTimeFormatOptions = {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  ...(isDateOnlyString ? { timeZone: 'UTC' } : {}),
+};
+const isoDate = isValidDate ? dateObj.toISOString() : '';
+const formattedDate = isValidDate
+  ? dateObj.toLocaleDateString('en-US', formatOptions)
+  : String(date);
+
+const resolvedImageSrc = resolveAssetUrl(imageSrc, getBase()) ?? imageSrc;
+---
+
+<article class="group flex h-full flex-col">
+  {
+    imageSrc && (
+      <a href={href} class="mb-5 block">
+        <div class="aspect-[21/9] overflow-hidden rounded-2xl bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))]">
+          <img
+            src={resolvedImageSrc}
+            alt={imageAlt ?? title}
+            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+          />
+        </div>
+      </a>
+    )
+  }
+
+  {
+    articleType && (
+      <span class="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-primary)]">
+        {articleType}
+      </span>
+    )
+  }
+
+  <div class="mb-3 flex flex-wrap items-center gap-3">
+    {
+      isoDate && (
+        <time
+          datetime={isoDate}
+          class="font-mono text-xs text-[var(--color-text-muted)]"
+          style="font-family: var(--font-mono-stack);"
+        >
+          {formattedDate}
+        </time>
+      )
+    }
+    {
+      readingTime && (
+        <span class="font-mono text-xs text-[var(--color-text-muted)]" style="font-family: var(--font-mono-stack);">
+          · {readingTime}
+        </span>
+      )
+    }
+  </div>
+
+  <h3
+    class="mb-3 font-serif font-bold leading-snug"
+    style="font-size: var(--text-subheading);"
+  >
+    <a
+      href={href}
+      class="transition-colors hover:text-[var(--color-accent-primary)]"
+    >
+      {title}
+    </a>
+  </h3>
+
+  {
+    description && (
+      <p class="mb-4 text-sm leading-relaxed text-[var(--color-text-muted)]">
+        {description}
+      </p>
+    )
+  }
+
+  {tags && tags.length > 0 && <TagList tags={tags} />}
+
+  <a
+    href={href}
+    class="mt-4 text-sm font-medium underline underline-offset-4 transition-colors hover:text-[var(--color-accent-primary)]"
+  >
+    Read more →
+  </a>
+</article>

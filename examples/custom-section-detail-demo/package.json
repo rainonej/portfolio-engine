@@ -1,0 +1,23 @@
+{
+  "name": "custom-section-detail-demo",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Example Astro site that disables all four replaceable theme screens (/work, /work/[slug], /writing, /writing/[slug]) and provides consumer-local replacements using the universal content components.",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@portfolio-engine/editorial-theme": "workspace:*",
+    "@portfolio-engine/engine-core": "workspace:*",
+    "@portfolio-engine/schema": "workspace:*",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "astro": "^6.2.2",
+    "typescript": "^6.0.0"
+  }
+}

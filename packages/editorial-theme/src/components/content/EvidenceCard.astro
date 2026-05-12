@@ -1,0 +1,105 @@
+---
+/**
+ * Compact proof block following a claim → evidence → outcome pattern.
+ *
+ * Good for work item summaries, research notes, and "what happened" sidebars.
+ * If `href` is provided the entire card becomes a link to the supporting detail screen.
+ */
+interface Props {
+  claim: string;
+  evidence: string;
+  outcome: string;
+  caveat?: string;
+  href?: string;
+}
+
+const { claim, evidence, outcome, caveat, href } = Astro.props;
+---
+
+{
+  href ? (
+    <a
+      href={href}
+      class="group block rounded-2xl border p-6 transition-colors hover:border-[var(--color-border-strong)]"
+      style="background-color: var(--color-surface-elevated); border-color: var(--color-border-default);"
+    >
+      <p
+        class="mb-4 font-serif font-bold leading-snug"
+        style="font-size: var(--text-subheading);"
+      >
+        {claim}
+      </p>
+      <dl class="space-y-3">
+        <div>
+          <dt class="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-primary)]">
+            Evidence
+          </dt>
+          <dd class="mt-1 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {evidence}
+          </dd>
+        </div>
+        <div>
+          <dt class="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-primary)]">
+            Outcome
+          </dt>
+          <dd class="mt-1 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {outcome}
+          </dd>
+        </div>
+        {caveat && (
+          <div>
+            <dt class="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">
+              Caveat
+            </dt>
+            <dd class="mt-1 text-sm leading-relaxed text-[var(--color-text-muted)]">
+              {caveat}
+            </dd>
+          </div>
+        )}
+      </dl>
+      <span class="mt-5 inline-block text-sm font-medium text-[var(--color-text-muted)] transition-colors group-hover:text-[var(--color-accent-primary)]">
+        Read more →
+      </span>
+    </a>
+  ) : (
+    <div
+      class="block rounded-2xl border p-6"
+      style="background-color: var(--color-surface-elevated); border-color: var(--color-border-default);"
+    >
+      <p
+        class="mb-4 font-serif font-bold leading-snug"
+        style="font-size: var(--text-subheading);"
+      >
+        {claim}
+      </p>
+      <dl class="space-y-3">
+        <div>
+          <dt class="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-primary)]">
+            Evidence
+          </dt>
+          <dd class="mt-1 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {evidence}
+          </dd>
+        </div>
+        <div>
+          <dt class="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-primary)]">
+            Outcome
+          </dt>
+          <dd class="mt-1 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {outcome}
+          </dd>
+        </div>
+        {caveat && (
+          <div>
+            <dt class="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">
+              Caveat
+            </dt>
+            <dd class="mt-1 text-sm leading-relaxed text-[var(--color-text-muted)]">
+              {caveat}
+            </dd>
+          </div>
+        )}
+      </dl>
+    </div>
+  )
+}

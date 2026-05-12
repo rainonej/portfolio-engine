@@ -1,0 +1,8 @@
+{
+  "items": [
+    { "label": "Home", "href": "/", "order": 1, "visible": true },
+    { "label": "About", "href": "/about", "order": 2, "visible": true },
+    { "label": "Work", "href": "/work", "order": 3, "visible": true },
+    { "label": "Writing", "href": "/writing", "order": 4, "visible": true }
+  ]
+}

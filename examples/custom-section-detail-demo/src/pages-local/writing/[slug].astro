@@ -1,0 +1,90 @@
+---
+/**
+ * Consumer-local replacement for the editorial-theme `/writing/[slug]` screen.
+ *
+ * The original theme route is disabled in astro.config.mjs and this file is
+ * registered via src/registry/portfolio-engine.registry.json. The visible
+ * banner makes it obvious in rendered HTML and visual previews that the
+ * consumer-local page rendered, not the theme default.
+ */
+import Layout from '@portfolio-engine/editorial-theme/layouts/Layout.astro';
+import TagList from '@portfolio-engine/editorial-theme/components/content/TagList.astro';
+import RelatedLinkCard from '@portfolio-engine/editorial-theme/components/content/RelatedLinkCard.astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { getBase, formatDate } from '@portfolio-engine/editorial-theme';
+
+type Props = {
+  entry: CollectionEntry<'writing'>;
+};
+
+export async function getStaticPaths() {
+  const posts = await getCollection('writing', ({ data }) => !data.draft);
+  return posts.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry }: Props = Astro.props;
+const { Content } = await render(entry);
+const p = entry.data;
+const base = getBase();
+---
+
+<Layout title={`${p.title} — Custom replacement`} description={p.description}>
+  <article class="mx-auto max-w-3xl px-6 pb-24 pt-40">
+    <div
+      class="mb-10 rounded-2xl border p-4 text-sm"
+      style="background-color: var(--color-surface-wash); border-color: var(--color-accent-primary); color: var(--color-text-primary);"
+      data-pe-replacement-banner="writing-detail"
+    >
+      <strong>Custom replacement screen — example only.</strong>
+      Rendered by <code>src/pages-local/writing/[slug].astro</code>. The theme's
+      default <code>/writing/[slug]</code> route is disabled in <code>astro.config.mjs</code>.
+    </div>
+
+    <a
+      href={`${base}/writing`}
+      class="mb-8 inline-block text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
+    >
+      ← Back to Writing
+    </a>
+
+    <div class="mb-4 flex flex-wrap items-center gap-3">
+      <time class="text-xs text-[var(--color-text-muted)]" datetime={p.date.toISOString()}>
+        {formatDate(p.date)}
+      </time>
+    </div>
+
+    <h1 class="mb-4 font-serif text-4xl font-bold leading-tight md:text-5xl">
+      {p.title}
+    </h1>
+
+    {p.tags && p.tags.length > 0 && (
+      <div class="mb-6">
+        <TagList tags={p.tags} />
+      </div>
+    )}
+
+    {
+      p.description && (
+        <p class="mb-10 text-xl leading-relaxed text-[var(--color-text-muted)]">
+          {p.description}
+        </p>
+      )
+    }
+
+    <div class="prose prose-stone max-w-none">
+      <Content />
+    </div>
+
+    <aside class="mt-16">
+      <RelatedLinkCard
+        label="See also"
+        title="Back to Writing"
+        description="Return to the custom writing list."
+        href={`${base}/writing`}
+      />
+    </aside>
+  </article>
+</Layout>

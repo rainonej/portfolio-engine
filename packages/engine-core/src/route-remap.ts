@@ -1,3 +1,13 @@
+/**
+ * This file applies the downstream consumer's `routes: { ... }` config to the
+ * theme's discovered routes — disabling routes that are turned off and
+ * remapping the URL paths for routes that are kept but renamed.
+ *
+ * It validates each override entry strictly (only `enabled` and `path` are
+ * supported, types are checked, unknown patterns error out) and reports back
+ * which routes were disabled and which were remapped so engine-core can record
+ * that information in the build manifest.
+ */
 import type { DiscoveredRoute } from './route-discovery.js';
 
 export interface RouteOverrideEntry {

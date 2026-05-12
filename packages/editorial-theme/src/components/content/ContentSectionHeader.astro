@@ -1,0 +1,62 @@
+---
+/**
+ * Reusable section-level header for any editorial screen.
+ *
+ * Renders an optional eyebrow tag, the section heading, an optional supporting
+ * description, and an optional inline link (e.g. "View all →"). Use this anywhere
+ * a screen needs a titled section intro — keeps spacing and typography consistent.
+ */
+interface Props {
+  eyebrow?: string;
+  heading: string;
+  description?: string;
+  linkHref?: string;
+  linkLabel?: string;
+}
+
+const {
+  eyebrow,
+  heading,
+  description,
+  linkHref,
+  linkLabel = 'View all →',
+} = Astro.props;
+---
+
+<header class="mb-10">
+  <div class="mb-3 flex items-baseline justify-between gap-6">
+    {
+      eyebrow && (
+        <span class="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-primary)]">
+          {eyebrow}
+        </span>
+      )
+    }
+    {
+      linkHref && (
+        <a
+          href={linkHref}
+          class="ml-auto shrink-0 text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
+        >
+          {linkLabel}
+        </a>
+      )
+    }
+  </div>
+  <h2
+    class="font-serif font-bold leading-tight"
+    style="font-size: var(--text-heading);"
+  >
+    {heading}
+  </h2>
+  {
+    description && (
+      <p
+        class="mt-4 max-w-[var(--measure-readable)] leading-relaxed text-[var(--color-text-muted)]"
+        style="font-size: var(--text-body);"
+      >
+        {description}
+      </p>
+    )
+  }
+</header>

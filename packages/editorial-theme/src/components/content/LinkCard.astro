@@ -1,0 +1,54 @@
+---
+/**
+ * Clickable card used to route readers from one screen to another.
+ *
+ * Renders as a single `<a>` block with an optional eyebrow tag, a title,
+ * and an optional description. Pass `accent` to highlight the card border
+ * with the theme's accent color.
+ */
+interface Props {
+  title: string;
+  description?: string;
+  href: string;
+  eyebrow?: string;
+  accent?: boolean;
+}
+
+const { title, description, href, eyebrow, accent = false } = Astro.props;
+
+const borderColorVar = accent
+  ? 'var(--color-accent-primary)'
+  : 'var(--color-border-default)';
+---
+
+<a
+  href={href}
+  class="group block h-full rounded-2xl border p-6 transition-colors hover:border-[var(--color-border-strong)]"
+  style={`background-color: var(--color-surface-elevated); border-color: ${borderColorVar};`}
+>
+  {
+    eyebrow && (
+      <span class="mb-3 block text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-primary)]">
+        {eyebrow}
+      </span>
+    )
+  }
+  <h3
+    class="mb-2 font-serif font-bold leading-snug transition-colors group-hover:text-[var(--color-accent-primary)]"
+    style="font-size: var(--text-subheading);"
+  >
+    {title}
+  </h3>
+  {
+    description && (
+      <p class="text-sm leading-relaxed text-[var(--color-text-muted)]">
+        {description}
+      </p>
+    )
+  }
+  <span
+    class="mt-4 inline-block text-sm font-medium text-[var(--color-text-muted)] transition-colors group-hover:text-[var(--color-accent-primary)]"
+  >
+    Read more →
+  </span>
+</a>

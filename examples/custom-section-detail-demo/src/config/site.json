@@ -1,0 +1,10 @@
+{
+  "title": "Custom section + detail demo",
+  "description": "Example Astro site that disables /work, /work/[slug], /writing, and /writing/[slug] from the editorial theme and replaces them with consumer-local pages.",
+  "baseUrl": "http://localhost:4321",
+  "tagline": "End-to-end proof that disable + replace + tokens + components work together",
+  "contact": {
+    "heading": "About this demo",
+    "body": "This site exists to verify the engine's route disable + replace flow. See the README for how the four replacement screens are wired."
+  }
+}

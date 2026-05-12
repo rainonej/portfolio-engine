@@ -1,0 +1,40 @@
+---
+/**
+ * Compact sibling/"see also" link.
+ *
+ * Use in sidebars and "related reading" rails. Smaller and lighter than
+ * `LinkCard.astro` — pairs a short label (e.g. "Up next") with a title and
+ * an optional one-line description.
+ */
+interface Props {
+  label: string;
+  title: string;
+  description?: string;
+  href: string;
+}
+
+const { label, title, description, href } = Astro.props;
+---
+
+<a
+  href={href}
+  class="group block rounded-xl border p-4 transition-colors hover:border-[var(--color-border-strong)]"
+  style="background-color: var(--color-surface-elevated); border-color: var(--color-border-default);"
+>
+  <span class="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-primary)]">
+    {label}
+  </span>
+  <p
+    class="mt-1 font-serif font-bold leading-snug transition-colors group-hover:text-[var(--color-accent-primary)]"
+    style="font-size: var(--text-body);"
+  >
+    {title}
+  </p>
+  {
+    description && (
+      <p class="mt-1 text-sm leading-relaxed text-[var(--color-text-muted)]">
+        {description}
+      </p>
+    )
+  }
+</a>
