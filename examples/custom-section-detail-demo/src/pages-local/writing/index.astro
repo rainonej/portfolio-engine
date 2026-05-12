@@ -1,0 +1,60 @@
+---
+/**
+ * Consumer-local replacement for the editorial-theme `/writing` screen.
+ *
+ * The original theme route is disabled in astro.config.mjs and this file is
+ * registered via src/registry/portfolio-engine.registry.json. The visible
+ * banner makes it obvious in rendered HTML and visual previews that the
+ * consumer-local page rendered, not the theme default.
+ */
+import Layout from '@portfolio-engine/editorial-theme/layouts/Layout.astro';
+import ContentSectionHeader from '@portfolio-engine/editorial-theme/components/content/ContentSectionHeader.astro';
+import ArticlePreviewCard from '@portfolio-engine/editorial-theme/components/content/ArticlePreviewCard.astro';
+import { getCollection } from 'astro:content';
+import { getBase, sortByDateDesc } from '@portfolio-engine/editorial-theme';
+
+const posts = await getCollection('writing', ({ data }) => !data.draft);
+const sorted = sortByDateDesc(posts);
+const base = getBase();
+---
+
+<Layout
+  title="Writing — Custom replacement"
+  description="Consumer-local /writing screen rendered by src/pages-local/writing/index.astro."
+>
+  <section class="mx-auto max-w-3xl px-6 pb-24 pt-40">
+    <div
+      class="mb-12 rounded-2xl border p-4 text-sm"
+      style="background-color: var(--color-surface-wash); border-color: var(--color-accent-primary); color: var(--color-text-primary);"
+      data-pe-replacement-banner="writing-list"
+    >
+      <strong>Custom replacement screen — example only.</strong>
+      Rendered by <code>src/pages-local/writing/index.astro</code>. The theme's
+      default <code>/writing</code> route is disabled in <code>astro.config.mjs</code>.
+    </div>
+
+    <ContentSectionHeader
+      eyebrow="Demo"
+      heading="Writing (custom replacement)"
+      description="This list comes from src/content/writing via getCollection('writing'). Each card uses ArticlePreviewCard from @portfolio-engine/editorial-theme/components/content."
+    />
+
+    {
+      sorted.length === 0 ? (
+        <p class="text-lg text-[var(--color-text-muted)]">No posts yet — check back soon.</p>
+      ) : (
+        <div class="space-y-12">
+          {sorted.map((post) => (
+            <ArticlePreviewCard
+              title={post.data.title}
+              description={post.data.description}
+              date={post.data.date}
+              tags={post.data.tags}
+              href={`${base}/writing/${post.id}`}
+            />
+          ))}
+        </div>
+      )
+    }
+  </section>
+</Layout>

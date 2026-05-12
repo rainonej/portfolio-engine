@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "localRoutes": [
+    {
+      "pattern": "/work",
+      "page": "work/index.astro",
+      "label": "Work (custom)",
+      "section": null,
+      "visibility": "public"
+    },
+    {
+      "pattern": "/work/[slug]",
+      "page": "work/[slug].astro",
+      "label": "Work detail (custom)",
+      "section": null,
+      "visibility": "hidden"
+    },
+    {
+      "pattern": "/writing",
+      "page": "writing/index.astro",
+      "label": "Writing (custom)",
+      "section": null,
+      "visibility": "public"
+    },
+    {
+      "pattern": "/writing/[slug]",
+      "page": "writing/[slug].astro",
+      "label": "Writing detail (custom)",
+      "section": null,
+      "visibility": "hidden"
+    }
+  ]
+}
