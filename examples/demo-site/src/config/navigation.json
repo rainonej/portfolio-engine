@@ -1,9 +1,11 @@
 {
   "items": [
-    { "label": "Work", "href": "/work", "order": 1, "visible": true },
+    { "label": "Projects", "href": "/work", "order": 1, "visible": true },
     { "label": "Writing", "href": "/writing", "order": 2, "visible": true },
-    { "label": "How I Think", "href": "/how-i-think", "order": 3, "visible": true },
-    { "label": "About", "href": "/about", "order": 4, "visible": true },
-    { "label": "Contact", "href": "/contact", "order": 5, "visible": true }
+    { "label": "Architecture", "href": "/architecture", "order": 3, "visible": true },
+    { "label": "Philosophy", "href": "/philosophy", "order": 4, "visible": true },
+    { "label": "About", "href": "/about", "order": 5, "visible": true },
+    { "label": "Résumé", "href": "/resume", "order": 6, "visible": true },
+    { "label": "Contact", "href": "/contact", "order": 7, "visible": true }
   ]
 }

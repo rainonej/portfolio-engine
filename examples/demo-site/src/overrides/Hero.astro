@@ -1,20 +1,36 @@
 ---
-import type { ProfilePerson } from '@portfolio-engine/editorial-theme';
-import { resolveHeroBio } from '@portfolio-engine/editorial-theme';
-
 /**
- * Demo override for the Hero surface.
+ * Demo override for the `Hero` surface.
  *
- * This file exists to prove the override bridge works end-to-end.
- * Replace or remove it in a real consumer site.
+ * Declared in `packages/editorial-theme/src/registry.ts`. This override uses
+ * every declared prop (`person`, `bookingUrl`, `pillars`, `base`, `tagline`, `ctas`)
+ * so the showcase is a working reference for downstream consumers.
+ *
+ * See: docs/downstream/consumption.md
  */
+import { resolveAssetUrl, resolveHeroBio } from '@portfolio-engine/editorial-theme';
+
 interface Pillar {
   heading: string;
   body: string;
   image?: string;
 }
 
-type Person = Pick<ProfilePerson, 'name' | 'shortBio' | 'summary' | 'longBio' | 'photo'>;
+interface HeroCta {
+  label: string;
+  href: string;
+  variant?: 'primary' | 'secondary' | 'link';
+  priority?: number;
+}
+
+interface Person {
+  name: string;
+  shortBio?: string;
+  summary?: string;
+  longBio?: string[];
+  photo?: string;
+  roleLine?: string;
+}
 
 interface Props {
   person: Person;
@@ -22,26 +38,235 @@ interface Props {
   pillars: Pillar[];
   base: string;
   tagline?: string;
+  ctas?: HeroCta[];
 }
 
-const { person, tagline } = Astro.props;
+const { person, bookingUrl, pillars, base, tagline, ctas } = Astro.props;
 const heroLine = resolveHeroBio(person);
+const photoSrc = person.photo
+  ? (resolveAssetUrl(person.photo, base) ?? person.photo)
+  : null;
+
+// Only attach the popup script if the configured booking URL parses as a
+// safe absolute https:// URL. The schema validates bookingUrl as a generic
+// URL, which would let a misconfigured site.json sneak `javascript:` or
+// other unexpected schemes into `window.location.href` /
+// `Calendly.initPopupWidget`. When the URL fails the check we still render
+// the CTA — it just falls through to plain link behavior, no JS hook.
+const safeBookingUrl: string | null = (() => {
+  if (!bookingUrl) return null;
+  try {
+    const parsed = new URL(bookingUrl);
+    if (parsed.protocol !== 'https:') return null;
+    return parsed.toString();
+  } catch {
+    return null;
+  }
+})();
+
+const effectiveCtas: HeroCta[] = (() => {
+  if (ctas && ctas.length > 0) {
+    return [...ctas].sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0));
+  }
+  const out: HeroCta[] = [
+    { label: 'Read the architecture', href: `${base}/architecture`, variant: 'primary', priority: 1 },
+    { label: 'Browse features', href: `${base}/work`, variant: 'secondary', priority: 2 },
+  ];
+  if (safeBookingUrl) {
+    out.push({ label: 'Book a walkthrough', href: safeBookingUrl, variant: 'link', priority: 3 });
+  }
+  return out;
+})();
+
+// The CTA list may come from the theme (which is allowed to forward
+// `bookingUrl` and other config-driven hrefs unchanged) or directly from
+// consumer overrides, neither of which is bound by our https-only gate
+// above. Sanitize every href to one of two safe shapes before it reaches
+// `<a href>`:
+//   1. Same-origin absolute paths starting with a single `/`.
+//   2. Fully-qualified https:// URLs.
+// Mirrors the validation rules in the theme's IframeEmbed component so
+// the override and the embed treat unsafe href values the same way.
+//
+// Explicitly rejected:
+//   - javascript:, data:, mailto:, http:, and any other non-https scheme
+//   - protocol-relative URLs (`//host/…`) — they start with `/` but
+//     navigate cross-origin
+//   - backslashes in same-origin paths (WHATWG URL parsers normalize `\`
+//     to `/` and can redirect the link cross-origin)
+//   - control characters (U+0000–U+001F, U+007F) that some parsers strip
+//     and others don't, which is a divergence attackers can exploit
+
+// eslint-disable-next-line no-control-regex
+const CTA_CONTROL_CHAR_RE = /[\u0000-\u001F\u007F]/;
+
+function isSafeCtaHref(href: string): boolean {
+  if (typeof href !== 'string' || href.length === 0) return false;
+  if (CTA_CONTROL_CHAR_RE.test(href)) return false;
+  if (href.startsWith('/')) {
+    if (href.startsWith('//')) return false;
+    if (href.includes('\\')) return false;
+    return true;
+  }
+  try {
+    const u = new URL(href);
+    return u.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+const sanitizedCtas: HeroCta[] = effectiveCtas
+  .map((cta): HeroCta | null => {
+    if (bookingUrl && cta.href === bookingUrl) {
+      if (!safeBookingUrl) return null;
+      return { ...cta, href: safeBookingUrl };
+    }
+    return isSafeCtaHref(cta.href) ? cta : null;
+  })
+  .filter((c): c is HeroCta => c !== null);
+
+const buttonCtas = sanitizedCtas.filter((c) => c.variant !== 'link').slice(0, 2);
+const linkCtas = [
+  ...sanitizedCtas.filter((c) => c.variant !== 'link').slice(2),
+  ...sanitizedCtas.filter((c) => c.variant === 'link'),
+];
 ---
 
 <section
-  class="mx-auto flex min-h-screen max-w-6xl flex-col justify-center px-6 pb-16 pt-24"
+  class="pe-demo-hero relative mx-auto max-w-6xl px-6 pb-16 pt-28 md:pt-32"
   data-override="Hero"
 >
-  <div class="max-w-2xl">
-    <p class="mb-3 font-mono text-xs uppercase tracking-widest text-[var(--color-accent-primary)]">
-      override active
-    </p>
-    <h1 class="mb-6 font-serif text-5xl font-bold leading-tight text-[var(--color-text-primary)]">
-      {person.name}
-      {tagline && (
-        <span class="block text-3xl font-normal text-[var(--color-text-muted)]">{tagline}</span>
-      )}
-    </h1>
-    <p class="text-lg leading-relaxed text-[var(--color-text-muted)]">{heroLine}</p>
+  <div
+    class="absolute right-6 top-24 hidden rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-wash)] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-accent-primary)] md:inline-block"
+    aria-label="This Hero is rendered by a consumer-supplied override"
+  >
+    demo: Hero override active
   </div>
+
+  <div class="grid items-center gap-12 md:grid-cols-5">
+    <div class="md:col-span-3">
+      {person.roleLine && (
+        <p class="mb-4 font-mono text-xs uppercase tracking-[0.18em] text-[var(--color-accent-primary)]">
+          {person.roleLine}
+        </p>
+      )}
+      <h1 class="mb-6 font-serif text-5xl font-bold leading-[1.05] text-[var(--color-text-primary)] md:text-6xl lg:text-7xl">
+        {person.name}
+        {tagline && (
+          <span class="mt-2 block font-serif text-2xl font-normal italic text-[var(--color-text-muted)] md:text-3xl">
+            {tagline}
+          </span>
+        )}
+      </h1>
+      {heroLine && (
+        <p class="mb-8 max-w-2xl text-lg leading-relaxed text-[var(--color-text-muted)] md:text-xl">
+          {heroLine}
+        </p>
+      )}
+
+      <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+        {buttonCtas.map((cta, index) => {
+          const tier = cta.variant ?? (index === 0 ? 'primary' : 'secondary');
+          const isPrimary = tier === 'primary';
+          const isBookingLink = Boolean(safeBookingUrl && cta.href === safeBookingUrl);
+          return (
+            <a
+              href={cta.href}
+              data-pe-booking-cta={isBookingLink ? '' : undefined}
+              class={
+                isPrimary
+                  ? 'rounded-full bg-[var(--color-text-primary)] px-8 py-3.5 text-sm font-medium text-[var(--color-text-inverse)] transition-colors hover:bg-[var(--color-text-muted)]'
+                  : 'rounded-full border border-[var(--color-border-default)] px-8 py-3.5 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:border-[var(--color-text-muted)]'
+              }
+            >
+              {cta.label}
+            </a>
+          );
+        })}
+      </div>
+
+      {linkCtas.length > 0 && (
+        <div class="mt-5 flex flex-wrap gap-5">
+          {linkCtas.map((cta) => {
+            const isBookingLink = Boolean(safeBookingUrl && cta.href === safeBookingUrl);
+            return (
+              <a
+                href={cta.href}
+                data-pe-booking-cta={isBookingLink ? '' : undefined}
+                class="text-sm font-medium text-[var(--color-accent-primary)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-muted)]"
+              >
+                {cta.label} →
+              </a>
+            );
+          })}
+        </div>
+      )}
+
+      {safeBookingUrl && (
+        <script is:inline define:vars={{ calendlyUrl: safeBookingUrl }}>
+          // Bind to every booking-CTA on this hero. Using a data attribute
+          // (not an id) so the consumer can have the booking URL referenced
+          // by both a button CTA and a link CTA without breaking HTML's
+          // unique-id rule, and so the script doesn't depend on DOM order.
+          document.addEventListener('DOMContentLoaded', () => {
+            const targets = document.querySelectorAll('[data-pe-booking-cta]');
+            targets.forEach((el) => {
+              el.addEventListener('click', (e) => {
+                // Only intercept plain left-clicks. Let the browser handle
+                // Ctrl/Cmd/Shift/middle-click so users can open the booking
+                // URL in a new tab or window like any other link.
+                if (
+                  e.button !== 0 ||
+                  e.ctrlKey ||
+                  e.metaKey ||
+                  e.shiftKey ||
+                  e.altKey
+                ) {
+                  return;
+                }
+                e.preventDefault();
+                const w = window;
+                if (typeof w.Calendly !== 'undefined' && calendlyUrl) {
+                  w.Calendly.initPopupWidget({ url: calendlyUrl });
+                } else {
+                  w.location.href = calendlyUrl;
+                }
+              });
+            });
+          });
+        </script>
+      )}
+    </div>
+
+    {photoSrc && (
+      <div class="hidden md:col-span-2 md:block">
+        <div class="aspect-[3/4] w-full overflow-hidden rounded-3xl border border-[var(--color-border-default)] bg-[var(--color-surface-wash)] shadow-xl">
+          <img
+            src={photoSrc}
+            alt={`${person.name} mark`}
+            class="h-full w-full object-contain p-8"
+          />
+        </div>
+      </div>
+    )}
+  </div>
+
+  {pillars.length > 0 && (
+    <div class="mt-20 grid gap-8 border-t border-[var(--color-border-default)] pt-12 md:grid-cols-3">
+      {pillars.map((pillar) => (
+        <div class="pe-demo-pillar">
+          <p class="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]">
+            @portfolio-engine
+          </p>
+          <h3 class="mb-3 font-serif text-2xl font-semibold text-[var(--color-text-primary)]">
+            {pillar.heading}
+          </h3>
+          <p class="text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {pillar.body}
+          </p>
+        </div>
+      ))}
+    </div>
+  )}
 </section>

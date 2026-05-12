@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Named Override Surfaces · portfolio-engine">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fbf7f0"/>
+      <stop offset="100%" stop-color="#f3ece1"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <g transform="translate(60, 80)">
+    <text font-family="ui-monospace,monospace" font-size="18" font-weight="700" fill="#7a3a16" letter-spacing="3">OVERRIDE SURFACES</text>
+  </g>
+  <g transform="translate(60, 160)" font-family="Inter,sans-serif">
+    <rect width="680" height="80" rx="12" fill="#fbf7f0" stroke="#7a3a16" stroke-width="2"/>
+    <text x="24" y="34" font-family="ui-monospace,monospace" font-size="11" font-weight="700" fill="#7a3a16" letter-spacing="2">HERO</text>
+    <text x="24" y="56" font-size="13" fill="#1d1a16">props: person · bookingUrl · pillars · base · tagline · ctas</text>
+    <text x="500" y="56" font-family="ui-monospace,monospace" font-size="11" fill="#a9683e">index.astro</text>
+  </g>
+  <g transform="translate(60, 252)" font-family="Inter,sans-serif">
+    <rect width="680" height="60" rx="12" fill="#fff" stroke="#e1d7c9"/>
+    <text x="24" y="26" font-family="ui-monospace,monospace" font-size="11" font-weight="700" fill="#7a3a16" letter-spacing="2">FEATUREDWRITING</text>
+    <text x="24" y="48" font-size="13" fill="#1d1a16">props: posts · base</text>
+    <text x="500" y="48" font-family="ui-monospace,monospace" font-size="11" fill="#a9683e">index.astro</text>
+  </g>
+  <g transform="translate(60, 324)" font-family="Inter,sans-serif">
+    <rect width="680" height="60" rx="12" fill="#fff" stroke="#e1d7c9"/>
+    <text x="24" y="26" font-family="ui-monospace,monospace" font-size="11" font-weight="700" fill="#7a3a16" letter-spacing="2">TESTIMONIALSECTION</text>
+    <text x="24" y="48" font-size="13" fill="#1d1a16">props: testimonials</text>
+    <text x="500" y="48" font-family="ui-monospace,monospace" font-size="11" fill="#a9683e">index.astro</text>
+  </g>
+  <g transform="translate(60, 396)" font-family="Inter,sans-serif">
+    <rect width="680" height="60" rx="12" fill="#fff" stroke="#e1d7c9"/>
+    <text x="24" y="26" font-family="ui-monospace,monospace" font-size="11" font-weight="700" fill="#7a3a16" letter-spacing="2">COLLABORATIONSECTION</text>
+    <text x="24" y="48" font-size="13" fill="#1d1a16">props: base · ctaBody</text>
+    <text x="500" y="48" font-family="ui-monospace,monospace" font-size="11" fill="#a9683e">index.astro</text>
+  </g>
+  <g transform="translate(60, 468)" font-family="Inter,sans-serif">
+    <rect width="680" height="60" rx="12" fill="#fff" stroke="#e1d7c9"/>
+    <text x="24" y="26" font-family="ui-monospace,monospace" font-size="11" font-weight="700" fill="#7a3a16" letter-spacing="2">FOOTER</text>
+    <text x="24" y="48" font-size="13" fill="#1d1a16">props: adminHref · siteTitle · adminLinkLabel</text>
+    <text x="500" y="48" font-family="ui-monospace,monospace" font-size="11" fill="#a9683e">Layout.astro</text>
+  </g>
+  <g transform="translate(60, 555)" font-family="ui-monospace,monospace" font-size="13" fill="#a9683e">
+    <text>any other surface · build-time error</text>
+  </g>
+</svg>

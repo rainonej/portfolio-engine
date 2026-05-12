@@ -1,23 +1,150 @@
 {
-  "awards": [
+  "selectedEvidence": [
+    "Used by examples/demo-site (this site) and examples/node-ssr-demo as reference consumers.",
+    "Emits a .portfolio-engine/manifest.json on every build with active route registry, override surfaces, and a design-token snapshot.",
+    "Ships a `portfolio-engine` CLI (alias: `pnpm pe:doctor`) that inspects the manifest and reports route origins, override status, and theme version.",
+    "CI guards the no-public/-in-engine-packages rule on every commit so theme packages stay code-only.",
+    "Three route-ownership modes — theme routes, consumer-local registry routes, and ordinary src/pages — all coexist in this same demo."
+  ],
+  "technicalRange": [
     {
-      "title": "Design Excellence Award",
-      "context": "AIGA, 2023",
-      "description": "Recognized for outstanding contribution to accessible interface design."
+      "heading": "Engine",
+      "items": [
+        "Astro 6 integration API",
+        "Vite virtual modules (@portfolio-engine:config / :context / :routes / :overrides)",
+        "Route discovery + injection",
+        "Consumer registry (src/registry/portfolio-engine.registry.json)",
+        "Zod 4 schema validation",
+        "TypeScript types injected into consumer .astro folder"
+      ]
+    },
+    {
+      "heading": "Theme",
+      "items": [
+        "Editorial layout, typography, and color system",
+        "Tailwind v4 wired via PostCSS, no extra config",
+        "Five named override surfaces (Hero, FeaturedWriting, TestimonialSection, CollaborationSection, Footer)",
+        "Style overrides appended after global.css",
+        "SchedulingBlock for Calendly / Cal / Google Calendar / Microsoft Bookings",
+        "IframeEmbed with HTTPS-only validation and host allowlist"
+      ]
+    },
+    {
+      "heading": "Admin",
+      "items": [
+        "/admin dashboard injected as SSR routes",
+        "GitHub OAuth (read:user, repo) with HMAC-signed session cookies",
+        "Content inventory + save via the GitHub Contents API",
+        "Public-asset uploader for files under public/",
+        "devBypass mode for local-only direct-to-disk writes"
+      ]
+    },
+    {
+      "heading": "Tooling",
+      "items": [
+        "Paste-into-Claude setup flow (docs/downstream/setup-with-claude.md)",
+        "Numbered phase scripts with DRY_RUN and SKIP_* flags",
+        "One-click upgrade script that pins @portfolio-engine/* to @latest in lockstep",
+        "VS Code task wiring",
+        "Seed templates for CLAUDE.md, copilot-instructions.md, and .cursor/mcp.example.json"
+      ]
+    }
+  ],
+  "experience": [
+    {
+      "organization": "portfolio-engine",
+      "title": "v0.6 — Override surfaces, consumer registry, design snapshot",
+      "startYear": "2026",
+      "current": true,
+      "description": "Editorial-theme 0.6.0 + admin-tools 0.0.19. Locks in the public surface area for downstream consumers.",
+      "highlights": [
+        "Five named override surfaces (Hero, FeaturedWriting, TestimonialSection, CollaborationSection, Footer) with stable prop contracts.",
+        "Consumer-local registry routes via src/pages-local/ + portfolio-engine.registry.json.",
+        "Design-token snapshot emitted to .portfolio-engine/design-snapshot.json for admin tooling.",
+        "Style overrides via overrides.styles, appended after the theme's global.css.",
+        "IframeEmbed component with same-origin + HTTPS-only validation."
+      ]
+    },
+    {
+      "organization": "portfolio-engine",
+      "title": "v0.5 — Admin tools and schema extraction",
+      "startYear": "2026",
+      "endYear": "2026",
+      "description": "Schema package broken out as the canonical source of truth; first version of admin-tools shipped.",
+      "highlights": [
+        "@portfolio-engine/schema published as a pure Zod, framework-free package.",
+        "@portfolio-engine/admin-tools shipped with /admin + /api/auth/* + /api/content routes.",
+        "GitHub OAuth + Contents-API writes; devBypass mode for local development.",
+        "Manifest writer added to record route origin and override status on every build."
+      ]
+    },
+    {
+      "organization": "portfolio-engine",
+      "title": "v0.3 — Engine-core integration",
+      "startYear": "2025",
+      "endYear": "2026",
+      "description": "The Astro integration that brokers config, content, and route injection. The first 'engine' worth the name.",
+      "highlights": [
+        "Vite virtual modules for config, context, routes, and overrides.",
+        "JSON-config loader bridged to Zod schemas with friendly error reporting.",
+        "Route discovery + injection replacing every banned third-party theme helper."
+      ]
+    },
+    {
+      "organization": "portfolio-engine",
+      "title": "v0.1 — Foundations",
+      "startYear": "2025",
+      "endYear": "2025",
+      "description": "Initial Zod schemas, layered architecture sketched in docs/architecture/, banned-dependencies policy recorded.",
+      "highlights": [
+        "Four-layer architecture (schema → engine-core → editorial-theme → consumer) committed in docs/architecture/README.md.",
+        "Banned-dependencies list captured: astro-theme-provider, astro-pages, astro-public.",
+        "First Astro theme built strictly first-party, no generic abstractions."
+      ]
     }
   ],
   "education": [
     {
-      "degree": "MFA Interaction Design",
-      "institution": "School of Visual Arts",
-      "location": "New York, NY",
-      "year": "2017"
+      "degree": "Inspired by",
+      "institution": "Astro Starlight",
+      "note": "Editorial content + injected route patterns."
     },
     {
-      "degree": "BA Computer Science",
-      "institution": "University of Michigan",
-      "location": "Ann Arbor, MI",
-      "year": "2014"
+      "degree": "Inspired by",
+      "institution": "Eleventy",
+      "note": "Make-the-data-yours, keep-the-engine-small philosophy."
+    },
+    {
+      "degree": "Inspired by",
+      "institution": "Next-Forge",
+      "note": "Turborepo monorepo patterns and consumer-app separation."
+    },
+    {
+      "degree": "Inspired by",
+      "institution": "Tailwind UI",
+      "note": "Token-driven design via CSS custom properties."
+    }
+  ],
+  "awards": [
+    {
+      "title": "Discipline: no packaged public/ in engine packages",
+      "context": "CI-enforced policy",
+      "description": "Engine packages ship code, not assets. Every commit runs a check; the consumer's public/ directory is the single source of truth for static files."
+    },
+    {
+      "title": "Discipline: layers only depend downward",
+      "context": "Architecture policy",
+      "description": "schema → engine-core → editorial-theme → consumer. Upward dependencies are rejected at review time. Keeps upgrades obvious and breaking changes loud."
+    },
+    {
+      "title": "Discipline: banned dependencies are stated, not implied",
+      "context": "docs/architecture/dependencies.md",
+      "description": "astro-theme-provider, astro-pages, astro-public — these are explicitly listed as off-limits with reasoning. Route injection and virtual modules are first-party."
+    },
+    {
+      "title": "Discipline: friendly Zod errors at build time",
+      "context": "User-facing reliability",
+      "description": "Misconfigured site.json or theme.json produces a precise, path-pointing error from @portfolio-engine/schema rather than a stack trace from inside Astro."
     }
   ]
 }

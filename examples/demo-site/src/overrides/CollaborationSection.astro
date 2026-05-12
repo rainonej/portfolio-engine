@@ -1,0 +1,63 @@
+---
+/**
+ * Demo override for the `CollaborationSection` surface.
+ *
+ * Declared props: `base`, `ctaBody`. The default surface renders a generic
+ * "let's collaborate" CTA. For the showcase, this override pivots to a
+ * "start your own portfolio-engine site" CTA with twin links — one to the
+ * setup-with-Claude flow, one to the repo.
+ *
+ * See: docs/downstream/consumption.md
+ */
+interface Props {
+  base: string;
+  ctaBody?: string;
+}
+
+const { base, ctaBody } = Astro.props;
+const setupUrl =
+  'https://github.com/rainonej/portfolio-engine/blob/main/docs/downstream/setup-with-claude.md';
+const repoUrl = 'https://github.com/rainonej/portfolio-engine';
+---
+
+<section
+  class="border-t border-[var(--color-border-default)] bg-[var(--color-surface-elevated,var(--color-surface-wash))] px-6 py-28"
+  data-override="CollaborationSection"
+>
+  <div class="mx-auto max-w-3xl text-center">
+    <p class="mb-4 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]">
+      demo: CollaborationSection override
+    </p>
+    <h2 class="mb-5 font-serif text-4xl font-bold md:text-5xl">
+      Build your own with portfolio-engine
+    </h2>
+    {ctaBody && (
+      <p class="mx-auto mb-10 max-w-xl text-lg leading-relaxed text-[var(--color-text-muted)]">
+        {ctaBody}
+      </p>
+    )}
+    <div class="flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5">
+      <a
+        href={setupUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 rounded-full bg-[var(--color-text-primary)] px-8 py-3.5 text-sm font-medium text-[var(--color-text-inverse)] transition-colors hover:bg-[var(--color-text-muted)]"
+      >
+        Set up with Claude Code
+        <span aria-hidden="true">→</span>
+      </a>
+      <a
+        href={repoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-default)] px-8 py-3.5 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:border-[var(--color-text-muted)]"
+      >
+        Read the source
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <p class="mt-10 text-sm text-[var(--color-text-muted)]">
+      Or <a href={`${base}/contact`} class="underline underline-offset-4 transition-colors hover:text-[var(--color-text-primary)]">book a 15-minute walkthrough</a> if you want a guided tour first.
+    </p>
+  </div>
+</section>
