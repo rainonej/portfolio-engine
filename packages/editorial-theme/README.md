@@ -173,6 +173,15 @@ editorialTheme({
 Each file is read at build time and inlined as a global stylesheet on
 every page.
 
+## Inline content components
+
+Two standalone Astro components are exported from `@portfolio-engine/editorial-theme` for use inside `.astro` pages (and `.mdx` content collections, when `@astrojs/mdx` is installed). They are not override surfaces — import and place them where you need them.
+
+| Component         | Import path                                                          | Purpose                                                                                                                                                                                                                                                                                                                           |
+| ----------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SchedulingBlock` | `@portfolio-engine/editorial-theme/components/SchedulingBlock.astro` | Provider-light scheduling CTA (button / link / iframe) for a public booking URL. See [`docs/downstream/scheduling-calendly.md`](../../docs/downstream/scheduling-calendly.md).                                                                                                                                                    |
+| `IframeEmbed`     | `@portfolio-engine/editorial-theme/components/IframeEmbed.astro`     | Generic, security-vetted iframe wrapper for static interactive demos under `public/` or absolute https:// URLs. Validates the scheme, supports optional `allowedHosts`, and exposes `sandbox` / `allow` / `referrerpolicy`. See [`docs/downstream/iframe-embeds-and-demos.md`](../../docs/downstream/iframe-embeds-and-demos.md). |
+
 ## Deploying (separate consumer repo)
 
 For a **standalone** Astro repo that depends on this package from npm: Vercel import, `pnpm install` / `pnpm build`, **production branch `main`**, **`dev` and PRs for previews**, canonical `SITE_URL`, and OAuth callback notes are in **[`docs/downstream/consumption.md` § Vercel (standalone consumer repo)](../../docs/downstream/consumption.md#vercel-standalone-consumer-repo)**.
