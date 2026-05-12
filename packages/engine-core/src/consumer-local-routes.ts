@@ -1,3 +1,12 @@
+/**
+ * This file lets a downstream site declare its own pages alongside the theme's pages.
+ *
+ * It loads `src/registry/portfolio-engine.registry.json`, validates each entry's
+ * source file lives under `src/pages-local`, and produces injectable route
+ * records that engine-core's main integration adds to Astro at build time.
+ * It also guards against consumer-local routes colliding with the theme's
+ * still-active routes.
+ */
 import { existsSync, readFileSync } from 'node:fs';
 import { normalize, resolve, sep } from 'node:path';
 import {

@@ -1,0 +1,86 @@
+---
+/**
+ * Demo override for the `FeaturedWriting` surface.
+ *
+ * Declared props: `posts`, `base`. Renders the recent-writing rail with a
+ * caption that names the override, larger cards than the default, and
+ * a "Read in depth" affordance per post.
+ *
+ * See: docs/downstream/consumption.md
+ */
+import { formatDate } from '@portfolio-engine/editorial-theme';
+
+interface Post {
+  id: string;
+  title: string;
+  date: Date;
+  description?: string;
+  image?: string;
+  href: string;
+}
+
+interface Props {
+  posts: Post[];
+  base: string;
+}
+
+const { posts, base } = Astro.props;
+---
+
+<section
+  class="border-t border-[var(--color-border-default)] bg-[var(--color-surface-wash)] px-6 py-24"
+  data-override="FeaturedWriting"
+>
+  <div class="mx-auto max-w-5xl">
+    <div class="mb-12 flex items-baseline justify-between gap-6">
+      <div>
+        <p class="mb-3 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]">
+          demo: FeaturedWriting override
+        </p>
+        <h2 class="font-serif text-3xl font-bold md:text-4xl">
+          Architecture deep-dives
+        </h2>
+        <p class="mt-3 max-w-xl text-base leading-relaxed text-[var(--color-text-muted)]">
+          The default `FeaturedWriting` renders a compact list. This override
+          presents posts as larger reading cards — useful when writing is
+          actually the lead content, not a sidebar.
+        </p>
+      </div>
+      <a
+        href={`${base}/writing`}
+        class="ml-auto hidden shrink-0 text-sm text-[var(--color-text-muted)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-primary)] sm:inline-block"
+      >
+        All posts →
+      </a>
+    </div>
+
+    <ul class="grid gap-8 md:grid-cols-3">
+      {posts.map((post) => (
+        <li class="pe-demo-writing-card">
+          <a
+            href={post.href}
+            class="group flex h-full flex-col rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-surface-page)] p-6 transition-colors hover:border-[var(--color-accent-primary)]"
+          >
+            <time
+              datetime={post.date.toISOString()}
+              class="mb-3 font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--color-text-muted)]"
+            >
+              {formatDate(post.date)}
+            </time>
+            <h3 class="mb-3 font-serif text-xl font-semibold leading-tight text-[var(--color-text-primary)] group-hover:text-[var(--color-accent-primary)]">
+              {post.title}
+            </h3>
+            {post.description && (
+              <p class="mb-4 flex-1 text-sm leading-relaxed text-[var(--color-text-muted)]">
+                {post.description}
+              </p>
+            )}
+            <span class="mt-auto text-sm font-medium text-[var(--color-accent-primary)]">
+              Read in depth →
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

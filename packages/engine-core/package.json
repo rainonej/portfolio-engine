@@ -4,7 +4,8 @@
   "description": "Route registry, config loader, virtual modules, and override resolution for portfolio-engine",
   "type": "module",
   "files": [
-    "dist"
+    "dist",
+    "client.d.ts"
   ],
   "types": "./dist/index.d.ts",
   "bin": {
@@ -15,9 +16,7 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./client": {
-      "types": "./dist/client.d.ts"
-    },
+    "./client": "./client.d.ts",
     "./doctor": {
       "types": "./dist/doctor.d.ts",
       "import": "./dist/doctor.js"

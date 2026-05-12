@@ -42,6 +42,24 @@ The three **required** packages are published to npm — your repo installs them
 
 ---
 
+## Where to change things
+
+| Goal                                              | Change this                                                     |
+| ------------------------------------------------- | --------------------------------------------------------------- |
+| Change colors or fonts                            | `src/config/theme.json` in the downstream site                  |
+| Change site-wide CSS                              | A `.css` file in `src/overrides/` in the downstream site        |
+| Change the shared outer frame (nav, footer, head) | `packages/editorial-theme/src/layouts/Layout.astro`             |
+| Change the home screen                            | `packages/editorial-theme/src/pages/index.astro`                |
+| Change the default work list screen               | `packages/editorial-theme/src/pages/work.astro`                 |
+| Change the default individual work screen         | `packages/editorial-theme/src/pages/work/[slug].astro`          |
+| Change the default writing list screen            | `packages/editorial-theme/src/pages/writing/index.astro`        |
+| Change the default individual writing screen      | `packages/editorial-theme/src/pages/writing/[slug].astro`       |
+| Replace Hero, Footer, or another override surface | `src/overrides/` in the downstream site + the consumer registry |
+| Add a custom downstream screen                    | The downstream site's `src/pages-local/` and consumer registry  |
+| Change what screens are listed in navigation      | `src/config/navigation.json` in the downstream site             |
+
+---
+
 ## Updating the theme
 
 ```bash

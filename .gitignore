@@ -78,6 +78,11 @@ web_modules/
 .next
 out
 
+# Vercel
+# Build Output API tree lifted into repo-root by scripts/lift-vercel-output.mjs,
+# and the Vercel CLI's local project metadata. Never commit either.
+.vercel/
+
 # Nuxt.js build / generate output
 .nuxt
 dist

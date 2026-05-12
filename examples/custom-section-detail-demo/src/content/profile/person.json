@@ -1,0 +1,9 @@
+{
+  "name": "Demo person",
+  "shortBio": "Minimal profile fixture used by the route-replacement demo.",
+  "summary": "This profile only exists to satisfy the editorial theme's home and about screens — the interesting part of this demo is what happens to /work and /writing.",
+  "longBio": [
+    "This demo focuses on a single thing: proving that the four replaceable editorial-theme screens (/work, /work/[slug], /writing, /writing/[slug]) can all be disabled together and replaced with consumer-local pages from src/pages-local.",
+    "Everything else on the site — home, about — uses the editorial theme defaults so the replacement story is the only variable."
+  ]
+}

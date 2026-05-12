@@ -1,0 +1,156 @@
+---
+/**
+ * Demo override for the `Footer` surface.
+ *
+ * Declared props: `adminHref`, `siteTitle`, `adminLinkLabel`. Renders a
+ * three-column branded footer with a "Built with portfolio-engine" badge.
+ *
+ * Admin-link visibility mirrors the theme's default Footer:
+ *   - Always visible in dev (`import.meta.env.DEV`).
+ *   - In production: only when `PUBLIC_SHOW_ADMIN_LINK=true` or
+ *     `site.admin.showPublicLink === true`.
+ * This keeps the override safe to copy into a downstream repo — it won't
+ * expose `/admin` to anonymous visitors in production unless explicitly opted in.
+ *
+ * The theme-version string is hard-coded against this demo site's declared
+ * editorial-theme dependency at edit time (see examples/demo-site/package.json).
+ * It's intentionally not derived at runtime to keep the override self-
+ * contained and dependency-free.
+ *
+ * See: docs/downstream/consumption.md
+ */
+import { config } from '@portfolio-engine:config';
+
+interface Props {
+  adminHref: string;
+  siteTitle: string;
+  adminLinkLabel: string;
+}
+
+const { adminHref, siteTitle, adminLinkLabel } = Astro.props;
+
+const isDev = import.meta.env.DEV;
+const showAdminLinkEnv = import.meta.env.PUBLIC_SHOW_ADMIN_LINK;
+const showAdminLinkSite = config.site.admin?.showPublicLink === true;
+const showAdminLink = isDev || showAdminLinkEnv === 'true' || showAdminLinkSite;
+
+const year = new Date().getFullYear();
+const repoUrl = 'https://github.com/rainonej/portfolio-engine';
+const docsUrl = 'https://github.com/rainonej/portfolio-engine/tree/main/docs';
+const setupUrl =
+  'https://github.com/rainonej/portfolio-engine/blob/main/docs/downstream/setup-with-claude.md';
+const themeVersion = '0.6.0';
+---
+
+<footer
+  class="mt-24 border-t border-[var(--color-border-default)] bg-[var(--color-surface-wash)] px-6 pb-12 pt-16"
+  data-override="Footer"
+>
+  <div class="mx-auto grid max-w-5xl gap-12 md:grid-cols-3">
+    <div>
+      <p class="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]">
+        Project
+      </p>
+      <h3 class="mb-3 font-serif text-2xl font-bold text-[var(--color-text-primary)]">
+        {siteTitle}
+      </h3>
+      <p class="text-sm leading-relaxed text-[var(--color-text-muted)]">
+        An open-source backbone for personal, portfolio, and editorial
+        sites — published as @portfolio-engine/* on npm.
+      </p>
+    </div>
+
+    <div>
+      <p class="mb-3 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]">
+        Get started
+      </p>
+      <ul class="space-y-2 text-sm">
+        <li>
+          <a
+            href={setupUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[var(--color-text-muted)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-primary)]"
+          >
+            Set up with Claude Code
+          </a>
+        </li>
+        <li>
+          <a
+            href={docsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[var(--color-text-muted)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-primary)]"
+          >
+            Read the docs
+          </a>
+        </li>
+        {showAdminLink && (
+          <li>
+            <a
+              href={adminHref}
+              class="text-[var(--color-text-muted)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-primary)]"
+            >
+              {adminLinkLabel}
+            </a>
+          </li>
+        )}
+      </ul>
+    </div>
+
+    <div>
+      <p class="mb-3 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]">
+        Source
+      </p>
+      <ul class="space-y-2 text-sm">
+        <li>
+          <a
+            href={repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[var(--color-text-muted)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-primary)]"
+          >
+            GitHub repository
+          </a>
+        </li>
+        <li>
+          <a
+            href={`${repoUrl}/blob/main/docs/architecture/README.md`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[var(--color-text-muted)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-primary)]"
+          >
+            Architecture
+          </a>
+        </li>
+        <li>
+          <a
+            href={`${repoUrl}/blob/main/CHANGELOG.md`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[var(--color-text-muted)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-primary)]"
+          >
+            Changelog
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div
+    class="mx-auto mt-12 flex max-w-5xl flex-col items-start gap-3 border-t border-[var(--color-border-default)] pt-6 text-xs text-[var(--color-text-muted)] sm:flex-row sm:items-center sm:justify-between"
+  >
+    <p>© {year} {siteTitle} · MIT licensed</p>
+    <p class="font-mono text-[10px] uppercase tracking-[0.18em]">
+      Built with{' '}
+      <a
+        href={repoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="underline underline-offset-4 transition-colors hover:text-[var(--color-text-primary)]"
+      >
+        portfolio-engine v{themeVersion}
+      </a>
+    </p>
+  </div>
+</footer>

@@ -1,0 +1,83 @@
+---
+/**
+ * Testimonial or reference quote card.
+ *
+ * Renders the quote in serif, an attribution line with optional role and logo,
+ * and an optional "Related" link out to a longer write-up. Designed to be reused
+ * anywhere a screen needs a single quote — testimonials sections, case study
+ * sidebars, or inline pull-quotes.
+ *
+ * Image URL handling: `logoSrc` is resolved through `resolveAssetUrl(getBase())`
+ * so that root-relative or relative asset paths render correctly when a
+ * downstream site is deployed under an Astro `base` subpath.
+ */
+import { getBase, resolveAssetUrl } from '../../lib/utils';
+
+interface Props {
+  quote: string;
+  attribution: string;
+  role?: string;
+  logoSrc?: string;
+  logoAlt?: string;
+  relatedHref?: string;
+  relatedLabel?: string;
+}
+
+const {
+  quote,
+  attribution,
+  role,
+  logoSrc,
+  logoAlt,
+  relatedHref,
+  relatedLabel = 'Related →',
+} = Astro.props;
+
+const resolvedLogoSrc = resolveAssetUrl(logoSrc, getBase()) ?? logoSrc;
+---
+
+<figure
+  class="flex h-full flex-col rounded-2xl border p-8"
+  style="background-color: var(--color-surface-elevated); border-color: var(--color-border-default);"
+>
+  <blockquote
+    class="mb-6 font-serif italic leading-relaxed text-[var(--color-text-primary)]"
+    style="font-size: var(--text-subheading);"
+  >
+    <span aria-hidden="true">“</span>{quote}<span aria-hidden="true">”</span>
+  </blockquote>
+
+  <figcaption class="mt-auto flex items-center gap-4">
+    {
+      logoSrc && (
+        <img
+          src={resolvedLogoSrc}
+          alt={logoAlt ?? attribution}
+          class="h-10 w-10 shrink-0 rounded-full object-cover"
+          loading="lazy"
+        />
+      )
+    }
+    <div>
+      <p class="text-sm font-semibold text-[var(--color-text-primary)]">
+        {attribution}
+      </p>
+      {
+        role && (
+          <p class="text-xs text-[var(--color-text-muted)]">{role}</p>
+        )
+      }
+    </div>
+  </figcaption>
+
+  {
+    relatedHref && (
+      <a
+        href={relatedHref}
+        class="mt-6 text-sm font-medium underline underline-offset-4 transition-colors hover:text-[var(--color-accent-primary)]"
+      >
+        {relatedLabel}
+      </a>
+    )
+  }
+</figure>

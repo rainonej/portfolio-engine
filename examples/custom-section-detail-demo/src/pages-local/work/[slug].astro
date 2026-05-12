@@ -1,0 +1,72 @@
+---
+/**
+ * Consumer-local replacement for the editorial-theme `/work/[slug]` screen.
+ *
+ * The original theme route is disabled in astro.config.mjs and this file is
+ * registered via src/registry/portfolio-engine.registry.json. The visible
+ * banner makes it obvious in rendered HTML and visual previews that the
+ * consumer-local page rendered, not the theme default.
+ */
+import Layout from '@portfolio-engine/editorial-theme/layouts/Layout.astro';
+import TagList from '@portfolio-engine/editorial-theme/components/content/TagList.astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { getBase } from '@portfolio-engine/editorial-theme';
+
+type Props = {
+  entry: CollectionEntry<'projects'>;
+};
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry }: Props = Astro.props;
+const { Content } = await render(entry);
+const p = entry.data;
+const base = getBase();
+---
+
+<Layout title={`${p.title} — Custom replacement`} description={p.description}>
+  <article class="mx-auto max-w-3xl px-6 pb-24 pt-40">
+    <div
+      class="mb-10 rounded-2xl border p-4 text-sm"
+      style="background-color: var(--color-surface-wash); border-color: var(--color-accent-primary); color: var(--color-text-primary);"
+      data-pe-replacement-banner="work-detail"
+    >
+      <strong>Custom replacement screen — example only.</strong>
+      Rendered by <code>src/pages-local/work/[slug].astro</code>. The theme's
+      default <code>/work/[slug]</code> route is disabled in <code>astro.config.mjs</code>.
+    </div>
+
+    <a
+      href={`${base}/work`}
+      class="mb-8 inline-block text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
+    >
+      ← Back to Work
+    </a>
+
+    <h1 class="mb-4 font-serif text-4xl font-bold md:text-5xl">{p.title}</h1>
+
+    {p.tags && p.tags.length > 0 && (
+      <div class="mb-6">
+        <TagList tags={p.tags} accent />
+      </div>
+    )}
+
+    {
+      p.description && (
+        <p class="mb-10 text-lg leading-relaxed text-[var(--color-text-muted)]">
+          {p.description}
+        </p>
+      )
+    }
+
+    <div class="prose prose-stone max-w-none">
+      <Content />
+    </div>
+  </article>
+</Layout>

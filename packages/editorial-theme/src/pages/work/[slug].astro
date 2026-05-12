@@ -1,18 +1,24 @@
 ---
+/**
+ * This file controls the default individual work item screen.
+ *
+ * It creates one visitor-facing screen for each item in the work content folder.
+ * It decides where the title, image, tags, description, and body text appear.
+ */
 import Layout from '../../layouts/Layout.astro';
-import type { CollectionEntry } from 'astro:content';
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import ImageOrFallback from '../../components/ImageOrFallback.astro';
 import { getBase, resolveAssetUrl } from '../../lib/utils';
 import { loadProfilePerson } from '../../lib/load-profile-person';
+import { getProjects, type ProjectEntry } from '../../lib/collections';
 
 type Props = {
-  entry: CollectionEntry<'projects'>;
+  entry: ProjectEntry;
 };
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects');
-  return projects.map((entry: CollectionEntry<'projects'>) => ({
+  const projects = await getProjects();
+  return projects.map((entry) => ({
     params: { slug: entry.id },
     props: { entry },
   }));
