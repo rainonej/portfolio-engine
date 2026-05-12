@@ -137,14 +137,18 @@ const linkCtas = [
 
       {linkCtas.length > 0 && (
         <div class="mt-5 flex flex-wrap gap-5">
-          {linkCtas.map((cta) => (
-            <a
-              href={cta.href}
-              class="text-sm font-medium text-[var(--color-accent-primary)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-muted)]"
-            >
-              {cta.label} →
-            </a>
-          ))}
+          {linkCtas.map((cta) => {
+            const isBookingLink = Boolean(bookingUrl && cta.href === bookingUrl);
+            return (
+              <a
+                href={cta.href}
+                id={isBookingLink ? 'hero-booking-calendly' : undefined}
+                class="text-sm font-medium text-[var(--color-accent-primary)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-muted)]"
+              >
+                {cta.label} →
+              </a>
+            );
+          })}
         </div>
       )}
     </div>

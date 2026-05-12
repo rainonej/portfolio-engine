@@ -40,7 +40,7 @@ pnpm --filter demo-site dev
 
 Open `http://localhost:4321`. The `/admin` route is reachable in dev with no GitHub OAuth (the integration runs with `devBypass: true`).
 
-Each build also generates [`.portfolio-engine/manifest.json`](.portfolio-engine/) in this folder, recording the resolved route registry, the override surfaces and which ones are overridden, and the design-token snapshot.
+Each build also writes a `.portfolio-engine/manifest.json` in this folder, recording the resolved route registry, the override surfaces and which ones are overridden, and the design-token snapshot. The file is regenerated on every build and is `.gitignore`d here, so it won't appear in the repo until you run a build locally. See [`docs/packages/engine-core.md`](../../docs/packages/engine-core.md) for the schema.
 
 ## Build it
 
