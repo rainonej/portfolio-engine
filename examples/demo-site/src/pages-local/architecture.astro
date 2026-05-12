@@ -11,9 +11,12 @@ import IframeEmbed from '@portfolio-engine/editorial-theme/components/IframeEmbe
 import { getBase, resolveAssetUrl } from '@portfolio-engine/editorial-theme';
 
 const base = getBase();
-const diagramSrc =
-  resolveAssetUrl('/assets/demos/architecture/', base) ??
-  '/assets/demos/architecture/';
+// resolveAssetUrl only returns null for null/empty input, so passing a
+// non-empty literal here is guaranteed to return a string.
+const diagramSrc = resolveAssetUrl(
+  '/assets/demos/architecture/',
+  base,
+) as string;
 ---
 
 <Layout
