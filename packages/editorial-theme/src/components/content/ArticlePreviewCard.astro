@@ -6,8 +6,13 @@
  * date in monospace, the title, an optional description, tags via TagList,
  * and an optional reading-time chip. Designed to be the default card type
  * for any writing list screen.
+ *
+ * Image URL handling: `imageSrc` is resolved through `resolveAssetUrl(getBase())`
+ * so that root-relative or relative asset paths render correctly when a
+ * downstream site is deployed under an Astro `base` subpath.
  */
 import TagList from './TagList.astro';
+import { getBase, resolveAssetUrl } from '../../lib/utils';
 
 interface Props {
   articleType?: string;
@@ -38,6 +43,8 @@ const isoDate = !Number.isNaN(dateObj.getTime()) ? dateObj.toISOString() : '';
 const formattedDate = !Number.isNaN(dateObj.getTime())
   ? dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
   : String(date);
+
+const resolvedImageSrc = resolveAssetUrl(imageSrc, getBase()) ?? imageSrc;
 ---
 
 <article class="group flex h-full flex-col">
@@ -46,7 +53,7 @@ const formattedDate = !Number.isNaN(dateObj.getTime())
       <a href={href} class="mb-5 block">
         <div class="aspect-[21/9] overflow-hidden rounded-2xl bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))]">
           <img
-            src={imageSrc}
+            src={resolvedImageSrc}
             alt={imageAlt ?? title}
             class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
