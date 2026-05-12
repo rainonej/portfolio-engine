@@ -38,10 +38,28 @@ const {
   imageAlt,
 } = Astro.props;
 
+/**
+ * Date-only strings like "2026-01-01" are parsed by `new Date()` as UTC
+ * midnight. In negative-UTC time zones (e.g. America/Los_Angeles) this
+ * renders as the previous calendar day. To keep card dates stable across
+ * time zones for the common CMS/frontmatter date-only format, detect
+ * `YYYY-MM-DD` strings up front and format them in UTC; pass other inputs
+ * through unchanged so `Date` instances and full ISO timestamps keep
+ * their local-time semantics.
+ */
+const isDateOnlyString =
+  typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date);
 const dateObj = date instanceof Date ? date : new Date(date);
-const isoDate = !Number.isNaN(dateObj.getTime()) ? dateObj.toISOString() : '';
-const formattedDate = !Number.isNaN(dateObj.getTime())
-  ? dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+const isValidDate = !Number.isNaN(dateObj.getTime());
+const formatOptions: Intl.DateTimeFormatOptions = {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  ...(isDateOnlyString ? { timeZone: 'UTC' } : {}),
+};
+const isoDate = isValidDate ? dateObj.toISOString() : '';
+const formattedDate = isValidDate
+  ? dateObj.toLocaleDateString('en-US', formatOptions)
   : String(date);
 
 const resolvedImageSrc = resolveAssetUrl(imageSrc, getBase()) ?? imageSrc;
