@@ -39,10 +39,12 @@ const demoSrc =
   title="Four-layer architecture diagram"
   height={520}
   loading="lazy"
-  sandbox="allow-same-origin"
+  sandbox="allow-scripts"
   caption="Click any layer to highlight its dependencies."
 />
 ```
+
+A note on `sandbox`: the iframe sandbox is _restrictive by default_. `allow-scripts` enables JS inside the embedded document (needed for the interactive diagram). Leave `allow-same-origin` _off_ for same-origin demos — adding it back alongside `allow-scripts` effectively defeats the sandbox, since the embedded page can then reach into the parent's storage and DOM. For a fully passive embed (e.g. a static SVG diagram with no JS), you can omit `sandbox` entirely.
 
 For Markdown posts that can't import a helper, write the path relative to the rendered page (e.g. `src="../../assets/demos/architecture/"` from `/writing/<slug>/`); same-origin path validation still applies.
 
