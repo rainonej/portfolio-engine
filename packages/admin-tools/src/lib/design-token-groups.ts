@@ -17,6 +17,11 @@ export const EDITORIAL_THEME_TOKEN_GROUPS: DesignTokenGroup[] = [
         usage: 'Headings, primary body text, primary buttons, key UI emphasis',
       },
       {
+        cssVar: '--color-text-inverse',
+        label: 'Inverse text',
+        usage: 'Text on solid primary surfaces (e.g. primary button label, dark toast body)',
+      },
+      {
         cssVar: '--color-accent-primary',
         label: 'Accent',
         usage: 'Links, eyebrow labels, featured badges, primary interactive highlights',
@@ -97,14 +102,39 @@ export const EDITORIAL_THEME_TOKEN_GROUPS: DesignTokenGroup[] = [
         usage: 'Code / monospace (theme.typography.fonts.mono)',
       },
       {
-        cssVar: '--text-body',
-        label: 'Body size',
-        usage: 'Base reading size (theme.typography.scale.body or preset)',
+        cssVar: '--text-display',
+        label: 'Display size',
+        usage: 'Hero / display type (theme.typography.scale.display or preset)',
       },
       {
         cssVar: '--text-title',
         label: 'Title size',
         usage: 'Page titles (theme.typography.scale.title or preset)',
+      },
+      {
+        cssVar: '--text-heading',
+        label: 'Heading size',
+        usage: 'Section headings (theme.typography.scale.heading or preset)',
+      },
+      {
+        cssVar: '--text-subheading',
+        label: 'Subheading size',
+        usage: 'Sub-section headings, card titles (theme.typography.scale.subheading or preset)',
+      },
+      {
+        cssVar: '--text-body',
+        label: 'Body size',
+        usage: 'Base reading size (theme.typography.scale.body or preset)',
+      },
+      {
+        cssVar: '--text-small',
+        label: 'Small size',
+        usage: 'Captions, metadata, small print (theme.typography.scale.small or preset)',
+      },
+      {
+        cssVar: '--text-label',
+        label: 'Label size',
+        usage: 'Eyebrows, micro labels (theme.typography.scale.label or preset)',
       },
     ],
   },
