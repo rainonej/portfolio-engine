@@ -1,0 +1,166 @@
+---
+/**
+ * Generic, security-vetted iframe embed for content pages.
+ *
+ * Accepts:
+ *   - same-origin paths starting with "/" (typical for static demos served
+ *     from the consumer's `public/` directory), or
+ *   - absolute https:// URLs.
+ *
+ * Anything else (http://, javascript:, data:, protocol-relative `//host`)
+ * is rejected at render time. An optional `allowedHosts` array enforces a
+ * host allowlist for absolute URLs.
+ *
+ * Sizing precedence:
+ *   1. `height` (fixed pixels / CSS length) — preferred for non-responsive
+ *      embedded content like Plotly dashboards.
+ *   2. `aspectRatio` — responsive width:height for content that scales.
+ *   3. Default fallback: a fixed 720px height (matches `SchedulingBlock`).
+ *
+ * `sandbox`, `allow`, and `referrerpolicy` are passed through verbatim when
+ * provided and omitted otherwise — consumers opt in to the security posture
+ * they want for the specific embed.
+ */
+export interface Props {
+  src: string;
+  title: string;
+  height?: number | string;
+  aspectRatio?: string;
+  allow?: string;
+  sandbox?: string;
+  referrerpolicy?:
+    | 'no-referrer'
+    | 'no-referrer-when-downgrade'
+    | 'origin'
+    | 'origin-when-cross-origin'
+    | 'same-origin'
+    | 'strict-origin'
+    | 'strict-origin-when-cross-origin'
+    | 'unsafe-url';
+  loading?: 'lazy' | 'eager';
+  allowedHosts?: string[];
+  caption?: string;
+  class?: string;
+}
+
+const {
+  src,
+  title,
+  height,
+  aspectRatio,
+  allow,
+  sandbox,
+  referrerpolicy,
+  loading = 'lazy',
+  allowedHosts,
+  caption,
+  class: className,
+} = Astro.props;
+
+if (typeof src !== 'string' || src.trim().length === 0) {
+  throw new Error('IframeEmbed: `src` is required and must be a non-empty string.');
+}
+if (typeof title !== 'string' || title.trim().length === 0) {
+  throw new Error('IframeEmbed: `title` is required for accessibility and must be a non-empty string.');
+}
+
+const trimmedSrc = src.trim();
+let isSameOrigin = false;
+let parsedUrl: URL | null = null;
+
+if (trimmedSrc.startsWith('/') && !trimmedSrc.startsWith('//')) {
+  // Same-origin path (e.g. "/assets/demos/...html"). Accepted.
+  isSameOrigin = true;
+} else {
+  try {
+    parsedUrl = new URL(trimmedSrc);
+  } catch {
+    throw new Error(
+      `IframeEmbed: \`src\` must be an absolute https:// URL or a same-origin path starting with "/" (got ${JSON.stringify(trimmedSrc)}).`,
+    );
+  }
+  if (parsedUrl.protocol !== 'https:') {
+    throw new Error(
+      `IframeEmbed: \`src\` must use the https:// scheme (got "${parsedUrl.protocol}"). Same-origin paths starting with "/" are also allowed.`,
+    );
+  }
+}
+
+if (Array.isArray(allowedHosts) && allowedHosts.length > 0) {
+  if (isSameOrigin) {
+    // Same-origin paths are not subject to host allowlists — they are served
+    // from the consumer's own origin and cannot escape it.
+  } else if (parsedUrl && !allowedHosts.includes(parsedUrl.host)) {
+    throw new Error(
+      `IframeEmbed: src host "${parsedUrl.host}" is not in \`allowedHosts\`: [${allowedHosts.join(', ')}].`,
+    );
+  }
+}
+
+const hasFixedHeight = height !== undefined && height !== null;
+const fixedHeightCss = hasFixedHeight
+  ? typeof height === 'number'
+    ? `${height}px`
+    : String(height)
+  : null;
+const useAspectRatio = !hasFixedHeight && typeof aspectRatio === 'string' && aspectRatio.length > 0;
+const aspectRatioCss = useAspectRatio ? aspectRatio : null;
+const defaultFixedHeightCss = !hasFixedHeight && !useAspectRatio ? '720px' : null;
+
+const shellMode: 'fixed' | 'aspect' = useAspectRatio ? 'aspect' : 'fixed';
+const shellStyle = useAspectRatio
+  ? `aspect-ratio: ${aspectRatioCss};`
+  : `--pe-iframe-embed-height: ${fixedHeightCss ?? defaultFixedHeightCss};`;
+
+const wrapperClass = ['pe-iframe-embed', className].filter(Boolean).join(' ');
+---
+
+<figure class={wrapperClass}>
+  <div class="pe-iframe-embed__frame-shell" style={shellStyle} data-mode={shellMode}>
+    <iframe
+      class="pe-iframe-embed__iframe"
+      src={trimmedSrc}
+      title={title}
+      loading={loading}
+      allow={allow}
+      sandbox={sandbox}
+      referrerpolicy={referrerpolicy}
+    ></iframe>
+  </div>
+  {caption && <figcaption class="pe-iframe-embed__caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .pe-iframe-embed {
+    display: block;
+    margin-block: 2rem;
+  }
+
+  .pe-iframe-embed__frame-shell {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid var(--color-border-default);
+    border-radius: 1rem;
+    background: var(--color-surface-elevated);
+  }
+
+  .pe-iframe-embed__frame-shell[data-mode='fixed'] {
+    height: var(--pe-iframe-embed-height);
+  }
+
+  .pe-iframe-embed__iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: transparent;
+  }
+
+  .pe-iframe-embed__caption {
+    margin-block-start: 0.75rem;
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+    line-height: 1.6;
+  }
+</style>

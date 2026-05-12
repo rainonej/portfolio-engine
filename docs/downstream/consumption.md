@@ -48,7 +48,7 @@ for future use.)
 
 For **`theme.json`** (colors, typography, tokens) and how they map to CSS variables, see **[`design-tokens-and-theme.md`](design-tokens-and-theme.md)**.
 
-For a concise comparison of **`src/pages-local`** vs **`src/pages`**, nav warnings, and `/resume` visibility, see **[`route-ownership.md`](route-ownership.md)**. For Calendly-style scheduling URLs and **`SchedulingBlock`**, see **[`scheduling-calendly.md`](scheduling-calendly.md)**.
+For a concise comparison of **`src/pages-local`** vs **`src/pages`**, nav warnings, and `/resume` visibility, see **[`route-ownership.md`](route-ownership.md)**. For Calendly-style scheduling URLs and **`SchedulingBlock`**, see **[`scheduling-calendly.md`](scheduling-calendly.md)**. For embedding interactive HTML demos or other iframes inside content pages (including the `.md` / `.mdx` trade-off and the `IframeEmbed` component), see **[`iframe-embeds-and-demos.md`](iframe-embeds-and-demos.md)**.
 
 There are two modes for consuming portfolio-engine packages, depending on whether you are a downstream site owner or an engine contributor.
 
