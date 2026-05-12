@@ -78,10 +78,42 @@ const effectiveCtas: HeroCta[] = (() => {
   return out;
 })();
 
-const buttonCtas = effectiveCtas.filter((c) => c.variant !== 'link').slice(0, 2);
+// The CTA list may come from the theme (which is allowed to forward
+// `bookingUrl` and other config-driven hrefs unchanged) or directly from
+// consumer overrides, neither of which is bound by our https-only gate
+// above. Sanitize every href to one of two safe shapes before it reaches
+// `<a href>`:
+//   1. Same-origin absolute paths starting with `/`.
+//   2. Fully-qualified https:// URLs.
+// Anything else (javascript:, data:, http:, mailto:, ...) is dropped, so
+// a misconfigured site.json can't smuggle an unsafe scheme into the DOM.
+// A CTA whose href matches `bookingUrl` is also normalized to
+// `safeBookingUrl` so the downstream `isBookingLink` check still
+// recognizes it; if `bookingUrl` failed the gate, that CTA is dropped.
+function isSafeCtaHref(href: string): boolean {
+  if (href.startsWith('/')) return true;
+  try {
+    const u = new URL(href);
+    return u.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+const sanitizedCtas: HeroCta[] = effectiveCtas
+  .map((cta): HeroCta | null => {
+    if (bookingUrl && cta.href === bookingUrl) {
+      if (!safeBookingUrl) return null;
+      return { ...cta, href: safeBookingUrl };
+    }
+    return isSafeCtaHref(cta.href) ? cta : null;
+  })
+  .filter((c): c is HeroCta => c !== null);
+
+const buttonCtas = sanitizedCtas.filter((c) => c.variant !== 'link').slice(0, 2);
 const linkCtas = [
-  ...effectiveCtas.filter((c) => c.variant !== 'link').slice(2),
-  ...effectiveCtas.filter((c) => c.variant === 'link'),
+  ...sanitizedCtas.filter((c) => c.variant !== 'link').slice(2),
+  ...sanitizedCtas.filter((c) => c.variant === 'link'),
 ];
 ---
 
