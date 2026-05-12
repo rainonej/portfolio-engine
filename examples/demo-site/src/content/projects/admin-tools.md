@@ -16,7 +16,7 @@ link: 'https://github.com/rainonej/portfolio-engine/tree/main/packages/admin-too
 - `/api/auth/{github,callback,session,logout}` — GitHub OAuth (`read:user`, `repo` scopes) with HMAC-signed session cookies.
 - `/api/content` — inventory, read, and save endpoints for collection entries.
 
-In `devBypass: true` mode, auth is skipped and saves go straight to disk. In production, saves go through the GitHub Contents API, so every edit is a real commit on the configured branch.
+`devBypass: true` only takes effect during `astro dev` — the integration sets the bypass env var only when `command === 'dev'`, and the route additionally checks `import.meta.env.DEV`. In `astro build` / production, that flag is ignored and `/admin` falls back to the normal flow: GitHub OAuth + an HMAC `SESSION_SECRET`, with saves going through the GitHub Contents API so every edit is a real commit on the configured branch.
 
 ## How to enable it
 
@@ -35,7 +35,7 @@ export default defineConfig({
 });
 ```
 
-This demo runs with `devBypass: true`. Visit [`/admin`](/admin) to see the dashboard.
+This demo passes `devBypass: true` in `astro.config.mjs`. Locally — when running `pnpm --filter demo-site dev` — `/admin` opens straight into the read/write dashboard. On the deployed preview / production build, that flag is a no-op: visiting [`/admin`](/admin) will require GitHub sign-in and a configured `SESSION_SECRET`, so on this public demo it will redirect to the GitHub OAuth start URL instead of letting an anonymous visitor write to the repo.
 
 ## Why it matters
 
