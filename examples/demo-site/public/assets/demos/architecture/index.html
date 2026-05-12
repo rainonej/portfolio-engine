@@ -91,10 +91,25 @@
       }
       .layer[aria-pressed='true'] {
         border-color: var(--accent);
-        background: color-mix(in srgb, var(--accent-soft) 14%, var(--wash));
+        background: color-mix(in srgb, var(--accent-soft) 18%, var(--wash));
+      }
+      .layer[data-dependency='true'] {
+        border-color: var(--accent-soft);
+        background: color-mix(in srgb, var(--accent-soft) 8%, var(--wash));
       }
       .layer.dim {
         opacity: 0.45;
+      }
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
       }
 
       .layer__index {
@@ -321,7 +336,16 @@
 
       function clearSelection() {
         for (const l of layers) {
+          // aria-pressed reflects ONLY whether this specific button is the
+          // selected layer. The dependency highlight uses a separate
+          // data-dependency attribute so screen readers don't announce
+          // multiple buttons as "pressed" for a single selection.
           l.setAttribute('aria-pressed', 'false');
+          l.removeAttribute('data-dependency');
+          // Remove any previously-injected dependency status text so we
+          // don't accumulate hidden nodes across selections.
+          const prevHint = l.querySelector('[data-dep-hint]');
+          if (prevHint) prevHint.remove();
           l.classList.remove('dim');
         }
       }
@@ -336,7 +360,12 @@
             l.setAttribute('aria-pressed', 'true');
             selected = l;
           } else if (l.dataset.layer === info.depends) {
-            l.setAttribute('aria-pressed', 'true');
+            l.setAttribute('data-dependency', 'true');
+            const hint = document.createElement('span');
+            hint.className = 'visually-hidden';
+            hint.dataset.depHint = '';
+            hint.textContent = ' (direct dependency of the selected layer)';
+            l.appendChild(hint);
           } else {
             l.classList.add('dim');
           }

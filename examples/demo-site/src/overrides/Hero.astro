@@ -47,6 +47,23 @@ const photoSrc = person.photo
   ? (resolveAssetUrl(person.photo, base) ?? person.photo)
   : null;
 
+// Only attach the popup script if the configured booking URL parses as a
+// safe absolute https:// URL. The schema validates bookingUrl as a generic
+// URL, which would let a misconfigured site.json sneak `javascript:` or
+// other unexpected schemes into `window.location.href` /
+// `Calendly.initPopupWidget`. When the URL fails the check we still render
+// the CTA — it just falls through to plain link behavior, no JS hook.
+const safeBookingUrl: string | null = (() => {
+  if (!bookingUrl) return null;
+  try {
+    const parsed = new URL(bookingUrl);
+    if (parsed.protocol !== 'https:') return null;
+    return parsed.toString();
+  } catch {
+    return null;
+  }
+})();
+
 const effectiveCtas: HeroCta[] = (() => {
   if (ctas && ctas.length > 0) {
     return [...ctas].sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0));
@@ -55,8 +72,8 @@ const effectiveCtas: HeroCta[] = (() => {
     { label: 'Read the architecture', href: `${base}/architecture`, variant: 'primary', priority: 1 },
     { label: 'Browse features', href: `${base}/work`, variant: 'secondary', priority: 2 },
   ];
-  if (bookingUrl) {
-    out.push({ label: 'Book a walkthrough', href: bookingUrl, variant: 'link', priority: 3 });
+  if (safeBookingUrl) {
+    out.push({ label: 'Book a walkthrough', href: safeBookingUrl, variant: 'link', priority: 3 });
   }
   return out;
 })();
@@ -104,7 +121,7 @@ const linkCtas = [
         {buttonCtas.map((cta, index) => {
           const tier = cta.variant ?? (index === 0 ? 'primary' : 'secondary');
           const isPrimary = tier === 'primary';
-          const isBookingLink = Boolean(bookingUrl && cta.href === bookingUrl);
+          const isBookingLink = Boolean(safeBookingUrl && cta.href === safeBookingUrl);
           return (
             <a
               href={cta.href}
@@ -124,7 +141,7 @@ const linkCtas = [
       {linkCtas.length > 0 && (
         <div class="mt-5 flex flex-wrap gap-5">
           {linkCtas.map((cta) => {
-            const isBookingLink = Boolean(bookingUrl && cta.href === bookingUrl);
+            const isBookingLink = Boolean(safeBookingUrl && cta.href === safeBookingUrl);
             return (
               <a
                 href={cta.href}
@@ -138,8 +155,8 @@ const linkCtas = [
         </div>
       )}
 
-      {bookingUrl && (
-        <script is:inline define:vars={{ calendlyUrl: bookingUrl }}>
+      {safeBookingUrl && (
+        <script is:inline define:vars={{ calendlyUrl: safeBookingUrl }}>
           // Bind to every booking-CTA on this hero. Using a data attribute
           // (not an id) so the consumer can have the booking URL referenced
           // by both a button CTA and a link CTA without breaking HTML's
