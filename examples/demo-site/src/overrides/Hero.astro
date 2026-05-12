@@ -83,15 +83,31 @@ const effectiveCtas: HeroCta[] = (() => {
 // consumer overrides, neither of which is bound by our https-only gate
 // above. Sanitize every href to one of two safe shapes before it reaches
 // `<a href>`:
-//   1. Same-origin absolute paths starting with `/`.
+//   1. Same-origin absolute paths starting with a single `/`.
 //   2. Fully-qualified https:// URLs.
-// Anything else (javascript:, data:, http:, mailto:, ...) is dropped, so
-// a misconfigured site.json can't smuggle an unsafe scheme into the DOM.
-// A CTA whose href matches `bookingUrl` is also normalized to
-// `safeBookingUrl` so the downstream `isBookingLink` check still
-// recognizes it; if `bookingUrl` failed the gate, that CTA is dropped.
+// Mirrors the validation rules in the theme's IframeEmbed component so
+// the override and the embed treat unsafe href values the same way.
+//
+// Explicitly rejected:
+//   - javascript:, data:, mailto:, http:, and any other non-https scheme
+//   - protocol-relative URLs (`//host/…`) — they start with `/` but
+//     navigate cross-origin
+//   - backslashes in same-origin paths (WHATWG URL parsers normalize `\`
+//     to `/` and can redirect the link cross-origin)
+//   - control characters (U+0000–U+001F, U+007F) that some parsers strip
+//     and others don't, which is a divergence attackers can exploit
+
+// eslint-disable-next-line no-control-regex
+const CTA_CONTROL_CHAR_RE = /[\u0000-\u001F\u007F]/;
+
 function isSafeCtaHref(href: string): boolean {
-  if (href.startsWith('/')) return true;
+  if (typeof href !== 'string' || href.length === 0) return false;
+  if (CTA_CONTROL_CHAR_RE.test(href)) return false;
+  if (href.startsWith('/')) {
+    if (href.startsWith('//')) return false;
+    if (href.includes('\\')) return false;
+    return true;
+  }
   try {
     const u = new URL(href);
     return u.protocol === 'https:';
