@@ -148,6 +148,18 @@ const linkCtas = [
             const targets = document.querySelectorAll('[data-pe-booking-cta]');
             targets.forEach((el) => {
               el.addEventListener('click', (e) => {
+                // Only intercept plain left-clicks. Let the browser handle
+                // Ctrl/Cmd/Shift/middle-click so users can open the booking
+                // URL in a new tab or window like any other link.
+                if (
+                  e.button !== 0 ||
+                  e.ctrlKey ||
+                  e.metaKey ||
+                  e.shiftKey ||
+                  e.altKey
+                ) {
+                  return;
+                }
                 e.preventDefault();
                 const w = window;
                 if (typeof w.Calendly !== 'undefined' && calendlyUrl) {
