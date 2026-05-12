@@ -1,3 +1,12 @@
+/**
+ * This file is the engine's main Astro integration entry point.
+ *
+ * It loads and validates the consumer's JSON config, discovers theme routes,
+ * applies any disable/remap overrides, loads consumer-local routes from the
+ * registry JSON, injects every active route into Astro, resolves named
+ * component overrides, writes `.portfolio-engine/manifest.json`, and wires up
+ * the virtual modules consumed by theme code.
+ */
 import type { AstroIntegration } from 'astro';
 import { existsSync, readFileSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
