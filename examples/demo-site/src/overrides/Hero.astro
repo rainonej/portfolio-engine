@@ -47,12 +47,14 @@ const photoSrc = person.photo
   ? (resolveAssetUrl(person.photo, base) ?? person.photo)
   : null;
 
-// Only attach the popup script if the configured booking URL parses as a
-// safe absolute https:// URL. The schema validates bookingUrl as a generic
-// URL, which would let a misconfigured site.json sneak `javascript:` or
-// other unexpected schemes into `window.location.href` /
-// `Calendly.initPopupWidget`. When the URL fails the check we still render
-// the CTA — it just falls through to plain link behavior, no JS hook.
+// Only treat the configured booking URL as usable if it parses as a safe
+// absolute https:// URL. The schema validates bookingUrl as a generic URL,
+// which would let a misconfigured site.json sneak `javascript:` or other
+// unexpected schemes into `window.location.href` /
+// `Calendly.initPopupWidget`. When the URL fails the check, the popup
+// script is not attached AND any CTA whose href matches the unsafe
+// bookingUrl is dropped from `sanitizedCtas` below — we never let an
+// unvalidated bookingUrl reach a rendered <a href> or a JS call.
 const safeBookingUrl: string | null = (() => {
   if (!bookingUrl) return null;
   try {
@@ -139,6 +141,7 @@ const linkCtas = [
 >
   <div
     class="absolute right-6 top-24 hidden rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-wash)] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-accent-primary)] md:inline-block"
+    role="note"
     aria-label="This Hero is rendered by a consumer-supplied override"
   >
     demo: Hero override active
