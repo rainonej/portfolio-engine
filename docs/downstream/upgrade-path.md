@@ -6,6 +6,14 @@ If you seeded agent tooling during setup, a **VS Code task** is already availabl
 
 Open the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`), run **Tasks: Run Task**, and choose **Upgrade portfolio-engine packages**. The task discovers every `@portfolio-engine/*` entry in your `package.json` and upgrades each to `@latest`.
 
+If you want an AI-ready follow-up bundle (upgrade + `pnpm check` + `pnpm build` + generated handoff prompt), run **Upgrade portfolio-engine packages + agent handoff**. It writes:
+
+- `.portfolio-engine/upgrade-handoff/pnpm-check.log`
+- `.portfolio-engine/upgrade-handoff/pnpm-build.log`
+- `.portfolio-engine/upgrade-handoff/agent-upgrade-prompt.md`
+
+Paste `agent-upgrade-prompt.md` into Copilot/Claude to continue on a new branch and open a PR into `origin/dev`.
+
 If you skipped agent-tooling seeding, copy the template manually:
 
 ```bash
@@ -21,6 +29,10 @@ bash docs/downstream/scripts/upgrade-portfolio-engine.sh
 
 # Windows
 ./docs/downstream/scripts/upgrade-portfolio-engine.ps1
+
+# Agent handoff bundle
+AGENT_HANDOFF=1 bash docs/downstream/scripts/upgrade-portfolio-engine.sh
+# Windows: ./docs/downstream/scripts/upgrade-portfolio-engine.ps1 -AgentHandoff
 ```
 
 To upgrade to the `@next` pre-release dist-tag instead:
