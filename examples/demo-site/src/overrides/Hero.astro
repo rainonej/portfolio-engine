@@ -108,7 +108,7 @@ const linkCtas = [
           return (
             <a
               href={cta.href}
-              id={isBookingLink ? 'hero-booking-calendly' : undefined}
+              data-pe-booking-cta={isBookingLink ? '' : undefined}
               class={
                 isPrimary
                   ? 'rounded-full bg-[var(--color-text-primary)] px-8 py-3.5 text-sm font-medium text-[var(--color-text-inverse)] transition-colors hover:bg-[var(--color-text-muted)]'
@@ -128,7 +128,7 @@ const linkCtas = [
             return (
               <a
                 href={cta.href}
-                id={isBookingLink ? 'hero-booking-calendly' : undefined}
+                data-pe-booking-cta={isBookingLink ? '' : undefined}
                 class="text-sm font-medium text-[var(--color-accent-primary)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-muted)]"
               >
                 {cta.label} →
@@ -140,19 +140,22 @@ const linkCtas = [
 
       {bookingUrl && (
         <script is:inline define:vars={{ calendlyUrl: bookingUrl }}>
-          // Run after parse so the script binds whether the booking CTA renders
-          // as a button (above) or a link (below this point in the source).
+          // Bind to every booking-CTA on this hero. Using a data attribute
+          // (not an id) so the consumer can have the booking URL referenced
+          // by both a button CTA and a link CTA without breaking HTML's
+          // unique-id rule, and so the script doesn't depend on DOM order.
           document.addEventListener('DOMContentLoaded', () => {
-            const el = document.getElementById('hero-booking-calendly');
-            if (!el) return;
-            el.addEventListener('click', (e) => {
-              e.preventDefault();
-              const w = window;
-              if (typeof w.Calendly !== 'undefined' && calendlyUrl) {
-                w.Calendly.initPopupWidget({ url: calendlyUrl });
-              } else {
-                w.location.href = calendlyUrl;
-              }
+            const targets = document.querySelectorAll('[data-pe-booking-cta]');
+            targets.forEach((el) => {
+              el.addEventListener('click', (e) => {
+                e.preventDefault();
+                const w = window;
+                if (typeof w.Calendly !== 'undefined' && calendlyUrl) {
+                  w.Calendly.initPopupWidget({ url: calendlyUrl });
+                } else {
+                  w.location.href = calendlyUrl;
+                }
+              });
             });
           });
         </script>
