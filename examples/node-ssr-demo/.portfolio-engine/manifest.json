@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-05-12T16:47:17.147Z",
+  "generatedAt": "2026-05-12T19:57:10.365Z",
   "rootDir": ".",
   "portfolioEngine": {
-    "engineCoreVersion": "0.3.1",
+    "engineCoreVersion": "0.3.2",
     "editorialThemeVersion": "unknown"
   },
   "consumerRegistry": {
