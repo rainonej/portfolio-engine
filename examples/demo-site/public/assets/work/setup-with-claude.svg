@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Setup with Claude  portfolio-engine">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fbf7f0"/>
+      <stop offset="100%" stop-color="#f3ece1"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <g transform="translate(60, 80)">
+    <text font-family="ui-monospace,monospace" font-size="18" font-weight="700" fill="#7a3a16" letter-spacing="3">SETUP-WITH-CLAUDE.MD</text>
+  </g>
+  <g transform="translate(60, 160)">
+    <rect width="680" height="80" rx="12" fill="#1d1a16"/>
+    <text x="24" y="32" font-family="ui-monospace,monospace" font-size="12" fill="#a9683e">$ # Paste docs/downstream/setup-with-claude.md into Claude Code</text>
+    <text x="24" y="56" font-family="ui-monospace,monospace" font-size="12" fill="#fbf7f0">claude &gt; provision-portfolio-engine --dry-run</text>
+  </g>
+  <g font-family="Inter,sans-serif">
+    <g transform="translate(60, 280)">
+      <rect width="200" height="100" rx="10" fill="#fff" stroke="#e1d7c9"/>
+      <text x="16" y="28" font-family="ui-monospace,monospace" font-size="11" font-weight="700" fill="#7a3a16">PHASE 1</text>
+      <text x="16" y="52" font-size="14" font-weight="600" fill="#1d1a16">Verify repo</text>
+      <text x="16" y="74" font-size="11" fill="#5a5048">consumer repo state</text>
+    </g>
+    <g transform="translate(282, 280)">
+      <rect width="200" height="100" rx="10" fill="#fff" stroke="#e1d7c9"/>
+      <text x="16" y="28" font-family="ui-monospace,monospace" font-size="11" font-weight="700" fill="#7a3a16">PHASE 2</text>
+      <text x="16" y="52" font-size="14" font-weight="600" fill="#1d1a16">Install packages</text>
+      <text x="16" y="74" font-size="11" fill="#5a5048">editorial-theme + adapter</text>
+    </g>
+    <g transform="translate(504, 280)">
+      <rect width="200" height="100" rx="10" fill="#fff" stroke="#e1d7c9"/>
+      <text x="16" y="28" font-family="ui-monospace,monospace" font-size="11" font-weight="700" fill="#7a3a16">PHASE 3</text>
+      <text x="16" y="52" font-size="14" font-weight="600" fill="#1d1a16">Write config</text>
+      <text x="16" y="74" font-size="11" fill="#5a5048">site / nav / theme / features</text>
+    </g>
+    <g transform="translate(60, 400)">
+      <rect width="200" height="100" rx="10" fill="#fff" stroke="#e1d7c9"/>
+      <text x="16" y="28" font-family="ui-monospace,monospace" font-size="11" font-weight="700" fill="#7a3a16">PHASE 4</text>
+      <text x="16" y="52" font-size="14" font-weight="600" fill="#1d1a16">Seed content</text>
+      <text x="16" y="74" font-size="11" fill="#5a5048">profile / projects / writing</text>
+    </g>
+    <g transform="translate(282, 400)">
+      <rect width="200" height="100" rx="10" fill="#fbf7f0" stroke="#7a3a16" stroke-width="2"/>
+      <text x="16" y="28" font-family="ui-monospace,monospace" font-size="11" font-weight="700" fill="#7a3a16">PHASE 5 </text>
+      <text x="16" y="52" font-size="14" font-weight="600" fill="#1d1a16">Build + verify</text>
+      <text x="16" y="74" font-size="11" fill="#7a3a16">pnpm build · all green</text>
+    </g>
+    <g transform="translate(504, 400)">
+      <rect width="200" height="100" rx="10" fill="#fff" stroke="#e1d7c9" stroke-dasharray="4 3"/>
+      <text x="16" y="28" font-family="ui-monospace,monospace" font-size="11" font-weight="700" fill="#a9683e">FLAGS</text>
+      <text x="16" y="52" font-family="ui-monospace,monospace" font-size="11" fill="#1d1a16">DRY_RUN=true</text>
+      <text x="16" y="72" font-family="ui-monospace,monospace" font-size="11" fill="#1d1a16">SKIP_PHASE_4=true</text>
+      <text x="16" y="92" font-family="ui-monospace,monospace" font-size="11" fill="#5a5048">nothing irreversible</text>
+    </g>
+  </g>
+  <g transform="translate(60, 540)" font-family="ui-monospace,monospace" font-size="13" fill="#a9683e">
+    <text>docs/downstream/setup-with-claude.md</text>
+  </g>
+</svg>

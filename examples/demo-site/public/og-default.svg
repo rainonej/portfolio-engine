@@ -1,6 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="#f7f4ef"/>
-  <rect x="0" y="0" width="8" height="630" fill="#9a5a2e"/>
-  <text x="80" y="300" font-family="serif" font-size="72" font-weight="bold" fill="#1e1a17">Alex Morgan</text>
-  <text x="80" y="380" font-family="sans-serif" font-size="36" fill="#6b625b">designs for clarity</text>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fbf7f0"/>
+      <stop offset="100%" stop-color="#f3ece1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="0" y="0" width="10" height="630" fill="#7a3a16"/>
+  <g transform="translate(80, 130)">
+    <text font-family="ui-monospace, 'SF Mono', Consolas, monospace" font-size="22" font-weight="700" fill="#7a3a16" letter-spacing="3.5">@PORTFOLIO-ENGINE</text>
+  </g>
+  <g transform="translate(80, 230)">
+    <text font-family="'Cormorant Garamond', Georgia, serif" font-size="120" font-weight="700" fill="#1d1a16">portfolio-engine</text>
+  </g>
+  <g transform="translate(80, 320)">
+    <text font-family="'Cormorant Garamond', Georgia, serif" font-size="44" font-style="italic" fill="#5a5048">an Astro backbone for personal sites</text>
+  </g>
+  <g transform="translate(80, 430)">
+    <text font-family="Inter, 'Helvetica Neue', sans-serif" font-size="26" fill="#5a5048">First-party, not generic.  ·  Astro 6  ·  Zod 4  ·  Tailwind v4</text>
+  </g>
+  <g transform="translate(80, 540)" font-family="ui-monospace, 'SF Mono', Consolas, monospace" font-size="16" fill="#a9683e">
+    <text>schema → engine-core → editorial-theme → consumer</text>
+  </g>
 </svg>

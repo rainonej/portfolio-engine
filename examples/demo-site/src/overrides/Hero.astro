@@ -1,20 +1,36 @@
 ---
-import type { ProfilePerson } from '@portfolio-engine/editorial-theme';
-import { resolveHeroBio } from '@portfolio-engine/editorial-theme';
-
 /**
- * Demo override for the Hero surface.
+ * Demo override for the `Hero` surface.
  *
- * This file exists to prove the override bridge works end-to-end.
- * Replace or remove it in a real consumer site.
+ * Declared in `packages/editorial-theme/src/registry.ts`. This override uses
+ * every declared prop (`person`, `bookingUrl`, `pillars`, `base`, `tagline`, `ctas`)
+ * so the showcase is a working reference for downstream consumers.
+ *
+ * See: docs/downstream/consumption.md
  */
+import { resolveAssetUrl, resolveHeroBio } from '@portfolio-engine/editorial-theme';
+
 interface Pillar {
   heading: string;
   body: string;
   image?: string;
 }
 
-type Person = Pick<ProfilePerson, 'name' | 'shortBio' | 'summary' | 'longBio' | 'photo'>;
+interface HeroCta {
+  label: string;
+  href: string;
+  variant?: 'primary' | 'secondary' | 'link';
+  priority?: number;
+}
+
+interface Person {
+  name: string;
+  shortBio?: string;
+  summary?: string;
+  longBio?: string[];
+  photo?: string;
+  roleLine?: string;
+}
 
 interface Props {
   person: Person;
@@ -22,26 +38,145 @@ interface Props {
   pillars: Pillar[];
   base: string;
   tagline?: string;
+  ctas?: HeroCta[];
 }
 
-const { person, tagline } = Astro.props;
+const { person, bookingUrl, pillars, base, tagline, ctas } = Astro.props;
 const heroLine = resolveHeroBio(person);
+const photoSrc = person.photo
+  ? (resolveAssetUrl(person.photo, base) ?? person.photo)
+  : null;
+
+const effectiveCtas: HeroCta[] = (() => {
+  if (ctas && ctas.length > 0) {
+    return [...ctas].sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0));
+  }
+  const out: HeroCta[] = [
+    { label: 'Read the architecture', href: `${base}/architecture`, variant: 'primary', priority: 1 },
+    { label: 'Browse features', href: `${base}/work`, variant: 'secondary', priority: 2 },
+  ];
+  if (bookingUrl) {
+    out.push({ label: 'Book a walkthrough', href: bookingUrl, variant: 'link', priority: 3 });
+  }
+  return out;
+})();
+
+const buttonCtas = effectiveCtas.filter((c) => c.variant !== 'link').slice(0, 2);
+const linkCtas = [
+  ...effectiveCtas.filter((c) => c.variant !== 'link').slice(2),
+  ...effectiveCtas.filter((c) => c.variant === 'link'),
+];
 ---
 
 <section
-  class="mx-auto flex min-h-screen max-w-6xl flex-col justify-center px-6 pb-16 pt-24"
+  class="pe-demo-hero relative mx-auto max-w-6xl px-6 pb-16 pt-28 md:pt-32"
   data-override="Hero"
 >
-  <div class="max-w-2xl">
-    <p class="mb-3 font-mono text-xs uppercase tracking-widest text-[var(--color-accent-primary)]">
-      override active
-    </p>
-    <h1 class="mb-6 font-serif text-5xl font-bold leading-tight text-[var(--color-text-primary)]">
-      {person.name}
-      {tagline && (
-        <span class="block text-3xl font-normal text-[var(--color-text-muted)]">{tagline}</span>
-      )}
-    </h1>
-    <p class="text-lg leading-relaxed text-[var(--color-text-muted)]">{heroLine}</p>
+  <div
+    class="absolute right-6 top-24 hidden rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-wash)] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-accent-primary)] md:inline-block"
+    aria-label="This Hero is rendered by a consumer-supplied override"
+  >
+    demo: Hero override active
   </div>
+
+  <div class="grid items-center gap-12 md:grid-cols-5">
+    <div class="md:col-span-3">
+      {person.roleLine && (
+        <p class="mb-4 font-mono text-xs uppercase tracking-[0.18em] text-[var(--color-accent-primary)]">
+          {person.roleLine}
+        </p>
+      )}
+      <h1 class="mb-6 font-serif text-5xl font-bold leading-[1.05] text-[var(--color-text-primary)] md:text-6xl lg:text-7xl">
+        {person.name}
+        {tagline && (
+          <span class="mt-2 block font-serif text-2xl font-normal italic text-[var(--color-text-muted)] md:text-3xl">
+            {tagline}
+          </span>
+        )}
+      </h1>
+      {heroLine && (
+        <p class="mb-8 max-w-2xl text-lg leading-relaxed text-[var(--color-text-muted)] md:text-xl">
+          {heroLine}
+        </p>
+      )}
+
+      <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+        {buttonCtas.map((cta, index) => {
+          const tier = cta.variant ?? (index === 0 ? 'primary' : 'secondary');
+          const isPrimary = tier === 'primary';
+          const isBookingLink = Boolean(bookingUrl && cta.href === bookingUrl);
+          return (
+            <a
+              href={cta.href}
+              id={isBookingLink ? 'hero-booking-calendly' : undefined}
+              class={
+                isPrimary
+                  ? 'rounded-full bg-[var(--color-text-primary)] px-8 py-3.5 text-sm font-medium text-[var(--color-text-inverse)] transition-colors hover:bg-[var(--color-text-muted)]'
+                  : 'rounded-full border border-[var(--color-border-default)] px-8 py-3.5 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:border-[var(--color-text-muted)]'
+              }
+            >
+              {cta.label}
+            </a>
+          );
+        })}
+      </div>
+
+      {bookingUrl && (
+        <script is:inline define:vars={{ calendlyUrl: bookingUrl }}>
+          document.getElementById('hero-booking-calendly')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            const w = window;
+            if (typeof w.Calendly !== 'undefined' && calendlyUrl) {
+              w.Calendly.initPopupWidget({ url: calendlyUrl });
+            } else {
+              w.location.href = calendlyUrl;
+            }
+          });
+        </script>
+      )}
+
+      {linkCtas.length > 0 && (
+        <div class="mt-5 flex flex-wrap gap-5">
+          {linkCtas.map((cta) => (
+            <a
+              href={cta.href}
+              class="text-sm font-medium text-[var(--color-accent-primary)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-muted)]"
+            >
+              {cta.label} →
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+
+    {photoSrc && (
+      <div class="hidden md:col-span-2 md:block">
+        <div class="aspect-[3/4] w-full overflow-hidden rounded-3xl border border-[var(--color-border-default)] bg-[var(--color-surface-wash)] shadow-xl">
+          <img
+            src={photoSrc}
+            alt={`${person.name} mark`}
+            class="h-full w-full object-contain p-8"
+          />
+        </div>
+      </div>
+    )}
+  </div>
+
+  {pillars.length > 0 && (
+    <div class="mt-20 grid gap-8 border-t border-[var(--color-border-default)] pt-12 md:grid-cols-3">
+      {pillars.map((pillar) => (
+        <div class="pe-demo-pillar">
+          <p class="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]">
+            @portfolio-engine
+          </p>
+          <h3 class="mb-3 font-serif text-2xl font-semibold text-[var(--color-text-primary)]">
+            {pillar.heading}
+          </h3>
+          <p class="text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {pillar.body}
+          </p>
+        </div>
+      ))}
+    </div>
+  )}
 </section>

@@ -1,0 +1,73 @@
+/**
+ * Style override appended after the editorial theme's global.css.
+ *
+ * Wired via `overrides.styles` in examples/demo-site/astro.config.mjs.
+ * See docs/downstream/consumption.md for the consumer-side contract.
+ *
+ * Order of cascade:
+ *   1. @portfolio-engine/editorial-theme global.css (reset, tokens, base)
+ *   2. this file — showcase polish
+ */
+
+/* Soft ambient gradient on the hero, picking up the accent token. */
+.pe-demo-hero {
+  background:
+    radial-gradient(
+      ellipse 70% 50% at 20% 0%,
+      color-mix(in srgb, var(--color-accent-secondary) 14%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 60% 40% at 80% 10%,
+      color-mix(in srgb, var(--color-accent-primary) 8%, transparent),
+      transparent 70%
+    );
+}
+
+/* Inline "demo note" callouts used inside markdown writing posts. */
+[data-pe-feature-callout] {
+  margin-block: 1.5rem;
+  padding: 1rem 1.25rem;
+  border-inline-start: 3px solid var(--color-accent-primary);
+  background: color-mix(in srgb, var(--color-accent-secondary) 8%, transparent);
+  border-radius: 0 0.5rem 0.5rem 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+[data-pe-feature-callout] > strong:first-child {
+  display: block;
+  margin-block-end: 0.25rem;
+  font-family: var(--font-family-mono, ui-monospace, SFMono-Regular, monospace);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-accent-primary);
+}
+
+/* Accent underline on prose links so the editorial-theme writing pages
+   read as "open-source docs" rather than "portfolio essays". */
+.prose a:not(.no-pe-underline) {
+  text-underline-offset: 0.18em;
+  text-decoration-color: color-mix(in srgb, var(--color-accent-primary) 50%, transparent);
+  transition: text-decoration-color 200ms ease;
+}
+
+.prose a:not(.no-pe-underline):hover {
+  text-decoration-color: var(--color-accent-primary);
+}
+
+/* Demo pillars on the home hero override — vertical separators on wide screens. */
+@media (min-width: 768px) {
+  .pe-demo-pillar + .pe-demo-pillar {
+    padding-inline-start: 2rem;
+    border-inline-start: 1px solid var(--color-border-default);
+  }
+}
+
+/* Visible "override active" badge cluster used by override files
+   (e.g., data-override="Hero"). Subtle, but discoverable. */
+[data-override] {
+  position: relative;
+}

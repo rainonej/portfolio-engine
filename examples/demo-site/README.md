@@ -1,65 +1,93 @@
-# demo-site
+# demo-site — the portfolio-engine showcase
 
-Reference **Astro consumer** for [`@portfolio-engine/editorial-theme`](../../packages/editorial-theme/). It proves integration end-to-end, including named overrides, explicit route/override registries, generated manifest output, and admin tooling.
+This site is the official showcase for [`portfolio-engine`](../../). It is a working Astro consumer of the same `@portfolio-engine/*` packages you would install in your own project — but its content is _about portfolio-engine itself_. Every page demonstrates a real feature.
 
-## What you own vs the theme
+**Live:** [`portfolio-engine-demo-site.vercel.app`](https://portfolio-engine-demo-site.vercel.app)
 
-| Yours (edit freely)                       | From the theme (via integration)                                                  |
-| ----------------------------------------- | --------------------------------------------------------------------------------- |
-| `config/*.json`                           | Layouts, pages, components, `global.css`                                          |
-| `src/content/**`, `src/content.config.ts` | Routes injected by `@portfolio-engine/engine-core`                                |
-| `public/**`                               | Tailwind + PostCSS setup inside `editorialTheme()`                                |
-| `astro.config.mjs`                        | Virtual modules `@portfolio-engine:config`, `:overrides`, optional `adminTools()` |
+## What this demo proves
 
-Architecture detail: [`docs/packages/editorial-theme.md`](../../docs/packages/editorial-theme.md).
+Each piece of the engine has a visible counterpart here:
 
-## Prerequisites
+| Feature                                                     | Where you can see it                                                                                                                                                                                                                                                                                                                                                                             |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Theme route injection (8 routes)                            | `/`, `/about`, `/work`, `/work/[slug]`, `/writing`, `/writing/[slug]`, `/contact`, `/resume` — all rendered from the theme, no `src/pages/` in this folder.                                                                                                                                                                                                                                      |
+| Consumer-local registry routes                              | [`/philosophy`](https://portfolio-engine-demo-site.vercel.app/philosophy), [`/architecture`](https://portfolio-engine-demo-site.vercel.app/architecture), [`/features`](https://portfolio-engine-demo-site.vercel.app/features) — declared in [`src/registry/portfolio-engine.registry.json`](src/registry/portfolio-engine.registry.json), source under [`src/pages-local/`](src/pages-local/). |
+| All five named override surfaces                            | [`src/overrides/Hero.astro`](src/overrides/Hero.astro), [`FeaturedWriting.astro`](src/overrides/FeaturedWriting.astro), [`TestimonialSection.astro`](src/overrides/TestimonialSection.astro), [`CollaborationSection.astro`](src/overrides/CollaborationSection.astro), [`Footer.astro`](src/overrides/Footer.astro).                                                                            |
+| Style override appended after `global.css`                  | [`src/overrides/styles/showcase.css`](src/overrides/styles/showcase.css), wired via `overrides.styles` in [`astro.config.mjs`](astro.config.mjs).                                                                                                                                                                                                                                                |
+| `theme.json` design tokens (semantic colors + Google Fonts) | [`src/config/theme.json`](src/config/theme.json) — Cormorant Garamond + Inter on a warm earth palette.                                                                                                                                                                                                                                                                                           |
+| `IframeEmbed` security-vetted component                     | [`src/pages-local/architecture.astro`](src/pages-local/architecture.astro) embeds [`public/assets/demos/architecture/`](public/assets/demos/architecture/) via the typed wrapper.                                                                                                                                                                                                                |
+| `SchedulingBlock` (Calendly)                                | `contact.scheduling` in [`src/config/site.json`](src/config/site.json), surfaced on [`/contact`](https://portfolio-engine-demo-site.vercel.app/contact).                                                                                                                                                                                                                                         |
+| Admin tools (`@portfolio-engine/admin-tools`)               | [`/admin`](https://portfolio-engine-demo-site.vercel.app/admin) with `devBypass: true`. Site-config link label set in `site.json`.                                                                                                                                                                                                                                                               |
+| Registry metadata (`agentGuidance`, `guidance`, `docsUrl`)  | [`astro.config.mjs`](astro.config.mjs) — the demo wraps `DEFAULT_ROUTE_REGISTRY` and `DEFAULT_OVERRIDE_SURFACES` to exercise the manifest contract.                                                                                                                                                                                                                                              |
+| Content collections                                         | [`src/content/profile`](src/content/profile/), [`projects`](src/content/projects/), [`writing`](src/content/writing/), [`testimonials`](src/content/testimonials/).                                                                                                                                                                                                                              |
 
-From the **monorepo root** (`portfolio-engine/`), not only this folder:
+The four packages are all published as `@portfolio-engine/*` on npm. This demo consumes them as `workspace:*` because it lives inside the engine repo, but a downstream consumer installs them from npm exactly the same way.
 
-- Node **≥ 24**, **pnpm ≥ 10** (see root [`package.json` engines](../../package.json)).
+## Use this site as your starting point
 
-## Install and run
+The recommended path is **not** to copy this folder. Instead, paste [`docs/downstream/setup-with-claude.md`](../../docs/downstream/setup-with-claude.md) into Claude Code in an empty repo and answer a handful of questions. The agent runs numbered phase scripts with `DRY_RUN` and `SKIP_*` flags and provisions a working consumer site in minutes.
+
+If you'd rather wire the integration manually, [`docs/downstream/consumption.md`](../../docs/downstream/consumption.md) walks through the consumer-side contract.
+
+## Run it locally
+
+From the **repo root** (`portfolio-engine/`), not this folder:
 
 ```bash
-cd portfolio-engine   # repo root
 pnpm install
 pnpm --filter demo-site dev
-# or
-pnpm --filter demo-site run build
 ```
 
-This example uses **`output: 'static'`** with **[`@astrojs/vercel`](https://docs.astro.build/en/guides/integrations-guide/vercel/)**, matching **[`docs/downstream/new-site-setup.md`](../../docs/downstream/new-site-setup.md)**. Admin and API routes set `prerender = false` so they can run as serverless/SSR on Vercel.
+Open `http://localhost:4321`. The `/admin` route is reachable in dev with no GitHub OAuth (the integration runs with `devBypass: true`).
 
-Open `http://localhost:4321/admin` after `pnpm --filter demo-site dev` (dev bypass skips GitHub; see `.env.example` for OAuth).
+Each build also generates [`.portfolio-engine/manifest.json`](.portfolio-engine/) in this folder, recording the resolved route registry, the override surfaces and which ones are overridden, and the design-token snapshot.
 
-Each build also generates `.portfolio-engine/manifest.json` in the demo-site root, including resolved route registry entries and named override surfaces.
-
-The demo intentionally passes **custom registry metadata** (`agentGuidance`, `guidance`, `docsUrl`) through `editorialTheme({ registries })` in `astro.config.mjs` to exercise the registry + manifest contract directly.
-
-For a **Node SSR** mirror of this site (standalone server bundle), see [`examples/node-ssr-demo`](../node-ssr-demo/).
-
-## Checks
+## Build it
 
 ```bash
-pnpm --filter demo-site run check   # astro check
+pnpm --filter demo-site build       # → dist/ (and .vercel/output for the adapter)
+pnpm --filter demo-site check       # astro check
 ```
 
-### Windows: `astro build` and symlinks
+<details>
+<summary><strong>Contributor notes</strong> — deployment, Windows, and the SSR mirror</summary>
 
-`@astrojs/vercel` may create symlinks under `.vercel/output/`. If `astro build` fails with `EPERM` on `symlink`, enable **Developer Mode** (Settings → System → For developers) or run the build in **WSL** / **CI (Linux)**, where symlinks are allowed.
-
-## Vercel
-
-Recommended **Option A** (pnpm workspace–friendly):
+### Vercel (option A — pnpm-workspace-friendly)
 
 1. Create a Vercel project linked to **`rainonej/portfolio-engine`**.
 2. **Root Directory:** repository root (`.`), _not_ only `examples/demo-site`, so `workspace:*` resolves during install.
-3. **Install Command:** `pnpm install` (or `pnpm install --frozen-lockfile` to match [`vercel.json`](../../vercel.json))
+3. **Install Command:** `pnpm install` (or `pnpm install --frozen-lockfile` to match [`vercel.json`](../../vercel.json)).
 4. **Build Command:** `pnpm --filter "./packages/*" run build && pnpm --filter demo-site build` — workspace packages must emit `dist/` before Astro loads `astro.config.mjs` (see [`vercel.json`](../../vercel.json)).
-5. **Output Directory:** `examples/demo-site/.vercel/output` — [`@astrojs/vercel`](https://docs.astro.build/en/guides/integrations-guide/vercel/) writes the Build Output API layout here, not a flat `dist/`.
-6. **Production branch:** `main` (or your release branch). **Preview:** all other branches and PRs (including `dev`) so every push gets a URL.
+5. **Output Directory:** `examples/demo-site/.vercel/output` — `@astrojs/vercel` writes the Build Output API layout here, not a flat `dist/`.
+6. **Production branch:** `main`. **Preview:** all other branches and PRs.
 
-If you instead set Root Directory to `examples/demo-site`, you must run install from the monorepo root (e.g. custom install command); Option A avoids that foot-gun.
+If you instead set Root Directory to `examples/demo-site`, you must run install from the monorepo root via a custom install command; option A avoids that foot-gun.
 
-**Standalone downstream repo** (separate Git project, e.g. `agreni-site`): Vercel root is that repo’s root, `pnpm build`, and branch rules are the same idea (`main` = production, `dev` / PRs = previews). See **[`docs/downstream/consumption.md` § Vercel (standalone consumer repo)](../../docs/downstream/consumption.md#vercel-standalone-consumer-repo)**.
+**Standalone downstream repo** (separate Git project): Vercel root is that repo's root, `pnpm build`, branch rules are the same idea. See [`docs/downstream/consumption.md` § Vercel (standalone consumer repo)](../../docs/downstream/consumption.md#vercel-standalone-consumer-repo).
+
+### Windows: `astro build` and symlinks
+
+`@astrojs/vercel` may create symlinks under `.vercel/output/`. If `astro build` fails with `EPERM` on `symlink`, enable **Developer Mode** (Settings → System → For developers) or run the build in **WSL** / **CI (Linux)** where symlinks are allowed.
+
+### Node-SSR mirror
+
+For a **Node SSR** mirror of this site (standalone server bundle, useful for Docker / custom VPS deployments), see [`examples/node-ssr-demo`](../node-ssr-demo/). It uses `@astrojs/node` with `output: 'server'` instead of static + Vercel.
+
+### Prerequisites
+
+Node **≥ 24**, **pnpm ≥ 10**. See root [`package.json` engines](../../package.json).
+
+### What you own vs the theme (for orientation when adapting this folder)
+
+| Yours (edit freely)                                                 | From the theme (via integration)                                                  |
+| ------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `src/config/*.json`                                                 | Layouts, pages, components, `global.css`                                          |
+| `src/content/**`, `src/content.config.ts`                           | Routes injected by `@portfolio-engine/engine-core`                                |
+| `src/overrides/**`                                                  | Tailwind + PostCSS setup inside `editorialTheme()`                                |
+| `src/pages-local/**`, `src/registry/portfolio-engine.registry.json` | Virtual modules `@portfolio-engine:config`, `:overrides`, optional `adminTools()` |
+| `public/**`                                                         |                                                                                   |
+| `astro.config.mjs`                                                  |                                                                                   |
+
+Architecture detail: [`docs/packages/editorial-theme.md`](../../docs/packages/editorial-theme.md).
+
+</details>

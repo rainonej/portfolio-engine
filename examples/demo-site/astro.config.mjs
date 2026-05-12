@@ -37,7 +37,12 @@ export default defineConfig({
       overrides: {
         components: {
           Hero: './src/overrides/Hero.astro',
+          FeaturedWriting: './src/overrides/FeaturedWriting.astro',
+          TestimonialSection: './src/overrides/TestimonialSection.astro',
+          CollaborationSection: './src/overrides/CollaborationSection.astro',
+          Footer: './src/overrides/Footer.astro',
         },
+        styles: ['./src/overrides/styles/showcase.css'],
       },
       registries: {
         routes: routeRegistry,

@@ -1,0 +1,69 @@
+---
+/**
+ * Demo override for the `TestimonialSection` surface.
+ *
+ * Declared prop: `testimonials` (array of { quote, author, role }).
+ * Renders quotes as a vertical stack with a connecting accent rule
+ * instead of the default grid — a layout-level override, not just styling.
+ *
+ * See: docs/downstream/consumption.md
+ */
+interface Testimonial {
+  quote: string;
+  author: string;
+  role: string;
+}
+
+interface Props {
+  testimonials: Testimonial[];
+}
+
+const { testimonials } = Astro.props;
+---
+
+<section
+  class="border-t border-[var(--color-border-default)] px-6 py-24"
+  data-override="TestimonialSection"
+>
+  <div class="mx-auto max-w-3xl">
+    <div class="mb-12 text-center">
+      <p class="mb-3 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]">
+        demo: TestimonialSection override
+      </p>
+      <h2 class="font-serif text-3xl font-bold md:text-4xl">
+        From people who use it
+      </h2>
+      <p class="mx-auto mt-3 max-w-xl text-base leading-relaxed text-[var(--color-text-muted)]">
+        The default surface renders testimonials as a two-column grid. This
+        override stacks them as a marquee of quotes connected by an accent
+        rule — appropriate when the message is the point, not the headcount.
+      </p>
+    </div>
+
+    <ol class="relative space-y-12 border-l border-[var(--color-border-default)] pl-10">
+      {testimonials.map((t, index) => (
+        <li class="relative">
+          <span
+            class="absolute -left-[2.7rem] top-2 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-page)] font-mono text-[10px] font-bold text-[var(--color-accent-primary)]"
+          >
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          <blockquote>
+            <p class="mb-4 font-serif text-2xl italic leading-relaxed text-[var(--color-text-primary)] md:text-[1.65rem]">
+              &ldquo;{t.quote}&rdquo;
+            </p>
+            <footer class="text-sm">
+              <span class="font-semibold text-[var(--color-text-primary)]">{t.author}</span>
+              {t.role && (
+                <>
+                  <span class="mx-2 text-[var(--color-border-default)]">·</span>
+                  <span class="text-[var(--color-text-muted)]">{t.role}</span>
+                </>
+              )}
+            </footer>
+          </blockquote>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

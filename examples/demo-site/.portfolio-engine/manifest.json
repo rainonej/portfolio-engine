@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-05-06T05:17:56.214Z",
+  "generatedAt": "2026-05-12T04:33:33.513Z",
   "rootDir": ".",
   "portfolioEngine": {
-    "engineCoreVersion": "0.3.0",
+    "engineCoreVersion": "0.3.1",
     "editorialThemeVersion": "unknown"
   },
   "consumerRegistry": {
     "path": "src/registry/portfolio-engine.registry.json",
     "loaded": true,
-    "routeCount": 1
+    "routeCount": 3
   },
   "routeOverrides": {
     "disabled": [],
@@ -112,15 +112,37 @@
       "entrypoint": "node_modules/@portfolio-engine/editorial-theme/dist/pages/writing/index.astro"
     },
     {
-      "pattern": "/how-i-think",
-      "resolved": "/how-i-think",
-      "label": "How I Think",
+      "pattern": "/philosophy",
+      "resolved": "/philosophy",
+      "label": "Philosophy",
       "section": null,
       "visibility": "public",
       "remappable": false,
       "disableable": false,
       "routeOrigin": "consumer-local",
-      "entrypoint": "src/pages-local/how-i-think.astro"
+      "entrypoint": "src/pages-local/philosophy.astro"
+    },
+    {
+      "pattern": "/architecture",
+      "resolved": "/architecture",
+      "label": "Architecture",
+      "section": null,
+      "visibility": "public",
+      "remappable": false,
+      "disableable": false,
+      "routeOrigin": "consumer-local",
+      "entrypoint": "src/pages-local/architecture.astro"
+    },
+    {
+      "pattern": "/features",
+      "resolved": "/features",
+      "label": "Features",
+      "section": null,
+      "visibility": "public",
+      "remappable": false,
+      "disableable": false,
+      "routeOrigin": "consumer-local",
+      "entrypoint": "src/pages-local/features.astro"
     }
   ],
   "overrideSurfaces": [

@@ -1,17 +1,28 @@
 {
-  "title": "Alex Morgan",
-  "description": "Portfolio of Alex Morgan — independent designer and technologist.",
+  "title": "portfolio-engine",
+  "description": "The official showcase of portfolio-engine — an open-source Astro backbone for personal, portfolio, and editorial websites. Every section demonstrates a feature you can use in your own site.",
   "baseUrl": "https://portfolio-engine-demo-site.vercel.app",
-  "tagline": "designs for clarity",
+  "tagline": "an Astro backbone for personal sites",
+  "bookingUrl": "https://calendly.com/portfolio-engine-demo/intro",
+  "admin": {
+    "showPublicLink": true,
+    "publicLinkLabel": "Try the admin tools"
+  },
   "contact": {
-    "heading": "Let's work together",
-    "body": "Reach out directly or book a conversation. I'm available for design partnerships, product consulting, and creative collaborations.",
+    "heading": "Start your own portfolio-engine site",
+    "body": "Paste docs/downstream/setup-with-claude.md into Claude Code and answer a handful of questions. Or open a GitHub Discussion if you want to think out loud before committing to the stack.",
     "scheduling": {
       "enabled": true,
       "provider": "calendly",
       "mode": "button",
-      "url": "https://calendly.com/example/intro-call",
-      "label": "Book an intro call"
+      "url": "https://calendly.com/portfolio-engine-demo/intro",
+      "label": "Book a 15-minute walkthrough",
+      "heading": "Want a guided tour?",
+      "eyebrow": "Office hours",
+      "description": "Book a slot and we'll walk through your use case live — pair on the setup flow, look at your config, or talk through whether the engine fits your project."
     }
+  },
+  "social": {
+    "github": "https://github.com/rainonej/portfolio-engine"
   }
 }

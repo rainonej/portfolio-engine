@@ -2,9 +2,23 @@
   "version": 1,
   "localRoutes": [
     {
-      "pattern": "/how-i-think",
-      "page": "how-i-think.astro",
-      "label": "How I Think",
+      "pattern": "/philosophy",
+      "page": "philosophy.astro",
+      "label": "Philosophy",
+      "section": null,
+      "visibility": "public"
+    },
+    {
+      "pattern": "/architecture",
+      "page": "architecture.astro",
+      "label": "Architecture",
+      "section": null,
+      "visibility": "public"
+    },
+    {
+      "pattern": "/features",
+      "page": "features.astro",
+      "label": "Features",
       "section": null,
       "visibility": "public"
     }

@@ -5,17 +5,17 @@
   "testimonials": true,
   "pillars": [
     {
-      "heading": "Product Design",
-      "body": "Thoughtful interfaces that serve real needs — from first sketch to shipped product."
+      "heading": "Engine",
+      "body": "@portfolio-engine/engine-core loads JSON config, validates against Zod schemas, exposes virtual modules, and injects routes — all through one Astro integration."
     },
     {
-      "heading": "Engineering",
-      "body": "Clean, maintainable systems built to last. Pragmatic choices over clever ones."
+      "heading": "Theme",
+      "body": "@portfolio-engine/editorial-theme ships layouts, components, Tailwind v4 plumbing, and five named override surfaces with stable prop contracts."
     },
     {
-      "heading": "Strategy",
-      "body": "Clarity on what to build and why, before a single pixel moves."
+      "heading": "Admin",
+      "body": "@portfolio-engine/admin-tools injects /admin, GitHub OAuth, and content-editing endpoints. Edits land as real commits in your content repo."
     }
   ],
-  "ctaBody": "Whether you need a design partner, an engineering collaborator, or both — let's talk."
+  "ctaBody": "Start with docs/downstream/setup-with-claude.md — paste it into Claude Code, answer a few questions, and the agent will provision your repo with DRY_RUN-safe phase scripts."
 }
