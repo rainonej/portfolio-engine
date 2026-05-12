@@ -1,4 +1,10 @@
 ---
+/**
+ * This file controls the default work list screen.
+ *
+ * It shows all items from the work content folder as a grid of cards.
+ * Each card links to the individual work item screen (/work/[slug]).
+ */
 import Layout from '../layouts/Layout.astro';
 import ImageOrFallback from '../components/ImageOrFallback.astro';
 import { getBase, resolveAssetUrl, sortByDateDesc } from '../lib/utils';

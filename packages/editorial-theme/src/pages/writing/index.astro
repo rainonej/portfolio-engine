@@ -1,4 +1,10 @@
 ---
+/**
+ * This file controls the default writing list screen.
+ *
+ * It shows all non-draft items from the writing content folder as a list of cards.
+ * Each card links to the individual writing item screen (/writing/[slug]).
+ */
 import Layout from '../../layouts/Layout.astro';
 import ImageOrFallback from '../../components/ImageOrFallback.astro';
 import { getBase, formatDate, resolveAssetUrl, sortByDateDesc } from '../../lib/utils';
