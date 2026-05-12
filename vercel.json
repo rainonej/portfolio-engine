@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm --filter \"./packages/*\" run build && pnpm --filter demo-site build && mkdir -p .vercel && rm -rf .vercel/output && mv examples/demo-site/.vercel/output .vercel/output",
+  "buildCommand": "pnpm --filter \"./packages/*\" run build && pnpm --filter demo-site build && node scripts/lift-vercel-output.mjs",
   "outputDirectory": ".vercel/output",
   "installCommand": "pnpm install --frozen-lockfile",
   "framework": null
