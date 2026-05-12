@@ -22,15 +22,21 @@ portfolio-engine bans both. The theme exposes named override surfaces. The consu
 
 ## A picture
 
+<!--
+  Relative URLs are used below so this post works under non-root deployments
+  (Astro `base` / `BASE_URL`). The post is rendered at /writing/<slug>/, so
+  `../../` reaches the site root. Astro components can call `resolveAssetUrl`
+  to get the same result programmatically — see /architecture.
+-->
 <figure style="margin: 2rem 0;">
   <iframe
-    src="/assets/demos/architecture/"
+    src="../../assets/demos/architecture/"
     title="Interactive diagram: portfolio-engine's four-layer architecture"
     loading="lazy"
     sandbox="allow-scripts"
     style="display:block; width:100%; height:560px; border:1px solid var(--color-border-default); border-radius:1rem; background: var(--color-surface-wash);"
   ></iframe>
-  <figcaption style="margin-top: 0.5rem; color: var(--color-text-muted); font-size: 0.85rem;">Click any layer to highlight its direct dependency. The same diagram is also rendered on <a href="/architecture">the architecture page</a>, where it's embedded via the theme's typed <code>&lt;IframeEmbed&gt;</code> component (with HTTPS-only validation and an optional host allowlist).</figcaption>
+  <figcaption style="margin-top: 0.5rem; color: var(--color-text-muted); font-size: 0.85rem;">Click any layer to highlight its direct dependency. The same diagram is also rendered on <a href="../../architecture">the architecture page</a>, where it's embedded via the theme's typed <code>&lt;IframeEmbed&gt;</code> component (with HTTPS-only validation and an optional host allowlist).</figcaption>
 </figure>
 
 ## The banned-dependencies list

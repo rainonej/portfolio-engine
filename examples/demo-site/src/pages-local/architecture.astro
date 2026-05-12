@@ -8,6 +8,12 @@
  */
 import Layout from '@portfolio-engine/editorial-theme/layouts/Layout.astro';
 import IframeEmbed from '@portfolio-engine/editorial-theme/components/IframeEmbed.astro';
+import { getBase, resolveAssetUrl } from '@portfolio-engine/editorial-theme';
+
+const base = getBase();
+const diagramSrc =
+  resolveAssetUrl('/assets/demos/architecture/', base) ??
+  '/assets/demos/architecture/';
 ---
 
 <Layout
@@ -44,7 +50,7 @@ import IframeEmbed from '@portfolio-engine/editorial-theme/components/IframeEmbe
       </p>
 
       <IframeEmbed
-        src="/assets/demos/architecture/"
+        src={diagramSrc}
         title="Four-layer architecture diagram — click any layer to highlight its dependency"
         height={620}
         loading="lazy"

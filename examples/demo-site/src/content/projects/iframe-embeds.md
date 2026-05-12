@@ -24,10 +24,18 @@ image: '/assets/work/iframe-embeds.svg'
 ```astro
 ---
 import IframeEmbed from '@portfolio-engine/editorial-theme/components/IframeEmbed.astro';
+import { getBase, resolveAssetUrl } from '@portfolio-engine/editorial-theme';
+
+// resolveAssetUrl prefixes the site's Astro `base` (BASE_URL) onto same-origin
+// paths, so deployments under e.g. `/portfolio/` still resolve correctly.
+const base = getBase();
+const demoSrc =
+  resolveAssetUrl('/assets/demos/architecture/', base) ??
+  '/assets/demos/architecture/';
 ---
 
 <IframeEmbed
-  src="/assets/demos/architecture/"
+  src={demoSrc}
   title="Four-layer architecture diagram"
   height={520}
   loading="lazy"
@@ -36,4 +44,6 @@ import IframeEmbed from '@portfolio-engine/editorial-theme/components/IframeEmbe
 />
 ```
 
-This site embeds a self-contained interactive diagram on the [architecture page](/architecture) and inside the [four-layer architecture writing post](/writing/four-layer-architecture).
+For Markdown posts that can't import a helper, write the path relative to the rendered page (e.g. `src="../../assets/demos/architecture/"` from `/writing/<slug>/`); same-origin path validation still applies.
+
+This site embeds the self-contained interactive diagram on the [architecture page](/architecture) and inside the [four-layer architecture writing post](/writing/four-layer-architecture).
