@@ -95,3 +95,11 @@ Set-Content -Path $promptFile -Value $prompt -Encoding UTF8
 
 Write-Host "[upgrade] Agent handoff prompt written: $promptFile"
 Write-Host '[upgrade] Next step: paste that prompt into Copilot/Claude.'
+
+if ($checkStatus -ne 0) {
+  exit $checkStatus
+}
+
+if ($buildStatus -ne 0) {
+  exit $buildStatus
+}

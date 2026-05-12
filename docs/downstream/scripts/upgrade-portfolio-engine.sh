@@ -96,3 +96,11 @@ EOF
 
 echo "[upgrade] Agent handoff prompt written: $prompt_file"
 echo "[upgrade] Next step: paste that prompt into Copilot/Claude."
+
+if [[ "$check_status" -ne 0 ]]; then
+  exit "$check_status"
+fi
+
+if [[ "$build_status" -ne 0 ]]; then
+  exit "$build_status"
+fi
