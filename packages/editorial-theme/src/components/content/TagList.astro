@@ -1,0 +1,42 @@
+---
+/**
+ * Tag chip renderer for arrays of tag strings.
+ *
+ * Provides consistent tag styling across every screen. Pass `accent` to
+ * render filled chips in the theme accent color (use sparingly — for an
+ * emphasized list such as a featured article header).
+ */
+interface Props {
+  tags: string[];
+  accent?: boolean;
+}
+
+const { tags, accent = false } = Astro.props;
+
+const hasTags = Array.isArray(tags) && tags.length > 0;
+
+const chipClass = accent
+  ? 'inline-flex items-center rounded-full px-3 py-1 text-xs font-medium uppercase tracking-widest'
+  : 'inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-widest';
+---
+
+{
+  hasTags && (
+    <ul class="flex flex-wrap gap-2" aria-label="Tags">
+      {tags.map((tag) => (
+        <li>
+          <span
+            class={chipClass}
+            style={
+              accent
+                ? 'background-color: var(--color-accent-primary); color: var(--color-text-inverse);'
+                : 'border-color: var(--color-border-default); color: var(--color-text-muted);'
+            }
+          >
+            {tag}
+          </span>
+        </li>
+      ))}
+    </ul>
+  )
+}

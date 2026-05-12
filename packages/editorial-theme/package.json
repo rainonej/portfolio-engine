@@ -22,7 +22,18 @@
     "./components/ThemeTypographyOverrides.astro": "./dist/components/ThemeTypographyOverrides.astro",
     "./components/ThemeTokenOverrides.astro": "./dist/components/ThemeTokenOverrides.astro",
     "./components/SchedulingBlock.astro": "./dist/components/SchedulingBlock.astro",
-    "./components/IframeEmbed.astro": "./dist/components/IframeEmbed.astro"
+    "./components/IframeEmbed.astro": "./dist/components/IframeEmbed.astro",
+    "./components/content/ContentSectionHeader.astro": "./dist/components/content/ContentSectionHeader.astro",
+    "./components/content/LinkCard.astro": "./dist/components/content/LinkCard.astro",
+    "./components/content/FeatureCard.astro": "./dist/components/content/FeatureCard.astro",
+    "./components/content/EvidenceCard.astro": "./dist/components/content/EvidenceCard.astro",
+    "./components/content/MetricCard.astro": "./dist/components/content/MetricCard.astro",
+    "./components/content/MetricStrip.astro": "./dist/components/content/MetricStrip.astro",
+    "./components/content/QuoteCard.astro": "./dist/components/content/QuoteCard.astro",
+    "./components/content/CardGrid.astro": "./dist/components/content/CardGrid.astro",
+    "./components/content/ArticlePreviewCard.astro": "./dist/components/content/ArticlePreviewCard.astro",
+    "./components/content/RelatedLinkCard.astro": "./dist/components/content/RelatedLinkCard.astro",
+    "./components/content/TagList.astro": "./dist/components/content/TagList.astro"
   },
   "scripts": {
     "build": "tsup",

@@ -1,0 +1,24 @@
+---
+/**
+ * Responsive CSS grid container for content cards.
+ *
+ * Pass `columns` as 2 or 3 (default 2). Children render in the default slot —
+ * use any of the cards in this folder (`LinkCard`, `FeatureCard`,
+ * `EvidenceCard`, `QuoteCard`, `ArticlePreviewCard`) as direct children.
+ * Gap uses the theme's `--space-card-gap` token.
+ */
+interface Props {
+  columns?: 2 | 3;
+}
+
+const { columns = 2 } = Astro.props;
+
+const columnsClass =
+  columns === 3
+    ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+    : 'grid grid-cols-1 md:grid-cols-2';
+---
+
+<div class={columnsClass} style="gap: var(--space-card-gap);">
+  <slot />
+</div>

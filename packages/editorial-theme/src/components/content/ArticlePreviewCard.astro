@@ -1,0 +1,116 @@
+---
+/**
+ * Preview card for long-form content (essays, posts, notes).
+ *
+ * Renders an optional cover image, an article-type eyebrow, the published
+ * date in monospace, the title, an optional description, tags via TagList,
+ * and an optional reading-time chip. Designed to be the default card type
+ * for any writing list screen.
+ */
+import TagList from './TagList.astro';
+
+interface Props {
+  articleType?: string;
+  title: string;
+  description?: string;
+  date: Date | string;
+  tags?: string[];
+  href: string;
+  readingTime?: string;
+  imageSrc?: string;
+  imageAlt?: string;
+}
+
+const {
+  articleType,
+  title,
+  description,
+  date,
+  tags,
+  href,
+  readingTime,
+  imageSrc,
+  imageAlt,
+} = Astro.props;
+
+const dateObj = date instanceof Date ? date : new Date(date);
+const isoDate = !Number.isNaN(dateObj.getTime()) ? dateObj.toISOString() : '';
+const formattedDate = !Number.isNaN(dateObj.getTime())
+  ? dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  : String(date);
+---
+
+<article class="group flex h-full flex-col">
+  {
+    imageSrc && (
+      <a href={href} class="mb-5 block">
+        <div class="aspect-[21/9] overflow-hidden rounded-2xl bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))]">
+          <img
+            src={imageSrc}
+            alt={imageAlt ?? title}
+            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+          />
+        </div>
+      </a>
+    )
+  }
+
+  {
+    articleType && (
+      <span class="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-primary)]">
+        {articleType}
+      </span>
+    )
+  }
+
+  <div class="mb-3 flex flex-wrap items-center gap-3">
+    {
+      isoDate && (
+        <time
+          datetime={isoDate}
+          class="font-mono text-xs text-[var(--color-text-muted)]"
+          style="font-family: var(--font-mono-stack);"
+        >
+          {formattedDate}
+        </time>
+      )
+    }
+    {
+      readingTime && (
+        <span class="font-mono text-xs text-[var(--color-text-muted)]" style="font-family: var(--font-mono-stack);">
+          · {readingTime}
+        </span>
+      )
+    }
+  </div>
+
+  <h3
+    class="mb-3 font-serif font-bold leading-snug"
+    style="font-size: var(--text-subheading);"
+  >
+    <a
+      href={href}
+      class="transition-colors hover:text-[var(--color-accent-primary)]"
+    >
+      {title}
+    </a>
+  </h3>
+
+  {
+    description && (
+      <p class="mb-4 text-sm leading-relaxed text-[var(--color-text-muted)]">
+        {description}
+      </p>
+    )
+  }
+
+  {tags && tags.length > 0 && <TagList tags={tags} />}
+
+  <a
+    href={href}
+    class="mt-4 text-sm font-medium underline underline-offset-4 transition-colors hover:text-[var(--color-accent-primary)]"
+  >
+    Read more →
+  </a>
+</article>
