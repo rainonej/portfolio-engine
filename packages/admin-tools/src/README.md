@@ -6,17 +6,17 @@ This package is optional. A site works without it.
 
 ## What each file/folder does
 
-| File / folder         | What it handles                                                       |
-|-----------------------|-----------------------------------------------------------------------|
-| `integration.ts`      | Astro integration entry point — adds the `/admin` route and API       |
-| `index.ts`            | Public exports for this package                                       |
-| `routes/admin.astro`  | The admin UI screen at `/admin`                                       |
-| `routes/api/`         | API endpoints for reading and writing content files                   |
-| `routes/api/auth/`    | GitHub OAuth authentication (login, callback, logout, session check)  |
-| `server/`             | Server-side helpers: session management and file paths                |
-| `client/`             | Browser-side helpers: content API calls and YAML frontmatter parsing  |
-| `components/`         | Astro components used inside the admin UI                             |
-| `lib/`                | Shared utilities (design token groups, etc.)                          |
+| File / folder        | What it handles                                                      |
+| -------------------- | -------------------------------------------------------------------- |
+| `integration.ts`     | Astro integration entry point — adds the `/admin` route and API      |
+| `index.ts`           | Public exports for this package                                      |
+| `routes/admin.astro` | The admin UI screen at `/admin`                                      |
+| `routes/api/`        | API endpoints for reading and writing content files                  |
+| `routes/api/auth/`   | GitHub OAuth authentication (login, callback, logout, session check) |
+| `server/`            | Server-side helpers: session management and file paths               |
+| `client/`            | Browser-side helpers: content API calls and YAML frontmatter parsing |
+| `components/`        | Astro components used inside the admin UI                            |
+| `lib/`               | Shared utilities (design token groups, etc.)                         |
 
 ## Authentication
 

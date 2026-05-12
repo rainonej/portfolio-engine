@@ -2,10 +2,10 @@
 
 This folder contains the global visual rules for the theme.
 
-| File                 | What it controls                                                        |
-|----------------------|-------------------------------------------------------------------------|
-| `global.css`         | Base styles applied to every screen: resets, body defaults, typography  |
-| `design-tokens.css`  | CSS custom properties (variables) for colors, spacing, and font weights |
+| File                | What it controls                                                        |
+| ------------------- | ----------------------------------------------------------------------- |
+| `global.css`        | Base styles applied to every screen: resets, body defaults, typography  |
+| `design-tokens.css` | CSS custom properties (variables) for colors, spacing, and font weights |
 
 ## Changing colors, fonts, or spacing
 
