@@ -57,8 +57,8 @@ pnpm --filter demo-site check       # astro check
 1. Create a Vercel project linked to **`rainonej/portfolio-engine`**.
 2. **Root Directory:** repository root (`.`), _not_ only `examples/demo-site`, so `workspace:*` resolves during install.
 3. **Install Command:** `pnpm install` (or `pnpm install --frozen-lockfile` to match [`vercel.json`](../../vercel.json)).
-4. **Build Command:** `pnpm --filter "./packages/*" run build && pnpm --filter demo-site build` — workspace packages must emit `dist/` before Astro loads `astro.config.mjs` (see [`vercel.json`](../../vercel.json)).
-5. **Output Directory:** `examples/demo-site/.vercel/output` — `@astrojs/vercel` writes the Build Output API layout here, not a flat `dist/`.
+4. **Build Command:** `pnpm --filter "./packages/*" run build && pnpm --filter demo-site build && rm -rf .vercel/output && mv examples/demo-site/.vercel/output .vercel/output` — workspace packages must emit `dist/` before Astro loads `astro.config.mjs`. The final `mv` lifts the Build Output API tree that `@astrojs/vercel` hard-codes under the Astro project root (`examples/demo-site/.vercel/output/`) up to `<repo-root>/.vercel/output/`, where Vercel's Build Output API auto-detection actually looks (see [`vercel.json`](../../vercel.json)).
+5. **Output Directory:** `.vercel/output` — the canonical Build Output API location at the repo root. Pointing Vercel at the nested `examples/demo-site/.vercel/output/` directly does **not** work: Vercel ignores the adapter-generated `config.json` and serves no routes (every path returns a bare-text `NOT_FOUND`).
 6. **Production branch:** `main`. **Preview:** all other branches and PRs.
 
 If you instead set Root Directory to `examples/demo-site`, you must run install from the monorepo root via a custom install command; option A avoids that foot-gun.
