@@ -389,14 +389,14 @@ const bodyFamilyLabel =
           <p class="adm-section-lead">Edit entries in place. New items are saved to your content folders.</p>
 
           <div class="adm-stat-row">
-            <div class="adm-stat">
+            <a class="adm-stat adm-stat--link" href="/product-achievements" target="_blank" rel="noopener noreferrer">
               <span class="adm-stat-num">{projects.length}</span>
               <span class="adm-stat-label">Projects</span>
-            </div>
-            <div class="adm-stat">
+            </a>
+            <a class="adm-stat adm-stat--link" href="/research" target="_blank" rel="noopener noreferrer">
               <span class="adm-stat-num">{writing.length}</span>
               <span class="adm-stat-label">Writing</span>
-            </div>
+            </a>
             <div class="adm-stat">
               <span class="adm-stat-num">{testimonials.length}</span>
               <span class="adm-stat-label">Testimonials</span>
@@ -885,6 +885,14 @@ const bodyFamilyLabel =
         border-radius: 999px;
         border: 1px solid var(--color-border-default);
         background: var(--color-surface-elevated);
+        text-decoration: none;
+        color: inherit;
+      }
+      .adm-stat--link:hover {
+        border-color: var(--color-accent-primary);
+      }
+      .adm-stat--link:hover .adm-stat-num {
+        color: var(--color-accent-primary);
       }
       .adm-stat-num {
         font-family: ui-serif, Georgia, serif;
