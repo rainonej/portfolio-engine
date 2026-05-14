@@ -42,67 +42,11 @@ importers:
         specifier: ^8.19.0
         version: 8.59.1(eslint@9.39.4(jiti@2.6.1))(typescript@6.0.3)
 
-  examples/custom-section-detail-demo:
-    dependencies:
-      '@portfolio-engine/editorial-theme':
-        specifier: workspace:*
-        version: link:../../packages/editorial-theme
-      '@portfolio-engine/engine-core':
-        specifier: workspace:*
-        version: link:../../packages/engine-core
-      '@portfolio-engine/schema':
-        specifier: workspace:*
-        version: link:../../packages/schema
-      zod:
-        specifier: ^4.4.3
-        version: 4.4.3
-    devDependencies:
-      '@astrojs/check':
-        specifier: ^0.9.9
-        version: 0.9.9(prettier@3.8.3)(typescript@6.0.3)
-      astro:
-        specifier: ^6.2.2
-        version: 6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(yaml@2.8.3)
-      typescript:
-        specifier: ^6.0.0
-        version: 6.0.3
-
   examples/demo-site:
     dependencies:
       '@astrojs/vercel':
         specifier: ^10.0.6
         version: 10.0.6(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(yaml@2.8.3))(rollup@4.60.2)
-      '@portfolio-engine/admin-tools':
-        specifier: workspace:*
-        version: link:../../packages/admin-tools
-      '@portfolio-engine/editorial-theme':
-        specifier: workspace:*
-        version: link:../../packages/editorial-theme
-      '@portfolio-engine/engine-core':
-        specifier: workspace:*
-        version: link:../../packages/engine-core
-      '@portfolio-engine/schema':
-        specifier: workspace:*
-        version: link:../../packages/schema
-      zod:
-        specifier: ^4.4.3
-        version: 4.4.3
-    devDependencies:
-      '@astrojs/check':
-        specifier: ^0.9.9
-        version: 0.9.9(prettier@3.8.3)(typescript@6.0.3)
-      astro:
-        specifier: ^6.2.2
-        version: 6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(yaml@2.8.3)
-      typescript:
-        specifier: ^6.0.0
-        version: 6.0.3
-
-  examples/node-ssr-demo:
-    dependencies:
-      '@astrojs/node':
-        specifier: ^10.0.6
-        version: 10.0.6(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(yaml@2.8.3))
       '@portfolio-engine/admin-tools':
         specifier: workspace:*
         version: link:../../packages/admin-tools
@@ -201,6 +145,62 @@ importers:
 
   packages/workflow-kit:
     devDependencies:
+      typescript:
+        specifier: ^6.0.0
+        version: 6.0.3
+
+  tests/fixtures/custom-section-detail:
+    dependencies:
+      '@portfolio-engine/editorial-theme':
+        specifier: workspace:*
+        version: link:../../../packages/editorial-theme
+      '@portfolio-engine/engine-core':
+        specifier: workspace:*
+        version: link:../../../packages/engine-core
+      '@portfolio-engine/schema':
+        specifier: workspace:*
+        version: link:../../../packages/schema
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@astrojs/check':
+        specifier: ^0.9.9
+        version: 0.9.9(prettier@3.8.3)(typescript@6.0.3)
+      astro:
+        specifier: ^6.2.2
+        version: 6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(yaml@2.8.3)
+      typescript:
+        specifier: ^6.0.0
+        version: 6.0.3
+
+  tests/fixtures/node-ssr:
+    dependencies:
+      '@astrojs/node':
+        specifier: ^10.0.6
+        version: 10.0.6(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(yaml@2.8.3))
+      '@portfolio-engine/admin-tools':
+        specifier: workspace:*
+        version: link:../../../packages/admin-tools
+      '@portfolio-engine/editorial-theme':
+        specifier: workspace:*
+        version: link:../../../packages/editorial-theme
+      '@portfolio-engine/engine-core':
+        specifier: workspace:*
+        version: link:../../../packages/engine-core
+      '@portfolio-engine/schema':
+        specifier: workspace:*
+        version: link:../../../packages/schema
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@astrojs/check':
+        specifier: ^0.9.9
+        version: 0.9.9(prettier@3.8.3)(typescript@6.0.3)
+      astro:
+        specifier: ^6.2.2
+        version: 6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(yaml@2.8.3)
       typescript:
         specifier: ^6.0.0
         version: 6.0.3
