@@ -17,6 +17,10 @@ export const TEMPLATE_PATHS = {
     pullRequestTemplate: 'templates/github/pull_request_template.md',
     issueTemplate: 'templates/github/issue_template.md',
   },
+  husky: {
+    preCommit: 'templates/husky/pre-commit',
+    lintStagedConfig: 'templates/husky/lint-staged.config.mjs',
+  },
   vscode: {
     extensions: 'templates/vscode/extensions.json',
     settings: 'templates/vscode/settings.json',

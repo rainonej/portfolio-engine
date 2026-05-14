@@ -32,6 +32,10 @@ templates/
     content-boundary-review.prompt.md Detailed content boundary check for a PR
     visual-review.prompt.md           Visual design review (avoids content authoring)
 
+  husky/
+    pre-commit                      Git pre-commit hook — runs lint-staged (auto-fix before commit)
+    lint-staged.config.mjs          lint-staged config (eslint --fix + prettier --write on staged files)
+
   scripts/
     check-content-boundaries.mjs    Fail when content leaks into route/template/component files
     check-rendered-links.mjs        Fail on stale internal links or placeholder content
@@ -81,19 +85,49 @@ Track your synced version in `package.json`:
 
 Then run `node scripts/check-tooling-version.mjs` to detect when you fall behind.
 
+### Setting up pre-commit hooks
+
+Pre-commit hooks run ESLint auto-fix and Prettier format on every staged file before it lands in the repo.
+This catches issues before CI and auto-corrects most of them without a second commit.
+
+```bash
+# 1. Install husky and lint-staged
+pnpm add -D husky lint-staged
+
+# 2. Copy the templates
+mkdir -p .husky
+cp node_modules/@portfolio-engine/workflow-kit/templates/husky/pre-commit .husky/pre-commit
+cp node_modules/@portfolio-engine/workflow-kit/templates/husky/lint-staged.config.mjs .
+
+# 3. Add "prepare": "husky" to your package.json scripts, then:
+pnpm exec husky init  # or: git config core.hooksPath .husky
+```
+
+The `lint-staged.config.mjs` auto-fixes `.ts`/`.mjs`/`.astro` files with ESLint and Prettier,
+and formats `.md`/`.json`/`.yml`/`.yaml` with Prettier.
+
 ### Adding check scripts to CI
 
-Add to your `.github/workflows/ci.yml`:
+The `templates/github/ci.yml` already includes ESLint, Prettier, type-check, content boundary, and schema
+strictness steps in the correct order. Copy it to `.github/workflows/ci.yml` and you're done.
+
+If you're adding individual steps to an existing workflow:
 
 ```yaml
+- name: ESLint
+  run: pnpm lint
+
+- name: Prettier (check)
+  run: pnpm format:check
+
+- name: Type check
+  run: pnpm check
+
 - name: Content boundary check
   run: node scripts/check-content-boundaries.mjs
 
 - name: Schema strictness check
   run: node scripts/check-schema-strictness.mjs
-
-- name: Rendered link check
-  run: node scripts/check-rendered-links.mjs
 ```
 
 ## Content format guidance
