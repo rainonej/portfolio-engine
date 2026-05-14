@@ -37,6 +37,83 @@
       "command": "pnpm build",
       "group": { "kind": "build", "isDefault": true },
       "presentation": { "reveal": "always" }
+    },
+    {
+      "label": "Upgrade portfolio-engine packages",
+      "detail": "Upgrade all @portfolio-engine/* dependencies to their latest published version",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "windows": {
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}/docs/downstream/scripts/upgrade-portfolio-engine.ps1"
+        ]
+      },
+      "linux": {
+        "command": "bash",
+        "args": ["${workspaceFolder}/docs/downstream/scripts/upgrade-portfolio-engine.sh"]
+      },
+      "osx": {
+        "command": "bash",
+        "args": ["${workspaceFolder}/docs/downstream/scripts/upgrade-portfolio-engine.sh"]
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      }
+    },
+    {
+      "label": "Upgrade portfolio-engine packages + agent handoff",
+      "detail": "Upgrade packages, run pnpm check/build, and generate an agent handoff prompt for a PR into dev",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "windows": {
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}/docs/downstream/scripts/upgrade-portfolio-engine.ps1",
+          "-AgentHandoff"
+        ]
+      },
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-c",
+          "AGENT_HANDOFF=1 bash \"${workspaceFolder}/docs/downstream/scripts/upgrade-portfolio-engine.sh\""
+        ]
+      },
+      "osx": {
+        "command": "bash",
+        "args": [
+          "-c",
+          "AGENT_HANDOFF=1 bash \"${workspaceFolder}/docs/downstream/scripts/upgrade-portfolio-engine.sh\""
+        ]
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      }
     }
   ]
 }

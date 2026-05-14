@@ -8,6 +8,10 @@
 export const WORKFLOW_KIT_VERSION = '0.0.2';
 
 export const TEMPLATE_PATHS = {
+  agent: {
+    claudeMd: 'templates/agent/CLAUDE.md',
+    copilotInstructions: 'templates/agent/copilot-instructions.md',
+  },
   github: {
     ci: 'templates/github/ci.yml',
     pullRequestTemplate: 'templates/github/pull_request_template.md',

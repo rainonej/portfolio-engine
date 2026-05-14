@@ -1,10 +1,15 @@
 {
-  "_comment": "MCP server support is planned for a future workflow-kit release. This file is a placeholder showing the intended configuration shape. Do not use as-is — the ./mcp entry point does not exist yet.",
   "mcpServers": {
-    "portfolio-engine": {
+    "vercel": {
+      "url": "https://mcp.vercel.com"
+    },
+    "context7": {
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "playwright": {
+      "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@portfolio-engine/workflow-kit/mcp"],
-      "env": {}
+      "args": ["@playwright/mcp@0.0.73"]
     }
   }
 }

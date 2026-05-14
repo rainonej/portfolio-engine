@@ -6,6 +6,10 @@ Reusable downstream tooling for Portfolio Engine sites.
 
 ```
 templates/
+  agent/
+    CLAUDE.md                       Claude Code instructions for downstream sites
+    copilot-instructions.md         GitHub Copilot instructions for downstream sites
+
   github/
     ci.yml                          GitHub Actions CI template
     pull_request_template.md        PR checklist for content/schema discipline
@@ -13,11 +17,11 @@ templates/
 
   vscode/
     extensions.json                 Recommended extensions (Astro, MDX, YAML, ESLint, Prettier, Tailwind)
-    settings.json                   Format-on-save, YAML schemas, file nesting
-    tasks.json                      Dev, check, build, and boundary-check tasks
+    settings.json                   Format-on-save, file nesting, rulers
+    tasks.json                      Dev, check, build, boundary-check, and upgrade tasks
 
   cursor/
-    mcp.example.json                Example MCP server config for Cursor
+    mcp.example.json                MCP server config (Vercel, Context7, Playwright)
     rules/
       portfolio-engine-boundaries.md  Architecture boundary rules for AI agents
       downstream-agent-rules.md       Rules for AI agents making changes to downstream sites
