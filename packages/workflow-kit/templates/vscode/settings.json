@@ -1,0 +1,32 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[astro]": {
+    "editor.defaultFormatter": "astro-build.astro-vscode"
+  },
+  "[mdx]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.wordWrap": "on"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "yaml.schemas": {
+    "./node_modules/@portfolio-engine/schema/schemas/page-header.json": "src/content/pages/*.yaml",
+    "./node_modules/@portfolio-engine/schema/schemas/card-summary.json": "src/content/**/*.yaml"
+  },
+  "editor.rulers": [100],
+  "editor.wordWrap": "off",
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.yaml": "$(capture).schema.json",
+    "*.mdx": "$(capture).md",
+    "*.astro": "$(capture).css"
+  }
+}

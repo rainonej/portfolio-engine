@@ -4,6 +4,8 @@
 
 An Astro theme for personal portfolio sites. It provides routes, layouts, and styles so you focus on your content — and it's designed to be set up entirely through Claude prompts.
 
+**[`examples/demo-site`](examples/demo-site/) is the only canonical example.** It is also the live advertising and showcase site for Portfolio Engine. Internal validation fixtures live under `tests/fixtures/` and are not user-facing examples.
+
 ---
 
 ## Get your site live
@@ -38,7 +40,7 @@ src/
                                        Zod schemas
 ```
 
-The three **required** packages are published to npm — your repo installs them. **`@portfolio-engine/admin-tools`** is optional (also on npm). **`@portfolio-engine/workflow-kit`** is scaffold-stage (not a production MCP toolkit yet).
+The three **required** packages are published to npm — your repo installs them. **`@portfolio-engine/admin-tools`** is optional (also on npm). **`@portfolio-engine/workflow-kit`** provides reusable downstream tooling: boundary-check scripts, AI prompts, GitHub Actions templates, and VS Code/Cursor setup.
 
 ---
 
@@ -118,7 +120,7 @@ pnpm format   # Prettier check
 | Package                                                    | Description                                                                |
 | ---------------------------------------------------------- | -------------------------------------------------------------------------- |
 | [`@portfolio-engine/admin-tools`](packages/admin-tools/)   | Admin/reviewer UI + `/api/content` + OAuth support (Node adapter required) |
-| [`@portfolio-engine/workflow-kit`](packages/workflow-kit/) | Reserved package for future workflow automation (currently scaffold)       |
+| [`@portfolio-engine/workflow-kit`](packages/workflow-kit/) | Reusable downstream tooling: check scripts, AI prompts, CI + editor templates |
 
 ### CI
 

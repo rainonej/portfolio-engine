@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "portfolio-engine": {
+      "command": "npx",
+      "args": ["-y", "@portfolio-engine/workflow-kit/mcp"],
+      "env": {}
+    }
+  }
+}

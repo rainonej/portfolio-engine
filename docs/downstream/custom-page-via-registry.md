@@ -156,5 +156,5 @@ route (nav validation, manifest, collision checks).
 
 ## Verified examples
 
-- `examples/demo-site` — static output; route `/how-i-think`.
-- `examples/node-ssr-demo` — `output: 'server'` with `@astrojs/node`; route `/ssr-registry-smoke`.
+- `examples/demo-site` — static output; the canonical public example.
+- `tests/fixtures/node-ssr` — `output: 'server'` with `@astrojs/node`; route `/ssr-registry-smoke` (internal fixture).

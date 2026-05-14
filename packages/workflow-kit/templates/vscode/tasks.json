@@ -1,0 +1,42 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Dev server",
+      "type": "shell",
+      "command": "pnpm dev",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "new" },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Type check",
+      "type": "shell",
+      "command": "pnpm check",
+      "group": { "kind": "test", "isDefault": true },
+      "presentation": { "reveal": "always" }
+    },
+    {
+      "label": "Check content boundaries",
+      "type": "shell",
+      "command": "node scripts/check-content-boundaries.mjs",
+      "group": "test",
+      "presentation": { "reveal": "always" }
+    },
+    {
+      "label": "Check schema strictness",
+      "type": "shell",
+      "command": "node scripts/check-schema-strictness.mjs",
+      "group": "test",
+      "presentation": { "reveal": "always" }
+    },
+    {
+      "label": "Build",
+      "type": "shell",
+      "command": "pnpm build",
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always" }
+    }
+  ]
+}
