@@ -41,7 +41,11 @@ export default tseslint.config(
     },
   },
   {
-    files: ['scripts/**/*.mjs', 'examples/**/astro.config.mjs'],
+    files: [
+      'scripts/**/*.mjs',
+      'examples/**/astro.config.mjs',
+      'tests/fixtures/**/astro.config.mjs',
+    ],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
@@ -49,6 +53,26 @@ export default tseslint.config(
         console: 'readonly',
         process: 'readonly',
       },
+    },
+  },
+  {
+    // Template scripts are Node.js scripts intended to be copied into downstream repos.
+    files: ['packages/workflow-kit/templates/scripts/**/*.mjs'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        console: 'readonly',
+        process: 'readonly',
+        fetch: 'readonly',
+        URL: 'readonly',
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
     },
   },
 );

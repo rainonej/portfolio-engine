@@ -47,19 +47,27 @@ function checkFile(filePath) {
     const lineNum = i + 1;
 
     if (line.includes('.passthrough()')) {
-      errors.push(`  ${rel}:${lineNum}  [passthrough]  Remove .passthrough() — use .strict() for content schemas`);
+      errors.push(
+        `  ${rel}:${lineNum}  [passthrough]  Remove .passthrough() — use .strict() for content schemas`,
+      );
     }
 
     if (/z\.(any|unknown)\(\)/.test(line)) {
-      errors.push(`  ${rel}:${lineNum}  [any/unknown]  Replace z.any()/z.unknown() with a concrete schema`);
+      errors.push(
+        `  ${rel}:${lineNum}  [any/unknown]  Replace z.any()/z.unknown() with a concrete schema`,
+      );
     }
 
     if (/entry\.data\s+as\s+\w/.test(line)) {
-      errors.push(`  ${rel}:${lineNum}  [type-cast]  Avoid \`entry.data as Type\` — let Zod infer the type`);
+      errors.push(
+        `  ${rel}:${lineNum}  [type-cast]  Avoid \`entry.data as Type\` — let Zod infer the type`,
+      );
     }
 
     if (/\?\?\s*(null|''|"")/.test(line)) {
-      warnings.push(`  ${rel}:${lineNum}  [null-fallback]  ?? null / ?? '' may hide a missing required field`);
+      warnings.push(
+        `  ${rel}:${lineNum}  [null-fallback]  ?? null / ?? '' may hide a missing required field`,
+      );
     }
 
     if (/\.optional\(\)/.test(line)) {
@@ -68,7 +76,9 @@ function checkFile(filePath) {
   });
 
   if (optionalCount > 8) {
-    warnings.push(`  ${rel}  [many-optional]  ${optionalCount} optional fields — consider making some required`);
+    warnings.push(
+      `  ${rel}  [many-optional]  ${optionalCount} optional fields — consider making some required`,
+    );
   }
 }
 

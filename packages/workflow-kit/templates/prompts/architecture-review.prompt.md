@@ -43,9 +43,11 @@ Report each violation with the file path and line number.
 List violations under these headings:
 
 **Content leaked into route/template/component files:**
+
 - (file:line — description)
 
 **Schema strictness issues:**
+
 - (file:line — description)
 
 **No violations found** if the changeset is clean.

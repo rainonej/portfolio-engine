@@ -15,7 +15,7 @@
  * Copy this script to scripts/check-tooling-version.mjs in your downstream repo.
  */
 
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const ROOT = process.cwd();
@@ -31,7 +31,7 @@ if (!SYNCED_VERSION) {
   console.warn(
     'check-tooling-version: no "portfolio-engine.workflowKitSyncedVersion" in package.json.\n' +
       '  Add it to track which version of workflow-kit templates you are using:\n' +
-      '    "portfolio-engine": { "workflowKitSyncedVersion": "0.1.0" }'
+      '    "portfolio-engine": { "workflowKitSyncedVersion": "0.1.0" }',
   );
   process.exit(0);
 }
@@ -44,7 +44,9 @@ try {
   const data = await res.json();
   latestVersion = data.version;
 } catch (err) {
-  console.warn(`check-tooling-version: could not fetch latest version from npm (${err.message}). Skipping.`);
+  console.warn(
+    `check-tooling-version: could not fetch latest version from npm (${err.message}). Skipping.`,
+  );
   process.exit(0);
 }
 
@@ -58,6 +60,6 @@ console.warn(
     `  Your synced version: ${SYNCED_VERSION}\n` +
     `  Latest published:    ${latestVersion}\n\n` +
     `  Review the changelog and intentionally copy any updated templates:\n` +
-    `    npx -y @portfolio-engine/workflow-kit@${latestVersion} --list-templates`
+    `    npx -y @portfolio-engine/workflow-kit@${latestVersion} --list-templates`,
 );
 process.exit(0); // warn only, do not fail CI

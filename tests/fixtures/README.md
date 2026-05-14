@@ -6,9 +6,9 @@ The only public example is [`examples/demo-site`](../../examples/demo-site/).
 
 ## Fixtures
 
-| Directory | Purpose |
-|---|---|
-| `node-ssr` | `@astrojs/node` + `output: 'server'` adapter — validates SSR support |
+| Directory               | Purpose                                                                           |
+| ----------------------- | --------------------------------------------------------------------------------- |
+| `node-ssr`              | `@astrojs/node` + `output: 'server'` adapter — validates SSR support              |
 | `custom-section-detail` | Consumer-local route overrides — validates `src/pages-local/` + registry patterns |
 
 These fixtures are included in the pnpm workspace so they resolve `workspace:*` dependencies

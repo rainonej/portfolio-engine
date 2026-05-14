@@ -117,9 +117,9 @@ pnpm format   # Prettier check
 
 **Optional** (post-MVP add-ons, not required to run a site):
 
-| Package                                                    | Description                                                                |
-| ---------------------------------------------------------- | -------------------------------------------------------------------------- |
-| [`@portfolio-engine/admin-tools`](packages/admin-tools/)   | Admin/reviewer UI + `/api/content` + OAuth support (Node adapter required) |
+| Package                                                    | Description                                                                   |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| [`@portfolio-engine/admin-tools`](packages/admin-tools/)   | Admin/reviewer UI + `/api/content` + OAuth support (Node adapter required)    |
 | [`@portfolio-engine/workflow-kit`](packages/workflow-kit/) | Reusable downstream tooling: check scripts, AI prompts, CI + editor templates |
 
 ### CI

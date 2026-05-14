@@ -16,7 +16,7 @@
  */
 
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
-import { join, relative, dirname } from 'node:path';
+import { join, relative } from 'node:path';
 
 const ROOT = process.cwd();
 const DIST = join(ROOT, process.argv.find((a) => a.startsWith('--dist='))?.slice(7) ?? 'dist');

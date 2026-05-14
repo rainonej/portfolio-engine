@@ -1,6 +1,6 @@
 ---
-"@portfolio-engine/schema": minor
-"@portfolio-engine/workflow-kit": minor
+'@portfolio-engine/schema': minor
+'@portfolio-engine/workflow-kit': minor
 ---
 
 Add generic schema primitives and build out workflow-kit templates.

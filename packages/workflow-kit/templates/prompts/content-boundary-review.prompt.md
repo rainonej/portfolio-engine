@@ -13,6 +13,7 @@ The rule is: **authored content belongs in `src/content/` and `src/config/`. Now
 ### In `src/pages-local/**/*.astro`
 
 Flag any:
+
 - String literals longer than ~30 characters that look like authored copy (headlines, deks, descriptions)
 - Arrays declared inline that hold content items
 - Section titles, labels, or marketing copy defined directly in the file
@@ -22,6 +23,7 @@ Flag any:
 ### In `src/overrides/**/*.astro`
 
 Flag any:
+
 - Authored copy in component JSX/template markup
 - Hard-coded marketing claims or personal details
 - Import of content collections
@@ -29,6 +31,7 @@ Flag any:
 ### In content schema files (`src/content.config.ts`, local schema files)
 
 Flag any:
+
 - `.passthrough()` on a first-class content collection schema
 - `z.any()` or `z.unknown()` used for fields that have a known shape
 - `as SomeType` casts in the schema definition
@@ -36,12 +39,14 @@ Flag any:
 ### In `src/pages-local/**/*.astro` or template files
 
 Flag any:
+
 - `(entry.data as SomeType)` casts
 - `entry.data.someField ?? 'fallback string'` where the fallback is authored copy rather than a safe empty state
 
 ## Output format
 
 For each violation, write:
+
 ```
 FILE: src/pages-local/work/index.astro
 LINE: 42

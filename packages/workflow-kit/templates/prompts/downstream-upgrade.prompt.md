@@ -16,6 +16,7 @@ You are upgrading a downstream Portfolio Engine site to a new version of `@portf
 ## Steps
 
 1. Update the version in `package.json`:
+
    ```bash
    pnpm update @portfolio-engine/editorial-theme @portfolio-engine/engine-core @portfolio-engine/schema
    ```

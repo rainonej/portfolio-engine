@@ -48,6 +48,7 @@ You are doing a visual review of changes to a Portfolio Engine downstream site.
 ## Output format
 
 List visual issues as:
+
 ```
 AREA: Hero section
 ISSUE: Heading line-height is too tight on mobile — text appears cramped below 400px

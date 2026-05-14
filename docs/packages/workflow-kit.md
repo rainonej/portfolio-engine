@@ -11,22 +11,22 @@ usage instructions and the full template listing.
 **Boundary-check scripts** (`templates/scripts/`) — copy into your downstream `scripts/` directory
 and wire them into CI:
 
-| Script | What it catches |
-|---|---|
+| Script                         | What it catches                                    |
+| ------------------------------ | -------------------------------------------------- |
 | `check-content-boundaries.mjs` | Content leaked into route/template/component files |
-| `check-schema-strictness.mjs` | `.passthrough()`, type casts, null fallbacks |
-| `check-rendered-links.mjs` | Stale internal links, placeholder content |
-| `check-unused.mjs` | Unused files/exports (Knip wrapper) |
-| `check-tooling-version.mjs` | Drift from upstream templates |
+| `check-schema-strictness.mjs`  | `.passthrough()`, type casts, null fallbacks       |
+| `check-rendered-links.mjs`     | Stale internal links, placeholder content          |
+| `check-unused.mjs`             | Unused files/exports (Knip wrapper)                |
+| `check-tooling-version.mjs`    | Drift from upstream templates                      |
 
 **AI prompts** (`templates/prompts/`) — copy-paste into Claude Code, Cursor, or a PR review workflow:
 
-| Prompt | Purpose |
-|---|---|
-| `architecture-review.prompt.md` | Check changed files for content/schema/template separation |
-| `downstream-upgrade.prompt.md` | Apply a new Portfolio Engine release |
-| `content-boundary-review.prompt.md` | Detailed boundary check for a PR |
-| `visual-review.prompt.md` | Visual design review (avoids content authoring) |
+| Prompt                              | Purpose                                                    |
+| ----------------------------------- | ---------------------------------------------------------- |
+| `architecture-review.prompt.md`     | Check changed files for content/schema/template separation |
+| `downstream-upgrade.prompt.md`      | Apply a new Portfolio Engine release                       |
+| `content-boundary-review.prompt.md` | Detailed boundary check for a PR                           |
+| `visual-review.prompt.md`           | Visual design review (avoids content authoring)            |
 
 **GitHub Actions template** (`templates/github/ci.yml`) — starter CI with type check,
 content boundary check, and build.

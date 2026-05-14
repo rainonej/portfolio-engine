@@ -104,7 +104,7 @@ tags:
   - research
 ---
 
-import MyDemo from "../../components/demos/MyDemo.astro";
+import MyDemo from '../../components/demos/MyDemo.astro';
 
 Regular Markdown here.
 
