@@ -1,7 +1,14 @@
 import { defineCollection } from 'astro:content';
 import { z } from 'zod';
 import { glob } from 'astro/loaders';
-import { ProfilePersonSchema, ProfileCvSchema } from '@portfolio-engine/schema';
+import {
+  MetricSchema,
+  PageHeaderSchema,
+  RelatedLinkSchema,
+  TagListSchema,
+  ProfilePersonSchema,
+  ProfileCvSchema,
+} from '@portfolio-engine/schema';
 
 const profile = defineCollection({
   loader: glob({ pattern: '**/*.json', base: './src/content/profile' }),
@@ -43,4 +50,17 @@ const testimonials = defineCollection({
   }),
 });
 
-export const collections = { profile, projects, writing, testimonials };
+// Structured YAML records — demonstrates @portfolio-engine/schema primitives.
+// Downstream sites use this pattern for page-level data that is too structured
+// for prose but too small to warrant a full content collection of its own.
+const notes = defineCollection({
+  loader: glob({ pattern: '**/*.yaml', base: './src/content/notes' }),
+  schema: z.object({
+    header: PageHeaderSchema,
+    tags: TagListSchema.optional(),
+    metrics: z.array(MetricSchema).optional(),
+    links: z.array(RelatedLinkSchema).optional(),
+  }),
+});
+
+export const collections = { profile, projects, writing, testimonials, notes };
