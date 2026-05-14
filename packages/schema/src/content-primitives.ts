@@ -84,6 +84,7 @@ export type ImageAsset = z.infer<typeof ImageAssetSchema>;
 export type Metric = z.infer<typeof MetricSchema>;
 export type EvidenceItem = z.infer<typeof EvidenceItemSchema>;
 export type RelatedLink = z.infer<typeof RelatedLinkSchema>;
+export type TagList = z.infer<typeof TagListSchema>;
 export type PageHeader = z.infer<typeof PageHeaderSchema>;
 export type Callout = z.infer<typeof CalloutSchema>;
 export type ContentBlock = z.infer<typeof ContentBlockSchema>;

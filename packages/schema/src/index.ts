@@ -161,6 +161,7 @@ export {
   type Metric,
   type EvidenceItem,
   type RelatedLink,
+  type TagList,
   type PageHeader,
   type Callout,
   type ContentBlock,

@@ -59,7 +59,8 @@ console.warn(
   `check-tooling-version: workflow-kit templates may have changed.\n` +
     `  Your synced version: ${SYNCED_VERSION}\n` +
     `  Latest published:    ${latestVersion}\n\n` +
-    `  Review the changelog and intentionally copy any updated templates:\n` +
-    `    npx -y @portfolio-engine/workflow-kit@${latestVersion} --list-templates`,
+    `  Review the changelog at:\n` +
+    `    https://github.com/rainonej/portfolio-engine/blob/main/packages/workflow-kit/CHANGELOG.md\n\n` +
+    `  Then copy updated templates intentionally from node_modules/@portfolio-engine/workflow-kit/templates/`,
 );
 process.exit(0); // warn only, do not fail CI

@@ -1,4 +1,5 @@
 {
+  "_comment": "MCP server support is planned for a future workflow-kit release. This file is a placeholder showing the intended configuration shape. Do not use as-is — the ./mcp entry point does not exist yet.",
   "mcpServers": {
     "portfolio-engine": {
       "command": "npx",

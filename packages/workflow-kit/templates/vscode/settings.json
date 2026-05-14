@@ -18,8 +18,8 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "yaml.schemas": {
-    "./node_modules/@portfolio-engine/schema/schemas/page-header.json": "src/content/pages/*.yaml",
-    "./node_modules/@portfolio-engine/schema/schemas/card-summary.json": "src/content/**/*.yaml"
+    // Add your own YAML schema associations here when JSON Schema files are available.
+    // Example: "./schemas/my-page.schema.json": "src/content/pages/*.yaml"
   },
   "editor.rulers": [100],
   "editor.wordWrap": "off",

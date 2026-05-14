@@ -44,6 +44,7 @@ const KNIP_CONFIG = {
 };
 
 let tempFileCreated = false;
+let exitCode = 0;
 
 try {
   // Write temp config so we don't conflict with any existing knip.json
@@ -54,9 +55,11 @@ try {
   console.log('check-unused: no unused files or exports found.');
 } catch {
   // Knip exits non-zero when it finds issues; output is already printed
-  process.exit(1);
+  exitCode = 1;
 } finally {
   if (tempFileCreated && existsSync(KNIP_CONFIG_PATH)) {
     unlinkSync(KNIP_CONFIG_PATH);
   }
 }
+
+process.exit(exitCode);
