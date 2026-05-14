@@ -1,6 +1,11 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.rulers": [100],
+
   "[astro]": {
     "editor.defaultFormatter": "astro-build.astro-vscode"
   },
@@ -17,16 +22,28 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "yaml.schemas": {
-    // Add your own YAML schema associations here when JSON Schema files are available.
-    // Example: "./schemas/my-page.schema.json": "src/content/pages/*.yaml"
+
+  "prettier.requireConfig": true,
+
+  "eslint.validate": ["javascript", "typescript", "astro"],
+
+  "tailwindCSS.includeLanguages": {
+    "astro": "html"
   },
-  "editor.rulers": [100],
-  "editor.wordWrap": "off",
+  "tailwindCSS.experimental.classRegex": [
+    ["cn\\(([^)]*)\\)", "'([^']*)'"],
+    ["clsx\\(([^)]*)\\)", "'([^']*)'"]
+  ],
+
+  "css.lint.unknownAtRules": "ignore",
+  "less.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
-    "*.yaml": "$(capture).schema.json",
+    "*.astro": "$(capture).css",
     "*.mdx": "$(capture).md",
-    "*.astro": "$(capture).css"
+    "*.yaml": "$(capture).schema.json",
+    "astro.config.*": "tsconfig.json, .env*, pnpm-lock.yaml, package.json"
   }
 }
