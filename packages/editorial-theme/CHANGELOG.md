@@ -1,5 +1,13 @@
 # @portfolio-engine/editorial-theme
 
+## 0.7.1
+
+### Patch Changes
+
+- Updated dependencies [4ff12a1]
+  - @portfolio-engine/engine-core@0.3.3
+  - @portfolio-engine/schema@0.6.0
+
 ## 0.7.0
 
 ### Minor Changes

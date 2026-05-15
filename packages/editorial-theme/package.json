@@ -1,6 +1,6 @@
 {
   "name": "@portfolio-engine/editorial-theme",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "The first-party Astro theme built on @portfolio-engine/engine-core",
   "type": "module",
   "files": [
