@@ -159,3 +159,6 @@ pnpm-lock.yaml.bak
 .playwright-mcp/
 mcp-list-verify.txt
 .smoke-packs/
+
+# Auto-generated fixture manifests (timestamp changes on every build run)
+tests/fixtures/**/.portfolio-engine/manifest.json

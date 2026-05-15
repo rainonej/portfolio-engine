@@ -29,8 +29,12 @@ Optional packages:
 
 Examples:
 
-- `examples/demo-site` — static + `@astrojs/vercel` (recommended downstream shape)
-- `examples/node-ssr-demo` — `@astrojs/node` + `output: 'server'` SSR fixture
+- `examples/demo-site` — the only public example; the Portfolio Engine advertising and showcase site
+
+Internal fixtures (not user-facing examples):
+
+- `tests/fixtures/node-ssr` — `@astrojs/node` + `output: 'server'` SSR fixture
+- `tests/fixtures/custom-section-detail` — consumer-local route override fixture
 
 Local-only paths (MCP, smoke test artifacts, `.vercel` build output) are gitignored: **[`docs/contributing/gitignored-local-files.md`](docs/contributing/gitignored-local-files.md)**.
 

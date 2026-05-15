@@ -1,18 +1,27 @@
 {
   "name": "@portfolio-engine/workflow-kit",
-  "private": true,
   "version": "0.0.2",
   "description": "Reusable GitHub workflow templates and AI workflow classifier for portfolio-engine sites",
   "type": "module",
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
   "scripts": {
-    "build": "echo 'build not yet configured'",
-    "dev": "echo 'dev not yet configured'",
-    "check": "tsc --noEmit"
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "check": "tsc --noEmit",
+    "prepublishOnly": "pnpm run build"
   },
   "devDependencies": {
+    "tsup": "^8.5.1",
     "typescript": "^6.0.0"
   }
 }

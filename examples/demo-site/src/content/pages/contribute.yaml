@@ -1,0 +1,78 @@
+meta:
+  title: Contribute — Portfolio Engine
+  description: >
+    Portfolio Engine is open source. Astro developers, design-system reviewers,
+    accessibility reviewers, AI-coding-agent users, and site owners can all
+    plug in — here's where to start.
+
+intro:
+  dek: >
+    Portfolio Engine is open source. The project needs different kinds of
+    contributors — pick the lane that fits and start in the public GitHub repo.
+    There is no private booking funnel; everything happens in issues and pull
+    requests.
+
+sections:
+  - eyebrow: Who plugs in where
+    heading: Lanes for different kinds of contributors
+
+lanes:
+  - heading: Astro developers
+    body: >
+      Review the engine/consumer boundary, the route-injection model, the
+      package structure, and Astro 6 conventions. Most simple agent tasks live
+      here.
+    links:
+      - label: Architecture overview
+        href: https://github.com/rainonej/portfolio-engine/blob/main/docs/architecture/README.md
+      - label: Good first issues
+        href: https://github.com/rainonej/portfolio-engine/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22
+
+  - heading: Tailwind / design-system reviewers
+    body: >
+      Review theme tokens, the override-surface contract, component variants,
+      and where consumer customization should live versus what belongs upstream.
+    links:
+      - label: Open a design issue
+        href: https://github.com/rainonej/portfolio-engine/issues
+      - label: Feature matrix
+        href: /features
+
+  - heading: Accessibility reviewers
+    body: >
+      Review generated pages, navigation, focus states, heading structure,
+      contrast, embeds, and admin surfaces. Real findings beat hypotheticals.
+    links:
+      - label: Report an a11y issue
+        href: https://github.com/rainonej/portfolio-engine/issues
+      - label: Live demo
+        href: /
+
+  - heading: AI-coding-agent users
+    body: >
+      Review the issue templates, the label taxonomy, AGENTS.md, the Copilot
+      instructions, and the visual QA loop. The engine is meant to be safe to
+      operate on with an agent.
+    links:
+      - label: AGENTS.md
+        href: https://github.com/rainonej/portfolio-engine/blob/main/AGENTS.md
+      - label: Workflow guide
+        href: /workflow
+
+  - heading: Site owners
+    body: >
+      Open an issue describing a recurring website need. You do not need to
+      propose code. Useful issues include the user need, examples, acceptance
+      criteria, and whether the feature should be reusable in the engine or
+      stay site-specific.
+    links:
+      - label: Open an issue
+        href: https://github.com/rainonej/portfolio-engine/issues
+      - label: Vision
+        href: /vision
+
+demoNote: >
+  No booking funnel. Portfolio Engine is a shared open-source project, not a
+  service. Conversations happen in GitHub Issues and pull requests so they are
+  legible to every contributor — humans and agents alike — without a private
+  channel.

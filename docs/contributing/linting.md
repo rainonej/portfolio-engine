@@ -24,7 +24,7 @@ Configuration: [`.prettierrc`](../../.prettierrc) and [`.prettierignore`](../../
 
 ## CI enforcement
 
-Lint and Prettier run first in CI, then **`pnpm check`** (builds all `packages/*`, then recursive typecheck / `astro check`), then a full **`pnpm build`**, **`pnpm --filter node-ssr-demo run build`**, and **`pnpm smoke:packed`** (packed tarball install smoke test). CI uses **Node 24** and **pnpm 10** (see [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml)).
+Lint and Prettier run first in CI, then **`pnpm check`** (builds all `packages/*`, then recursive typecheck / `astro check`), then a full **`pnpm build`**, **`pnpm --filter node-ssr-demo run build`** (SSR fixture), and **`pnpm smoke:packed`** (packed tarball install smoke test). CI uses **Node 24** and **pnpm 10** (see [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml)).
 
 Fix locally before pushing:
 

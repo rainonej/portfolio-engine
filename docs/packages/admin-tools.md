@@ -16,7 +16,7 @@ manifest status + in-browser content editor + public asset uploader), `/api/auth
 `/api/content` endpoint (inventory/read/save — local writes in `devBypass`, GitHub Contents API writes in
 OAuth mode). Uses `node:fs` for the filesystem audit and `/api/content`; deploy with a **Node-capable**
 host (e.g. `@astrojs/vercel` serverless for non-prerendered routes, or `@astrojs/node` for a full Node
-server — see `examples/demo-site` and `examples/node-ssr-demo`). See
+server — see `examples/demo-site` or the SSR fixture at `tests/fixtures/node-ssr`). See
 [`packages/admin-tools/README.md`](../../packages/admin-tools/README.md).
 
 **Next:** Add schema-aware editors, file move/rename/delete flows, and richer non-technical UX from

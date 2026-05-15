@@ -1,0 +1,36 @@
+meta:
+  title: Vision — Portfolio Engine
+  description: >
+    Why Portfolio Engine exists, who it's for, and what makes it agent-native.
+    Read by the same profile/person.json that drives every other page.
+
+intro:
+  paragraphs:
+    - >
+      Portfolio Engine is an open-source backbone for personal and professional
+      websites. The goal is a shared commons of Astro/Tailwind capabilities that
+      downstream sites depend on — not a one-off generator that disappears once
+      your site is shipped.
+    - >
+      Site owners contribute needs. AI coding agents implement scoped issues
+      against typed contracts. Humans review the shared foundation. The engine
+      is the artifact every contributor is improving at the same time.
+    - >
+      This demo is the project's own showcase — Apache-2.0 licensed, built from
+      the same @portfolio-engine/* packages a downstream site would install. It
+      is intentionally not a generated personal website. If you are here to
+      evaluate the engine, read the cards below and follow the workflow guide.
+
+sections:
+  - eyebrow: Design principles
+    heading: Choices made on purpose
+
+  - eyebrow: Working principles
+    heading: How that plays out, day to day
+
+demoNote: >
+  This page is a consumer-local route. Its URL is declared in
+  src/registry/portfolio-engine.registry.json, the source file lives at
+  src/pages-local/vision.astro, and the engine injects it via Astro's
+  injectRoute hook. The values and working principles come from
+  src/content/profile/person.json via getEntry('profile', 'person').
