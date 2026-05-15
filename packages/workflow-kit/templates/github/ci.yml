@@ -81,3 +81,29 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: Static rendered-link check
+        run: node scripts/check-rendered-links.mjs
+
+      # Rendered interaction smoke — only runs if the downstream repo has opted in by
+      # copying check-rendered-interactions.mjs to scripts/. This check uses Playwright
+      # to verify that CTAs, cards, and navigation are actually clickable in a browser.
+      # Static link checks (above) cannot catch overlay, pointer-events, or z-index issues.
+      #
+      # To enable: copy the template, install Playwright, and add check:rendered-interactions
+      # to your package.json scripts.
+      #   pnpm add -D @playwright/test
+      #   pnpm exec playwright install --with-deps chromium
+      #
+      # Then uncomment the step below and set SITE_URL in your repository secrets or
+      # pass a local server URL.
+      #
+      # - name: Rendered interaction smoke
+      #   run: |
+      #     if [ -f scripts/check-rendered-interactions.mjs ]; then
+      #       pnpm check:rendered-interactions
+      #     else
+      #       echo "No rendered interaction smoke configured; skipping."
+      #     fi
+      #   env:
+      #     SITE_URL: ${{ secrets.VERCEL_PREVIEW_URL }}

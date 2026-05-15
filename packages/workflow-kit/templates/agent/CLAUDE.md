@@ -108,6 +108,32 @@ node scripts/check-content-boundaries.mjs
 node scripts/check-schema-strictness.mjs
 ```
 
+After build, run the static rendered-link check:
+
+```bash
+node scripts/check-rendered-links.mjs
+```
+
+This check validates that internal hrefs resolve to files in `dist/`. It does **not** prove
+that elements are visible, clickable, or free of overlay/z-index/nested-anchor issues.
+
+For changes that affect CTAs, cards, navigation, overlays, or layout wrappers, also run
+browser interaction verification:
+
+```bash
+SITE_URL=https://your-preview.vercel.app node scripts/check-rendered-interactions.mjs
+```
+
+If `scripts/check-rendered-interactions.mjs` is not present, follow the setup instructions
+in `node_modules/@portfolio-engine/workflow-kit/README.md`.
+
+When reporting work done in a PR, distinguish:
+
+- **Static rendered HTML verified** — output of `check-rendered-links` or equivalent
+- **Browser interaction verified** — Playwright output, Vercel preview URL, or manual steps
+
+Do not claim browser interactions were verified unless you actually clicked or ran Playwright.
+
 ## Visual QA
 
 After layout/style changes, inspect the site in a browser.
