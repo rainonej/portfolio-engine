@@ -1,130 +1,22 @@
 ---
-/**
- * Consumer-local route — declared in src/registry/portfolio-engine.registry.json.
- *
- * Demonstrates: a consumer-local page reading content collections.
- * The principle cards are NOT hard-coded here — they're loaded from the same
- * `profile/person.json` that drives the home and contribute pages, so the
- * project's positioning stays in one place across the site.
- */
-import Layout from '@portfolio-engine/editorial-theme/layouts/Layout.astro';
+// Consumer-local route — declared in src/registry/portfolio-engine.registry.json.
+// Thin host: loads page copy from content/pages/vision.yaml and person data
+// from content/profile/person.json, then delegates all rendering to VisionTemplate.
 import { getEntry } from 'astro:content';
-import type { ValueCard, WorkingPrinciple } from '@portfolio-engine/schema';
 import { ProfilePersonSchema } from '@portfolio-engine/schema';
+import VisionTemplate from '../templates/VisionTemplate.astro';
+
+const pageEntry = await getEntry('pages', 'vision');
+if (!pageEntry) throw new Error('vision.astro: pages/vision.yaml is required.');
 
 const personEntry = await getEntry('profile', 'person');
-if (!personEntry) {
-  throw new Error('vision.astro: profile/person.json is required.');
-}
+if (!personEntry) throw new Error('vision.astro: profile/person.json is required.');
 
 const person = ProfilePersonSchema.parse(personEntry.data);
-const values: ValueCard[] = person.values ?? [];
-const principles: WorkingPrinciple[] = person.workingPrinciples ?? [];
 ---
 
-<Layout
-  title="Vision — Portfolio Engine"
-  description="Why Portfolio Engine exists, who it's for, and what makes it agent-native. Read by the same profile/person.json that drives every other page."
->
-  <main class="mx-auto max-w-3xl px-6 pb-24 pt-40">
-    <p
-      class="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]"
-    >
-      Consumer-local route · src/pages-local/vision.astro
-    </p>
-    <h1 class="mb-6 font-serif text-5xl font-bold leading-tight">
-      Vision
-    </h1>
-
-    <section class="mb-16 space-y-5 text-lg leading-relaxed text-[var(--color-text-muted)]">
-      <p>
-        Portfolio Engine is an open-source backbone for personal and
-        professional websites. The goal is a shared commons of Astro/Tailwind
-        capabilities that downstream sites depend on — not a one-off generator
-        that disappears once your site is shipped.
-      </p>
-      <p>
-        Site owners contribute needs. AI coding agents implement scoped issues
-        against typed contracts. Humans review the shared foundation. The
-        engine is the artifact every contributor is improving at the same
-        time.
-      </p>
-      <p>
-        This demo is the project's own showcase — Apache-2.0 licensed, built
-        from the same @portfolio-engine/* packages a downstream site would
-        install. It is intentionally <strong class="font-semibold text-[var(--color-text-primary)]">not</strong> a generated
-        personal website. If you are here to evaluate the engine, read the
-        cards below and follow the workflow guide.
-      </p>
-    </section>
-
-    {values.length > 0 && (
-      <section class="mb-16">
-        <h2
-          class="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]"
-        >
-          Design principles
-        </h2>
-        <h3 class="mb-8 font-serif text-3xl font-bold">
-          Choices made on purpose
-        </h3>
-        <ol class="space-y-8">
-          {values.map((value, index) => (
-            <li class="flex gap-6">
-              <span
-                class="mt-1 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-wash)] font-mono text-xs font-bold text-[var(--color-accent-primary)]"
-              >
-                {String(index + 1).padStart(2, '0')}
-              </span>
-              <div>
-                <h4 class="mb-2 font-serif text-2xl font-semibold leading-tight">
-                  {value.title}
-                </h4>
-                <p class="text-base leading-relaxed text-[var(--color-text-muted)]">
-                  {value.body}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
-    )}
-
-    {principles.length > 0 && (
-      <section class="mb-12">
-        <h2
-          class="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]"
-        >
-          Working principles
-        </h2>
-        <h3 class="mb-8 font-serif text-3xl font-bold">
-          How that plays out, day to day
-        </h3>
-        <ul class="grid gap-6 sm:grid-cols-2">
-          {principles.map((principle) => (
-            <li
-              class="rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-surface-wash)] p-5"
-            >
-              <h4 class="mb-2 font-serif text-lg font-semibold">
-                {principle.title}
-              </h4>
-              <p class="text-sm leading-relaxed text-[var(--color-text-muted)]">
-                {principle.body}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )}
-
-    <aside data-pe-feature-callout>
-      <strong>Demo note</strong>
-      This page is a consumer-local route. Its URL is declared in
-      <code>src/registry/portfolio-engine.registry.json</code>, the source
-      file lives at <code>src/pages-local/vision.astro</code>, and the
-      engine injects it via Astro's <code>injectRoute</code> hook. The cards
-      above come from <code>src/content/profile/person.json</code> via
-      <code>getEntry('profile', 'person')</code>.
-    </aside>
-  </main>
-</Layout>
+<VisionTemplate
+  page={pageEntry.data}
+  values={person.values ?? []}
+  principles={person.workingPrinciples ?? []}
+/>

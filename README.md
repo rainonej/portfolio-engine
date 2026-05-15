@@ -2,7 +2,7 @@
 
 [![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://portfolio-engine-demo-site.vercel.app)
 
-An Astro theme for personal portfolio sites. It provides routes, layouts, and styles so you focus on your content — and it's designed to be set up entirely through Claude prompts.
+An agent-native foundation for personal portfolio sites. It gives Claude Code a schema-enforced content model, typed override surfaces, and a hardened CI pipeline — so the AI can safely build and maintain your site without producing code that silently drifts from your content.
 
 **[`examples/demo-site`](examples/demo-site/) is the only canonical example.** It is also the live advertising and showcase site for Portfolio Engine. Internal validation fixtures live under `tests/fixtures/` and are not user-facing examples.
 

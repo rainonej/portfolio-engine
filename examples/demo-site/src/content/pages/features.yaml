@@ -1,0 +1,104 @@
+meta:
+  title: Features — portfolio-engine
+  description: >
+    Everything portfolio-engine ships, in one table. Routes, overrides, theme
+    components, admin, tooling — with links to the docs.
+
+intro:
+  dek: >
+    Everything portfolio-engine ships today, in one table. The "Theme routes"
+    and "Named override surfaces" rows read their counts at build time from
+    DEFAULT_ROUTE_REGISTRY and DEFAULT_OVERRIDE_SURFACES exported from
+    @portfolio-engine/editorial-theme, so this page cannot drift from the
+    theme's public surface.
+
+features:
+  - name: Theme routes
+    status: shipped
+    description: >
+      Routes injected by editorialTheme() — home, about, work (+detail),
+      writing (+detail), contact, résumé.
+    docUrl: https://github.com/rainonej/portfolio-engine/blob/main/docs/downstream/route-ownership.md
+
+  - name: Consumer-local routes
+    status: shipped
+    description: >
+      Add pages the theme doesn't know about via src/pages-local/ +
+      portfolio-engine.registry.json. Collision-checked against theme routes.
+    docUrl: https://github.com/rainonej/portfolio-engine/blob/main/docs/downstream/custom-page-via-registry.md
+
+  - name: Named override surfaces
+    status: shipped
+    description: >
+      Typed prop contracts for each override surface. Trying to override
+      anything else is a build-time error.
+    docUrl: https://github.com/rainonej/portfolio-engine/blob/main/docs/downstream/consumption.md
+
+  - name: Style overrides
+    status: shipped
+    description: >
+      CSS files passed to overrides.styles are appended after global.css so
+      consumer styles always win.
+    docUrl: https://github.com/rainonej/portfolio-engine/blob/main/docs/downstream/design-tokens-and-theme.md
+
+  - name: Design tokens (theme.json)
+    status: shipped
+    description: >
+      Semantic colors and typography in one JSON file. Resolved into CSS custom
+      properties; Google Fonts wired automatically.
+    docUrl: https://github.com/rainonej/portfolio-engine/blob/main/docs/downstream/design-tokens-and-theme.md
+
+  - name: IframeEmbed
+    status: shipped
+    description: >
+      Security-vetted iframe wrapper: HTTPS-only or same-origin paths, optional
+      host allowlist, typed sandbox / allow / referrerpolicy.
+    docUrl: https://github.com/rainonej/portfolio-engine/blob/main/docs/downstream/iframe-embeds-and-demos.md
+
+  - name: SchedulingBlock
+    status: shipped
+    description: >
+      Provider-light scheduling component (Calendly, Cal, Google Calendar,
+      Microsoft Bookings, custom) with button / link / embed modes.
+    docUrl: https://github.com/rainonej/portfolio-engine/blob/main/docs/downstream/scheduling-calendly.md
+
+  - name: Admin tools
+    status: optional
+    description: >
+      /admin dashboard + GitHub OAuth + Contents-API writes. Or devBypass:
+      true for local-only direct-to-disk writes.
+    docUrl: https://github.com/rainonej/portfolio-engine/tree/main/packages/admin-tools
+
+  - name: Setup-with-Claude flow
+    status: shipped
+    description: >
+      Paste docs/downstream/setup-with-claude.md into Claude Code. Numbered
+      phase scripts with DRY_RUN and SKIP_* flags.
+    docUrl: https://github.com/rainonej/portfolio-engine/blob/main/docs/downstream/setup-with-claude.md
+
+  - name: One-click upgrade
+    status: shipped
+    description: >
+      VS Code task + shell script that pins every @portfolio-engine/* package
+      to @latest in lockstep.
+    docUrl: https://github.com/rainonej/portfolio-engine/blob/main/docs/downstream/upgrade-path.md
+
+  - name: Manifest + doctor CLI
+    status: shipped
+    description: >
+      .portfolio-engine/manifest.json emitted every build. pnpm pe:doctor
+      inspects route origins, override status, and theme version.
+    docUrl: https://github.com/rainonej/portfolio-engine/tree/main/packages/engine-core
+
+  - name: workflow-kit
+    status: experimental
+    description: >
+      Scaffold and guardrail templates. GitHub Actions CI, pre-commit hooks,
+      content boundary checks, schema strictness checks, and agent prompt files.
+    docUrl: https://github.com/rainonej/portfolio-engine/tree/main/packages/workflow-kit
+
+demoNote: >
+  This page imports DEFAULT_ROUTE_REGISTRY and DEFAULT_OVERRIDE_SURFACES
+  directly from @portfolio-engine/editorial-theme. If the theme ships a new
+  override surface in a future release, the live registry section updates on
+  the next build — no manual edits needed.

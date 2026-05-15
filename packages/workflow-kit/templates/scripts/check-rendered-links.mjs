@@ -12,7 +12,11 @@
  * Copy this script to scripts/check-rendered-links.mjs in your downstream repo.
  * Edit RENAMED_ROUTES and PLACEHOLDER_STRINGS to match your site.
  *
- * Usage: node scripts/check-rendered-links.mjs [--dist=dist]
+ * Usage: node scripts/check-rendered-links.mjs [--dist=dist] [--warn-only]
+ *
+ * --warn-only  Downgrade dead-link findings to warnings (exits 0) instead of
+ *              failing the build. Useful during initial adoption or when
+ *              external links are expected to be temporarily unavailable.
  */
 
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
@@ -20,6 +24,7 @@ import { join, relative } from 'node:path';
 
 const ROOT = process.cwd();
 const DIST = join(ROOT, process.argv.find((a) => a.startsWith('--dist='))?.slice(7) ?? 'dist');
+const WARN_ONLY = process.argv.includes('--warn-only');
 
 // Routes that were renamed in this downstream site.
 // Format: ['/old-route', '/new-route']
@@ -83,7 +88,9 @@ for (const htmlFile of htmlFiles) {
     const candidate2 = join(DIST, href.replace(/\/$/, '') + '.html');
     const candidate3 = join(DIST, href);
     if (!existsSync(candidate1) && !existsSync(candidate2) && !existsSync(candidate3)) {
-      warnings.push(`  ${rel}  [dead-link]  href="${href}" does not resolve in dist/`);
+      const msg = `  ${rel}  [dead-link]  href="${href}" does not resolve in dist/`;
+      if (WARN_ONLY) warnings.push(msg);
+      else errors.push(msg);
     }
   }
 }

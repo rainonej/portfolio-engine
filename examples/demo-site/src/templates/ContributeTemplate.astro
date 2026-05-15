@@ -1,0 +1,148 @@
+---
+import Layout from '@portfolio-engine/editorial-theme/layouts/Layout.astro';
+
+interface LaneLink {
+  label: string;
+  href: string;
+}
+
+interface Lane {
+  heading: string;
+  body: string;
+  links?: LaneLink[];
+}
+
+interface PageSection {
+  eyebrow?: string;
+  heading: string;
+}
+
+interface PageData {
+  meta: { title: string; description: string };
+  intro?: { dek?: string };
+  sections?: PageSection[];
+  lanes?: Lane[];
+  demoNote?: string;
+}
+
+interface Props {
+  page: PageData;
+  issuesUrl: string;
+  architectureUrl: string;
+  goodFirstIssueUrl: string;
+}
+
+const { page, issuesUrl, architectureUrl, goodFirstIssueUrl } = Astro.props;
+
+const [lanesSection] = page.sections ?? [];
+---
+
+<Layout title={page.meta.title} description={page.meta.description}>
+  <main class="mx-auto max-w-4xl px-6 pb-24 pt-40">
+    <p
+      class="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]"
+    >
+      Consumer-local route · src/pages-local/contribute.astro
+    </p>
+    <h1 class="mb-6 font-serif text-5xl font-bold leading-tight">Contribute</h1>
+
+    {
+      page.intro?.dek && (
+        <p class="mb-12 max-w-3xl text-xl leading-relaxed text-[var(--color-text-muted)]">
+          {page.intro.dek}
+        </p>
+      )
+    }
+
+    <section class="mb-12">
+      <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+        <a
+          href={issuesUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-full bg-[var(--color-text-primary)] px-6 py-3 text-sm font-medium text-[var(--color-text-inverse)] transition-colors hover:bg-[var(--color-text-muted)]"
+        >
+          Open an issue <span aria-hidden="true">↗</span>
+        </a>
+        <a
+          href={architectureUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-default)] px-6 py-3 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:border-[var(--color-text-muted)]"
+        >
+          Review the architecture <span aria-hidden="true">↗</span>
+        </a>
+        <a
+          href={goodFirstIssueUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-default)] px-6 py-3 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:border-[var(--color-text-muted)]"
+        >
+          Browse good first issues <span aria-hidden="true">↗</span>
+        </a>
+        <a
+          href="/workflow"
+          class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-default)] px-6 py-3 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:border-[var(--color-text-muted)]"
+        >
+          Inspect agent workflow <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+
+    {
+      page.lanes && page.lanes.length > 0 && (
+        <section class="mb-16">
+          {lanesSection?.eyebrow && (
+            <h2 class="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]">
+              {lanesSection.eyebrow}
+            </h2>
+          )}
+          {lanesSection && (
+            <h3 class="mb-8 font-serif text-3xl font-bold">{lanesSection.heading}</h3>
+          )}
+          <ul class="space-y-6">
+            {page.lanes.map((lane) => (
+              <li class="rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-surface-wash)] p-6">
+                <h4 class="mb-3 font-serif text-2xl font-semibold leading-tight">
+                  For {lane.heading}
+                </h4>
+                <p class="mb-4 text-base leading-relaxed text-[var(--color-text-muted)]">
+                  {lane.body}
+                </p>
+                {lane.links && (
+                  <ul class="flex flex-wrap gap-4 text-sm">
+                    {lane.links.map((link) => {
+                      const isExternal = link.href.startsWith('https://');
+                      return (
+                        <li>
+                          <a
+                            href={link.href}
+                            target={isExternal ? '_blank' : undefined}
+                            rel={isExternal ? 'noopener noreferrer' : undefined}
+                            class="text-[var(--color-accent-primary)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-primary)]"
+                          >
+                            {link.label}
+                            {isExternal ? ' ↗' : ' →'}
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      page.demoNote && (
+        <aside data-pe-feature-callout>
+          <strong>No booking funnel</strong>
+          {page.demoNote}
+        </aside>
+      )
+    }
+  </main>
+</Layout>

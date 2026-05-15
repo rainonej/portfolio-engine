@@ -1,0 +1,71 @@
+meta:
+  title: Architecture — portfolio-engine
+  description: >
+    The four-layer architecture in detail, with an interactive same-origin
+    diagram embedded via the theme's IframeEmbed component.
+
+intro:
+  paragraphs:
+    - >
+      portfolio-engine is split into four packages, each one a strict downward
+      dependency. The interactive diagram below renders the layers and their
+      direct dependencies — click a layer to see what it does and what it
+      depends on.
+
+diagram:
+  title: >-
+    Four-layer architecture diagram — click any layer to highlight its dependency
+  caption: >-
+    Same-origin static demo, rendered through the theme's typed IframeEmbed
+    wrapper. The component rejects http://, javascript:, data:,
+    protocol-relative, and control-character src values at build time.
+
+sections:
+  - heading: Layers, interactive
+    body: >
+      This diagram is a self-contained HTML file under
+      public/assets/demos/architecture/, embedded via the theme's IframeEmbed
+      component. Same-origin so the host allowlist does not apply; sandboxed
+      to allow-scripts only, no cookies or storage shared.
+
+  - heading: The layers, in words
+
+layers:
+  - label: Layer 01
+    title: '@portfolio-engine/schema'
+    description: >
+      Pure Zod schemas. No Astro, no Vite, no framework dependency. The
+      canonical shape of every config file, content entry, and registry record.
+      Ships as a leaf package so every other layer can depend on it cleanly.
+
+  - label: Layer 02
+    title: '@portfolio-engine/engine-core'
+    description: >
+      The Astro integration. Loads JSON config, validates against the schema
+      package, exposes virtual modules (@portfolio-engine:config, :context,
+      :routes, :overrides), discovers routes, and writes
+      .portfolio-engine/manifest.json on build. Consumers never import this
+      directly.
+
+  - label: Layer 03
+    title: '@portfolio-engine/editorial-theme'
+    description: >
+      The first-party theme. Owns layouts, components, the global stylesheet,
+      and the five named override surfaces. Exports editorialTheme() — the
+      single Astro integration that wraps engine-core and configures Tailwind
+      v4 via PostCSS.
+
+  - label: Layer 04
+    title: Your consumer site
+    description: >
+      Private repo. Holds src/config/*.json, src/content/**, src/overrides/,
+      and optionally src/pages-local/ + src/registry/. Depends on the editorial
+      theme via the published npm package. Never on engine-core or schema
+      directly.
+
+demoNote: >
+  This page is rendered from src/pages-local/architecture.astro via the
+  consumer registry. The interactive diagram is loaded by the theme's
+  IframeEmbed component — a typed wrapper around iframe with HTTPS validation,
+  an optional host allowlist, and rejection of javascript:, data:,
+  protocol-relative, and control-character URLs.
