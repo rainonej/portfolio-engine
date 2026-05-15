@@ -38,10 +38,13 @@ export const TEMPLATE_PATHS = {
     downstreamUpgrade: 'templates/prompts/downstream-upgrade.prompt.md',
     contentBoundaryReview: 'templates/prompts/content-boundary-review.prompt.md',
     visualReview: 'templates/prompts/visual-review.prompt.md',
+    renderedInteractionReview: 'templates/prompts/rendered-interaction-review.prompt.md',
   },
   scripts: {
     checkContentBoundaries: 'templates/scripts/check-content-boundaries.mjs',
     checkRenderedLinks: 'templates/scripts/check-rendered-links.mjs',
+    checkRenderedInteractions: 'templates/scripts/check-rendered-interactions.mjs',
+    renderedInteractionsConfigExample: 'templates/scripts/rendered-interactions.config.example.mjs',
     checkSchemaStrictness: 'templates/scripts/check-schema-strictness.mjs',
     checkUnused: 'templates/scripts/check-unused.mjs',
     checkToolingVersion: 'templates/scripts/check-tooling-version.mjs',
