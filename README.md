@@ -1,6 +1,6 @@
 # portfolio-engine
 
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://portfolio-engine-demo-site.vercel.app)
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://portfolio-engine-demo-site-ffklyggsg-rainonejs-projects.vercel.app/)
 
 An agent-native foundation for personal portfolio sites. It gives Claude Code a schema-enforced content model, typed override surfaces, and a hardened CI pipeline — so the AI can safely build and maintain your site without producing code that silently drifts from your content.
 
