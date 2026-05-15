@@ -1,0 +1,18 @@
+---
+// Consumer-local route — declared in src/registry/portfolio-engine.registry.json.
+// Thin host: loads page copy from content/pages/workflow.yaml.
+// All rendering and URL construction are in WorkflowTemplate.
+import { getEntry } from 'astro:content';
+import WorkflowTemplate from '../templates/WorkflowTemplate.astro';
+
+const pageEntry = await getEntry('pages', 'workflow');
+if (!pageEntry) throw new Error('workflow.astro: pages/workflow.yaml is required.');
+
+const REPO_URL = 'https://github.com/rainonej/portfolio-engine';
+---
+
+<WorkflowTemplate
+  page={pageEntry.data}
+  repoUrl={REPO_URL}
+  issuesUrl={`${REPO_URL}/issues`}
+/>

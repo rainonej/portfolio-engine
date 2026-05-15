@@ -1,0 +1,60 @@
+---
+title: 'Using MDX for component-rich writing'
+date: 2026-05-14
+description: 'MDX lets you import Astro components directly into prose. Use it when a writing piece needs embedded demos, structured callouts, or interactive diagrams — not for every post.'
+tags: ['MDX', 'Components', 'Content']
+---
+
+import IframeEmbed from '@portfolio-engine/editorial-theme/components/IframeEmbed.astro';
+
+Plain Markdown handles the vast majority of writing on this site. MDX is the escape hatch for the cases where prose alone is not enough.
+
+## When to reach for MDX
+
+The rule of thumb from `@portfolio-engine/workflow-kit`:
+
+- **Use `.md`** for essays, notes, and anything that reads as pure prose.
+- **Use `.mdx`** when the post needs a component — an embedded demo, a metric strip, an interactive diagram.
+
+Avoid MDX for structure you can express in frontmatter. A list of related links belongs in YAML, not in JSX sprinkled through prose.
+
+## Component imports work like any ES module
+
+```mdx
+import IframeEmbed from '@portfolio-engine/editorial-theme/components/IframeEmbed.astro';
+
+<IframeEmbed
+  src="/assets/demos/architecture/"
+  title="Four-layer architecture"
+  height={520}
+  sandbox="allow-scripts"
+/>
+```
+
+The import resolves at build time — no runtime JS needed. The component runs in Astro's static pipeline and its output is plain HTML.
+
+## Security note for embedded iframes
+
+`<IframeEmbed>` validates its `src` at build time: `https://` or a same-origin `/path` only. `http://`, `data:`, and `javascript:` fail the build. The `sandbox` attribute is restrictive by default; add permissions narrowly.
+
+<IframeEmbed
+  src="/assets/demos/architecture/"
+  title="Four-layer architecture diagram — embedded via IframeEmbed in MDX"
+  height={480}
+  loading="lazy"
+  sandbox="allow-scripts"
+  caption="The interactive four-layer diagram, embedded from MDX using the IframeEmbed component."
+/>
+
+## What this file demonstrates
+
+This `.mdx` file is part of the demo-site's format showcase:
+
+| Format | Used for | Example in this repo |
+| ------ | -------- | -------------------- |
+| `.md` | Prose essays, writing posts | `writing/two-repo-model.md` |
+| `.mdx` | Component-rich posts | This file |
+| `.yaml` | Structured records, page data | `notes/portfolio-engine-at-a-glance.yaml` |
+| `.json` | Config and profile data | `config/site.json`, `profile/person.json` |
+
+Each format is validated by a Zod schema defined in `src/content.config.ts`.

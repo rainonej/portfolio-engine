@@ -1,6 +1,0 @@
-{
-  "quote": "The two-repo split was the part I didn't realize I needed. My CV and draft writing live in a private repo my engine maintainer never touches; engine upgrades arrive as a single pnpm install. It's the quietest dependency I have.",
-  "author": "Maya Ortiz",
-  "role": "Design lead, editorial team",
-  "featured": true
-}

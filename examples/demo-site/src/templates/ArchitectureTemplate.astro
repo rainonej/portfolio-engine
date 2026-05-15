@@ -1,0 +1,120 @@
+---
+import Layout from '@portfolio-engine/editorial-theme/layouts/Layout.astro';
+import IframeEmbed from '@portfolio-engine/editorial-theme/components/IframeEmbed.astro';
+import { getBase, resolveAssetUrl } from '@portfolio-engine/editorial-theme';
+
+interface Layer {
+  label: string;
+  title: string;
+  description: string;
+}
+
+interface PageSection {
+  heading: string;
+  body?: string;
+}
+
+interface PageData {
+  meta: { title: string; description: string };
+  intro?: { paragraphs?: string[] };
+  diagram?: { title: string; caption?: string };
+  sections?: PageSection[];
+  layers?: Layer[];
+  demoNote?: string;
+}
+
+interface Props {
+  page: PageData;
+  featuresHref: string;
+}
+
+const { page, featuresHref } = Astro.props;
+
+const base = getBase();
+const diagramSrc = resolveAssetUrl('/assets/demos/architecture/', base) as string;
+
+const [diagramSection] = page.sections ?? [];
+---
+
+<Layout title={page.meta.title} description={page.meta.description}>
+  <main class="mx-auto max-w-4xl px-6 pb-24 pt-40">
+    <p
+      class="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]"
+    >
+      Consumer-local route · src/pages-local/architecture.astro
+    </p>
+    <h1 class="mb-6 font-serif text-5xl font-bold leading-tight">Architecture</h1>
+
+    {
+      page.intro?.paragraphs?.map((p) => (
+        <p class="mb-12 text-xl leading-relaxed text-[var(--color-text-muted)]">{p}</p>
+      ))
+    }
+
+    {
+      diagramSection && (
+        <section class="mb-16">
+          <h2 class="mb-4 font-serif text-3xl font-bold">{diagramSection.heading}</h2>
+          {diagramSection.body && (
+            <p class="mb-6 text-base leading-relaxed text-[var(--color-text-muted)]">
+              {diagramSection.body}
+            </p>
+          )}
+          <IframeEmbed
+            src={diagramSrc}
+            title={page.diagram?.title ?? 'Architecture diagram'}
+            height={620}
+            loading="lazy"
+            sandbox="allow-scripts"
+            caption={page.diagram?.caption}
+          />
+        </section>
+      )
+    }
+
+    {
+      page.layers && page.layers.length > 0 && (
+        <section class="mb-16">
+          <h2 class="mb-4 font-serif text-3xl font-bold">The layers, in words</h2>
+          <dl class="space-y-8">
+            {page.layers.map((layer) => (
+              <div>
+                <dt class="mb-1 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]">
+                  {layer.label}
+                </dt>
+                <dd>
+                  <h3 class="mb-2 font-serif text-xl font-semibold">{layer.title}</h3>
+                  <p class="text-base leading-relaxed text-[var(--color-text-muted)]">
+                    {layer.description}
+                  </p>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )
+    }
+
+    {
+      page.demoNote && (
+        <aside data-pe-feature-callout>
+          <strong>Demo note</strong>
+          {page.demoNote}
+        </aside>
+      )
+    }
+
+    <section class="mt-12">
+      <p class="text-base leading-relaxed text-[var(--color-text-muted)]">
+        For the live route registry and override-surface contract — read directly from
+        <code>@portfolio-engine/editorial-theme</code> at build time — see the
+        <a
+          href={featuresHref}
+          class="text-[var(--color-accent-primary)] underline underline-offset-4 transition-colors hover:text-[var(--color-text-primary)]"
+        >
+          feature matrix
+        </a>.
+      </p>
+    </section>
+  </main>
+</Layout>

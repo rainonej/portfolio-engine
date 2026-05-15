@@ -1,25 +1,24 @@
 {
-  "title": "portfolio-engine",
-  "description": "The official showcase of portfolio-engine — an open-source Astro backbone for personal, portfolio, and editorial websites. Every section demonstrates a feature you can use in your own site.",
+  "title": "Portfolio Engine",
+  "description": "An Apache-2.0 Astro/Tailwind backbone for agent-native personal and professional websites: site owners contribute needs, AI agents implement scoped issues, and humans review the shared foundation.",
   "baseUrl": "https://portfolio-engine-demo-site.vercel.app",
-  "tagline": "an Astro backbone for personal sites",
-  "bookingUrl": "https://calendly.com/portfolio-engine-demo/intro",
+  "tagline": "open-source infrastructure for agent-native websites",
   "admin": {
     "showPublicLink": true,
-    "publicLinkLabel": "Try the admin tools"
+    "publicLinkLabel": "Explore admin tools"
   },
   "contact": {
-    "heading": "Start your own portfolio-engine site",
-    "body": "Paste docs/downstream/setup-with-claude.md into Claude Code and answer a handful of questions. Or open a GitHub Discussion if you want to think out loud before committing to the stack.",
+    "heading": "Contribute to Portfolio Engine",
+    "body": "Portfolio Engine is looking for Astro developers, Tailwind/design-system reviewers, accessibility reviewers, open-source maintainers, agent-workflow people, and site owners with real recurring needs. Open an issue, review the architecture, test the demo, or propose a reusable capability that should belong in the shared engine.",
     "scheduling": {
-      "enabled": true,
-      "provider": "calendly",
-      "mode": "button",
-      "url": "https://calendly.com/portfolio-engine-demo/intro",
-      "label": "Book a 15-minute walkthrough",
-      "heading": "Want a guided tour?",
-      "eyebrow": "Office hours",
-      "description": "Book a slot and we'll walk through your use case live — pair on the setup flow, look at your config, or talk through whether the engine fits your project."
+      "enabled": false,
+      "provider": "custom",
+      "mode": "link",
+      "url": "https://github.com/rainonej/portfolio-engine/issues",
+      "label": "Open a GitHub issue",
+      "heading": "Contribute through GitHub",
+      "eyebrow": "Open source",
+      "description": "Use GitHub Issues and pull requests rather than booking a private walkthrough."
     }
   },
   "social": {

@@ -1,0 +1,182 @@
+---
+import Layout from '@portfolio-engine/editorial-theme/layouts/Layout.astro';
+import type { DEFAULT_ROUTE_REGISTRY, DEFAULT_OVERRIDE_SURFACES } from '@portfolio-engine/editorial-theme';
+
+type RouteRegistry = typeof DEFAULT_ROUTE_REGISTRY;
+type OverrideSurfaces = typeof DEFAULT_OVERRIDE_SURFACES;
+
+interface Feature {
+  name: string;
+  status: 'shipped' | 'optional' | 'experimental';
+  description: string;
+  docUrl: string;
+}
+
+interface PageData {
+  meta: { title: string; description: string };
+  intro?: { dek?: string };
+  features?: Feature[];
+  demoNote?: string;
+}
+
+interface Props {
+  page: PageData;
+  routeRegistry: RouteRegistry;
+  overrideSurfaces: OverrideSurfaces;
+}
+
+const { page, routeRegistry, overrideSurfaces } = Astro.props;
+
+const statusStyles: Record<Feature['status'], string> = {
+  shipped:
+    'bg-[color-mix(in_srgb,var(--color-accent-primary)_15%,transparent)] text-[var(--color-accent-primary)]',
+  optional:
+    'bg-[var(--color-surface-wash)] text-[var(--color-text-muted)] border border-[var(--color-border-default)]',
+  experimental:
+    'bg-[color-mix(in_srgb,var(--color-accent-secondary)_20%,transparent)] text-[var(--color-accent-secondary)]',
+};
+
+const features = page.features ?? [];
+---
+
+<Layout title={page.meta.title} description={page.meta.description}>
+  <main class="mx-auto max-w-5xl px-6 pb-24 pt-40">
+    <p
+      class="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]"
+    >
+      Consumer-local route · src/pages-local/features.astro
+    </p>
+    <h1 class="mb-6 font-serif text-5xl font-bold leading-tight">Feature matrix</h1>
+
+    {
+      page.intro?.dek && (
+        <p class="mb-12 max-w-3xl text-xl leading-relaxed text-[var(--color-text-muted)]">
+          {page.intro.dek}
+        </p>
+      )
+    }
+
+    <div
+      class="overflow-hidden rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-surface-page)]"
+    >
+      <table class="w-full border-collapse text-left text-sm">
+        <caption class="sr-only">
+          Live capability matrix for portfolio-engine: each row lists a feature, its current status
+          (shipped, beta, or planned), and a short description.
+        </caption>
+        <thead>
+          <tr
+            class="border-b border-[var(--color-border-default)] bg-[var(--color-surface-wash)]"
+          >
+            <th
+              class="px-5 py-4 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent-primary)]"
+              >Feature</th
+            >
+            <th
+              class="px-5 py-4 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent-primary)]"
+              >Status</th
+            >
+            <th
+              class="px-5 py-4 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent-primary)]"
+              >What it does</th
+            >
+          </tr>
+        </thead>
+        <tbody>
+          {
+            features.map((feature, index) => (
+              <tr
+                class={
+                  index < features.length - 1
+                    ? 'border-b border-[var(--color-border-default)]'
+                    : ''
+                }
+              >
+                <td class="px-5 py-4 align-top font-serif text-base font-semibold text-[var(--color-text-primary)]">
+                  <a
+                    href={feature.docUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="underline underline-offset-4 transition-colors hover:text-[var(--color-accent-primary)]"
+                  >
+                    {feature.name}
+                  </a>
+                </td>
+                <td class="px-5 py-4 align-top">
+                  <span
+                    class={`inline-flex items-center rounded-full px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] ${statusStyles[feature.status]}`}
+                  >
+                    {feature.status}
+                  </span>
+                </td>
+                <td class="px-5 py-4 align-top text-[var(--color-text-muted)]">
+                  {feature.description}
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <section class="mt-16">
+      <h2
+        class="mb-4 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]"
+      >
+        Live registry data
+      </h2>
+      <h3 class="mb-6 font-serif text-3xl font-bold">What the theme actually declares</h3>
+      <div class="grid gap-6 md:grid-cols-2">
+        <div
+          class="rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-surface-wash)] p-6"
+        >
+          <p
+            class="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-text-muted)]"
+          >
+            DEFAULT_ROUTE_REGISTRY
+          </p>
+          <ul class="space-y-1 font-mono text-sm">
+            {
+              routeRegistry.map((route) => (
+                <li class="flex items-baseline justify-between gap-4">
+                  <span class="text-[var(--color-text-primary)]">{route.pattern}</span>
+                  <span class="text-xs text-[var(--color-text-muted)]">{route.visibility}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div
+          class="rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-surface-wash)] p-6"
+        >
+          <p
+            class="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-text-muted)]"
+          >
+            DEFAULT_OVERRIDE_SURFACES
+          </p>
+          <ul class="space-y-2 font-mono text-sm">
+            {
+              overrideSurfaces.map((surface) => (
+                <li>
+                  <span class="text-[var(--color-text-primary)]">{surface.name}</span>
+                  <span class="ml-2 text-xs text-[var(--color-text-muted)]">
+                    ({surface.props.join(', ')})
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    {
+      page.demoNote && (
+        <aside data-pe-feature-callout class="mt-12">
+          <strong>Demo note</strong>
+          {page.demoNote}
+        </aside>
+      )
+    }
+  </main>
+</Layout>

@@ -1,0 +1,19 @@
+---
+// Consumer-local route — declared in src/registry/portfolio-engine.registry.json.
+// Thin host: loads page copy from content/pages/contribute.yaml.
+// All rendering is in ContributeTemplate.
+import { getEntry } from 'astro:content';
+import ContributeTemplate from '../templates/ContributeTemplate.astro';
+
+const pageEntry = await getEntry('pages', 'contribute');
+if (!pageEntry) throw new Error('contribute.astro: pages/contribute.yaml is required.');
+
+const REPO_URL = 'https://github.com/rainonej/portfolio-engine';
+---
+
+<ContributeTemplate
+  page={pageEntry.data}
+  issuesUrl={`${REPO_URL}/issues`}
+  architectureUrl={`${REPO_URL}/blob/main/docs/architecture/README.md`}
+  goodFirstIssueUrl={`${REPO_URL}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22`}
+/>

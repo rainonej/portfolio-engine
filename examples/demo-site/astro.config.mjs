@@ -1,4 +1,5 @@
 // @ts-check
+import mdx from '@astrojs/mdx';
 import vercel from '@astrojs/vercel';
 import { defineConfig } from 'astro/config';
 import { adminTools } from '@portfolio-engine/admin-tools';
@@ -29,6 +30,7 @@ export default defineConfig({
   output: 'static',
   adapter: vercel(),
   integrations: [
+    mdx(),
     editorialTheme({
       siteConfigPath: './src/config/site.json',
       navigationConfigPath: './src/config/navigation.json',

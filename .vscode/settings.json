@@ -4,8 +4,41 @@
   },
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "//css.lint.unknownAtRules": "VS Code's built-in CSS linter does not recognize Tailwind v4 directives (@theme, @apply, @layer, @variant, etc.); silence those warnings here so the Problems pane reflects real issues only. Builds remain unaffected — Tailwind processes these via PostCSS.",
+
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.rulers": [100],
+
+  "[astro]": {
+    "editor.defaultFormatter": "astro-build.astro-vscode"
+  },
+  "[markdown]": {
+    "editor.wordWrap": "on"
+  },
+
+  "prettier.requireConfig": true,
+
+  "eslint.validate": ["javascript", "typescript", "astro"],
+
+  "tailwindCSS.includeLanguages": {
+    "astro": "html"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["cn\\(([^)]*)\\)", "'([^']*)'"],
+    ["clsx\\(([^)]*)\\)", "'([^']*)'"]
+  ],
+
   "css.lint.unknownAtRules": "ignore",
   "less.lint.unknownAtRules": "ignore",
-  "scss.lint.unknownAtRules": "ignore"
+  "scss.lint.unknownAtRules": "ignore",
+
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.astro": "$(capture).css",
+    "*.yaml": "$(capture).schema.json",
+    "astro.config.*": "tsconfig.json, .env*, pnpm-lock.yaml"
+  }
 }

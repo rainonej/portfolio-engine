@@ -1,0 +1,105 @@
+meta:
+  title: Workflow — Portfolio Engine
+  description: >
+    The agent-safe contribution workflow: site-owner needs → scoped issues →
+    human or AI implementation → review on the shared foundation.
+
+intro:
+  dek: >
+    Portfolio Engine is built around a contribution flow that is honest about
+    what AI coding agents are good at and where humans still own the call. Site
+    owners contribute needs. Scoped issues route work to the right lane. The
+    shared engine improves on every cycle.
+
+sections:
+  - eyebrow: Four lanes
+    heading: Where each kind of contribution lives
+
+  - eyebrow: What keeps it safe
+    heading: Guardrails on every lane
+
+  - eyebrow: Start here
+    heading: Pick the lane that fits the work
+
+lanes:
+  - eyebrow: Lane 01
+    heading: Site-owner work
+    body: >
+      Describe a recurring website need. You don't need to propose code. The
+      most useful issues capture the user need, examples from real downstream
+      sites, acceptance criteria, and whether the feature should be reusable in
+      the engine or stay site-specific.
+    examples:
+      - Issue templates for site needs
+      - Examples from downstream consumers
+      - Acceptance criteria written in plain English
+      - Reuse questions (engine vs site-specific)
+
+  - eyebrow: Lane 02
+    heading: Simple agent tasks
+    body: >
+      Scoped, single-package changes against typed contracts. Good fits for an
+      AI coding agent working from the public docs and AGENTS.md. The engine and
+      consumer boundaries make the blast radius obvious before code is written.
+    examples:
+      - Add a new theme component with declared props
+      - Wire a new config field through schema to engine-core to theme
+      - Document an existing override surface
+      - Write a content-collection migration
+
+  - eyebrow: Lane 03
+    heading: Agentic automation
+    body: >
+      Multi-step workflows that read repository state, propose patches, and
+      report back. The workflow-kit package is the scaffolding. Today:
+      experimental. Tomorrow: routing consumer changes upstream when they look
+      reusable.
+    examples:
+      - Classify a consumer change as reusable vs site-specific
+      - Open an upstream PR when criteria are met
+      - Generate a release-note draft from CHANGELOG entries
+      - Compare manifest snapshots across PRs
+
+  - eyebrow: Lane 04
+    heading: Human-only decisions
+    body: >
+      License, governance, breaking API changes, security-sensitive surfaces,
+      accessibility regressions, and anything where the right call depends on
+      context an agent does not have. These get reviewed by a maintainer, not
+      auto-merged.
+    examples:
+      - Schema-breaking changes
+      - New override surfaces and prop contracts
+      - Auth, OAuth, and admin-tools surfaces
+      - Accessibility review of generated markup
+
+guardrails:
+  - title: Typed contracts
+    body: >
+      Config, content, route registries, and override surfaces are validated
+      through shared schemas at build time. A misconfigured change fails with a
+      path-pointing error before it ships.
+
+  - title: Package boundaries
+    body: >
+      schema to engine-core to editorial-theme to consumer. Dependencies only
+      point downward. Reviewers can read the dependency direction and know what
+      a change can and cannot affect.
+
+  - title: Issue labels
+    body: >
+      Labels distinguish site-owner work, simple agent tasks, agentic
+      automation, and human-only decisions, so the same backlog stays legible
+      to humans and to agents reading from public docs.
+
+  - title: Visual QA and CI
+    body: >
+      CI enforces the no-public/-in-engine-packages rule, the layered dependency
+      direction, and schema validation on every commit. Visual QA loops cover
+      the rendered output that types alone cannot describe.
+
+demoNote: >
+  This page is a consumer-local route declared in
+  src/registry/portfolio-engine.registry.json. The lanes and guardrails
+  describe the public engine repo — labels and templates are visible there
+  without any private access.

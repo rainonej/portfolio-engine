@@ -1,0 +1,36 @@
+header:
+  eyebrow: Portfolio Engine
+  title: At a Glance
+  dek: >
+    Key facts about the engine for quick reference — sourced from a YAML file
+    using PageHeaderSchema, MetricSchema, and RelatedLinkSchema from
+    @portfolio-engine/schema.
+
+tags:
+  - Architecture
+  - Schema
+  - Reference
+
+metrics:
+  - value: '4'
+    label: Core packages
+    note: schema, engine-core, editorial-theme, admin-tools
+  - value: 100%
+    label: Type-safe content
+    note: Every config file and content entry validated by Zod at build time
+  - value: '0'
+    label: Client JS by default
+    note: Static output — hydration is opt-in per component
+  - value: '2'
+    label: Git repos
+    note: Public engine repo + private consumer repo, no shared history
+
+links:
+  - title: Two-repo model
+    href: /writing/two-repo-model
+    label: Architecture
+  - title: Why Astro, Zod, and Tailwind v4
+    href: /writing/why-astro-zod-tailwind
+    label: Stack decisions
+  - title: GitHub
+    href: https://github.com/rainonej/portfolio-engine

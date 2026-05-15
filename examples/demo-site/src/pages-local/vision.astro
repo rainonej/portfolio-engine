@@ -1,0 +1,22 @@
+---
+// Consumer-local route — declared in src/registry/portfolio-engine.registry.json.
+// Thin host: loads page copy from content/pages/vision.yaml and person data
+// from content/profile/person.json, then delegates all rendering to VisionTemplate.
+import { getEntry } from 'astro:content';
+import { ProfilePersonSchema } from '@portfolio-engine/schema';
+import VisionTemplate from '../templates/VisionTemplate.astro';
+
+const pageEntry = await getEntry('pages', 'vision');
+if (!pageEntry) throw new Error('vision.astro: pages/vision.yaml is required.');
+
+const personEntry = await getEntry('profile', 'person');
+if (!personEntry) throw new Error('vision.astro: profile/person.json is required.');
+
+const person = ProfilePersonSchema.parse(personEntry.data);
+---
+
+<VisionTemplate
+  page={pageEntry.data}
+  values={person.values ?? []}
+  principles={person.workingPrinciples ?? []}
+/>
