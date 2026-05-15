@@ -8,7 +8,7 @@
 - [ ] No site-specific copy was added to `src/pages-local/**/*.astro`
 - [ ] No fallback strings (`?? ''`, `?? null`) were added for fields that belong in a schema
 - [ ] Schema changes use `.strict()` — no `.passthrough()` for first-class content
-- [ ] `pnpm check:rendered-links` passed after build (static href validation)
+- [ ] `node scripts/check-rendered-links.mjs` passed after build (static href validation)
 - [ ] `pnpm check` passes
 - [ ] `pnpm build` passes
 

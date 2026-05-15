@@ -16,7 +16,7 @@ Downstream agents should compare and update:
 - `scripts/check-rendered-links.mjs` — hardened: supports single-quoted hrefs, normalizes leading slashes, documents static-only scope
 - `scripts/check-content-boundaries.mjs` — hardened: fixed brittle CSS regex, added heuristic-limitation header comment
 - `.github/pull_request_template.md` — add interaction verification section distinguishing static vs browser checks
-- `.claude/CLAUDE.md` — add rendered-link and interaction check steps to local validation
+- `CLAUDE.md` — add rendered-link and interaction check steps to local validation
 - `.github/copilot-instructions.md` — same additions
 - `.cursor/rules/downstream-agent-rules.md` — add interaction verification requirements
 

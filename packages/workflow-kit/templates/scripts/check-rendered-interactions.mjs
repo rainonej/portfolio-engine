@@ -72,7 +72,7 @@ for (const viewport of viewports.length > 0
   for (const route of routes) {
     const url = baseUrl.replace(/\/$/, '') + route;
     try {
-      await page.goto(url, { waitUntil: 'networkidle' });
+      await page.goto(url, { waitUntil: 'load' });
       const h1 = page.locator('h1').first();
       const visible = await h1.isVisible().catch(() => false);
       if (visible) {
@@ -102,7 +102,7 @@ for (const viewport of viewports.length > 0
     const { from, role, name, expectedUrl, allowNewPage = false, note } = check;
     const url = baseUrl.replace(/\/$/, '') + from;
     try {
-      await page.goto(url, { waitUntil: 'networkidle' });
+      await page.goto(url, { waitUntil: 'load' });
 
       const locator = page.getByRole(role, { name });
       const isVisible = await locator
@@ -123,50 +123,47 @@ for (const viewport of viewports.length > 0
 
       // Playwright actionability check: click() will throw if the element is
       // obscured, disabled, or not stable — this catches overlay interception.
+      let finalUrl;
       if (allowNewPage) {
-        const [newPage] = await Promise.all([
-          context.waitForEvent('page'),
-          locator.first().click(),
-        ]);
-        await newPage.waitForLoadState('networkidle');
-        const finalUrl = newPage.url();
-        if (expectedUrl && !expectedUrl.test(finalUrl)) {
-          errors.push({
-            viewport: viewport.name,
-            route: from,
-            check: `${role}[name=${name}] → ${String(expectedUrl)}`,
-            result: 'FAIL',
-            detail: `Opened new page at ${finalUrl}, expected ${String(expectedUrl)}.${note ? ' Note: ' + note : ''}`,
-          });
+        // allowNewPage: true means the click may open a new tab/popup OR navigate the
+        // current tab (e.g. inline PDF, same-origin redirect). Register the new-tab
+        // listener before clicking to avoid race conditions.
+        const newTabPromise = context.waitForEvent('page', { timeout: 2000 }).catch(() => null);
+        await locator.first().click();
+        const newTab = await newTabPromise;
+        if (newTab) {
+          // New tab or popup opened.
+          await newTab.waitForLoadState('load').catch(() => {});
+          finalUrl = newTab.url();
+          await newTab.close();
         } else {
-          passes.push({
-            viewport: viewport.name,
-            route: from,
-            check: `${role}[name=${name}] → ${String(expectedUrl)}`,
-            result: 'PASS',
-          });
+          // Same-tab navigation. Note: if the link triggers a file download, the
+          // current URL may not change — verify download links by href attribute
+          // rather than relying on this click check.
+          await page.waitForLoadState('load').catch(() => {});
+          finalUrl = page.url();
         }
-        await newPage.close();
       } else {
         await locator.first().click();
-        await page.waitForLoadState('networkidle');
-        const finalUrl = page.url();
-        if (expectedUrl && !expectedUrl.test(finalUrl)) {
-          errors.push({
-            viewport: viewport.name,
-            route: from,
-            check: `${role}[name=${name}] → ${String(expectedUrl)}`,
-            result: 'FAIL',
-            detail: `Navigated to ${finalUrl}, expected ${String(expectedUrl)}.${note ? ' Note: ' + note : ''}`,
-          });
-        } else {
-          passes.push({
-            viewport: viewport.name,
-            route: from,
-            check: `${role}[name=${name}] → ${String(expectedUrl)}`,
-            result: 'PASS',
-          });
-        }
+        await page.waitForLoadState('load').catch(() => {});
+        finalUrl = page.url();
+      }
+
+      if (expectedUrl && !expectedUrl.test(finalUrl)) {
+        errors.push({
+          viewport: viewport.name,
+          route: from,
+          check: `${role}[name=${name}] → ${String(expectedUrl)}`,
+          result: 'FAIL',
+          detail: `Navigated to ${finalUrl}, expected ${String(expectedUrl)}.${note ? ' Note: ' + note : ''}`,
+        });
+      } else {
+        passes.push({
+          viewport: viewport.name,
+          route: from,
+          check: `${role}[name=${name}] → ${String(expectedUrl)}`,
+          result: 'PASS',
+        });
       }
     } catch (err) {
       // On click failure, try to report what element is actually at the click point.
