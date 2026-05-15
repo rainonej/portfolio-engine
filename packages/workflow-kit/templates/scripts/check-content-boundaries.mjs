@@ -10,6 +10,11 @@
  * NOTE: getCollection/getEntry in route files is intentional for the thin-host
  * pattern (route loads data, passes to template). This script does NOT flag it.
  *
+ * IMPORTANT: This is a heuristic guardrail, not a proof that all labels live in YAML.
+ * Short strings, generic UI labels, and some fallback labels may remain unless a
+ * downstream repo adopts stricter local policy. False negatives are expected for
+ * strings under 40 characters and for strings that look like CSS utility classes.
+ *
  * Copy this script to scripts/check-content-boundaries.mjs in your downstream repo.
  */
 
@@ -72,7 +77,7 @@ function looksLikeAuthoredCopy(str) {
     if (cssLike / tokens.length >= 0.65) return false;
   }
   // Single-token CSS expression (e.g. bg-[color-mix(in_srgb,var(--…)_15%,…)])
-  if (tokens.length === 1 && /^[\w/[\]:!.()\-,%#_]+$/.test(str)) return false;
+  if (tokens.length === 1 && /^[\w/[\]:!.()\\,%#_-]+$/.test(str)) return false;
   return true;
 }
 

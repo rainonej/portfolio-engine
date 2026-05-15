@@ -27,21 +27,24 @@ templates/
       downstream-agent-rules.md       Rules for AI agents making changes to downstream sites
 
   prompts/
-    architecture-review.prompt.md     Review changed files for content/schema/template separation
-    downstream-upgrade.prompt.md      How to apply a new Portfolio Engine release
-    content-boundary-review.prompt.md Detailed content boundary check for a PR
-    visual-review.prompt.md           Visual design review (avoids content authoring)
+    architecture-review.prompt.md          Review changed files for content/schema/template separation
+    downstream-upgrade.prompt.md           How to apply a new Portfolio Engine release
+    content-boundary-review.prompt.md      Detailed content boundary check for a PR
+    visual-review.prompt.md                Visual design review (avoids content authoring)
+    rendered-interaction-review.prompt.md  Browser interaction review: CTAs, cards, nav, overlays
 
   husky/
     pre-commit                      Git pre-commit hook — runs lint-staged (auto-fix before commit)
     lint-staged.config.mjs          lint-staged config (eslint --fix + prettier --write on staged files)
 
   scripts/
-    check-content-boundaries.mjs    Fail when content leaks into route/template/component files
-    check-rendered-links.mjs        Fail on stale internal links or placeholder content
-    check-schema-strictness.mjs     Fail on .passthrough(), type casts; warn on null fallbacks
-    check-unused.mjs                Knip wrapper for unused files, exports, and dependencies
-    check-tooling-version.mjs       Warn when upstream templates may have changed
+    check-content-boundaries.mjs             Fail when content leaks into route/template/component files
+    check-rendered-links.mjs                 Fail on stale internal links or placeholder content (static only)
+    check-rendered-interactions.mjs          Browser interaction smoke-test (Playwright — see below)
+    rendered-interactions.config.example.mjs Example config for check-rendered-interactions
+    check-schema-strictness.mjs              Fail on .passthrough(), type casts; warn on null fallbacks
+    check-unused.mjs                         Knip wrapper for unused files, exports, and dependencies
+    check-tooling-version.mjs                Warn when upstream templates may have changed
 ```
 
 ## How to use
@@ -185,6 +188,58 @@ import {
 
 Compose these into site-specific schemas in your downstream `src/content.config.ts`.
 Do not use `.passthrough()` on first-class content schemas.
+
+## Static rendered links vs browser interactions
+
+`check-rendered-links` verifies that `href` values in built HTML point to generated files in
+`dist/`. It does not verify that a user can click the element in a browser.
+
+A downstream refactor can pass static link checks while still breaking real click behavior if
+an overlay, nested anchor, z-index layer, or preview toolbar intercepts interaction. This gap
+was exposed by downstream PR #60 in `jordan-site`:
+<https://github.com/rainonej/jordan-site/pull/60>
+
+**Concrete case study:** In that PR, all hrefs were correct and static link checks passed.
+But `.ambient-bg` — the decorative background component from `editorial-theme` — was
+`aria-hidden` and visually behind the page (`-z-10`), yet still intercepted clicks and text
+selection because it lacked `pointer-events: none`. Adding `pointer-events: none` to the
+ambient background layer restored all interactions. This bug is now fixed upstream in
+`@portfolio-engine/editorial-theme`.
+
+Use `check-rendered-interactions` (or equivalent Playwright tests) when a change affects:
+
+- CTAs, buttons, or primary links
+- Cards (project, research, writing)
+- Header or footer navigation
+- Overlays, hover layers, or layout wrappers
+- Links inside complex components
+- Vercel preview behavior
+
+### Setting up Playwright for interaction checks
+
+Copy the interaction smoke template from workflow-kit:
+
+```bash
+cp node_modules/@portfolio-engine/workflow-kit/templates/scripts/check-rendered-interactions.mjs scripts/
+cp node_modules/@portfolio-engine/workflow-kit/templates/scripts/rendered-interactions.config.example.mjs scripts/rendered-interactions.config.mjs
+```
+
+Install Playwright:
+
+```bash
+pnpm add -D @playwright/test
+pnpm exec playwright install --with-deps chromium
+```
+
+Edit `scripts/rendered-interactions.config.mjs` to match your site's routes and interactions,
+then run:
+
+```bash
+SITE_URL=https://your-preview.vercel.app node scripts/check-rendered-interactions.mjs
+```
+
+Add `check:rendered-interactions` to your `package.json` scripts and run it after deploying
+Vercel preview builds for changes that touch CTAs, cards, or navigation.
 
 ## Changeset policy
 
