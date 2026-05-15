@@ -9,6 +9,11 @@
  * - No placeholder strings appear in public HTML
  * - No stale /work/ or /writing/ links if those routes were renamed
  *
+ * IMPORTANT: This script verifies static rendered hrefs.
+ * It does not prove the element is visible, clickable, unobscured, or reachable
+ * through browser interaction. For that, use the rendered interaction smoke template
+ * (scripts/check-rendered-interactions.mjs) with Playwright.
+ *
  * Copy this script to scripts/check-rendered-links.mjs in your downstream repo.
  * Edit RENAMED_ROUTES and PLACEHOLDER_STRINGS to match your site.
  *
@@ -29,6 +34,9 @@ const WARN_ONLY = process.argv.includes('--warn-only');
 // Routes that were renamed in this downstream site.
 // Format: ['/old-route', '/new-route']
 // If you renamed /work to /projects, add ['/work', '/projects'].
+// Downstream repos MUST customize this list to match their own route history.
+// Example: if you previously used /work and renamed it to /product-achievements,
+// add ['/work', '/product-achievements'].
 const RENAMED_ROUTES = [
   // ['/work', '/projects'],
 ];
@@ -80,15 +88,17 @@ for (const htmlFile of htmlFiles) {
     }
   }
 
-  // Check internal hrefs resolve
-  const hrefMatches = src.matchAll(/href="(\/[^"#?]+)"/g);
+  // Check internal hrefs resolve. Matches both single- and double-quoted hrefs.
+  const hrefMatches = src.matchAll(/href=(["'])(\/[^"'#?]+)\1/g);
   for (const m of hrefMatches) {
-    const href = m[1];
-    const candidate1 = join(DIST, href, 'index.html');
-    const candidate2 = join(DIST, href.replace(/\/$/, '') + '.html');
-    const candidate3 = join(DIST, href);
+    const href = m[2];
+    // Normalize leading slash before joining with DIST to avoid double-slash paths.
+    const hrefRel = href.replace(/^\/+/, '');
+    const candidate1 = join(DIST, hrefRel, 'index.html');
+    const candidate2 = join(DIST, hrefRel.replace(/\/$/, '') + '.html');
+    const candidate3 = join(DIST, hrefRel);
     if (!existsSync(candidate1) && !existsSync(candidate2) && !existsSync(candidate3)) {
-      const msg = `  ${rel}  [dead-link]  href="${href}" does not resolve in dist/`;
+      const msg = `  ${rel}  [dead-link]  href="${href}" does not resolve in ${DIST}`;
       if (WARN_ONLY) warnings.push(msg);
       else errors.push(msg);
     }
