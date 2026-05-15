@@ -21,6 +21,14 @@ Before editing `src/pages-local/`, `src/overrides/`, or package-level components
 - Authored content belongs in `src/content/`, not in Astro files.
 - Run `node scripts/check-content-boundaries.mjs` after your change.
 
+If the change touches CTAs, cards, navigation, overlays, or layout wrappers:
+
+- Run `node scripts/check-rendered-links.mjs` after build (validates static hrefs).
+- Also run browser interaction verification — static link checks cannot catch overlay,
+  pointer-events, z-index, or nested-anchor issues that break real clicks.
+- Use `node scripts/check-rendered-interactions.mjs` with a Vercel preview URL, or
+  use Playwright MCP / browser DevTools to verify CTAs and cards are actually clickable.
+
 ## Schema changes
 
 - Use primitives from `@portfolio-engine/schema` (MetricSchema, EvidenceItemSchema, etc.).
@@ -39,3 +47,5 @@ do not blindly overwrite local customizations.
 - Add content to route files or templates.
 - Invent new schema fields without updating all content files.
 - Use `as SomeType` casts on `entry.data` from content collections.
+- Claim browser interactions were verified unless you actually clicked elements or ran Playwright.
+- Mistake `check-rendered-links` (static href check) for proof that elements are clickable.

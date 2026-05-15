@@ -54,7 +54,23 @@ If boundary-check scripts are present:
 ```bash
 node scripts/check-content-boundaries.mjs
 node scripts/check-schema-strictness.mjs
+node scripts/check-rendered-links.mjs
 ```
+
+`check-rendered-links` validates static hrefs. It does **not** prove elements are clickable.
+
+For changes that touch CTAs, cards, navigation, overlays, or layout wrappers, also run:
+
+```bash
+SITE_URL=https://your-preview.vercel.app node scripts/check-rendered-interactions.mjs
+```
+
+In the PR body, distinguish:
+
+- **Static rendered HTML verified** — `check-rendered-links` output or equivalent
+- **Browser interaction verified** — Playwright output, Vercel preview URL, or manual steps
+
+Do not claim browser interactions were verified unless you actually clicked or ran Playwright.
 
 ## Tooling rules
 
