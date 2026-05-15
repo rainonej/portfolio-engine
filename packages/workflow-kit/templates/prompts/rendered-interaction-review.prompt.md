@@ -68,6 +68,15 @@ actual behavior, suspected cause, and file pointer.
   sits above interactive elements and intercepts clicks?
 - Are `pointer-events: none` or `z-index` values hiding or blocking interactive areas?
 - Does the Vercel Toolbar or any preview banner intercept CTA clicks?
+- **Decorative background layers** — ambient gradient/blob backgrounds are a known
+  source of click interception. A layer can be `aria-hidden` and visually behind the
+  page (`-z-10`) yet still block clicks and text selection if it lacks `pointer-events:
+none`. In `jordan-site` PR #60, `.ambient-bg` was the root cause: static
+  rendered-link checks passed because hrefs were correct, but clicks failed in all
+  browsers until `pointer-events: none` was applied to the layer. Search specifically:
+  ```bash
+  rg -n "ambient-bg|fixed|inset-0|pointer-events" src packages
+  ```
 
 ### Nested anchor check
 
@@ -99,6 +108,11 @@ When an interaction fails or is suspect, use the following to diagnose:
 4. **Search for overlay patterns in source** — grep or search the component tree for:
    - `absolute`, `fixed`, `inset-0`, `z-`, `pointer-events`
    - `<a` inside another `<a`
+   - `ambient-bg`, `ambient-blob`, or any decorative gradient layer
+
+5. **Verify text selection** — if text cannot be selected on the page, a fixed overlay
+   likely intercepts all pointer events, not just clicks. This is the same class of bug
+   as click interception.
 
 ---
 

@@ -6,8 +6,12 @@
  *
  * The checks below are based on the failure mode exposed by jordan-site PR #60,
  * where static rendered-link checks passed but homepage CTAs, resume links, and
- * research cards were not reliably clickable in a real browser due to overlay,
- * z-index, or nested-anchor issues.
+ * research cards were not reliably clickable in a real browser.
+ *
+ * Root cause: the decorative .ambient-bg layer from @portfolio-engine/editorial-theme
+ * was aria-hidden and visually behind the page (-z-10), but lacked pointer-events:none.
+ * It intercepted all clicks and text selection. This is now fixed upstream, but if you
+ * see clicks fail while hrefs are correct, check decorative fixed/background layers first.
  *
  * See check-rendered-interactions.mjs for the runner.
  */

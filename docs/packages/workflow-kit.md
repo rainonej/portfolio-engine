@@ -60,6 +60,13 @@ if any of the above issues are present. This gap was exposed by downstream PR #6
 `jordan-site`:
 <https://github.com/rainonej/jordan-site/pull/60>
 
+**Concrete case study:** All hrefs were correct and static link checks passed, but browser
+clicks failed. The root cause was the decorative `.ambient-bg` layer from
+`@portfolio-engine/editorial-theme`: `aria-hidden` and behind the page (`-z-10`), but without
+`pointer-events: none`, so it still intercepted clicks and text selection. This bug is fixed
+upstream as of this release. The downstream lesson: decorative fixed background layers must
+explicitly disable pointer events regardless of `z-index` or `aria-hidden`.
+
 Use `check-rendered-interactions` when a change affects:
 
 - CTAs, buttons, or primary links

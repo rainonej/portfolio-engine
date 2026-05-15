@@ -199,6 +199,13 @@ an overlay, nested anchor, z-index layer, or preview toolbar intercepts interact
 was exposed by downstream PR #60 in `jordan-site`:
 <https://github.com/rainonej/jordan-site/pull/60>
 
+**Concrete case study:** In that PR, all hrefs were correct and static link checks passed.
+But `.ambient-bg` — the decorative background component from `editorial-theme` — was
+`aria-hidden` and visually behind the page (`-z-10`), yet still intercepted clicks and text
+selection because it lacked `pointer-events: none`. Adding `pointer-events: none` to the
+ambient background layer restored all interactions. This bug is now fixed upstream in
+`@portfolio-engine/editorial-theme`.
+
 Use `check-rendered-interactions` (or equivalent Playwright tests) when a change affects:
 
 - CTAs, buttons, or primary links

@@ -11,6 +11,11 @@
  * anchors, z-index conflicts, and Vercel toolbar interception that static checks
  * cannot detect.
  *
+ * Known failure class: decorative background layers (e.g. ambient-bg, gradient blobs)
+ * can intercept clicks and text selection even when aria-hidden and behind the page
+ * (z-index: -1 or lower), if they lack pointer-events: none. If clicks fail but hrefs
+ * are correct, inspect fixed/absolute background layers first.
+ *
  * Requirements:
  *   pnpm add -D @playwright/test
  *   pnpm exec playwright install --with-deps chromium
@@ -164,12 +169,46 @@ for (const viewport of viewports.length > 0
         }
       }
     } catch (err) {
+      // On click failure, try to report what element is actually at the click point.
+      // This catches the ambient-background / overlay interception pattern, where a
+      // decorative layer sits above the interactive element and blocks the click.
+      let interceptInfo = '';
+      try {
+        const locator = page.getByRole(role, { name });
+        const box = await locator
+          .first()
+          .boundingBox()
+          .catch(() => null);
+        if (box) {
+          const hit = await page.evaluate(
+            ({ x, y }) => {
+              // Runs in browser context — document and getComputedStyle are browser globals.
+              const el = document.elementFromPoint(x, y); // eslint-disable-line no-undef
+              if (!el) return null;
+              const s = getComputedStyle(el); // eslint-disable-line no-undef
+              return {
+                tag: el.tagName,
+                className: el.getAttribute('class')?.slice(0, 80),
+                pointerEvents: s.pointerEvents,
+                position: s.position,
+                zIndex: s.zIndex,
+              };
+            },
+            { x: box.x + box.width / 2, y: box.y + box.height / 2 },
+          );
+          if (hit) {
+            interceptInfo = ` Intercepted by: <${hit.tag} class="${hit.className}" style="pointer-events:${hit.pointerEvents};position:${hit.position};z-index:${hit.zIndex}">`;
+          }
+        }
+      } catch {
+        // diagnostic failure is non-fatal
+      }
       errors.push({
         viewport: viewport.name,
         route: from,
         check: `${role}[name=${name}] clickable`,
         result: 'FAIL',
-        detail: `${err.message}${note ? ' Note: ' + note : ''}`,
+        detail: `${err.message}${interceptInfo}${note ? ' Note: ' + note : ''}`,
       });
     }
   }

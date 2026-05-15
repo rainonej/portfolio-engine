@@ -49,3 +49,7 @@ do not blindly overwrite local customizations.
 - Use `as SomeType` casts on `entry.data` from content collections.
 - Claim browser interactions were verified unless you actually clicked elements or ran Playwright.
 - Mistake `check-rendered-links` (static href check) for proof that elements are clickable.
+- Assume a decorative layer is non-interactive just because it is `aria-hidden` or has a
+  negative `z-index`. Decorative background layers need explicit `pointer-events: none` to
+  avoid intercepting clicks and text selection. Search for `ambient-bg`, `fixed`, or `inset-0`
+  layers and verify they have `pointer-events-none`.
