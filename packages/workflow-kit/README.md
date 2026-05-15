@@ -39,7 +39,7 @@ templates/
   scripts/
     check-content-boundaries.mjs    Fail when content leaks into route/template/component files
     check-rendered-links.mjs        Fail on stale internal links or placeholder content
-    check-schema-strictness.mjs     Fail on .passthrough(), type casts, and null fallbacks
+    check-schema-strictness.mjs     Fail on .passthrough(), type casts; warn on null fallbacks
     check-unused.mjs                Knip wrapper for unused files, exports, and dependencies
     check-tooling-version.mjs       Warn when upstream templates may have changed
 ```

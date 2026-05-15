@@ -51,7 +51,7 @@ try {
   writeFileSync(KNIP_CONFIG_PATH, JSON.stringify(KNIP_CONFIG, null, 2));
   tempFileCreated = true;
 
-  execSync(`npx knip --config ${KNIP_CONFIG_PATH}`, { stdio: 'inherit', cwd: ROOT });
+  execSync(`npx knip --config "${KNIP_CONFIG_PATH}"`, { stdio: 'inherit', cwd: ROOT });
   console.log('check-unused: no unused files or exports found.');
 } catch {
   // Knip exits non-zero when it finds issues; output is already printed

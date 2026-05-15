@@ -5,7 +5,9 @@
 // Templates live under packages/workflow-kit/templates/.
 // Copy them into your downstream repo intentionally; do not auto-overwrite.
 
-export const WORKFLOW_KIT_VERSION = '0.0.2';
+import pkg from '../package.json' with { type: 'json' };
+
+export const WORKFLOW_KIT_VERSION: string = pkg.version;
 
 export const TEMPLATE_PATHS = {
   agent: {

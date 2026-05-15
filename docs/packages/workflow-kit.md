@@ -11,13 +11,13 @@ usage instructions and the full template listing.
 **Boundary-check scripts** (`templates/scripts/`) — copy into your downstream `scripts/` directory
 and wire them into CI:
 
-| Script                         | What it catches                                    |
-| ------------------------------ | -------------------------------------------------- |
-| `check-content-boundaries.mjs` | Content leaked into route/template/component files |
-| `check-schema-strictness.mjs`  | `.passthrough()`, type casts, null fallbacks       |
-| `check-rendered-links.mjs`     | Stale internal links, placeholder content          |
-| `check-unused.mjs`             | Unused files/exports (Knip wrapper)                |
-| `check-tooling-version.mjs`    | Drift from upstream templates                      |
+| Script                         | What it catches                                                                  |
+| ------------------------------ | -------------------------------------------------------------------------------- |
+| `check-content-boundaries.mjs` | Content leaked into route/template/component files                               |
+| `check-schema-strictness.mjs`  | `.passthrough()`, type casts (errors); null fallbacks, many optionals (warnings) |
+| `check-rendered-links.mjs`     | Stale internal links, placeholder content                                        |
+| `check-unused.mjs`             | Unused files/exports (Knip wrapper)                                              |
+| `check-tooling-version.mjs`    | Drift from upstream templates                                                    |
 
 **AI prompts** (`templates/prompts/`) — copy-paste into Claude Code, Cursor, or a PR review workflow:
 
@@ -31,7 +31,7 @@ and wire them into CI:
 **GitHub Actions template** (`templates/github/ci.yml`) — starter CI with type check,
 content boundary check, and build.
 
-**VS Code setup** (`templates/vscode/`) — format-on-save, YAML schema associations,
+**VS Code setup** (`templates/vscode/`) — format-on-save, file nesting, rulers,
 recommended extensions (Astro, MDX, YAML, ESLint, Prettier, Tailwind).
 
 **Cursor/MCP setup** (`templates/cursor/`) — architecture boundary rules and downstream
