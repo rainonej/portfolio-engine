@@ -23,7 +23,7 @@ const pillars = (config.features.pillars ?? []).map((p: Pillar) => ({
   image: p.image ? (resolveAssetUrl(p.image, base) ?? undefined) : undefined,
 }));
 
-const projects = await getProjects();
+const projects = config.features.work ? await getProjects() : [];
 const featured = sortByDateDesc(projects.filter((p) => p.data.featured)).slice(0, 3);
 
 const recentPosts = sortByDateDesc(await getWritingPosts()).slice(0, 3);
@@ -64,7 +64,7 @@ const featuredTestimonials = config.features.testimonials
 
   <!-- Featured Work (no override surface — consistent across all consumers) -->
   {
-    featured.length > 0 && (
+    config.features.work && featured.length > 0 && (
       <Reveal as="section" class="px-6 py-24" delay={60}>
         <div class="mx-auto max-w-5xl">
           <SectionIntro
