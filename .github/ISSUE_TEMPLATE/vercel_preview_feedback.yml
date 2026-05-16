@@ -1,0 +1,67 @@
+name: Vercel preview feedback
+description: Convert preview or visual feedback into a structured issue
+title: '[Preview feedback]: '
+labels:
+  - source:vercel
+  - task:bug-fix
+body:
+  - type: input
+    id: preview_url
+    attributes:
+      label: Preview URL
+      placeholder: https://...
+    validations:
+      required: true
+  - type: input
+    id: route
+    attributes:
+      label: Route/path
+      placeholder: /, /work, /features, etc.
+    validations:
+      required: true
+  - type: input
+    id: viewport
+    attributes:
+      label: Viewport/device
+      placeholder: mobile 390x844, desktop 1440x1000, etc.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What looks wrong?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot or copied preview comment
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope guess
+      options:
+        - site-specific
+        - reusable engine feature
+        - design-system issue
+        - accessibility issue
+        - unknown
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: |
+        - [ ] ...
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety
+      options:
+        - label: No secrets or private content are included.
+          required: true

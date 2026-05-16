@@ -1,0 +1,35 @@
+name: Architecture review
+description: Review package boundaries, route ownership, schemas, or extension points
+title: '[Architecture review]: '
+labels:
+  - task:decision
+body:
+  - type: textarea
+    id: area
+    attributes:
+      label: Area under review
+      placeholder: Package boundary, route injection, override surfaces, schema contract, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: concern
+    attributes:
+      label: Concern or question
+    validations:
+      required: true
+  - type: textarea
+    id: suggested_change
+    attributes:
+      label: Suggested change
+  - type: textarea
+    id: risk
+    attributes:
+      label: Risk if unchanged
+  - type: checkboxes
+    id: review_type
+    attributes:
+      label: Review type
+      options:
+        - label: This may affect public package contracts.
+        - label: This may affect downstream consumers.
+        - label: This may require maintainer decision before implementation.
