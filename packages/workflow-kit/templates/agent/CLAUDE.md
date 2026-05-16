@@ -2,6 +2,8 @@
 
 This is a consumer site built on `@portfolio-engine/editorial-theme` and optionally `@portfolio-engine/admin-tools`.
 
+For the agent workflow rules that govern Portfolio Engine and all consumer sites built on it, read [AGENTS.md](https://github.com/rainonej/portfolio-engine/blob/main/AGENTS.md) in the portfolio-engine repo.
+
 The upstream engine lives at:
 
 ```text
