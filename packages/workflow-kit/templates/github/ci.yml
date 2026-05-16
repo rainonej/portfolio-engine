@@ -12,6 +12,7 @@ on:
 
 jobs:
   lint:
+    name: Format & lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -35,6 +36,7 @@ jobs:
         run: pnpm format:check
 
   check:
+    name: Types, docs & schema
     runs-on: ubuntu-latest
     needs: lint
     steps:
@@ -61,7 +63,11 @@ jobs:
       - name: Schema strictness check
         run: node scripts/check-schema-strictness.mjs
 
+      - name: Tooling version check
+        run: pnpm check:tooling-version
+
   build:
+    name: Build, smoke & links
     runs-on: ubuntu-latest
     needs: check
     steps:
@@ -107,3 +113,26 @@ jobs:
       #     fi
       #   env:
       #     SITE_URL: ${{ secrets.VERCEL_PREVIEW_URL }}
+
+  unused:
+    name: Dead code audit
+    runs-on: ubuntu-latest
+    needs: lint
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Unused files and exports check
+        run: pnpm check:unused
