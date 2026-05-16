@@ -1,0 +1,42 @@
+# Portfolio Engine — downstream rendered-interactions workflow template
+# Copy this to .github/workflows/rendered-interactions.yml in your downstream repo.
+#
+# Triggers on deployment_status (fires when Vercel marks a deployment successful).
+# No polling or timed delay needed — the event carries the deployment URL directly.
+
+name: Rendered Interactions
+
+on:
+  deployment_status:
+
+jobs:
+  rendered-interactions:
+    name: Rendered interaction checks
+    runs-on: ubuntu-latest
+    if: >
+      github.event.deployment_status.state == 'success' &&
+      contains(github.event.deployment_status.environment_url, '.vercel.app')
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.deployment.sha }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Rendered interaction checks
+        run: pnpm check:rendered-interactions
+        env:
+          SITE_URL: ${{ github.event.deployment_status.environment_url }}
