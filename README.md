@@ -1,6 +1,6 @@
 # Portfolio Engine
 
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://portfolio-engine-demo-site.vercel.app)
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://portfolio-engine-psi.vercel.app)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 
 Portfolio Engine is an Apache-2.0 Astro/Tailwind backbone for agent-native personal and professional websites.
@@ -9,7 +9,7 @@ The idea is simple: site owners contribute needs, examples, feedback, and accept
 
 It is not a one-off portfolio template. It is an open-source commons for building serious personal/professional sites without every user starting from scratch.
 
-- **Live demo:** [https://portfolio-engine-demo-site.vercel.app](https://portfolio-engine-demo-site.vercel.app)
+- **Live demo:** [https://portfolio-engine-psi.vercel.app](https://portfolio-engine-psi.vercel.app)
 - **Repository:** [https://github.com/rainonej/portfolio-engine](https://github.com/rainonej/portfolio-engine)
 
 ---
