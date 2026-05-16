@@ -1,151 +1,259 @@
-# portfolio-engine
+# Portfolio Engine
 
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://portfolio-engine-demo-site-ffklyggsg-rainonejs-projects.vercel.app/)
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://portfolio-engine-demo-site.vercel.app)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 
-An agent-native foundation for personal portfolio sites. It gives Claude Code a schema-enforced content model, typed override surfaces, and a hardened CI pipeline — so the AI can safely build and maintain your site without producing code that silently drifts from your content.
+Portfolio Engine is an Apache-2.0 Astro/Tailwind backbone for agent-native personal and professional websites.
 
-**[`examples/demo-site`](examples/demo-site/) is the only canonical example.** It is also the live advertising and showcase site for Portfolio Engine. Internal validation fixtures live under `tests/fixtures/` and are not user-facing examples.
+The idea is simple: site owners contribute needs, examples, feedback, and acceptance criteria; AI agents implement scoped issues; humans review the shared foundation; reusable improvements flow back into the engine.
+
+It is not a one-off portfolio template. It is an open-source commons for building serious personal/professional sites without every user starting from scratch.
+
+- **Live demo:** [https://portfolio-engine-demo-site.vercel.app](https://portfolio-engine-demo-site.vercel.app)
+- **Repository:** [https://github.com/rainonej/portfolio-engine](https://github.com/rainonej/portfolio-engine)
 
 ---
 
-## Get your site live
+## Why this exists
 
-**You need:**
+AI coding agents have made small implementation tasks much cheaper. A site owner can now describe a feature like:
 
-|                    |                                                                           |
-| ------------------ | ------------------------------------------------------------------------- |
-| **Node.js 24+**    | [nodejs.org](https://nodejs.org) — matches root [`engines`](package.json) |
-| **pnpm 10+**       | `npm install -g pnpm` after installing Node                               |
-| **GitHub account** | [github.com](https://github.com)                                          |
-| **Vercel account** | [vercel.com](https://vercel.com)                                          |
-| **Claude Code**    | [claude.ai/code](https://claude.ai/code)                                  |
+- add a publications page;
+- fix this mobile layout;
+- create a case-study template;
+- add a project gallery;
+- embed a safe interactive demo;
+- add a reusable visual section;
+- turn this preview comment into a scoped task.
 
-**Then open [`docs/downstream/setup-with-claude.md`](docs/downstream/setup-with-claude.md), copy the whole file, and paste it into Claude Code.** Claude will ask for your details, build the project, and tell you exactly when to go click something in Vercel. One conversation, start to finish.
+But cheap implementation is not the same thing as good software. If every person vibe-codes a website from scratch, the result is thousands of brittle one-off codebases with inconsistent components, inaccessible markup, hard-coded assumptions, no upgrade path, and no shared maintenance.
+
+Portfolio Engine tries a different model:
+
+1. One open-source Astro/Tailwind backbone.
+2. Many downstream consumer sites.
+3. Typed content/config contracts.
+4. Explicit package and override boundaries.
+5. AI-agent-friendly issues.
+6. CI, build checks, visual QA, and human review.
+7. Reusable improvements that flow back into the shared engine.
+
+The goal is not to remove developers. The goal is to make human judgment more leveraged.
+
+---
+
+## Who this is for
+
+### Site owners and vibe coders
+
+You know what you want your site to do, even if you do not want to become an Astro/Tailwind expert. Portfolio Engine gives your agent a typed content model, stable override surfaces, visual QA prompts, CI checks, and a shared engine to build against.
+
+### AI-agent users
+
+Use Claude Code, Cursor, Copilot, ChatGPT, Codex-style agents, or another coding workflow. The repo is designed around scoped issues, explicit package boundaries, and reviewable PRs instead of one giant prompt that generates an unmaintainable site.
+
+### Human contributors
+
+Astro developers, Tailwind/design-system reviewers, accessibility reviewers, open-source maintainers, and agent-workflow people can help make the shared backbone safer, more flexible, and easier to contribute to.
+
+---
+
+## Use it
+
+### Fast path: agent-assisted setup
+
+The most documented setup path today is Claude Code:
+
+1. Open [`docs/downstream/setup-with-claude.md`](docs/downstream/setup-with-claude.md).
+2. Paste the whole file into Claude Code.
+3. Answer the intake questions.
+4. Let the agent scaffold the downstream repo, run checks, and guide the Vercel setup.
+
+Claude Code is the best-documented path today, not a hard dependency of the architecture.
+
+### Manual path
+
+Use:
+
+- [`docs/downstream/new-site-setup.md`](docs/downstream/new-site-setup.md)
+- [`docs/downstream/consumption.md`](docs/downstream/consumption.md)
+
+to wire the packages yourself.
+
+### Other agents
+
+Cursor, Copilot, ChatGPT, Codex-style agents, and other coding agents can use the same docs, issue templates, package boundaries, and visual QA prompts. See:
+
+- [`AGENTS.md`](AGENTS.md)
+- [`docs/agent-workflow.md`](docs/agent-workflow.md)
+- [`docs/downstream/agent-tooling.md`](docs/downstream/agent-tooling.md)
 
 ---
 
 ## What lives where
 
-Your portfolio is its own private repo. This repo is the engine it consumes.
+Your portfolio is its own repo. This repo is the engine it consumes.
 
-```
-Your repo (e.g. my-portfolio)       This repo (portfolio-engine)
-────────────────────────────        ──────────────────────────────
+```text
+Your repo (for example, my-portfolio)       This repo (portfolio-engine)
+────────────────────────────────────        ──────────────────────────────
 src/
-  config/    ← your JSON config     @portfolio-engine/editorial-theme
-  content/   ← your writing/work      layouts, components, routes
-  context/   ← your identity (AI)   @portfolio-engine/engine-core
-  overrides/ ← component swaps        config loader, route registry
-                                    @portfolio-engine/schema
-                                       Zod schemas
+  config/    ← your JSON config             @portfolio-engine/editorial-theme
+  content/   ← your writing/work              layouts, components, routes
+  context/   ← your identity/context        @portfolio-engine/engine-core
+  overrides/ ← component swaps                config loader, route registry
+  pages-local/ ← local screens              @portfolio-engine/schema
+  registry/    ← local route registry          Zod schemas
 ```
 
-The three **required** packages are published to npm — your repo installs them. **`@portfolio-engine/admin-tools`** is optional (also on npm). **`@portfolio-engine/workflow-kit`** provides reusable downstream tooling: boundary-check scripts, AI prompts, GitHub Actions templates, and VS Code/Cursor setup.
+The three required runtime packages are published as `@portfolio-engine/*` packages:
+
+| Package                             | Role                                                                                    |
+| ----------------------------------- | --------------------------------------------------------------------------------------- |
+| `@portfolio-engine/schema`          | Framework-free Zod schemas for config/content contracts                                 |
+| `@portfolio-engine/engine-core`     | Astro integration, config loading, virtual modules, route registry, override resolution |
+| `@portfolio-engine/editorial-theme` | Layouts, routes, components, theme defaults, override surfaces                          |
+
+Optional packages:
+
+| Package                          | Role                                                                                           |
+| -------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `@portfolio-engine/admin-tools`  | Admin/reviewer UI and GitHub-backed content editing surfaces                                   |
+| `@portfolio-engine/workflow-kit` | Reusable downstream tooling, prompts, GitHub Actions templates, and agent-workflow scaffolding |
 
 ---
 
 ## Where to change things
 
-| Goal                                              | Change this                                                     |
-| ------------------------------------------------- | --------------------------------------------------------------- |
-| Change colors or fonts                            | `src/config/theme.json` in the downstream site                  |
-| Change site-wide CSS                              | A `.css` file in `src/overrides/` in the downstream site        |
-| Change the shared outer frame (nav, footer, head) | `packages/editorial-theme/src/layouts/Layout.astro`             |
-| Change the home screen                            | `packages/editorial-theme/src/pages/index.astro`                |
-| Change the default work list screen               | `packages/editorial-theme/src/pages/work.astro`                 |
-| Change the default individual work screen         | `packages/editorial-theme/src/pages/work/[slug].astro`          |
-| Change the default writing list screen            | `packages/editorial-theme/src/pages/writing/index.astro`        |
-| Change the default individual writing screen      | `packages/editorial-theme/src/pages/writing/[slug].astro`       |
-| Replace Hero, Footer, or another override surface | `src/overrides/` in the downstream site + the consumer registry |
-| Add a custom downstream screen                    | The downstream site's `src/pages-local/` and consumer registry  |
-| Change what screens are listed in navigation      | `src/config/navigation.json` in the downstream site             |
+| Goal                              | Change this                                                                     |
+| --------------------------------- | ------------------------------------------------------------------------------- |
+| Change content                    | downstream `src/content/**`                                                     |
+| Change colors or fonts            | downstream `src/config/theme.json`                                              |
+| Change navigation                 | downstream `src/config/navigation.json`                                         |
+| Change site metadata              | downstream `src/config/site.json`                                               |
+| Add a custom local page           | downstream `src/pages-local/` and `src/registry/portfolio-engine.registry.json` |
+| Replace a supported section       | downstream `src/overrides/`                                                     |
+| Add a reusable engine capability  | upstream package in this repo, after an issue/PR review                         |
+| Change schemas                    | `packages/schema`                                                               |
+| Change route/config loading       | `packages/engine-core`                                                          |
+| Change default screens/components | `packages/editorial-theme`                                                      |
+| Change agent/workflow scaffolding | `packages/workflow-kit`, `.github/`, and `docs/`                                |
 
 ---
 
-## Updating the theme
+## Contribute
 
-```bash
-pnpm update @portfolio-engine/editorial-theme
-pnpm build   # make sure it still builds
-```
+Portfolio Engine needs both users and contributors.
 
-Check the [releases](https://github.com/rainonej/portfolio-engine/releases) before upgrading across a minor version.
+Useful contributions include:
+
+- test the setup flow on a clean machine;
+- open a feature request for a recurring site need;
+- review the Astro package architecture;
+- review Tailwind/theme-token boundaries;
+- audit accessibility defaults;
+- improve visual QA prompts;
+- improve agent instructions;
+- add a small reusable component;
+- convert a downstream workaround into a generalized engine feature.
+
+Good first contribution types:
+
+- docs friction report;
+- accessibility review;
+- theme-token review;
+- small bug fix;
+- visual QA report;
+- agent-readiness critique;
+- issue-template improvement.
+
+Start with:
+
+- [`VISION.md`](VISION.md)
+- [`ARCHITECTURE.md`](ARCHITECTURE.md)
+- [`AGENTS.md`](AGENTS.md)
+- [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- [`GOVERNANCE.md`](GOVERNANCE.md)
+- [`AI_USAGE.md`](AI_USAGE.md)
+- [`docs/project-management.md`](docs/project-management.md)
 
 ---
 
-## More docs
+## Agent-native contribution loop
 
-| Topic                                                   | Link                                                                                       |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Setup with Claude (paste whole file, Claude guides you) | [docs/downstream/setup-with-claude.md](docs/downstream/setup-with-claude.md)               |
-| New site setup (full manual reference)                  | [docs/downstream/new-site-setup.md](docs/downstream/new-site-setup.md)                     |
-| Semver vs. workspace-link, overrides, Vercel detail     | [docs/downstream/consumption.md](docs/downstream/consumption.md)                           |
-| Agent tooling for downstream vibe-coding                | [docs/downstream/agent-tooling.md](docs/downstream/agent-tooling.md)                       |
-| Visual QA prompt                                        | [docs/downstream/visual-qa-prompt.md](docs/downstream/visual-qa-prompt.md)                 |
-| Design review checklist                                 | [docs/downstream/design-review-checklist.md](docs/downstream/design-review-checklist.md)   |
-| Lint, format, CI                                        | [docs/contributing/linting.md](docs/contributing/linting.md)                               |
-| Gitignored local files (MCP, smoke test, `.vercel`)     | [docs/contributing/gitignored-local-files.md](docs/contributing/gitignored-local-files.md) |
+A typical contribution loop should look like this:
+
+1. A site owner reviews a preview deployment or local site.
+2. They leave visual feedback or open a feature request.
+3. The feedback becomes a GitHub issue.
+4. A maintainer classifies the issue by source, owner, area, risk, and readiness.
+5. A narrow issue may be labeled as safe for an AI agent.
+6. An AI agent or human contributor opens a PR.
+7. CI, type checks, build checks, and visual review run.
+8. Humans review before merge.
+9. Reusable improvements land in the shared engine.
+
+This project is not trying to make a fully autonomous repo. It is trying to make AI-assisted changes boring, scoped, reviewable, and useful.
 
 ---
 
-## For contributors to this repo
+## Current status
 
-<details>
-<summary>Expand</summary>
+Portfolio Engine is early but usable.
 
-### Install and develop
+Shipped:
+
+- Astro/Tailwind runtime packages;
+- typed config/content schemas;
+- theme routes;
+- consumer-local routes;
+- named override surfaces;
+- visual QA prompts;
+- design review checklist;
+- CI and packed-consumer smoke test;
+- canonical demo-site reference consumer;
+- community docs (VISION.md, ARCHITECTURE.md, ROADMAP.md, AGENTS.md);
+- docs/agent-workflow.md and docs/vercel-feedback-loop.md;
+- issue templates for agent tasks, preview feedback, accessibility, architecture, design-system, and consumer features.
+
+In progress:
+
+- workflow-kit automation;
+- more reference consumer sites.
+
+Not claiming yet:
+
+- fully autonomous merges;
+- fully automatic Vercel-comment-to-agent-PR loop;
+- stable 1.0 API guarantees.
+
+---
+
+## Install and develop
 
 ```bash
 git clone https://github.com/rainonej/portfolio-engine
 cd portfolio-engine
 pnpm install
-pnpm check    # Typecheck all packages
-pnpm build    # Build all packages
-pnpm lint     # ESLint
-pnpm format   # Prettier check
+pnpm check
+pnpm build
+pnpm lint
+pnpm format
 ```
 
-### Packages
+CI runs lint, typecheck/check, build, and packed consumer smoke tests on pushes and PRs.
 
-**Required runtime** (every consumer installs these):
+Runtime requirements:
 
-| Package                                                          | Description                                                         |
-| ---------------------------------------------------------------- | ------------------------------------------------------------------- |
-| [`@portfolio-engine/editorial-theme`](packages/editorial-theme/) | Astro theme: layouts, components, page routes                       |
-| [`@portfolio-engine/engine-core`](packages/engine-core/)         | Config loader, virtual modules, route registry, override resolution |
-| [`@portfolio-engine/schema`](packages/schema/)                   | Shared Zod schemas for content and configuration                    |
+- Node >= 24
+- pnpm >= 10
+- Astro 6
+- Tailwind CSS v4
+- TypeScript 6
+- Zod 4
 
-**Optional** (post-MVP add-ons, not required to run a site):
+---
 
-| Package                                                    | Description                                                                   |
-| ---------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| [`@portfolio-engine/admin-tools`](packages/admin-tools/)   | Admin/reviewer UI + `/api/content` + OAuth support (Node adapter required)    |
-| [`@portfolio-engine/workflow-kit`](packages/workflow-kit/) | Reusable downstream tooling: check scripts, AI prompts, CI + editor templates |
+## License
 
-### CI
-
-GitHub Actions runs **lint → check (packages build + typecheck + `astro check`) → full build → packed tarball smoke test** on pushes to `main` / `dev` and on PRs. Uses **Node 24** and **pnpm 10**. See [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
-
-### Runtime requirements
-
-- Node **≥ 24**, pnpm **≥ 10** — see [`engines`](package.json) in root `package.json`.
-- Match CI locally when possible so `astro build` with **`@astrojs/vercel`** behaves the same (Windows may need **Developer Mode** for symlinks during that step; see [examples/demo-site/README.md](examples/demo-site/README.md)).
-- **Astro 6** — bump deliberately across the workspace when upgrading.
-
-### Vercel (demo site)
-
-Connect **`rainonej/portfolio-engine`** in Vercel: root = repo root, install `pnpm install`, build `pnpm --filter demo-site run build`; follow the adapter output layout from **`@astrojs/vercel`** (do not assume a flat `dist/` only). Production on `main`; `dev` and PRs get previews. Details: [examples/demo-site/README.md](examples/demo-site/README.md#vercel).
-
-### Local-only / gitignored files
-
-MCP config (`.mcp.json`, `.cursor/mcp.json`), smoke-test dirs, and local `.vercel` output are gitignored. See **[`docs/contributing/gitignored-local-files.md`](docs/contributing/gitignored-local-files.md)** so you do not commit them by mistake.
-
-### Publishing
-
-Packages are published with [Changesets](CONTRIBUTING.md#changesets). See [CONTRIBUTING.md](CONTRIBUTING.md) for branch flow, changesets, and local linking.
-
-### Issues and project board
-
-[`docs/project-management.md`](docs/project-management.md) · [GitHub Project 2](https://github.com/users/rainonej/projects/2)
-
-</details>
+Apache-2.0.
