@@ -1,5 +1,7 @@
 # Copilot instructions for this portfolio site
 
+For the agent workflow rules that govern Portfolio Engine and all consumer sites built on it, read [AGENTS.md](https://github.com/rainonej/portfolio-engine/blob/main/AGENTS.md) in the portfolio-engine repo.
+
 ## Scope
 
 This is a consumer site built on `@portfolio-engine/editorial-theme`.
@@ -15,6 +17,14 @@ Prefer changes in:
 - `public/`
 
 Do not patch upstream package behavior in this consumer repo unless explicitly asked.
+
+## Content boundary rules
+
+Authored content belongs in `src/content/` and `src/config/`. Never in route files, templates, or components.
+
+Do not add `?? 'fallback text'` in route or template files.
+Do not use `.passthrough()` in content collection schemas.
+Do not cast `entry.data as SomeType` — let Zod infer the type.
 
 ## Package upgrades (`@portfolio-engine/*`)
 
@@ -40,6 +50,29 @@ If linting is configured, also run:
 ```bash
 pnpm lint
 ```
+
+If boundary-check scripts are present:
+
+```bash
+node scripts/check-content-boundaries.mjs
+node scripts/check-schema-strictness.mjs
+node scripts/check-rendered-links.mjs
+```
+
+`check-rendered-links` validates static hrefs. It does **not** prove elements are clickable.
+
+For changes that touch CTAs, cards, navigation, overlays, or layout wrappers, also run:
+
+```bash
+SITE_URL=https://your-preview.vercel.app node scripts/check-rendered-interactions.mjs
+```
+
+In the PR body, distinguish:
+
+- **Static rendered HTML verified** — `check-rendered-links` output or equivalent
+- **Browser interaction verified** — Playwright output, Vercel preview URL, or manual steps
+
+Do not claim browser interactions were verified unless you actually clicked or ran Playwright.
 
 ## Tooling rules
 

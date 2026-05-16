@@ -1,0 +1,50 @@
+name: Accessibility review
+description: Report an accessibility issue or audit finding
+title: '[Accessibility]: '
+labels:
+  - task:bug-fix
+  - area:theme
+  - owner:human-dev
+body:
+  - type: input
+    id: route
+    attributes:
+      label: Route or component
+      placeholder: /, /features, Hero, Footer, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: Accessibility issue
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - keyboard navigation
+        - focus state
+        - color contrast
+        - headings/landmarks
+        - alt text
+        - form labels
+        - ARIA
+        - motion
+        - semantic HTML
+        - other
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected accessible behavior
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps or audit notes
+  - type: textarea
+    id: suggested_fix
+    attributes:
+      label: Suggested fix

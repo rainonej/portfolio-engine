@@ -68,22 +68,25 @@ for (const viewport of viewports.length > 0
   });
   const page = await context.newPage();
 
-  // Route reachability checks — assert h1 is visible on each route.
+  // Route reachability checks — assert <main> is present on each route.
+  // Using <main> rather than h1 visibility because: some templates visually-hide
+  // their h1 (clip-path: inset(50%)) and isVisible() returns false even when the
+  // page rendered correctly; others use h2 via SiteSectionHeader and emit no h1.
+  // Every template wraps content in a semantic <main>, making it a reliable signal.
   for (const route of routes) {
     const url = baseUrl.replace(/\/$/, '') + route;
     try {
       await page.goto(url, { waitUntil: 'load' });
-      const h1 = page.locator('h1').first();
-      const visible = await h1.isVisible().catch(() => false);
-      if (visible) {
-        passes.push({ viewport: viewport.name, route, check: 'h1 visible', result: 'PASS' });
+      const count = await page.locator('main').count();
+      if (count > 0) {
+        passes.push({ viewport: viewport.name, route, check: 'main present', result: 'PASS' });
       } else {
         errors.push({
           viewport: viewport.name,
           route,
-          check: 'h1 visible',
+          check: 'main present',
           result: 'FAIL',
-          detail: 'No visible <h1> found on page.',
+          detail: 'No <main> found in DOM.',
         });
       }
     } catch (err) {
@@ -92,7 +95,7 @@ for (const viewport of viewports.length > 0
         route,
         check: 'page load',
         result: 'FAIL',
-        detail: String(err.message),
+        detail: err instanceof Error ? err.message : String(err),
       });
     }
   }
@@ -205,7 +208,7 @@ for (const viewport of viewports.length > 0
         route: from,
         check: `${role}[name=${name}] clickable`,
         result: 'FAIL',
-        detail: `${err.message}${interceptInfo}${note ? ' Note: ' + note : ''}`,
+        detail: `${err instanceof Error ? err.message : String(err)}${interceptInfo}${note ? ' Note: ' + note : ''}`,
       });
     }
   }

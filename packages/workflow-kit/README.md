@@ -12,6 +12,7 @@ templates/
 
   github/
     ci.yml                          GitHub Actions CI template
+    rendered-interactions.yml       Vercel deployment_status-triggered interaction checks
     pull_request_template.md        PR checklist for content/schema discipline
     issue_template.md               Issue template
 
@@ -217,11 +218,13 @@ Use `check-rendered-interactions` (or equivalent Playwright tests) when a change
 
 ### Setting up Playwright for interaction checks
 
-Copy the interaction smoke template from workflow-kit:
+Copy the interaction smoke template and the CI workflow from workflow-kit:
 
 ```bash
 cp node_modules/@portfolio-engine/workflow-kit/templates/scripts/check-rendered-interactions.mjs scripts/
 cp node_modules/@portfolio-engine/workflow-kit/templates/scripts/rendered-interactions.config.example.mjs scripts/rendered-interactions.config.mjs
+mkdir -p .github/workflows
+cp node_modules/@portfolio-engine/workflow-kit/templates/github/rendered-interactions.yml .github/workflows/
 ```
 
 Install Playwright:
@@ -238,8 +241,11 @@ then run:
 SITE_URL=https://your-preview.vercel.app node scripts/check-rendered-interactions.mjs
 ```
 
-Add `check:rendered-interactions` to your `package.json` scripts and run it after deploying
-Vercel preview builds for changes that touch CTAs, cards, or navigation.
+Add `check:rendered-interactions` to your `package.json` scripts.
+
+The `rendered-interactions.yml` workflow triggers on Vercel `deployment_status` events — it
+runs automatically when Vercel marks a deployment successful, with `SITE_URL` set from
+`github.event.deployment_status.environment_url`. No polling or manual URL wiring needed.
 
 ## Changeset policy
 
@@ -253,11 +259,15 @@ Workflow-kit templates changed.
 Downstream agents should compare and update:
 
 - `.github/workflows/ci.yml`
+- `.github/workflows/rendered-interactions.yml`
 - `.vscode/extensions.json`
 - `.vscode/settings.json`
 - `.cursor/rules/portfolio-engine-boundaries.md`
 - `scripts/check-content-boundaries.mjs`
+- `scripts/check-rendered-interactions.mjs`
+- `scripts/rendered-interactions.config.example.mjs`
 - `scripts/check-schema-strictness.mjs`
+- `scripts/check-tooling-version.mjs`
 
 Do not blindly overwrite downstream customizations. Copy the new checks intentionally.
 ```

@@ -1,0 +1,51 @@
+name: Consumer feature request
+description: Request a reusable site capability without needing to propose code
+title: '[Consumer need]: '
+labels:
+  - task:feat
+  - source:human
+  - owner:site-owner
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What do you need your site to do?
+      description: Describe the user/site-owner need in plain language.
+    validations:
+      required: true
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples or references
+      description: Link examples, screenshots, sketches, or describe similar sites.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: What would count as done?
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+  - type: dropdown
+    id: scope_guess
+    attributes:
+      label: Scope guess
+      options:
+        - probably site-specific
+        - probably reusable engine feature
+        - not sure
+    validations:
+      required: true
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints
+      description: Accessibility, content, brand, layout, or technical constraints.
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety
+      options:
+        - label: I did not include secrets, credentials, or private data.
+          required: true
