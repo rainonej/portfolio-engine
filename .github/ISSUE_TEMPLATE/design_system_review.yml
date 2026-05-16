@@ -4,6 +4,7 @@ title: '[Design system]: '
 labels:
   - task:decision
   - area:theme
+  - owner:human-dev
 body:
   - type: textarea
     id: area

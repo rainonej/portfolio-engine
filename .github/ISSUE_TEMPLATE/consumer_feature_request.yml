@@ -4,6 +4,7 @@ title: '[Consumer need]: '
 labels:
   - task:feat
   - source:human
+  - owner:site-owner
 body:
   - type: textarea
     id: need

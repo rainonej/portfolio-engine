@@ -4,6 +4,7 @@ title: '[Preview feedback]: '
 labels:
   - source:vercel
   - task:bug-fix
+  - owner:human-dev
 body:
   - type: input
     id: preview_url

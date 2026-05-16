@@ -3,6 +3,7 @@ description: Review package boundaries, route ownership, schemas, or extension p
 title: '[Architecture review]: '
 labels:
   - task:decision
+  - owner:human-dev
 body:
   - type: textarea
     id: area

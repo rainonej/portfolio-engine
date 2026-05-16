@@ -4,6 +4,7 @@ title: '[Accessibility]: '
 labels:
   - task:bug-fix
   - area:theme
+  - owner:human-dev
 body:
   - type: input
     id: route

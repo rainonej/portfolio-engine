@@ -4,6 +4,7 @@ title: '[Agent task]: '
 labels:
   - task:chore
   - source:human
+  - owner:simple-ai
 body:
   - type: markdown
     attributes:
