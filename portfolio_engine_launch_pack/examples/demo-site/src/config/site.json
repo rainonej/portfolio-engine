@@ -1,0 +1,27 @@
+{
+  "title": "Portfolio Engine",
+  "description": "An Apache-2.0 Astro/Tailwind backbone for agent-native personal and professional websites: site owners contribute needs, AI agents implement scoped issues, and humans review the shared foundation.",
+  "baseUrl": "https://portfolio-engine-demo-site.vercel.app",
+  "tagline": "open-source infrastructure for agent-native websites",
+  "admin": {
+    "showPublicLink": true,
+    "publicLinkLabel": "Explore admin tools"
+  },
+  "contact": {
+    "heading": "Contribute to Portfolio Engine",
+    "body": "Portfolio Engine is looking for Astro developers, Tailwind/design-system reviewers, accessibility reviewers, open-source maintainers, agent-workflow people, and site owners with real recurring needs. Open an issue, review the architecture, test the demo, or propose a reusable capability that should belong in the shared engine.",
+    "scheduling": {
+      "enabled": false,
+      "provider": "custom",
+      "mode": "link",
+      "url": "https://github.com/rainonej/portfolio-engine/issues",
+      "label": "Open a GitHub issue",
+      "heading": "Contribute through GitHub",
+      "eyebrow": "Open source",
+      "description": "Use GitHub Issues and pull requests rather than booking a private walkthrough."
+    }
+  },
+  "social": {
+    "github": "https://github.com/rainonej/portfolio-engine"
+  }
+}

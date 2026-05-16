@@ -1,0 +1,36 @@
+name: Design-system review
+description: Review theme tokens, styling rules, component variants, or override boundaries
+title: '[Design system]: '
+labels:
+  - task:decision
+  - area:theme
+body:
+  - type: textarea
+    id: area
+    attributes:
+      label: Design-system area
+      placeholder: theme tokens, component variants, spacing, typography, override surfaces, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: Issue or question
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed rule or change
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: Impact
+      options:
+        - label: This affects default theme output.
+        - label: This affects consumer customization.
+        - label: This affects AI-generated UI guardrails.

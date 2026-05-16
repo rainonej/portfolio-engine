@@ -1,0 +1,21 @@
+{
+  "blog": false,
+  "work": true,
+  "contact": true,
+  "testimonials": false,
+  "pillars": [
+    {
+      "heading": "Shared backbone",
+      "body": "Reusable Astro/Tailwind packages provide routes, layouts, content schemas, design tokens, override surfaces, admin tools, and deployment conventions."
+    },
+    {
+      "heading": "Consumer-contributors",
+      "body": "Site owners contribute needs, feedback, examples, and acceptance criteria. They do not need to become framework experts to shape the system they use."
+    },
+    {
+      "heading": "Agent-safe workflow",
+      "body": "Scoped GitHub issues, package boundaries, visual QA, CI, and human review make AI-assisted implementation useful without handing the project over to automation."
+    }
+  ],
+  "ctaBody": "Explore the architecture, inspect the feature matrix, or open a GitHub issue with a reusable site need. The goal is a shared commons where every good contribution improves the backbone for everyone."
+}

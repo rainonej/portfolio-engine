@@ -1,0 +1,62 @@
+{
+  "name": "Portfolio Engine",
+  "roleLine": "Open-source backbone for agent-native personal and professional websites.",
+  "shortBio": "An Apache-2.0 Astro/Tailwind backbone where site owners contribute needs, AI agents implement scoped issues, and humans review the shared foundation. This demo is the project's own showcase — not a generated personal site.",
+  "summary": "Portfolio Engine is a layered Astro theme system. Schema, engine-core, editorial-theme, and admin-tools ship as @portfolio-engine/* packages and are consumed by downstream content repos. Built with Astro 6, Zod 4, Tailwind v4, and pnpm workspaces.",
+  "longBio": [
+    "Portfolio Engine is open source. The goal is a shared commons of Astro/Tailwind capabilities that downstream sites depend on, not a one-off generator that disappears once your website is built.",
+    "The engine is split into four strict layers: a pure Zod schema package, an Astro integration that loads config and injects routes, an editorial theme that owns layouts and components, and your consumer site that owns content, config, and overrides. Layers only depend downward. This keeps upgrades boring and breaking changes obvious.",
+    "Contributors include Astro developers, Tailwind/design-system reviewers, accessibility reviewers, AI-coding-agent users, and site owners with recurring needs. Site owners do not have to write code: a useful issue describes the need, examples, acceptance criteria, and whether the capability should be reusable or site-specific."
+  ],
+  "values": [
+    {
+      "title": "Open-source commons",
+      "body": "Every good contribution improves the backbone for everyone. Capabilities that are obviously reusable belong in the engine, not in private one-off forks."
+    },
+    {
+      "title": "Explicit override surfaces",
+      "body": "Consumers override named components and styles, not arbitrary files. Override points are declared by the theme and stable across versions."
+    },
+    {
+      "title": "Two-repo model",
+      "body": "Engine packages live in a public repo. Your content, config, and identity live in a private repo. They share no git history and no secrets."
+    },
+    {
+      "title": "Strict layering",
+      "body": "schema → engine-core → editorial-theme → consumer. Dependencies only point downward. Banned: astro-theme-provider, astro-pages, astro-public."
+    }
+  ],
+  "workingPrinciples": [
+    {
+      "title": "Config is JSON, validated by Zod",
+      "body": "site.json, navigation.json, theme.json, features.json — four files, one schema package, friendly errors at build time."
+    },
+    {
+      "title": "Content is plain Astro collections",
+      "body": "Profile, projects, and writing use Astro's native content layer. The engine never touches your markdown."
+    },
+    {
+      "title": "Agent-safe workflow",
+      "body": "Scoped GitHub issues, label taxonomy, AGENTS.md, Copilot instructions, and visual QA loops make AI-assisted implementation reviewable instead of opaque."
+    },
+    {
+      "title": "Three route-ownership modes",
+      "body": "Theme-injected routes, consumer-local routes via a registry JSON, and ordinary src/pages — pick the right mode per page."
+    },
+    {
+      "title": "No packaged public/ in the engine",
+      "body": "Engine packages ship code, not assets. Your public/ directory stays yours. CI enforces this rule on every commit."
+    }
+  ],
+  "credentials": [
+    "Astro 6",
+    "Tailwind CSS v4",
+    "Zod 4",
+    "TypeScript 6",
+    "pnpm workspaces",
+    "Apache-2.0 licensed",
+    "Node >= 24"
+  ],
+  "github": "https://github.com/rainonej/portfolio-engine",
+  "photo": "/og-default.svg"
+}
