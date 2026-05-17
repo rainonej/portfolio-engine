@@ -1,0 +1,46 @@
+<!doctype html>
+<!--
+  FIXTURE: failing — private local palette
+  This file intentionally violates theme-token boundaries.
+  It defines a private CSS palette instead of consuming canonical tokens.
+  The check-theme-token-boundaries.mjs script MUST flag this file.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fixture: Failing — Private Palette</title>
+    <style>
+      :root {
+        --bg: #f8f6f1;
+        --panel: #ffffff;
+        --ink: #101827;
+        --accent: #0f766e;
+        --accent2: #b45309;
+        --muted: #64748b;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: sans-serif;
+      }
+
+      .card {
+        background: var(--panel);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+      }
+
+      a {
+        color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Violation example</h1>
+      <p>This iframe defines a private local palette. It should be rejected.</p>
+      <a href="#">Link</a>
+    </div>
+  </body>
+</html>

@@ -92,7 +92,10 @@ export {
   type ThemeConfig,
   type SemanticColors,
   type FontEntry,
+  type ThemeColorToken,
 } from './theme-config.js';
+
+export { DEFAULT_THEME_CONFIG } from './default-theme.js';
 
 export const FeaturesConfigSchema = z.object({
   blog: z.boolean().default(true),

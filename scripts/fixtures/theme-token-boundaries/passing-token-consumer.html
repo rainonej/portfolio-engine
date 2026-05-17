@@ -1,0 +1,61 @@
+<!doctype html>
+<!--
+  FIXTURE: passing — correct token consumer
+  This file correctly consumes canonical Portfolio Engine semantic tokens.
+  It loads the generated theme CSS and uses only var(--color-*) references.
+  The check-theme-token-boundaries.mjs script MUST pass this file.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fixture: Passing — Token Consumer</title>
+    <link rel="stylesheet" href="/assets/portfolio-engine/theme.generated.css" />
+    <style>
+      :root {
+        --demo-bg: var(--color-surface-page);
+        --demo-text: var(--color-text-primary);
+        --demo-muted: var(--color-text-muted);
+        --demo-border: var(--color-border-default);
+        --demo-accent: var(--color-accent-primary);
+        --demo-accent-secondary: var(--color-accent-secondary);
+      }
+
+      body {
+        background: var(--demo-bg);
+        color: var(--demo-text);
+        font-family: var(--font-sans-stack, sans-serif);
+      }
+
+      .card {
+        background: var(--color-surface-elevated);
+        border: 1px solid var(--demo-border);
+        padding: 1rem;
+      }
+
+      .badge {
+        background: color-mix(in srgb, var(--color-accent-primary) 10%, transparent);
+        color: var(--demo-accent);
+        border: 1px solid color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.75rem;
+      }
+
+      a {
+        color: var(--demo-accent);
+      }
+
+      .muted {
+        color: var(--demo-muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Correct token usage</h1>
+      <p class="muted">This demo consumes semantic tokens only.</p>
+      <span class="badge">Proof</span>
+      <a href="#">Link</a>
+    </div>
+  </body>
+</html>
