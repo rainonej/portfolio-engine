@@ -1,6 +1,6 @@
 {
   "name": "@portfolio-engine/workflow-kit",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Reusable GitHub workflow templates and AI workflow classifier for portfolio-engine sites",
   "type": "module",
   "files": [

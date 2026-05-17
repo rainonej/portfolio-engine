@@ -1,5 +1,12 @@
 # @portfolio-engine/engine-core
 
+## 0.3.4
+
+### Patch Changes
+
+- Updated dependencies [3556096]
+  - @portfolio-engine/schema@0.7.0
+
 ## 0.3.3
 
 ### Patch Changes

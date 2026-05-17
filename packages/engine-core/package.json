@@ -1,6 +1,6 @@
 {
   "name": "@portfolio-engine/engine-core",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Route registry, config loader, virtual modules, and override resolution for portfolio-engine",
   "type": "module",
   "files": [

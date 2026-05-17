@@ -1,5 +1,14 @@
 # @portfolio-engine/admin-tools
 
+## 0.0.24
+
+### Patch Changes
+
+- Updated dependencies [3556096]
+  - @portfolio-engine/schema@0.7.0
+  - @portfolio-engine/editorial-theme@0.7.4
+  - @portfolio-engine/engine-core@0.3.4
+
 ## 0.0.23
 
 ### Patch Changes
