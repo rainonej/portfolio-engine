@@ -2,7 +2,12 @@
  * Upstream self-check: enforces theme-token boundaries across demo-site and
  * workflow-kit templates. Mirrors the downstream check distributed via workflow-kit.
  *
- * Config is read from theme-token-boundaries.config.mjs in the project root.
+ * Usage:
+ *   node scripts/check-theme-token-boundaries.mjs
+ *   node scripts/check-theme-token-boundaries.mjs --config path/to/config.mjs
+ *
+ * Config is read from theme-token-boundaries.config.mjs in the project root,
+ * or from the path provided via --config.
  */
 
 import fs from 'node:fs';
@@ -12,13 +17,24 @@ import { pathToFileURL } from 'node:url';
 const cwd = process.cwd();
 
 // ---------------------------------------------------------------------------
-// Config
+// CLI args
 // ---------------------------------------------------------------------------
 
-const configPath = path.join(cwd, 'theme-token-boundaries.config.mjs');
+const args = process.argv.slice(2);
+const configArgIdx = args.indexOf('--config');
+const configArgPath = configArgIdx !== -1 ? args[configArgIdx + 1] : null;
+
+// ---------------------------------------------------------------------------
+// Config loading
+// ---------------------------------------------------------------------------
+
+const configPath = configArgPath
+  ? path.resolve(cwd, configArgPath)
+  : path.join(cwd, 'theme-token-boundaries.config.mjs');
+
 if (!fs.existsSync(configPath)) {
   console.error('check:theme-token-boundaries: config file not found.');
-  console.error('  Expected: theme-token-boundaries.config.mjs');
+  console.error(`  Expected: ${path.relative(cwd, configPath)}`);
   process.exit(1);
 }
 
@@ -94,32 +110,50 @@ function expandGlobs(patterns, ignorePatterns) {
 
 const HEX_COLOR = /#([0-9a-fA-F]{3,8})\b/;
 const COLOR_FUNC = /\b(rgba?|hsla?|oklch|color)\s*\(/;
-const PRIVATE_PALETTE =
-  /--(?!color-)[\w-]+\s*:\s*(?:#[0-9a-fA-F]{3,8}|rgba?\s*\(|hsla?\s*\(|oklch\s*\()/;
-const CANONICAL_REDEF =
-  /--color-[\w-]+\s*:\s*(?:#[0-9a-fA-F]{3,8}|rgba?\s*\(|hsla?\s*\(|oklch\s*\()/;
 
-const FILE_IGNORE = 'portfolio-engine-theme-token-boundary-ignore-file';
-const LINE_IGNORE = 'portfolio-engine-theme-token-boundary-ignore-next-line';
+const FILE_IGNORE_DIRECTIVE = 'portfolio-engine-theme-token-boundary-ignore-file';
+const LINE_IGNORE_DIRECTIVE = 'portfolio-engine-theme-token-boundary-ignore-next-line';
 
-function stripVarReferences(line) {
-  return line.replace(/var\s*\(--[\w-]+(?:\s*,\s*[^)]+)?\)/g, 'var(TOKEN)');
+function isCssRelevantFile(filePath) {
+  return /\.(css|astro|html|svg|tsx?|jsx?)$/.test(filePath);
 }
 
-function stripComments(line) {
+function stripSimpleVarReferences(line) {
+  return line.replace(/var\s*\(--[\w-]+\s*\)/g, 'var(TOKEN)');
+}
+
+function stripInlineComments(line) {
   return line.replace(/\/\*.*?\*\//g, '').replace(/\/\/.*$/, '');
 }
 
-function checkLine(rawLine, lineNum) {
+function buildPatterns(allowedTokenPrefixes) {
+  const escapedPrefixes = (allowedTokenPrefixes ?? ['--color-']).map(
+    (p) => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '[\\w-]+',
+  );
+  const prefixUnion = escapedPrefixes.join('|');
+
+  const CANONICAL_REDEF = new RegExp(
+    `(?:${prefixUnion})\\s*:\\s*(?:#[0-9a-fA-F]{3,8}|rgba?\\s*\\(|hsla?\\s*\\(|oklch\\s*\\()`,
+  );
+
+  const PRIVATE_PALETTE = new RegExp(
+    `--(?!(?:${prefixUnion}))(?!-)(?=[a-zA-Z])([\\w-]+)\\s*:\\s*(?:#[0-9a-fA-F]{3,8}|rgba?\\s*\\(|hsla?\\s*\\(|oklch\\s*\\()`,
+  );
+
+  return { CANONICAL_REDEF, PRIVATE_PALETTE };
+}
+
+function checkLine(rawLine, lineNum, cssRelevant, patterns) {
+  const { CANONICAL_REDEF, PRIVATE_PALETTE } = patterns;
   const violations = [];
-  const line = stripComments(stripVarReferences(rawLine));
+  const line = stripInlineComments(stripSimpleVarReferences(rawLine));
 
   if (CANONICAL_REDEF.test(line)) {
     violations.push({
       type: 'canonical-token-redef',
       line: lineNum,
       excerpt: rawLine.trim(),
-      message: 'Canonical --color-* token redefined with literal value outside theme.json',
+      message: 'Canonical token variable redefined with a literal value outside tokenAuthority',
     });
     return violations;
   }
@@ -134,42 +168,46 @@ function checkLine(rawLine, lineNum) {
     return violations;
   }
 
-  if (HEX_COLOR.test(line)) {
-    violations.push({
-      type: 'literal-hex',
-      line: lineNum,
-      excerpt: rawLine.trim(),
-      message: 'Literal hex color value — use var(--color-*) instead',
-    });
-  }
+  if (cssRelevant) {
+    if (HEX_COLOR.test(line)) {
+      violations.push({
+        type: 'literal-hex',
+        line: lineNum,
+        excerpt: rawLine.trim(),
+        message: 'Literal hex color — use var(--color-*) instead',
+      });
+    }
 
-  if (COLOR_FUNC.test(line)) {
-    violations.push({
-      type: 'literal-color-func',
-      line: lineNum,
-      excerpt: rawLine.trim(),
-      message: 'Literal color function (rgb/hsl/oklch) — use var(--color-*) instead',
-    });
+    if (COLOR_FUNC.test(line)) {
+      violations.push({
+        type: 'literal-color-func',
+        line: lineNum,
+        excerpt: rawLine.trim(),
+        message: 'Literal color function (rgb/hsl/oklch) — use var(--color-*) instead',
+      });
+    }
   }
 
   return violations;
 }
 
-function checkFile(filePath) {
+function checkFile(filePath, patterns) {
   const rel = path.relative(cwd, filePath).replace(/\\/g, '/');
   const content = fs.readFileSync(filePath, 'utf8');
   const lines = content.split('\n');
+  const cssRelevant = isCssRelevantFile(filePath);
 
-  if (content.includes(FILE_IGNORE)) {
-    const reason = (lines[0] ?? '').split(FILE_IGNORE)[1]?.trim();
+  if (content.includes(FILE_IGNORE_DIRECTIVE)) {
+    const directiveLine = lines.find((l) => l.includes(FILE_IGNORE_DIRECTIVE)) ?? '';
+    const reason = directiveLine.split(FILE_IGNORE_DIRECTIVE)[1]?.trim();
     if (!reason) {
       return [
         {
           file: rel,
           type: 'ignore-without-reason',
-          line: 1,
-          excerpt: (lines[0] ?? '').trim(),
-          message: 'File-level ignore directive requires a reason',
+          line: lines.findIndex((l) => l.includes(FILE_IGNORE_DIRECTIVE)) + 1,
+          excerpt: directiveLine.trim(),
+          message: 'File-level ignore requires a reason after the directive text',
         },
       ];
     }
@@ -188,22 +226,22 @@ function checkFile(filePath) {
       continue;
     }
 
-    if (rawLine.includes(LINE_IGNORE)) {
-      const reason = rawLine.split(LINE_IGNORE)[1]?.trim();
+    if (rawLine.includes(LINE_IGNORE_DIRECTIVE)) {
+      const reason = rawLine.split(LINE_IGNORE_DIRECTIVE)[1]?.trim();
       if (!reason) {
         fileViolations.push({
           file: rel,
           type: 'ignore-without-reason',
           line: lineNum,
           excerpt: rawLine.trim(),
-          message: 'Line-level ignore directive requires a reason',
+          message: 'Line-level ignore requires a reason after the directive text',
         });
       }
       skipNext = true;
       continue;
     }
 
-    for (const v of checkLine(rawLine, lineNum)) {
+    for (const v of checkLine(rawLine, lineNum, cssRelevant, patterns)) {
       fileViolations.push({ file: rel, ...v });
     }
   }
@@ -215,11 +253,20 @@ function checkFile(filePath) {
 // Main
 // ---------------------------------------------------------------------------
 
+const patterns = buildPatterns(config.allowedTokenPrefixes);
+
+const authorityFiles = new Set(
+  expandGlobs(config.tokenAuthority ?? [], config.ignore).map((f) =>
+    path.resolve(f).replace(/\\/g, '/'),
+  ),
+);
+
 const consumerFiles = expandGlobs(config.tokenConsumers, config.ignore);
 const allViolations = [];
 
 for (const file of consumerFiles) {
-  allViolations.push(...checkFile(file));
+  if (authorityFiles.has(path.resolve(file).replace(/\\/g, '/'))) continue;
+  allViolations.push(...checkFile(file, patterns));
 }
 
 if (allViolations.length === 0) {
@@ -235,7 +282,7 @@ for (const v of allViolations) {
   console.error('');
 }
 console.error(
-  `${allViolations.length} violation(s). Color values belong only in theme.json.\n` +
+  `${allViolations.length} violation(s). Color values belong only in tokenAuthority files.\n` +
     'Use var(--color-*) everywhere else.\n',
 );
 process.exit(1);

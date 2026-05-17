@@ -13,9 +13,15 @@ const ThemeColorTokenSchema = (cssVar: string) =>
     role: z.string(),
     /** When and where to use this color. */
     usage: z.string(),
-    /** Usage anti-patterns. */
+    /**
+     * Usage anti-patterns. Defaults to [] so downstream tokens remain valid when
+     * a site has no specific avoid guidance — empty array is explicitly allowed.
+     */
     avoid: z.array(z.string()).default([]),
-    /** Concrete application examples. */
+    /**
+     * Concrete application examples. Defaults to [] for the same reason as avoid.
+     * Providing at least one example is strongly recommended for agent readability.
+     */
     examples: z.array(z.string()).default([]),
   });
 
@@ -116,6 +122,17 @@ const GuidanceSchema = z
   .optional();
 
 export const ThemeConfigSchema = z.object({
+  /**
+   * @deprecated Removed in favour of structured `semanticColors` token objects.
+   * Presence of this field is a hard schema error with a migration message.
+   */
+  colors: z
+    .unknown()
+    .refine(() => false, {
+      message:
+        'theme.colors is no longer supported — move color values to semanticColors token objects in src/config/theme.json.',
+    })
+    .optional(),
   typography: z
     .object({
       /** Legacy: serif / heading stack (prefer `fonts.heading`). */

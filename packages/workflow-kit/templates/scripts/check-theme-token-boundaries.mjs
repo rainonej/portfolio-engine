@@ -2,23 +2,31 @@
  * check-theme-token-boundaries.mjs
  *
  * Enforces the single-authority theme model: color values belong only in
- * src/config/theme.json. Everything else must consume semantic tokens via
- * var(--color-*).
+ * tokenAuthority files (default: src/config/theme.json). Everything else must
+ * consume semantic tokens via var(--color-*).
  *
  * Usage:
  *   node scripts/check-theme-token-boundaries.mjs
+ *   node scripts/check-theme-token-boundaries.mjs --config path/to/config.mjs
  *
- * Config: theme-token-boundaries.config.mjs (optional, auto-detected).
+ * Config: theme-token-boundaries.config.mjs (optional, auto-detected from cwd).
  * Copy theme-token-boundaries.config.example.mjs → theme-token-boundaries.config.mjs
  * in your project root to customise.
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { pathToFileURL } from 'node:url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const cwd = process.cwd();
+
+// ---------------------------------------------------------------------------
+// CLI args
+// ---------------------------------------------------------------------------
+
+const args = process.argv.slice(2);
+const configArgIdx = args.indexOf('--config');
+const configArgPath = configArgIdx !== -1 ? args[configArgIdx + 1] : null;
 
 // ---------------------------------------------------------------------------
 // Defaults
@@ -60,16 +68,18 @@ const DEFAULT_CONFIG = {
 // ---------------------------------------------------------------------------
 
 async function loadConfig() {
-  const configPath = path.join(cwd, 'theme-token-boundaries.config.mjs');
-  if (fs.existsSync(configPath)) {
-    const mod = await import(pathToFileURL(configPath).href);
+  const explicit = configArgPath ? path.resolve(cwd, configArgPath) : null;
+  const auto = path.join(cwd, 'theme-token-boundaries.config.mjs');
+  const target = explicit ?? (fs.existsSync(auto) ? auto : null);
+  if (target) {
+    const mod = await import(pathToFileURL(target).href);
     return { ...DEFAULT_CONFIG, ...mod.default };
   }
   return DEFAULT_CONFIG;
 }
 
 // ---------------------------------------------------------------------------
-// Glob expansion (minimal, no extra deps)
+// Glob expansion
 // ---------------------------------------------------------------------------
 
 function matchesGlob(filePath, pattern) {
@@ -124,15 +134,11 @@ function walkDir(dir, out = []) {
 function expandGlobs(patterns, ignorePatterns) {
   const allFiles = walkDir(cwd);
   const matched = new Set();
-
   for (const file of allFiles) {
     const rel = path.relative(cwd, file).replace(/\\/g, '/');
-    const isIgnored = ignorePatterns.some((p) => matchesGlob(rel, p));
-    if (isIgnored) continue;
-    const isIncluded = patterns.some((p) => matchesGlob(rel, p));
-    if (isIncluded) matched.add(file);
+    if (ignorePatterns.some((p) => matchesGlob(rel, p))) continue;
+    if (patterns.some((p) => matchesGlob(rel, p))) matched.add(file);
   }
-
   return [...matched];
 }
 
@@ -140,51 +146,65 @@ function expandGlobs(patterns, ignorePatterns) {
 // Violation detection
 // ---------------------------------------------------------------------------
 
-// Matches hex color values: #rgb, #rrggbb, #rgba, #rrggbbaa
 const HEX_COLOR = /#([0-9a-fA-F]{3,8})\b/;
-
-// Matches rgb/rgba/hsl/hsla/oklch color functions
 const COLOR_FUNC = /\b(rgba?|hsla?|oklch|color)\s*\(/;
-
-// Private local palette: --non-color-var: <literal-color>
-const PRIVATE_PALETTE =
-  /--(?!color-)[\w-]+\s*:\s*(?:#[0-9a-fA-F]{3,8}|rgba?\s*\(|hsla?\s*\(|oklch\s*\()/;
-
-// Canonical color token redefined with literal: --color-*: <literal-color>
-const CANONICAL_REDEF =
-  /--color-[\w-]+\s*:\s*(?:#[0-9a-fA-F]{3,8}|rgba?\s*\(|hsla?\s*\(|oklch\s*\()/;
 
 const FILE_IGNORE_DIRECTIVE = 'portfolio-engine-theme-token-boundary-ignore-file';
 const LINE_IGNORE_DIRECTIVE = 'portfolio-engine-theme-token-boundary-ignore-next-line';
 
-function stripVarReferences(line) {
-  // Remove var(--*) references — these are valid token consumption
-  return line.replace(/var\s*\(--[\w-]+(?:\s*,\s*[^)]+)?\)/g, 'var(TOKEN)');
+/** Only check bare hex/color-func in file types where they have style semantics. */
+function isCssRelevantFile(filePath) {
+  return /\.(css|astro|html|svg|tsx?|jsx?)$/.test(filePath);
 }
 
-function stripComments(line) {
-  // Remove inline /* */ comments and // comments
+/**
+ * Strip simple `var(--name)` references so they don't produce false positives.
+ * Does NOT strip `var(--name, fallback)` — literal color fallbacks must still fail.
+ */
+function stripSimpleVarReferences(line) {
+  return line.replace(/var\s*\(--[\w-]+\s*\)/g, 'var(TOKEN)');
+}
+
+function stripInlineComments(line) {
   return line.replace(/\/\*.*?\*\//g, '').replace(/\/\/.*$/, '');
 }
 
-function checkLine(rawLine, lineNum) {
+function buildPatterns(allowedTokenPrefixes) {
+  const escapedPrefixes = (allowedTokenPrefixes ?? ['--color-']).map(
+    (p) => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '[\\w-]+',
+  );
+  const prefixUnion = escapedPrefixes.join('|');
+
+  // Canonical token variable (from allowedTokenPrefixes) assigned a literal
+  const CANONICAL_REDEF = new RegExp(
+    `(?:${prefixUnion})\\s*:\\s*(?:#[0-9a-fA-F]{3,8}|rgba?\\s*\\(|hsla?\\s*\\(|oklch\\s*\\()`,
+  );
+
+  // Private local palette: --non-canonical-var: <literal-color>
+  const PRIVATE_PALETTE = new RegExp(
+    `--(?!(?:${prefixUnion}))(?!-)(?=[a-zA-Z])([\\w-]+)\\s*:\\s*(?:#[0-9a-fA-F]{3,8}|rgba?\\s*\\(|hsla?\\s*\\(|oklch\\s*\\()`,
+  );
+
+  return { CANONICAL_REDEF, PRIVATE_PALETTE };
+}
+
+function checkLine(rawLine, lineNum, cssRelevant, patterns) {
+  const { CANONICAL_REDEF, PRIVATE_PALETTE } = patterns;
   const violations = [];
+  const line = stripInlineComments(stripSimpleVarReferences(rawLine));
 
-  // Strip var() token references before checking
-  const line = stripComments(stripVarReferences(rawLine));
-
-  // Violation 1: canonical token redefinition (--color-*: literal)
+  // Always check: canonical token redefinition (all file types)
   if (CANONICAL_REDEF.test(line)) {
     violations.push({
       type: 'canonical-token-redef',
       line: lineNum,
       excerpt: rawLine.trim(),
-      message: 'Canonical --color-* token redefined with literal value outside theme.json',
+      message: 'Canonical token variable redefined with a literal value outside tokenAuthority',
     });
-    return violations; // don't double-report
+    return violations;
   }
 
-  // Violation 2: private local palette (--private-var: literal)
+  // Always check: private local palette (all file types)
   if (PRIVATE_PALETTE.test(line)) {
     violations.push({
       type: 'private-palette',
@@ -195,47 +215,49 @@ function checkLine(rawLine, lineNum) {
     return violations;
   }
 
-  // Violation 3: bare literal color value in a style context
-  if (HEX_COLOR.test(line)) {
-    violations.push({
-      type: 'literal-hex',
-      line: lineNum,
-      excerpt: rawLine.trim(),
-      message: 'Literal hex color value — use var(--color-*) instead',
-    });
-  }
+  // CSS-context only: bare literal hex / color functions.
+  // Skipped for .md, .mdx, .json to avoid false positives on issue refs and SHAs.
+  if (cssRelevant) {
+    if (HEX_COLOR.test(line)) {
+      violations.push({
+        type: 'literal-hex',
+        line: lineNum,
+        excerpt: rawLine.trim(),
+        message: 'Literal hex color — use var(--color-*) instead',
+      });
+    }
 
-  if (COLOR_FUNC.test(line)) {
-    violations.push({
-      type: 'literal-color-func',
-      line: lineNum,
-      excerpt: rawLine.trim(),
-      message: 'Literal color function (rgb/hsl/oklch) — use var(--color-*) instead',
-    });
+    if (COLOR_FUNC.test(line)) {
+      violations.push({
+        type: 'literal-color-func',
+        line: lineNum,
+        excerpt: rawLine.trim(),
+        message: 'Literal color function (rgb/hsl/oklch) — use var(--color-*) instead',
+      });
+    }
   }
 
   return violations;
 }
 
-function checkFile(filePath) {
+function checkFile(filePath, patterns) {
   const rel = path.relative(cwd, filePath).replace(/\\/g, '/');
   const content = fs.readFileSync(filePath, 'utf8');
   const lines = content.split('\n');
+  const cssRelevant = isCssRelevantFile(filePath);
 
-  // File-level ignore
+  // File-level ignore — read reason from the line that contains the directive
   if (content.includes(FILE_IGNORE_DIRECTIVE)) {
-    const firstLine = lines[0] ?? '';
-    // Require a reason after the directive
-    const idx = firstLine.indexOf(FILE_IGNORE_DIRECTIVE);
-    const reason = firstLine.slice(idx + FILE_IGNORE_DIRECTIVE.length).trim();
-    if (!reason || reason === ':') {
+    const directiveLine = lines.find((l) => l.includes(FILE_IGNORE_DIRECTIVE)) ?? '';
+    const reason = directiveLine.split(FILE_IGNORE_DIRECTIVE)[1]?.trim();
+    if (!reason) {
       return [
         {
           file: rel,
           type: 'ignore-without-reason',
-          line: 1,
-          excerpt: firstLine.trim(),
-          message: 'File-level ignore directive requires a reason',
+          line: lines.findIndex((l) => l.includes(FILE_IGNORE_DIRECTIVE)) + 1,
+          excerpt: directiveLine.trim(),
+          message: 'File-level ignore requires a reason after the directive text',
         },
       ];
     }
@@ -249,31 +271,27 @@ function checkFile(filePath) {
     const lineNum = i + 1;
     const rawLine = lines[i];
 
-    // Line-level ignore (previous line had directive)
     if (skipNextLine) {
       skipNextLine = false;
       continue;
     }
 
-    // Check if this line sets up a next-line ignore
     if (rawLine.includes(LINE_IGNORE_DIRECTIVE)) {
-      const idx = rawLine.indexOf(LINE_IGNORE_DIRECTIVE);
-      const reason = rawLine.slice(idx + LINE_IGNORE_DIRECTIVE.length).trim();
-      if (!reason || reason === ':') {
+      const reason = rawLine.split(LINE_IGNORE_DIRECTIVE)[1]?.trim();
+      if (!reason) {
         fileViolations.push({
           file: rel,
           type: 'ignore-without-reason',
           line: lineNum,
           excerpt: rawLine.trim(),
-          message: 'Line-level ignore directive requires a reason',
+          message: 'Line-level ignore requires a reason after the directive text',
         });
       }
       skipNextLine = true;
       continue;
     }
 
-    const lineViolations = checkLine(rawLine, lineNum);
-    for (const v of lineViolations) {
+    for (const v of checkLine(rawLine, lineNum, cssRelevant, patterns)) {
       fileViolations.push({ file: rel, ...v });
     }
   }
@@ -286,16 +304,25 @@ function checkFile(filePath) {
 // ---------------------------------------------------------------------------
 
 const config = await loadConfig();
-const consumerFiles = expandGlobs(config.tokenConsumers, config.ignore);
+const patterns = buildPatterns(config.allowedTokenPrefixes);
 
+// Authority files are allowed to contain literal colors — exclude them from checks
+const authorityFiles = new Set(
+  expandGlobs(config.tokenAuthority ?? [], config.ignore).map((f) =>
+    path.resolve(f).replace(/\\/g, '/'),
+  ),
+);
+
+const consumerFiles = expandGlobs(config.tokenConsumers, config.ignore);
 const allViolations = [];
+
 for (const file of consumerFiles) {
-  const violations = checkFile(file);
-  allViolations.push(...violations);
+  if (authorityFiles.has(path.resolve(file).replace(/\\/g, '/'))) continue;
+  allViolations.push(...checkFile(file, patterns));
 }
 
 if (allViolations.length === 0) {
-  console.log('check:theme-token-boundaries OK');
+  console.log(`check:theme-token-boundaries OK (${consumerFiles.length} file(s) scanned)`);
   process.exit(0);
 }
 
@@ -308,7 +335,7 @@ for (const v of allViolations) {
 }
 console.error(
   `${allViolations.length} violation(s) found.\n` +
-    'Color values belong only in src/config/theme.json.\n' +
+    'Color values belong only in tokenAuthority files (default: src/config/theme.json).\n' +
     'Use var(--color-*) everywhere else.\n',
 );
 process.exit(1);
