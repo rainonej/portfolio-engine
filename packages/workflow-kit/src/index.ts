@@ -48,5 +48,8 @@ export const TEMPLATE_PATHS = {
     checkSchemaStrictness: 'templates/scripts/check-schema-strictness.mjs',
     checkUnused: 'templates/scripts/check-unused.mjs',
     checkToolingVersion: 'templates/scripts/check-tooling-version.mjs',
+    checkThemeTokenBoundaries: 'templates/scripts/check-theme-token-boundaries.mjs',
+    themeTokenBoundariesConfigExample:
+      'templates/scripts/theme-token-boundaries.config.example.mjs',
   },
 } as const;

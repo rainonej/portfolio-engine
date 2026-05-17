@@ -1,15 +1,103 @@
 {
   "semanticColors": {
-    "surface": { "page": "#fbf7f0", "wash": "#f3ece1" },
-    "text": { "primary": "#1d1a16", "muted": "#5a5048" },
-    "accent": { "primary": "#7a3a16", "secondary": "#a9683e" },
-    "border": { "default": "#e1d7c9" }
+    "surface": {
+      "page": {
+        "value": "#fbf7f0",
+        "name": "Warm Ivory",
+        "cssVar": "--color-surface-page",
+        "role": "Main page background",
+        "usage": "Use for the body background and large quiet surfaces.",
+        "avoid": ["Do not use for cards that need elevation."],
+        "examples": ["body", "main page wrapper", "quiet full-width sections"]
+      },
+      "wash": {
+        "value": "#f3ece1",
+        "name": "Warm Wash",
+        "cssVar": "--color-surface-wash",
+        "role": "Warm section fill",
+        "usage": "Use for alternating section backgrounds, skill chips, and tag fills.",
+        "avoid": ["Do not use for the primary page background."],
+        "examples": ["section backgrounds", "skill tags", "quiet divider fills"]
+      }
+    },
+    "text": {
+      "primary": {
+        "value": "#1d1a16",
+        "name": "Dark Ink",
+        "cssVar": "--color-text-primary",
+        "role": "Primary text",
+        "usage": "Use for headings, body text, and high-priority labels.",
+        "avoid": [],
+        "examples": ["h1", "body", "primary nav labels"]
+      },
+      "muted": {
+        "value": "#5a5048",
+        "name": "Warm Muted",
+        "cssVar": "--color-text-muted",
+        "role": "Secondary text",
+        "usage": "Use for metadata, captions, helper text, and subdued descriptions.",
+        "avoid": ["Do not use for important claims or metrics."],
+        "examples": ["date labels", "descriptions", "eyebrows"]
+      }
+    },
+    "accent": {
+      "primary": {
+        "value": "#7a3a16",
+        "name": "Deep Copper",
+        "cssVar": "--color-accent-primary",
+        "role": "Primary action and proof accent",
+        "usage": "Use for links, diagnostics, proof, icons, key callouts, metric badges, and CTAs.",
+        "avoid": ["Do not flood large backgrounds with this color."],
+        "examples": ["links", "CTA borders", "metric badges", "proof markers"]
+      },
+      "secondary": {
+        "value": "#a9683e",
+        "name": "Light Copper",
+        "cssVar": "--color-accent-secondary",
+        "role": "Secondary editorial accent",
+        "usage": "Use sparingly for contrast, secondary callouts, and warm emphasis.",
+        "avoid": ["Do not compete with the primary accent."],
+        "examples": ["secondary badge", "small highlight", "editorial accent"]
+      }
+    },
+    "border": {
+      "default": {
+        "value": "#e1d7c9",
+        "name": "Warm Border",
+        "cssVar": "--color-border-default",
+        "role": "Default structural border",
+        "usage": "Use for cards, dividers, tables, and quiet boundaries.",
+        "avoid": [],
+        "examples": ["card border", "horizontal divider", "table row separator"]
+      }
+    }
   },
   "typography": {
     "preset": "comfortable",
     "fonts": {
-      "heading": "Cormorant Garamond",
-      "body": "Inter"
+      "heading": {
+        "family": "Cormorant Garamond",
+        "fallback": "Georgia, serif",
+        "provider": "google",
+        "usage": "Headings, hero text, pull quotes, and achievement titles."
+      },
+      "body": {
+        "family": "Inter",
+        "fallback": "ui-sans-serif, system-ui, sans-serif",
+        "provider": "google",
+        "usage": "Body text, labels, tags, metadata, and navigation."
+      }
     }
+  },
+  "guidance": {
+    "principles": [
+      "Use semantic CSS variables, not hard-coded colors.",
+      "Use primary accent for proof, diagnostics, links, icons, key callouts, and metric badges.",
+      "Use secondary accent sparingly.",
+      "Make outcomes visually prominent.",
+      "Cards should look obviously clickable: border, hover state, full-card link target.",
+      "For v0-generated UI, normalize colors back to semantic CSS variables before merging.",
+      "Prefer shared component polish over page-local one-off styling."
+    ]
   }
 }
