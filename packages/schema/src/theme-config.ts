@@ -1,36 +1,65 @@
 import { z } from 'zod';
 
+/** Structured color token — all fields required so the token is self-documenting. */
+const ThemeColorTokenSchema = (cssVar: string) =>
+  z.object({
+    /** Hex or CSS color value (e.g. "#0f172a"). */
+    value: z.string(),
+    /** Human-readable name for the swatch (e.g. "Midnight Navy"). */
+    name: z.string(),
+    /** CSS custom property name — must match the semantic slot exactly. */
+    cssVar: z.literal(cssVar),
+    /** One-line description of the semantic role. */
+    role: z.string(),
+    /** When and where to use this color. */
+    usage: z.string(),
+    /** Usage anti-patterns. */
+    avoid: z.array(z.string()).default([]),
+    /** Concrete application examples. */
+    examples: z.array(z.string()).default([]),
+  });
+
+export type ThemeColorToken = {
+  value: string;
+  name: string;
+  cssVar: string;
+  role: string;
+  usage: string;
+  avoid: string[];
+  examples: string[];
+};
+
 /** Semantic palette roles → editorial CSS variables (`design-resolve.ts`). */
 export const SemanticColorsSchema = z
   .object({
     surface: z
       .object({
-        page: z.string().optional(),
-        elevated: z.string().optional(),
+        page: ThemeColorTokenSchema('--color-surface-page').optional(),
+        elevated: ThemeColorTokenSchema('--color-surface-elevated').optional(),
         /** Warm section fills (maps to `--color-surface-wash`). */
-        wash: z.string().optional(),
+        wash: ThemeColorTokenSchema('--color-surface-wash').optional(),
       })
       .optional(),
     text: z
       .object({
-        primary: z.string().optional(),
-        muted: z.string().optional(),
+        primary: ThemeColorTokenSchema('--color-text-primary').optional(),
+        muted: ThemeColorTokenSchema('--color-text-muted').optional(),
         /** Text on solid primary surfaces (e.g. primary buttons). */
-        inverse: z.string().optional(),
+        inverse: ThemeColorTokenSchema('--color-text-inverse').optional(),
       })
       .optional(),
     accent: z
       .object({
-        primary: z.string().optional(),
-        secondary: z.string().optional(),
+        primary: ThemeColorTokenSchema('--color-accent-primary').optional(),
+        secondary: ThemeColorTokenSchema('--color-accent-secondary').optional(),
         /** Supporting accent / tags (maps to `--color-accent-muted`). */
-        muted: z.string().optional(),
+        muted: ThemeColorTokenSchema('--color-accent-muted').optional(),
       })
       .optional(),
     border: z
       .object({
-        default: z.string().optional(),
-        strong: z.string().optional(),
+        default: ThemeColorTokenSchema('--color-border-default').optional(),
+        strong: ThemeColorTokenSchema('--color-border-strong').optional(),
       })
       .optional(),
   })
@@ -59,6 +88,8 @@ export const FontEntrySchema = z.union([
      * `google` or omitted: eligible; `system` and `custom`: excluded from that URL (host loads fonts separately).
      */
     provider: z.enum(['google', 'system', 'custom']).optional(),
+    /** When and where this font is used. */
+    usage: z.string().optional(),
   }),
 ]);
 
@@ -76,6 +107,13 @@ export function resolveFontFallback(entry: FontEntry | undefined): string | unde
   if (!entry || typeof entry === 'string') return undefined;
   return entry.fallback || undefined;
 }
+
+/** Design principles and usage guidance stored alongside tokens. */
+const GuidanceSchema = z
+  .object({
+    principles: z.array(z.string()).default([]),
+  })
+  .optional();
 
 export const ThemeConfigSchema = z.object({
   typography: z
@@ -106,21 +144,15 @@ export const ThemeConfigSchema = z.object({
       preset: z.enum(['comfortable', 'compact']).optional(),
     })
     .optional(),
-  /** Semantic roles — override legacy flat `colors` when both set. */
+  /** Semantic color roles — the only downstream color authority. */
   semanticColors: SemanticColorsSchema,
-  colors: z
-    .object({
-      primary: z.string().optional(),
-      secondary: z.string().optional(),
-      background: z.string().optional(),
-      text: z.string().optional(),
-    })
-    .optional(),
   layout: z
     .object({
       maxWidth: z.string().optional(),
     })
     .optional(),
+  /** Design principles and agent guidance stored with the tokens. */
+  guidance: GuidanceSchema,
 });
 
 export type ThemeConfig = z.infer<typeof ThemeConfigSchema>;

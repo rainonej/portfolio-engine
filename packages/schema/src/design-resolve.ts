@@ -56,109 +56,115 @@ function resolvedEntry(value: string, source: string): ResolvedCssVariable {
   return { value, source };
 }
 
-function pickColor(
-  semantic: string | undefined,
-  semanticSource: string,
-  legacy: string | undefined,
-  legacySource: string,
-  defaultHex: string,
-): ResolvedCssVariable {
-  if (semantic) return resolvedEntry(sanitizeCssValue(semantic), semanticSource);
-  if (legacy) return resolvedEntry(sanitizeCssValue(legacy), legacySource);
-  return resolvedEntry(defaultHex, 'default');
-}
-
 /**
  * Merge theme.json into canonical CSS variables used by the editorial theme.
- * Precedence: semanticColors → legacy flat colors → defaults.
+ * Precedence: semanticColors.*.value → defaults.
  */
-export function resolveCssVariables(theme: ThemeConfig | undefined): Map<string, ResolvedCssVariable> {
+export function resolveCssVariables(
+  theme: ThemeConfig | undefined,
+): Map<string, ResolvedCssVariable> {
   const t = theme ?? {};
   const sem = t.semanticColors;
-  const leg = t.colors;
   const out = new Map<string, ResolvedCssVariable>();
   const D = EDITORIAL_CSS_DEFAULTS;
 
   out.set(
     '--color-surface-page',
-    pickColor(
-      sem?.surface?.page,
-      'theme.semanticColors.surface.page',
-      leg?.background,
-      'theme.colors.background',
-      D['--color-surface-page'],
-    ),
+    sem?.surface?.page?.value
+      ? resolvedEntry(
+          sanitizeCssValue(sem.surface.page.value),
+          'theme.semanticColors.surface.page.value',
+        )
+      : resolvedEntry(D['--color-surface-page'], 'default'),
   );
   out.set(
     '--color-surface-elevated',
-    sem?.surface?.elevated
-      ? resolvedEntry(sanitizeCssValue(sem.surface.elevated), 'theme.semanticColors.surface.elevated')
+    sem?.surface?.elevated?.value
+      ? resolvedEntry(
+          sanitizeCssValue(sem.surface.elevated.value),
+          'theme.semanticColors.surface.elevated.value',
+        )
       : resolvedEntry(D['--color-surface-elevated'], 'default'),
   );
   out.set(
     '--color-text-primary',
-    pickColor(
-      sem?.text?.primary,
-      'theme.semanticColors.text.primary',
-      leg?.text,
-      'theme.colors.text',
-      D['--color-text-primary'],
-    ),
+    sem?.text?.primary?.value
+      ? resolvedEntry(
+          sanitizeCssValue(sem.text.primary.value),
+          'theme.semanticColors.text.primary.value',
+        )
+      : resolvedEntry(D['--color-text-primary'], 'default'),
   );
   out.set(
     '--color-text-muted',
-    sem?.text?.muted
-      ? resolvedEntry(sanitizeCssValue(sem.text.muted), 'theme.semanticColors.text.muted')
+    sem?.text?.muted?.value
+      ? resolvedEntry(
+          sanitizeCssValue(sem.text.muted.value),
+          'theme.semanticColors.text.muted.value',
+        )
       : resolvedEntry(D['--color-text-muted'], 'default'),
   );
   out.set(
     '--color-text-inverse',
-    sem?.text?.inverse
-      ? resolvedEntry(sanitizeCssValue(sem.text.inverse), 'theme.semanticColors.text.inverse')
+    sem?.text?.inverse?.value
+      ? resolvedEntry(
+          sanitizeCssValue(sem.text.inverse.value),
+          'theme.semanticColors.text.inverse.value',
+        )
       : resolvedEntry(D['--color-text-inverse'], 'default'),
   );
   out.set(
     '--color-accent-primary',
-    pickColor(
-      sem?.accent?.primary,
-      'theme.semanticColors.accent.primary',
-      leg?.primary,
-      'theme.colors.primary',
-      D['--color-accent-primary'],
-    ),
+    sem?.accent?.primary?.value
+      ? resolvedEntry(
+          sanitizeCssValue(sem.accent.primary.value),
+          'theme.semanticColors.accent.primary.value',
+        )
+      : resolvedEntry(D['--color-accent-primary'], 'default'),
   );
   out.set(
     '--color-accent-secondary',
-    pickColor(
-      sem?.accent?.secondary,
-      'theme.semanticColors.accent.secondary',
-      leg?.secondary,
-      'theme.colors.secondary',
-      D['--color-accent-secondary'],
-    ),
+    sem?.accent?.secondary?.value
+      ? resolvedEntry(
+          sanitizeCssValue(sem.accent.secondary.value),
+          'theme.semanticColors.accent.secondary.value',
+        )
+      : resolvedEntry(D['--color-accent-secondary'], 'default'),
   );
   out.set(
     '--color-border-default',
-    sem?.border?.default
-      ? resolvedEntry(sanitizeCssValue(sem.border.default), 'theme.semanticColors.border.default')
+    sem?.border?.default?.value
+      ? resolvedEntry(
+          sanitizeCssValue(sem.border.default.value),
+          'theme.semanticColors.border.default.value',
+        )
       : resolvedEntry(D['--color-border-default'], 'default'),
   );
-  if (sem?.border?.strong) {
+  if (sem?.border?.strong?.value) {
     out.set(
       '--color-border-strong',
-      resolvedEntry(sanitizeCssValue(sem.border.strong), 'theme.semanticColors.border.strong'),
+      resolvedEntry(
+        sanitizeCssValue(sem.border.strong.value),
+        'theme.semanticColors.border.strong.value',
+      ),
     );
   }
   out.set(
     '--color-surface-wash',
-    sem?.surface?.wash
-      ? resolvedEntry(sanitizeCssValue(sem.surface.wash), 'theme.semanticColors.surface.wash')
+    sem?.surface?.wash?.value
+      ? resolvedEntry(
+          sanitizeCssValue(sem.surface.wash.value),
+          'theme.semanticColors.surface.wash.value',
+        )
       : resolvedEntry(D['--color-surface-wash'], 'default'),
   );
   out.set(
     '--color-accent-muted',
-    sem?.accent?.muted
-      ? resolvedEntry(sanitizeCssValue(sem.accent.muted), 'theme.semanticColors.accent.muted')
+    sem?.accent?.muted?.value
+      ? resolvedEntry(
+          sanitizeCssValue(sem.accent.muted.value),
+          'theme.semanticColors.accent.muted.value',
+        )
       : resolvedEntry(D['--color-accent-muted'], 'default'),
   );
 
@@ -166,7 +172,9 @@ export function resolveCssVariables(theme: ThemeConfig | undefined): Map<string,
 }
 
 /** Typography-related CSS variables (font stacks + scale). */
-export function resolveTypographyVariables(theme: ThemeConfig | undefined): Map<string, ResolvedCssVariable> {
+export function resolveTypographyVariables(
+  theme: ThemeConfig | undefined,
+): Map<string, ResolvedCssVariable> {
   const out = new Map<string, ResolvedCssVariable>();
   const typo = theme?.typography;
   if (!typo) {
@@ -195,8 +203,7 @@ export function resolveTypographyVariables(theme: ThemeConfig | undefined): Map<
 
   // Resolve body font
   const bodyEntry = typo.fonts?.body;
-  const rawBodyFamily =
-    typeof bodyEntry === 'object' ? resolveFontFamily(bodyEntry) : bodyEntry;
+  const rawBodyFamily = typeof bodyEntry === 'object' ? resolveFontFamily(bodyEntry) : bodyEntry;
   const bodyFallbackRaw =
     typeof bodyEntry === 'object'
       ? (resolveFontFallback(bodyEntry) ?? 'ui-sans-serif, system-ui, sans-serif')
@@ -228,8 +235,7 @@ export function resolveTypographyVariables(theme: ThemeConfig | undefined): Map<
 
   // Resolve mono font
   const monoEntry = typo.fonts?.mono;
-  const rawMonoFamily =
-    typeof monoEntry === 'object' ? resolveFontFamily(monoEntry) : monoEntry;
+  const rawMonoFamily = typeof monoEntry === 'object' ? resolveFontFamily(monoEntry) : monoEntry;
   const monoFallbackRaw =
     typeof monoEntry === 'object'
       ? (resolveFontFallback(monoEntry) ?? 'ui-monospace, monospace')
@@ -244,8 +250,7 @@ export function resolveTypographyVariables(theme: ThemeConfig | undefined): Map<
     resolvedEntry(monoStack, rawMonoFamily ? 'theme.typography.fonts.mono' : 'default'),
   );
 
-  const presetMap =
-    typo.preset === 'compact' ? TYPO_SCALE_COMPACT : TYPO_SCALE_COMFORTABLE;
+  const presetMap = typo.preset === 'compact' ? TYPO_SCALE_COMPACT : TYPO_SCALE_COMFORTABLE;
   const scaleKeys = [
     'display',
     'title',
@@ -275,7 +280,10 @@ export function resolveTypographyVariables(theme: ThemeConfig | undefined): Map<
   }
 
   if (typo.fontSize) {
-    out.set('font-size', resolvedEntry(sanitizeCssValue(typo.fontSize), 'theme.typography.fontSize'));
+    out.set(
+      'font-size',
+      resolvedEntry(sanitizeCssValue(typo.fontSize), 'theme.typography.fontSize'),
+    );
   }
 
   return out;
@@ -309,7 +317,10 @@ export interface DesignSnapshot {
 }
 
 /** Flattened snapshot for agents / CI (colors + typography variables). */
-export function buildDesignSnapshot(theme: ThemeConfig | undefined, generatedAt = new Date().toISOString()): DesignSnapshot {
+export function buildDesignSnapshot(
+  theme: ThemeConfig | undefined,
+  generatedAt = new Date().toISOString(),
+): DesignSnapshot {
   const merged = new Map<string, ResolvedCssVariable>();
   for (const [k, v] of resolveCssVariables(theme)) merged.set(k, v);
   for (const [k, v] of resolveTypographyVariables(theme)) merged.set(k, v);

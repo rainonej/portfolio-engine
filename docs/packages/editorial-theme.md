@@ -37,9 +37,13 @@ Admin route handled separately in `@portfolio-engine/admin-tools` (Epic 7).
 
 Editorial palette, type scale, semantic colors, and typography overrides are documented in **[`docs/downstream/design-tokens-and-theme.md`](../downstream/design-tokens-and-theme.md)**. Layout and admin load Google Fonts via **`editorialGoogleFontsStylesheetHref`** based on `src/config/theme.json` when families are hosted on Google Fonts.
 
+`src/config/theme.json` is the **only** downstream theme authority. Color values, names, roles, and usage guidance all live there. The `src/context/` folder is for identity, voice, route structure, and agent process — not color tokens.
+
 ### Override surfaces
 
 Named override points are explicit and stable. Consumers can override individual components by placing a file in their `src/overrides/components/` directory. The exact surface list is defined in Task 4.4.
+
+Overrides must consume semantic CSS tokens (`var(--color-*)`) and must not define canonical `--color-*` values or private literal palettes. Theme colors belong exclusively in `src/config/theme.json`.
 
 ## Implementation
 
