@@ -130,5 +130,39 @@ if ($null -eq $runId) {
 gh run watch $runId --exit-status
 Write-Host "Release run $runId completed."
 Write-Host 'Tip: git fetch origin main --tags  (then refresh Git Graph)'
-$runUrl = "https://github.com/$((gh repo view --json nameWithOwner -q .nameWithOwner).Trim())/actions/runs/$runId"
+
+$repoName = (gh repo view --json nameWithOwner -q .nameWithOwner).Trim()
+$verifyRunId = $runId
+
+# When changesets are pending the version job pushes a bump commit (via PAT) and sets
+# skip_publish=true. That push event triggers a second Release run which does the actual
+# npm publish. Detect this and wait for the follow-up run before verifying npm.
+$dispatchJobs = (gh run view $runId --json jobs | ConvertFrom-Json).jobs
+$publishJob = $dispatchJobs | Where-Object { $_.name -eq 'Publish to npm' }
+if ($publishJob -and $publishJob.conclusion -eq 'skipped') {
+  Write-Host ''
+  Write-Host 'Publish job skipped (version-bump commit was pushed). Waiting for the follow-up push-triggered publish run...'
+  $followUpId = $null
+  for ($k = 0; $k -lt 60; $k++) {
+    $rows = gh run list --workflow Release --branch main --limit 10 --json databaseId,event,createdAt | ConvertFrom-Json
+    foreach ($row in $rows) {
+      if ($row.event -ne 'push') { continue }
+      try {
+        $created = [datetime]::Parse($row.createdAt, $null, [System.Globalization.DateTimeStyles]::RoundtripKind)
+      } catch { continue }
+      if ($created -ge $dispatchAfter) { $followUpId = $row.databaseId; break }
+    }
+    if ($null -ne $followUpId) { break }
+    Start-Sleep -Seconds 5
+  }
+  if ($null -ne $followUpId) {
+    gh run watch $followUpId --exit-status
+    Write-Host "Publish run $followUpId completed."
+    $verifyRunId = $followUpId
+  } else {
+    Write-Warning 'Could not find the follow-up publish run within timeout. Verifying npm anyway.'
+  }
+}
+
+$runUrl = "https://github.com/$repoName/actions/runs/$verifyRunId"
 Verify-MainPublishedVersions -RunUrl $runUrl
