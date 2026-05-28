@@ -110,12 +110,26 @@ export async function getWritingPosts(opts?: { includeDrafts?: boolean }): Promi
   return opts?.includeDrafts ? entries : entries.filter((e) => e.data.draft !== true);
 }
 
+/**
+ * Normalizes visibility to `published` when the field is absent.
+ *
+ * The interface types `visibility` as required so `ProjectEntry` stays structurally
+ * compatible with Astro's `render()` (which expects the consumer's generated
+ * `CollectionEntry<'projects'>` where `.default('published')` guarantees the field).
+ * The cast here handles the runtime upgrade window: a consumer who updates the theme
+ * package before adding `visibility` to their local schema gets `undefined` at runtime,
+ * and we treat that as `published` rather than hiding all their existing work.
+ */
+export function getProjectVisibility(entry: ProjectEntry): ProjectVisibility {
+  return (entry.data.visibility as ProjectVisibility | undefined) ?? 'published';
+}
+
 export function isProjectListed(entry: ProjectEntry): boolean {
-  return entry.data.visibility === 'published';
+  return getProjectVisibility(entry) === 'published';
 }
 
 export function isProjectBuildable(entry: ProjectEntry): boolean {
-  return entry.data.visibility !== 'draft';
+  return getProjectVisibility(entry) !== 'draft';
 }
 
 /** Project entries filtered by visibility. Default is `listed` (published only). */

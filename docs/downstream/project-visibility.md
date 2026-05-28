@@ -38,6 +38,6 @@ featured: false
 
 ## Recommended workflow
 
-1. Start new stories as `draft`.
-2. Move to `unlisted` for review links.
-3. Move to `published` when ready.
+1. Start unfinished work entries as `draft`.
+2. Move to `unlisted` when you want a review link.
+3. Move to `published` when the project is ready for public indexes.
