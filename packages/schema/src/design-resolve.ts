@@ -297,12 +297,12 @@ export function buildThemeOverrideCss(theme: ThemeConfig | undefined): string {
   const lines: string[] = [];
 
   for (const [key, { value, source }] of colors) {
-    if (source !== 'default') lines.push(`  ${key}: ${value};`);
+    if (source !== 'default') lines.push(`  ${key}: ${value} !important;`);
   }
   for (const [key, { value, source }] of typos) {
     if (source !== 'default') {
-      if (key === 'font-size') lines.push(`  font-size: ${value};`);
-      else lines.push(`  ${key}: ${value};`);
+      if (key === 'font-size') lines.push(`  font-size: ${value} !important;`);
+      else lines.push(`  ${key}: ${value} !important;`);
     }
   }
 
