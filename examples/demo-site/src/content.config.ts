@@ -8,6 +8,7 @@ import {
   TagListSchema,
   ProfilePersonSchema,
   ProfileCvSchema,
+  ProjectVisibilitySchema,
 } from '@portfolio-engine/schema';
 
 const profile = defineCollection({
@@ -22,6 +23,7 @@ const projects = defineCollection({
       title: z.string(),
       description: z.string(),
       featured: z.boolean().optional().default(false),
+      visibility: ProjectVisibilitySchema.optional().default('published'),
       image: z.string().optional(),
       tags: z.array(z.string()).optional(),
       link: z.url().optional(),
