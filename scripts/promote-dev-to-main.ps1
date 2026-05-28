@@ -142,15 +142,18 @@ $publishJob = $dispatchJobs | Where-Object { $_.name -eq 'Publish to npm' }
 if ($publishJob -and $publishJob.conclusion -eq 'skipped') {
   Write-Host ''
   Write-Host 'Publish job skipped (version-bump commit was pushed). Waiting for the follow-up push-triggered publish run...'
+  # Fetch origin/main to get the version-bump commit SHA pushed by the version job.
+  # Matching by SHA is precise — timestamp-based matching can accidentally select the
+  # earlier merge-triggered push run, which completes before the publish run starts.
+  git fetch origin main | Out-Null
+  $bumpSha = (git rev-parse origin/main).Trim()
+
   $followUpId = $null
   for ($k = 0; $k -lt 60; $k++) {
-    $rows = gh run list --workflow Release --branch main --limit 10 --json databaseId,event,createdAt | ConvertFrom-Json
+    $rows = gh run list --workflow Release --branch main --limit 10 --json databaseId,event,headSha | ConvertFrom-Json
     foreach ($row in $rows) {
       if ($row.event -ne 'push') { continue }
-      try {
-        $created = [datetime]::Parse($row.createdAt, $null, [System.Globalization.DateTimeStyles]::RoundtripKind)
-      } catch { continue }
-      if ($created -ge $dispatchAfter) { $followUpId = $row.databaseId; break }
+      if ($row.headSha -eq $bumpSha) { $followUpId = $row.databaseId; break }
     }
     if ($null -ne $followUpId) { break }
     Start-Sleep -Seconds 5
