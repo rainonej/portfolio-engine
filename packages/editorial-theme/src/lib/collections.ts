@@ -32,6 +32,10 @@
  */
 
 import { getCollection, getEntry } from 'astro:content';
+import type { ProjectVisibility } from '@portfolio-engine/schema';
+
+export type { ProjectVisibility };
+export type ProjectVisibilityFilter = 'listed' | 'buildable' | 'all';
 
 /** Shape mirrors the `writing` collection schema in consumer `content.config.ts`. */
 export interface WritingData {
@@ -43,9 +47,6 @@ export interface WritingData {
   draft: boolean;
   tags?: string[];
 }
-
-export type ProjectVisibility = 'published' | 'unlisted' | 'draft';
-export type ProjectVisibilityFilter = 'listed' | 'buildable' | 'all';
 
 /** Shape mirrors the `projects` collection schema in consumer `content.config.ts`. */
 export interface ProjectData {
