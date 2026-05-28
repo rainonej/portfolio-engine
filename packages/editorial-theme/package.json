@@ -38,7 +38,8 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "check": "tsc --noEmit",
+    "test": "node src/lib/collections.test.mjs",
+    "check": "tsc --noEmit && pnpm run test",
     "prepublishOnly": "pnpm run build"
   },
   "peerDependencies": {
