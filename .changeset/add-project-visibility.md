@@ -12,8 +12,8 @@ Add canonical project visibility support (`published | unlisted | draft`).
 
 **`@portfolio-engine/editorial-theme`**
 
-- `ProjectData.visibility` field added (structurally required; defaults to `published` at runtime for legacy entries without the field)
-- `getProjectVisibility(entry)` — normalizer that treats missing/undefined visibility as `published`
+- `ProjectData.visibility` field — required; build will throw a descriptive error if the field is absent from an entry
+- `getProjectVisibility(entry)` — reads the visibility field and throws with an actionable message if it is missing
 - `isProjectListed(entry)` — true for `published` entries only
 - `isProjectBuildable(entry)` — true for `published` and `unlisted`; false for `draft`
 - `getProjects()` now accepts `opts.visibility`:
@@ -31,5 +31,5 @@ Add canonical project visibility support (`published | unlisted | draft`).
 - **Actions:**
   1. Add `ProjectVisibilitySchema` to your schema imports from `@portfolio-engine/schema`.
   2. Add `visibility: ProjectVisibilitySchema.optional().default('published')` to your `projects` collection schema.
-  3. Existing project entries without a `visibility` field continue to behave as published — no frontmatter migration required.
+  3. Existing project entries without a `visibility` frontmatter value will default to `published` via the schema `.default('published')`. No per-file frontmatter changes required.
   4. See `docs/downstream/project-visibility.md` for full usage and workflow guidance.
