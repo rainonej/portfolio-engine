@@ -103,6 +103,11 @@ const logoutUrl = sitePathUrl(Astro.request, 'api/auth/logout');
 const homeUrl = siteHomeUrl(Astro.request);
 const contentApiUrl = sitePathUrl(Astro.request, 'api/content');
 
+const workRoute = routes.find((r) => r.pattern === '/work');
+const writingRoute = routes.find((r) => r.pattern === '/writing');
+const workUrl = workRoute ? sitePathUrl(Astro.request, workRoute.resolved.replace(/^\//, '')) : null;
+const writingUrl = writingRoute ? sitePathUrl(Astro.request, writingRoute.resolved.replace(/^\//, '')) : null;
+
 const personOnDisk = await readJsonSafe('src/content/profile/person.json');
 const siteOnDisk = await readJsonSafe('src/config/site.json');
 
@@ -389,14 +394,28 @@ const bodyFamilyLabel =
           <p class="adm-section-lead">Edit entries in place. New items are saved to your content folders.</p>
 
           <div class="adm-stat-row">
-            <a class="adm-stat adm-stat--link" href="/product-achievements" target="_blank" rel="noopener noreferrer">
-              <span class="adm-stat-num">{projects.length}</span>
-              <span class="adm-stat-label">Projects</span>
-            </a>
-            <a class="adm-stat adm-stat--link" href="/research" target="_blank" rel="noopener noreferrer">
-              <span class="adm-stat-num">{writing.length}</span>
-              <span class="adm-stat-label">Writing</span>
-            </a>
+            {workUrl ? (
+              <a class="adm-stat adm-stat--link" href={workUrl} target="_blank" rel="noopener noreferrer">
+                <span class="adm-stat-num">{projects.length}</span>
+                <span class="adm-stat-label">Projects</span>
+              </a>
+            ) : (
+              <div class="adm-stat">
+                <span class="adm-stat-num">{projects.length}</span>
+                <span class="adm-stat-label">Projects</span>
+              </div>
+            )}
+            {writingUrl ? (
+              <a class="adm-stat adm-stat--link" href={writingUrl} target="_blank" rel="noopener noreferrer">
+                <span class="adm-stat-num">{writing.length}</span>
+                <span class="adm-stat-label">Writing</span>
+              </a>
+            ) : (
+              <div class="adm-stat">
+                <span class="adm-stat-num">{writing.length}</span>
+                <span class="adm-stat-label">Writing</span>
+              </div>
+            )}
             <div class="adm-stat">
               <span class="adm-stat-num">{testimonials.length}</span>
               <span class="adm-stat-label">Testimonials</span>
