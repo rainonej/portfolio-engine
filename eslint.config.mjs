@@ -13,6 +13,7 @@ export default tseslint.config(
       '**/.astro/**',
       '**/.vercel/**',
       'pnpm-lock.yaml',
+      '01_upstream_portfolio_engine_visibility_packet/**',
     ],
   },
   {
