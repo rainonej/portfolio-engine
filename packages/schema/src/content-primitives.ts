@@ -90,3 +90,6 @@ export type Callout = z.infer<typeof CalloutSchema>;
 export type ContentBlock = z.infer<typeof ContentBlockSchema>;
 export type CardSummary = z.infer<typeof CardSummarySchema>;
 export type TemplateContract = z.infer<typeof TemplateContractSchema>;
+
+export const ProjectVisibilitySchema = z.enum(['published', 'unlisted', 'draft']);
+export type ProjectVisibility = z.infer<typeof ProjectVisibilitySchema>;

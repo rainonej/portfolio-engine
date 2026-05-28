@@ -160,6 +160,7 @@ export {
   ContentBlockSchema,
   CardSummarySchema,
   TemplateContractSchema,
+  ProjectVisibilitySchema,
   type ImageAsset,
   type Metric,
   type EvidenceItem,
@@ -170,4 +171,5 @@ export {
   type ContentBlock,
   type CardSummary,
   type TemplateContract,
+  type ProjectVisibility,
 } from './content-primitives.js';

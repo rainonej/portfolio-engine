@@ -45,6 +45,7 @@ export default tseslint.config(
       'scripts/**/*.mjs',
       'examples/**/astro.config.mjs',
       'tests/fixtures/**/astro.config.mjs',
+      'packages/**/*.test.mjs',
     ],
     languageOptions: {
       ecmaVersion: 'latest',

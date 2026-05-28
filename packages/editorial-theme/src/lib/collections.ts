@@ -32,6 +32,10 @@
  */
 
 import { getCollection, getEntry } from 'astro:content';
+import type { ProjectVisibility } from '@portfolio-engine/schema';
+
+export type { ProjectVisibility };
+export type ProjectVisibilityFilter = 'listed' | 'buildable' | 'all';
 
 /** Shape mirrors the `writing` collection schema in consumer `content.config.ts`. */
 export interface WritingData {
@@ -54,6 +58,7 @@ export interface ProjectData {
   tags?: string[];
   link?: string;
   date: Date;
+  visibility: ProjectVisibility;
 }
 
 /** Shape mirrors the `testimonials` collection schema in consumer `content.config.ts`. */
@@ -100,22 +105,56 @@ export interface TestimonialEntry {
 }
 
 /** All writing posts. Drafts are excluded by default; pass `{ includeDrafts: true }` to include them. */
-export async function getWritingPosts(
-  opts?: { includeDrafts?: boolean }
-): Promise<WritingEntry[]> {
+export async function getWritingPosts(opts?: { includeDrafts?: boolean }): Promise<WritingEntry[]> {
   const entries = (await getCollection('writing')) as unknown as WritingEntry[];
   return opts?.includeDrafts ? entries : entries.filter((e) => e.data.draft !== true);
 }
 
-/** All project entries. */
-export async function getProjects(): Promise<ProjectEntry[]> {
-  return (await getCollection('projects')) as unknown as ProjectEntry[];
+/**
+ * Returns the visibility for a project entry.
+ * Throws if `visibility` is missing — add it to your projects collection schema:
+ *
+ *   import { ProjectVisibilitySchema } from '@portfolio-engine/schema';
+ *   visibility: ProjectVisibilitySchema.optional().default('published'),
+ */
+export function getProjectVisibility(entry: ProjectEntry): ProjectVisibility {
+  const v = entry.data.visibility as ProjectVisibility | undefined;
+  if (v === undefined) {
+    throw new Error(
+      `[portfolio-engine] Project entry "${entry.id}" is missing the required \`visibility\` field.\n` +
+        `Add it to your projects collection schema in content.config.ts:\n\n` +
+        `  import { ProjectVisibilitySchema } from '@portfolio-engine/schema';\n` +
+        `  // inside the projects defineCollection schema object:\n` +
+        `  visibility: ProjectVisibilitySchema.optional().default('published'),\n\n` +
+        `All existing entries without a frontmatter value will default to 'published'.`,
+    );
+  }
+  return v;
+}
+
+export function isProjectListed(entry: ProjectEntry): boolean {
+  return getProjectVisibility(entry) === 'published';
+}
+
+export function isProjectBuildable(entry: ProjectEntry): boolean {
+  return getProjectVisibility(entry) !== 'draft';
+}
+
+/** Project entries filtered by visibility. Default is `listed` (published only). */
+export async function getProjects(opts?: {
+  visibility?: ProjectVisibilityFilter;
+}): Promise<ProjectEntry[]> {
+  const entries = (await getCollection('projects')) as unknown as ProjectEntry[];
+  const visibility = opts?.visibility ?? 'listed';
+  if (visibility === 'all') return entries;
+  if (visibility === 'buildable') return entries.filter(isProjectBuildable);
+  return entries.filter(isProjectListed);
 }
 
 /** All testimonials. Pass `{ featuredOnly: true }` to only return featured entries. */
-export async function getTestimonials(
-  opts?: { featuredOnly?: boolean }
-): Promise<TestimonialEntry[]> {
+export async function getTestimonials(opts?: {
+  featuredOnly?: boolean;
+}): Promise<TestimonialEntry[]> {
   const entries = (await getCollection('testimonials')) as unknown as TestimonialEntry[];
   return opts?.featuredOnly ? entries.filter((e) => e.data.featured) : entries;
 }
@@ -125,7 +164,13 @@ export async function getWritingPostById(id: string): Promise<WritingEntry | und
   return (await getEntry('writing', id)) as unknown as WritingEntry | undefined;
 }
 
-/** A single project entry by id. */
-export async function getProjectById(id: string): Promise<ProjectEntry | undefined> {
-  return (await getEntry('projects', id)) as unknown as ProjectEntry | undefined;
+/** A single project entry by id. Defaults to `buildable` — drafts return undefined. */
+export async function getProjectById(
+  id: string,
+  opts?: { visibility?: 'buildable' | 'all' },
+): Promise<ProjectEntry | undefined> {
+  const entry = (await getEntry('projects', id)) as unknown as ProjectEntry | undefined;
+  if (!entry) return undefined;
+  if (opts?.visibility === 'all') return entry;
+  return isProjectBuildable(entry) ? entry : undefined;
 }

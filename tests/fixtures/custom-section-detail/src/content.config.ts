@@ -1,7 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { z } from 'zod';
 import { glob } from 'astro/loaders';
-import { ProfilePersonSchema, ProfileCvSchema } from '@portfolio-engine/schema';
+import { ProfilePersonSchema, ProfileCvSchema, ProjectVisibilitySchema } from '@portfolio-engine/schema';
 
 const profile = defineCollection({
   loader: glob({ pattern: '**/*.json', base: './src/content/profile' }),
@@ -14,6 +14,7 @@ const projects = defineCollection({
     title: z.string(),
     description: z.string(),
     featured: z.boolean().optional().default(false),
+    visibility: ProjectVisibilitySchema.optional().default('published'),
     image: z.string().optional(),
     tags: z.array(z.string()).optional(),
     link: z.url().optional(),

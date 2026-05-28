@@ -17,7 +17,7 @@ type Props = {
 };
 
 export async function getStaticPaths() {
-  const projects = await getProjects();
+  const projects = await getProjects({ visibility: 'buildable' });
   return projects.map((entry) => ({
     params: { slug: entry.id },
     props: { entry },
