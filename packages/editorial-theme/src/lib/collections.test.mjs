@@ -1,16 +1,24 @@
 /**
  * Predicate unit tests for project visibility helpers.
  * Run with: node src/lib/collections.test.mjs
- *
- * Verifies upgrade-window compatibility: a ProjectEntry whose data has no
- * visibility field (undefined) must behave identically to published.
  */
 
 import assert from 'node:assert/strict';
 
 // Inline the pure helpers so this file has no build dependency.
 function getProjectVisibility(entry) {
-  return entry.data.visibility ?? 'published';
+  const v = entry.data.visibility;
+  if (v === undefined) {
+    throw new Error(
+      `[portfolio-engine] Project entry "${entry.id}" is missing the required \`visibility\` field.\n` +
+        `Add it to your projects collection schema in content.config.ts:\n\n` +
+        `  import { ProjectVisibilitySchema } from '@portfolio-engine/schema';\n` +
+        `  // inside the projects defineCollection schema object:\n` +
+        `  visibility: ProjectVisibilitySchema.optional().default('published'),\n\n` +
+        `All existing entries without a frontmatter value will default to 'published'.`,
+    );
+  }
+  return v;
 }
 function isProjectListed(entry) {
   return getProjectVisibility(entry) === 'published';
@@ -20,12 +28,20 @@ function isProjectBuildable(entry) {
 }
 
 function makeEntry(visibility) {
-  return { data: visibility === undefined ? {} : { visibility } };
+  return { id: 'test-entry', data: visibility === undefined ? {} : { visibility } };
 }
 
-// undefined (legacy entry, no visibility in schema)
-assert.equal(isProjectListed(makeEntry(undefined)), true, 'undefined => listed');
-assert.equal(isProjectBuildable(makeEntry(undefined)), true, 'undefined => buildable');
+// undefined — must throw a deprecation error with actionable message
+assert.throws(
+  () => getProjectVisibility(makeEntry(undefined)),
+  (err) => {
+    assert.ok(err.message.includes('missing the required `visibility` field'));
+    assert.ok(err.message.includes('ProjectVisibilitySchema'));
+    assert.ok(err.message.includes('content.config.ts'));
+    return true;
+  },
+  'undefined visibility must throw a descriptive error',
+);
 
 // published
 assert.equal(isProjectListed(makeEntry('published')), true, 'published => listed');
