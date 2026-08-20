@@ -13,11 +13,12 @@ import '../styles/global.css';
 import { editorialGoogleFontsStylesheetHref } from '../lib/google-fonts.js';
 import { config } from '@portfolio-engine:config';
 import { overrides } from '@portfolio-engine:overrides';
-import { readFileSync } from 'node:fs';
 import { getBase } from '../lib/utils';
 
-const styleFiles: string[] = overrides.__styles__ ? JSON.parse(overrides.__styles__) : [];
-const extraCss = styleFiles.map((p: string) => readFileSync(p, 'utf-8')).join('\n');
+// Already-resolved CSS content (read once at config-resolution time by
+// `resolveOverrides()` in engine-core) — never read from disk here, so this works
+// identically for prerendered and server-rendered routes.
+const extraCss = overrides.__styles__ ?? '';
 
 interface Props {
   title: string;

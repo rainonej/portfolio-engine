@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import type { OverrideMap } from './types.js';
@@ -62,8 +63,15 @@ export function resolveOverrides(
     }
   }
   if (styles.length > 0) {
-    // JSON-encoded array — avoids ambiguity since file paths can legally contain ';'.
-    overrideMap['__styles__'] = JSON.stringify(styles.map((p) => resolve(projectRootDir, p)));
+    // Read and inline the CSS content here, at config-resolution time (runs once during
+    // `astro build`/dev-server-start, when the consumer's source tree is guaranteed to be
+    // on disk) — not deferred to request time. The resulting virtual module is plain
+    // serialized data with no filesystem dependency, so it works the same in serverless
+    // functions, which don't bundle the raw source tree and would ENOENT on any
+    // server-rendered (non-prerendered) route trying to re-read these paths per-request.
+    overrideMap['__styles__'] = styles
+      .map((p) => readFileSync(resolve(projectRootDir, p), 'utf-8'))
+      .join('\n');
   }
 
   return overrideMap;
