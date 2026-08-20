@@ -3,9 +3,14 @@ import Layout from '../layouts/Layout.astro';
 import Reveal from '../components/Reveal.astro';
 import SectionIntro from '../components/SectionIntro.astro';
 import { getEntry } from 'astro:content';
+import { config } from '@portfolio-engine:config';
+import { getBase, resolveAssetUrl } from '../lib/utils';
 import { loadProfilePerson, resolveLongBioParagraphs } from '../lib/load-profile-person';
 
+const base = getBase();
 const person = await loadProfilePerson();
+const resumePdfUrl = resolveAssetUrl(config.site.resumePdfUrl, base);
+const resumePdfIsExternal = resumePdfUrl?.startsWith('https://') ?? false;
 
 const cvEntry = await getEntry('profile', 'cv');
 if (import.meta.env.DEV && !cvEntry) {
@@ -89,6 +94,22 @@ function formatExperienceDateRange(role: CvExperience): string | null {
       <h1 class="mb-6 font-serif text-5xl font-bold leading-tight md:text-6xl">
         {person.name}
       </h1>
+      {
+        resumePdfUrl && (
+          <a
+            href={resumePdfUrl}
+            download={resumePdfIsExternal ? undefined : true}
+            target={resumePdfIsExternal ? '_blank' : undefined}
+            rel={resumePdfIsExternal ? 'noopener noreferrer' : undefined}
+            class="mb-8 inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[var(--color-accent-primary)] bg-[var(--color-accent-primary)] px-5 py-2.5 text-sm font-semibold text-[var(--color-surface-page)] transition-colors hover:bg-transparent hover:text-[var(--color-accent-primary)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent-primary)]"
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Download résumé PDF
+          </a>
+        )
+      }
       {summaryParagraphs.length > 0 && (
         <div class="mt-6 max-w-2xl space-y-4 text-lg leading-relaxed text-[var(--color-text-muted)]">
           {summaryParagraphs.map((para) => (

@@ -146,7 +146,31 @@ export function createEngineIntegration(options: EngineIntegrationOptions): Astr
         const discovered = discoverRoutes(pagesDir, registries.routes);
 
         // 3. Apply route remaps / disables from downstream config
-        const { routes: activeRoutes, disabled, remapped } = applyRouteOverrides(discovered, options.routes ?? {});
+        const {
+          routes: overriddenRoutes,
+          disabled: explicitlyDisabled,
+          remapped,
+        } = applyRouteOverrides(discovered, options.routes ?? {});
+
+        // Theme registries may associate a route with a boolean features.json key.
+        // Missing/unknown keys fail fast so a registry typo cannot silently expose a route.
+        const resolvedFeatures = resolvedConfig.features as Record<string, unknown>;
+        const featureDisabled: string[] = [];
+        const activeRoutes = overriddenRoutes.filter((route) => {
+          const featureFlag = route.routeRecord.featureFlag;
+          if (!featureFlag) return true;
+          if (!(featureFlag in resolvedFeatures)) {
+            throw new Error(
+              `[portfolio-engine] Route "${route.pattern}" references unknown feature flag "${featureFlag}".`,
+            );
+          }
+          if (resolvedFeatures[featureFlag] === false) {
+            featureDisabled.push(route.pattern);
+            return false;
+          }
+          return true;
+        });
+        const disabled = [...explicitlyDisabled, ...featureDisabled];
 
         const registryRelative =
           options.consumerRegistryPath ?? CONSUMER_REGISTRY_DEFAULT_RELATIVE_PATH;

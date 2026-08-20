@@ -7,6 +7,8 @@ export interface RouteRegistryEntry {
   visibility: RouteVisibility;
   remappable: boolean;
   disableable: boolean;
+  /** Optional boolean key in features.json that controls route injection. */
+  featureFlag?: string;
   agentGuidance?: string;
   adminDescription?: string;
 }

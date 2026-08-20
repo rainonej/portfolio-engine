@@ -7,6 +7,27 @@ Shared Zod schemas for portfolio-engine content and configuration:
 
 Consumed by both `engine-core` (for validation) and downstream consumer sites (for type safety).
 
+## Résumé document and route
+
+Set a canonical public PDF in `config/site.json` and control the built-in route
+from `config/features.json`:
+
+```jsonc
+// config/site.json
+{
+  "resumePdfUrl": "/documents/resume.pdf"
+}
+
+// config/features.json
+{
+  "resumePage": true
+}
+```
+
+`resumePdfUrl` accepts a root-relative consumer asset or an absolute HTTPS URL.
+`resumePage` defaults to `true` for backward compatibility. Set it to `false`
+to stop the editorial theme from injecting `/resume`.
+
 See [`docs/packages/schema.md`](../../docs/packages/schema.md) for architecture detail.
 
 ## Status

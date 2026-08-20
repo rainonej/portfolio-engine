@@ -47,6 +47,17 @@ export const SiteConfigSchema = z.object({
   baseUrl: z.url(),
   tagline: z.string(),
   /**
+   * Canonical public résumé document. Use a root-relative consumer asset or an
+   * absolute HTTPS URL; the editorial theme exposes it from `/resume`.
+   */
+  resumePdfUrl: z
+    .string()
+    .refine(
+      (value) => value.startsWith('/') || value.startsWith('https://'),
+      'Resume PDF URL must be root-relative (for example /documents/resume.pdf) or an absolute https:// URL.',
+    )
+    .optional(),
+  /**
    * Optional public footer link to `/admin`. Visibility is independent of auth:
    * anyone can see the URL; GitHub OAuth still gates access. Prefer `PUBLIC_SHOW_ADMIN_LINK=true`
    * for env-driven production, or set `showPublicLink` here for config-as-code.
@@ -102,6 +113,8 @@ export const FeaturesConfigSchema = z.object({
   testimonials: z.boolean().default(false),
   work: z.boolean().default(true),
   contact: z.boolean().default(true),
+  /** Controls injection of the editorial theme's `/resume` route. */
+  resumePage: z.boolean().default(true),
   pillars: z
     .array(
       z.object({

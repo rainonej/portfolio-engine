@@ -66,6 +66,7 @@ See that package for the canonical Zod schemas. A minimal set:
   "description": "Personal portfolio.",
   "baseUrl": "https://example.com",
   "tagline": "designs for clarity",
+  "resumePdfUrl": "/documents/resume.pdf",
   "contact": {
     "heading": "Let's work together",
     "body": "Reach out and let's find what's possible.",
@@ -73,6 +74,10 @@ See that package for the canonical Zod schemas. A minimal set:
   "bookingUrl": "https://calendly.com/your-handle/30min",
 }
 ```
+
+The built-in `/resume` page renders structured `profile/cv` content and shows a
+download action when `site.resumePdfUrl` is configured. Set `resumePage` to
+`false` in `features.json` to disable route injection; it defaults to `true`.
 
 ```jsonc
 // config/navigation.json
@@ -97,6 +102,7 @@ See that package for the canonical Zod schemas. A minimal set:
   "blog": true,
   "work": true,
   "contact": true,
+  "resumePage": true,
   "testimonials": true,
   "pillars": [{ "heading": "Product Design", "body": "Thoughtful interfaces." }],
   "ctaBody": "Let's talk.",

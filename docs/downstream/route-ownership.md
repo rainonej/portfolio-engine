@@ -22,6 +22,11 @@ Files under **`src/pages/`** are normal Astro routes. Astro owns them directly. 
 
 ## Résumé (`/resume`) visibility
 
+The editorial theme injects `/resume` by default. Configure a canonical PDF with
+`site.resumePdfUrl` (for example `/documents/resume.pdf`) to show the built-in
+download action. Set `features.resumePage` to `false` when a consumer should not
+have any résumé route.
+
 If you want **full doctor/manifest visibility** for `/resume`, implement it as a **consumer-local registry** route (pattern `/resume`, page under `src/pages-local`). If `/resume` is intentionally a **fully custom** Astro page under `src/pages/resume.astro`, that is valid, but document for your team that it **will not** be engine-injected and **may not** show up in the Portfolio Engine manifest—doctor will not list it as a first-class engine route.
 
 ## Quick comparison

@@ -14,6 +14,8 @@ export interface RouteRecord {
   visibility: 'public' | 'admin-only' | 'hidden';
   remappable: boolean;
   disableable: boolean;
+  /** Optional boolean key in the resolved features config that controls injection. */
+  featureFlag?: string;
 }
 
 /** Stable public type: the full list of registered routes after override resolution. */
