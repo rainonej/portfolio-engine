@@ -1,6 +1,19 @@
 @import "./design-tokens.css";
 @import "tailwindcss";
 
+/*
+ * Explicit sources: Tailwind's automatic content detection respects .gitignore, which
+ * excludes node_modules in virtually every consumer project. Without these, any utility
+ * class used only inside this package's own components/layouts/pages (and not already
+ * used somewhere in the consumer's own src/) is silently never generated — the class
+ * appears in the rendered markup but produces no CSS rule at all.
+ * Paths are relative to this file and mirror 1:1 between src/ (this repo) and dist/
+ * (published package), since tsup's copyAssets step preserves the directory layout.
+ */
+@source "../components/**/*.astro";
+@source "../layouts/**/*.astro";
+@source "../pages/**/*.astro";
+
 @theme {
   --font-sans: var(--font-sans-stack);
   --font-serif: var(--font-serif-stack);
