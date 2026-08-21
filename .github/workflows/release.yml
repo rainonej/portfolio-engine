@@ -1,6 +1,6 @@
-# Two-phase release on main:
-# 1) Pending `.changeset/*.md` (from dev→main promotion) → `changeset version` + push (triggers this workflow again).
-# 2) No pending changesets → build + `changeset publish` to npm.
+# Release on main:
+# 1) Pending `.changeset/*.md` (from dev→main promotion) → `changeset version` + push.
+# 2) The publish job syncs to the updated main tip, then builds + publishes to npm in the same run.
 #
 # Use RELEASE_BOT_TOKEN when GitHub Actions cannot push to protected `main` (see docs/workflows/release-workflow.md).
 name: Release
@@ -109,8 +109,8 @@ jobs:
           fi
 
           git push "https://x-access-token:${PUSH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:${ref}"
-          echo "Version commit pushed — npm publish runs on the next workflow run."
-          echo "skip_publish=true" >> "$GITHUB_OUTPUT"
+          echo "Version commit pushed — npm publish will continue from the updated main tip in this workflow run."
+          echo "skip_publish=false" >> "$GITHUB_OUTPUT"
 
       - name: No pending changesets — publish may run
         id: version_pass
