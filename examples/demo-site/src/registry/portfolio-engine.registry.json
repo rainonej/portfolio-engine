@@ -1,40 +1,11 @@
 {
   "version": 1,
   "localRoutes": [
-    {
-      "pattern": "/vision",
-      "page": "vision.astro",
-      "label": "Vision",
-      "section": null,
-      "visibility": "public"
-    },
-    {
-      "pattern": "/workflow",
-      "page": "workflow.astro",
-      "label": "Workflow",
-      "section": null,
-      "visibility": "public"
-    },
-    {
-      "pattern": "/architecture",
-      "page": "architecture.astro",
-      "label": "Architecture",
-      "section": null,
-      "visibility": "public"
-    },
-    {
-      "pattern": "/features",
-      "page": "features.astro",
-      "label": "Features",
-      "section": null,
-      "visibility": "public"
-    },
-    {
-      "pattern": "/contribute",
-      "page": "contribute.astro",
-      "label": "Contribute",
-      "section": null,
-      "visibility": "public"
-    }
+    { "pattern": "/vision", "page": "vision.astro", "label": "Vision", "section": null, "visibility": "public" },
+    { "pattern": "/workflow", "page": "workflow.astro", "label": "Workflow", "section": null, "visibility": "public" },
+    { "pattern": "/architecture", "page": "architecture.astro", "label": "Architecture", "section": null, "visibility": "public" },
+    { "pattern": "/features", "page": "features.astro", "label": "Features", "section": null, "visibility": "public" },
+    { "pattern": "/contribute", "page": "contribute.astro", "label": "Contribute", "section": null, "visibility": "public" },
+    { "pattern": "/pdf-viewer", "page": "pdf-viewer.astro", "label": "PDF viewer", "section": null, "visibility": "public" }
   ]
 }

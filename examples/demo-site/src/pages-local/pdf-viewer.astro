@@ -1,0 +1,23 @@
+---
+import PdfViewer from '@portfolio-engine/editorial-theme/components/PdfViewer.astro';
+import Layout from '@portfolio-engine/editorial-theme/layouts/Layout.astro';
+---
+
+<Layout title="PDF viewer regression fixture">
+  <main class="demo-pdf-page">
+    <h1>PDF viewer regression fixture</h1>
+    <p>Two independent readers verify that each document renders exactly once.</p>
+    <PdfViewer src="/assets/pdf-viewer/summary.pdf" title="Two-page summary fixture" />
+    <PdfViewer src="/assets/pdf-viewer/report.pdf" title="Three-page report fixture" />
+  </main>
+</Layout>
+
+<style>
+  .demo-pdf-page {
+    display: grid;
+    gap: var(--space-6);
+    margin-inline: auto;
+    max-width: 72rem;
+    padding: var(--space-8) var(--space-4);
+  }
+</style>
