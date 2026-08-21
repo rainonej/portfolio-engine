@@ -1,5 +1,5 @@
-@import "./design-tokens.css";
-@import "tailwindcss";
+@import './design-tokens.css';
+@import 'tailwindcss';
 
 /*
  * Explicit sources: Tailwind's automatic content detection respects .gitignore, which
@@ -287,6 +287,45 @@
     width: 100%;
     min-height: 640px;
     border: 0;
+  }
+
+  .pe-social-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .pe-social-link {
+    display: inline-flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border-default);
+    border-radius: 999px;
+    color: var(--color-text-muted);
+    background: var(--color-surface-elevated);
+    transition:
+      border-color 0.2s ease,
+      color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .pe-social-link:hover {
+    border-color: var(--color-accent-primary);
+    color: var(--color-accent-primary);
+    background: var(--color-surface-page);
+  }
+
+  .pe-social-link:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 3px;
+  }
+
+  .pe-social-link svg {
+    width: 1.25rem;
+    height: 1.25rem;
   }
 }
 

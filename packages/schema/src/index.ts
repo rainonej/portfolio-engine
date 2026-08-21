@@ -142,11 +142,13 @@ export type {
 } from './registry.js';
 export {
   ProfilePersonSchema,
+  ProfileEmailSchema,
   ProfileCvSchema,
   ProfileExperienceSchema,
   ProfileEducationSchema,
   ProfileAwardSchema,
   type ProfilePerson,
+  type ProfileEmail,
   type ProfileCv,
   type ProfileExperience,
   type ProfileEducation,
