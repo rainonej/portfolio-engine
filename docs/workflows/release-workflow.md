@@ -35,6 +35,8 @@ Single-run behavior:
 
 `changeset publish` no-ops when local versions already match the registry.
 
+The workflow sets `NPM_CONFIG_IGNORE_SCRIPTS=true` only for the `changeset publish` step. It has already built the complete workspace and verified every publishable package's `dist/index.js`, so rerunning package `prepublishOnly` scripts during concurrent publication is both redundant and unsafe for workspace dependency resolution. Package-level lifecycle scripts remain available for direct/manual publication outside this workflow.
+
 Do **not** run `changeset version` locally for routine releases; CI owns version commits on `main`.
 
 ## Branch protection and bot pushes
