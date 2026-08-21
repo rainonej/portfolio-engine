@@ -23,6 +23,7 @@
     "./components/ThemeTokenOverrides.astro": "./dist/components/ThemeTokenOverrides.astro",
     "./components/SchedulingBlock.astro": "./dist/components/SchedulingBlock.astro",
     "./components/IframeEmbed.astro": "./dist/components/IframeEmbed.astro",
+    "./components/PdfViewer.astro": "./dist/components/PdfViewer.astro",
     "./components/SocialLinks.astro": "./dist/components/SocialLinks.astro",
     "./components/content/ContentSectionHeader.astro": "./dist/components/content/ContentSectionHeader.astro",
     "./components/content/LinkCard.astro": "./dist/components/content/LinkCard.astro",
@@ -50,6 +51,7 @@
     "@portfolio-engine/engine-core": "workspace:*",
     "@portfolio-engine/schema": "workspace:*",
     "@tailwindcss/postcss": "^4.2.4",
+    "pdfjs-dist": "5.4.54",
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
