@@ -71,6 +71,9 @@ const wrapperClass = ['pdf-reader', 'pe-pdf-viewer', className].filter(Boolean).
 
 <script is:inline type="module">
   for (const root of document.querySelectorAll('[data-pdf-viewer]')) {
+    if (root.dataset.pdfViewerInitialized === 'true') continue;
+    root.dataset.pdfViewerInitialized = 'true';
+
     const PDFJS_URL = root.dataset.pdfjsUrl;
     const PDFJS_WORKER_URL = root.dataset.workerUrl;
     const source = root.dataset.src;

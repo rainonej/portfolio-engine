@@ -20,4 +20,15 @@ for (const selector of dynamicSelectors) {
   );
 }
 
-console.log('PDF viewer dynamic selector scoping: all assertions passed');
+assert.match(
+  source,
+  /if \(root\.dataset\.pdfViewerInitialized === 'true'\) continue;/,
+  'each viewer must skip repeated initialization when multiple component scripts run on one page',
+);
+assert.match(
+  source,
+  /root\.dataset\.pdfViewerInitialized = 'true';/,
+  'each viewer must be marked before asynchronous PDF loading begins',
+);
+
+console.log('PDF viewer initialization and dynamic selector scoping: all assertions passed');
