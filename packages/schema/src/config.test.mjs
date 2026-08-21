@@ -21,8 +21,7 @@ assert.equal(
   true,
 );
 assert.equal(
-  SiteConfigSchema.safeParse({ ...baseSite, resumePdfUrl: '//cdn.example.com/resume.pdf' })
-    .success,
+  SiteConfigSchema.safeParse({ ...baseSite, resumePdfUrl: '//cdn.example.com/resume.pdf' }).success,
   false,
 );
 assert.equal(
