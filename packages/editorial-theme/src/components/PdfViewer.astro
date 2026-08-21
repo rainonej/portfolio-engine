@@ -1,0 +1,534 @@
+---
+import pdfjsUrl from 'pdfjs-dist/build/pdf.min.mjs?url';
+import pdfjsWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+
+interface Props {
+  src: string;
+  title: string;
+  openLabel?: string;
+  downloadLabel?: string;
+  class?: string;
+}
+
+const {
+  src,
+  title,
+  openLabel = 'Open',
+  downloadLabel = 'Download',
+  class: className,
+} = Astro.props;
+
+if (typeof src !== 'string' || !src.startsWith('/') || src.startsWith('//') || src.includes('\\')) {
+  throw new Error(
+    'PdfViewer: `src` must be a same-origin path beginning with a single "/".',
+  );
+}
+if (typeof title !== 'string' || title.trim().length === 0) {
+  throw new Error('PdfViewer: `title` is required for accessibility.');
+}
+
+const wrapperClass = ['pdf-reader', 'pe-pdf-viewer', className].filter(Boolean).join(' ');
+---
+
+<div
+  class={wrapperClass}
+  data-pdf-viewer
+  data-src={src}
+  data-pdfjs-url={pdfjsUrl}
+  data-worker-url={pdfjsWorkerUrl}
+  aria-label={title}
+>
+  <div class="pdf-reader__toolbar" role="toolbar" aria-label="PDF reader controls">
+    <p class="pdf-reader__page-status" data-page-status role="status" aria-live="polite">
+      Loading document…
+    </p>
+    <div class="pdf-reader__controls">
+      <button type="button" data-zoom-out aria-label="Zoom out">−</button>
+      <output data-zoom aria-label="Current zoom">Fit width</output>
+      <button type="button" data-zoom-in aria-label="Zoom in">+</button>
+      <button type="button" data-fit aria-label="Fit PDF pages to viewer width">Fit</button>
+      <a href={src} target="_blank" rel="noopener" aria-label="Open original PDF in a new tab">{openLabel}</a>
+      <a href={src} download aria-label="Download original PDF">{downloadLabel}</a>
+    </div>
+  </div>
+
+  <div class="pdf-reader__viewport" data-viewport tabindex="0" aria-label="Scrollable PDF pages">
+    <div class="pdf-reader__loading" data-loading>
+      <span aria-hidden="true"></span>
+      <p>Preparing the document reader…</p>
+    </div>
+    <div class="pdf-reader__pages" data-pages hidden></div>
+    <div class="pdf-reader__error" data-error role="alert" hidden>
+      <h2>The document reader could not load.</h2>
+      <p>You can still open or download the original PDF.</p>
+      <div>
+        <a href={src} target="_blank" rel="noopener">Open PDF</a>
+        <a href={src} download>Download PDF</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline type="module">
+  for (const root of document.querySelectorAll('[data-pdf-viewer]')) {
+    const PDFJS_URL = root.dataset.pdfjsUrl;
+    const PDFJS_WORKER_URL = root.dataset.workerUrl;
+    const source = root.dataset.src;
+    const viewport = root.querySelector('[data-viewport]');
+    const pages = root.querySelector('[data-pages]');
+    const loading = root.querySelector('[data-loading]');
+    const error = root.querySelector('[data-error]');
+    const status = root.querySelector('[data-page-status]');
+    const zoomOutput = root.querySelector('[data-zoom]');
+    const zoomIn = root.querySelector('[data-zoom-in]');
+    const zoomOut = root.querySelector('[data-zoom-out]');
+    const fit = root.querySelector('[data-fit]');
+
+    let documentTask;
+    let pdf;
+    const pageModels = [];
+    let zoom = 1;
+    let fitScale = 1;
+    let resizeTimer;
+    let disposed = false;
+    const renderTasks = new Map();
+
+    const fail = (reason) => {
+      console.error('PDF viewer:', reason);
+      loading.hidden = true;
+      pages.hidden = true;
+      error.hidden = false;
+      status.textContent = 'The document reader could not load.';
+    };
+
+    const scaleFor = () => fitScale * zoom;
+    const describeZoom = () => {
+      zoomOutput.value = zoom === 1 ? 'Fit width' : `${Math.round(zoom * 100)}%`;
+      zoomOut.disabled = zoom <= 0.75;
+      zoomIn.disabled = zoom >= 2;
+    };
+
+    const cancelRender = (pageNumber) => {
+      const task = renderTasks.get(pageNumber);
+      if (task) {
+        task.cancel();
+        renderTasks.delete(pageNumber);
+      }
+    };
+
+    const sizePage = (model) => {
+      const scale = scaleFor();
+      model.element.style.width = `${Math.round(model.baseWidth * scale)}px`;
+      model.element.style.height = `${Math.round(model.baseHeight * scale)}px`;
+    };
+
+    const renderText = async (model) => {
+      const scale = scaleFor();
+      if (model.textRenderedScale === scale || model.textRendering) return;
+      model.textRendering = true;
+      model.textTask?.cancel();
+
+      try {
+        const pageViewport = model.page.getViewport({ scale });
+        model.text.replaceChildren();
+        const textTask = new model.pdfjs.TextLayer({
+          textContentSource: model.page.streamTextContent({ includeMarkedContent: true }),
+          container: model.text,
+          viewport: pageViewport,
+        });
+        model.textTask = textTask;
+        await textTask.render();
+        model.textRenderedScale = scale;
+      } catch (reason) {
+        if (reason?.name !== 'AbortException') fail(reason);
+      } finally {
+        model.textRendering = false;
+      }
+    };
+
+    const renderPage = async (model) => {
+      if (model.renderedScale === scaleFor() || model.rendering) return;
+      model.rendering = true;
+      cancelRender(model.number);
+
+      try {
+        const page = model.page ?? await pdf.getPage(model.number);
+        model.page = page;
+        const scale = scaleFor();
+        const pageViewport = page.getViewport({ scale });
+        const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+        const canvas = model.canvas;
+        const context = canvas.getContext('2d', { alpha: false });
+
+        canvas.width = Math.floor(pageViewport.width * pixelRatio);
+        canvas.height = Math.floor(pageViewport.height * pixelRatio);
+        canvas.style.width = `${pageViewport.width}px`;
+        canvas.style.height = `${pageViewport.height}px`;
+
+        const task = page.render({
+          canvasContext: context,
+          viewport: pageViewport,
+          transform: pixelRatio === 1 ? undefined : [pixelRatio, 0, 0, pixelRatio, 0, 0],
+        });
+        renderTasks.set(model.number, task);
+        await task.promise;
+        renderTasks.delete(model.number);
+        model.renderedScale = scale;
+      } catch (reason) {
+        if (reason?.name !== 'RenderingCancelledException') fail(reason);
+      } finally {
+        model.rendering = false;
+      }
+    };
+
+    const resize = () => {
+      if (!pageModels.length) return;
+      const innerWidth = Math.max(240, viewport.clientWidth - 32);
+      fitScale = innerWidth / pageModels[0].baseWidth;
+      for (const model of pageModels) {
+        sizePage(model);
+        renderText(model);
+        if (model.visible) {
+          model.renderedScale = 0;
+          renderPage(model);
+        }
+      }
+    };
+
+    try {
+      const pdfjs = await import(PDFJS_URL);
+      pdfjs.GlobalWorkerOptions.workerSrc = PDFJS_WORKER_URL;
+      documentTask = pdfjs.getDocument({
+        url: source,
+        withCredentials: false,
+        isEvalSupported: false,
+      });
+      pdf = await Promise.race([
+        documentTask.promise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error('The PDF took too long to load.')), 20000)),
+      ]);
+      if (disposed) throw new Error('Reader was removed before loading completed.');
+
+      const firstPage = await pdf.getPage(1);
+      const fragment = document.createDocumentFragment();
+
+      for (let number = 1; number <= pdf.numPages; number += 1) {
+        const page = number === 1 ? firstPage : await pdf.getPage(number);
+        const baseViewport = page.getViewport({ scale: 1 });
+        const element = document.createElement('section');
+        element.className = 'pdf-reader__page';
+        element.dataset.page = String(number);
+        element.setAttribute('aria-label', `Page ${number} of ${pdf.numPages}`);
+
+        const canvas = document.createElement('canvas');
+        canvas.setAttribute('aria-hidden', 'true');
+        const text = document.createElement('div');
+        text.className = 'textLayer';
+        element.append(canvas, text);
+        fragment.append(element);
+
+        pageModels.push({
+          number,
+          page,
+          pdfjs,
+          element,
+          canvas,
+          text,
+          baseWidth: baseViewport.width,
+          baseHeight: baseViewport.height,
+          visible: false,
+          rendering: false,
+          renderedScale: 0,
+          textRendering: false,
+          textRenderedScale: 0,
+          textTask: null,
+        });
+      }
+
+      pages.append(fragment);
+      resize();
+      pages.hidden = false;
+      loading.hidden = true;
+      status.textContent = `Page 1 of ${pdf.numPages}`;
+      describeZoom();
+
+      const observer = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          const model = pageModels[Number(entry.target.dataset.page) - 1];
+          model.visible = entry.isIntersecting;
+          if (entry.isIntersecting) renderPage(model);
+        }
+        const visible = pageModels.filter((model) => model.visible);
+        if (visible.length) {
+          status.textContent = `Page ${visible[0].number} of ${pdf.numPages}`;
+        }
+      }, { root: viewport, rootMargin: '120% 0px', threshold: 0.01 });
+
+      pageModels.forEach((model) => observer.observe(model.element));
+
+      const changeZoom = (next) => {
+        zoom = Math.max(0.75, Math.min(2, next));
+        describeZoom();
+        resize();
+      };
+      zoomIn.addEventListener('click', () => changeZoom(zoom + 0.25));
+      zoomOut.addEventListener('click', () => changeZoom(zoom - 0.25));
+      fit.addEventListener('click', () => changeZoom(1));
+
+      const resizeObserver = new ResizeObserver(() => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(resize, 120);
+      });
+      resizeObserver.observe(viewport);
+
+      const cleanup = new MutationObserver(() => {
+        if (!document.body.contains(root)) {
+          disposed = true;
+          observer.disconnect();
+          resizeObserver.disconnect();
+          cleanup.disconnect();
+          clearTimeout(resizeTimer);
+          renderTasks.forEach((task) => task.cancel());
+          pageModels.forEach((model) => model.textTask?.cancel());
+          documentTask?.destroy();
+          pdf?.destroy();
+        }
+      });
+      cleanup.observe(document.body, { childList: true, subtree: true });
+    } catch (reason) {
+      fail(reason);
+      documentTask?.destroy();
+    }
+  }
+</script>
+
+<style>
+  .pdf-reader {
+    border: 1px solid var(--color-border-default);
+    border-radius: 1rem;
+    background: var(--color-surface-elevated);
+    overflow: hidden;
+  }
+
+  .pdf-reader__toolbar {
+    position: sticky;
+    top: 4rem;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 4rem;
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid var(--color-border-default);
+    background: color-mix(in srgb, var(--color-surface-page) 94%, transparent);
+    backdrop-filter: blur(12px);
+  }
+
+  .pdf-reader__page-status {
+    flex: 0 0 auto;
+    margin: 0;
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-text-muted);
+  }
+
+  .pdf-reader__controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.35rem;
+  }
+
+  .pdf-reader__controls button,
+  .pdf-reader__controls a {
+    display: inline-flex;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border-default);
+    border-radius: 0.65rem;
+    background: var(--color-surface-page);
+    padding: 0.45rem 0.7rem;
+    color: var(--color-text-primary);
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 650;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .pdf-reader__controls button:hover,
+  .pdf-reader__controls a:hover {
+    border-color: var(--color-accent-primary);
+  }
+
+  .pdf-reader__controls button:focus-visible,
+  .pdf-reader__controls a:focus-visible,
+  .pdf-reader__viewport:focus-visible {
+    outline: 3px solid var(--color-accent-primary);
+    outline-offset: 2px;
+  }
+
+  .pdf-reader__controls button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .pdf-reader__controls output {
+    min-width: 4.75rem;
+    align-self: center;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  .pdf-reader__viewport {
+    height: min(78vh, 58rem);
+    min-height: 32rem;
+    overflow: auto;
+    overscroll-behavior: contain;
+    background: color-mix(in srgb, var(--color-text-primary) 9%, var(--color-surface-elevated));
+    scrollbar-gutter: stable;
+  }
+
+  .pdf-reader__pages {
+    width: max-content;
+    min-width: 100%;
+    padding: 1rem;
+  }
+
+  .pdf-reader__page {
+    position: relative;
+    margin: 0 auto 1rem;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 0.3rem 1.4rem rgb(0 0 0 / 12%);
+  }
+
+  .pdf-reader__page canvas,
+  .pdf-reader__page .textLayer {
+    position: absolute;
+    inset: 0;
+  }
+
+  .pdf-reader__page canvas {
+    display: block;
+  }
+
+  .textLayer {
+    overflow: hidden;
+    line-height: 1;
+    opacity: 1;
+    text-size-adjust: none;
+    transform-origin: 0 0;
+    forced-color-adjust: none;
+    z-index: 2;
+  }
+
+  .textLayer :is(span, br) {
+    position: absolute;
+    color: transparent;
+    white-space: pre;
+    cursor: text;
+    transform-origin: 0 0;
+  }
+
+  .textLayer span.markedContent {
+    top: 0;
+    height: 0;
+  }
+
+  .textLayer ::selection {
+    color: transparent;
+    background: color-mix(in srgb, var(--color-accent-primary) 38%, transparent);
+  }
+
+  .pdf-reader__loading,
+  .pdf-reader__error {
+    min-height: 32rem;
+    padding: 4rem 1.5rem;
+    text-align: center;
+    color: var(--color-text-muted);
+  }
+
+  .pdf-reader__loading span {
+    display: block;
+    width: 3rem;
+    height: 3rem;
+    margin: 4rem auto 1rem;
+    border: 3px solid var(--color-border-default);
+    border-top-color: var(--color-accent-primary);
+    border-radius: 50%;
+    animation: pdf-reader-spin 0.8s linear infinite;
+  }
+
+  .pdf-reader__error h2 {
+    margin-bottom: 0.5rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+  }
+
+  .pdf-reader__error div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .pdf-reader__error a {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    border: 1px solid var(--color-border-default);
+    border-radius: 999px;
+    padding: 0.6rem 1rem;
+    color: var(--color-text-primary);
+    font-weight: 650;
+  }
+
+  @keyframes pdf-reader-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 40rem) {
+    .pdf-reader__toolbar {
+      position: relative;
+      top: auto;
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .pdf-reader__controls {
+      width: 100%;
+      justify-content: flex-start;
+    }
+
+    .pdf-reader__controls output {
+      order: -1;
+      width: 100%;
+      min-height: 1.5rem;
+      text-align: left;
+    }
+
+    .pdf-reader__viewport,
+    .pdf-reader__loading,
+    .pdf-reader__error {
+      min-height: 28rem;
+      height: 72vh;
+    }
+
+    .pdf-reader__pages {
+      padding: 0.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pdf-reader__loading span {
+      animation: none;
+    }
+  }
+</style>
