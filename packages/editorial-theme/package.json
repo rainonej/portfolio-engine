@@ -23,6 +23,7 @@
     "./components/ThemeTokenOverrides.astro": "./dist/components/ThemeTokenOverrides.astro",
     "./components/SchedulingBlock.astro": "./dist/components/SchedulingBlock.astro",
     "./components/IframeEmbed.astro": "./dist/components/IframeEmbed.astro",
+    "./components/SocialLinks.astro": "./dist/components/SocialLinks.astro",
     "./components/content/ContentSectionHeader.astro": "./dist/components/content/ContentSectionHeader.astro",
     "./components/content/LinkCard.astro": "./dist/components/content/LinkCard.astro",
     "./components/content/FeatureCard.astro": "./dist/components/content/FeatureCard.astro",
@@ -38,7 +39,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test": "node src/lib/collections.test.mjs",
+    "test": "node src/lib/collections.test.mjs && node src/lib/profile-person.test.mjs",
     "check": "tsc --noEmit && pnpm run test",
     "prepublishOnly": "pnpm run build"
   },

@@ -2,6 +2,7 @@
   "blog": false,
   "work": true,
   "contact": true,
+  "resumePage": true,
   "testimonials": false,
   "pillars": [
     {

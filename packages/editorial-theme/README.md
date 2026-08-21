@@ -66,6 +66,7 @@ See that package for the canonical Zod schemas. A minimal set:
   "description": "Personal portfolio.",
   "baseUrl": "https://example.com",
   "tagline": "designs for clarity",
+  "resumePdfUrl": "/documents/resume.pdf",
   "contact": {
     "heading": "Let's work together",
     "body": "Reach out and let's find what's possible.",
@@ -73,6 +74,10 @@ See that package for the canonical Zod schemas. A minimal set:
   "bookingUrl": "https://calendly.com/your-handle/30min",
 }
 ```
+
+The built-in `/resume` page renders structured `profile/cv` content and shows a
+download action when `site.resumePdfUrl` is configured. Set `resumePage` to
+`false` in `features.json` to disable route injection; it defaults to `true`.
 
 ```jsonc
 // config/navigation.json
@@ -97,6 +102,7 @@ See that package for the canonical Zod schemas. A minimal set:
   "blog": true,
   "work": true,
   "contact": true,
+  "resumePage": true,
   "testimonials": true,
   "pillars": [{ "heading": "Product Design", "body": "Thoughtful interfaces." }],
   "ctaBody": "Let's talk.",
@@ -181,6 +187,7 @@ Two standalone Astro components are exported from `@portfolio-engine/editorial-t
 | ----------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SchedulingBlock` | `@portfolio-engine/editorial-theme/components/SchedulingBlock.astro` | Provider-light scheduling CTA (button / link / iframe) for a public booking URL. See [`docs/downstream/scheduling-calendly.md`](../../docs/downstream/scheduling-calendly.md).                                                                                                                                                    |
 | `IframeEmbed`     | `@portfolio-engine/editorial-theme/components/IframeEmbed.astro`     | Generic, security-vetted iframe wrapper for static interactive demos under `public/` or absolute https:// URLs. Validates the scheme, supports optional `allowedHosts`, and exposes `sandbox` / `allow` / `referrerpolicy`. See [`docs/downstream/iframe-embeds-and-demos.md`](../../docs/downstream/iframe-embeds-and-demos.md). |
+| `SocialLinks`     | `@portfolio-engine/editorial-theme/components/SocialLinks.astro`     | Accessible icon links for configured LinkedIn, GitHub, and Instagram profile fields. The built-in about, contact, and résumé pages use the same component.                                                                                                                                                                        |
 
 ## Deploying (separate consumer repo)
 

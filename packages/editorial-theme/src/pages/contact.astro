@@ -1,10 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { config } from '@portfolio-engine:config';
-import { loadProfilePerson } from '../lib/load-profile-person';
+import { loadProfilePerson, resolveProfileEmails } from '../lib/load-profile-person';
 import SchedulingBlock from '../components/SchedulingBlock.astro';
+import SocialLinks from '../components/SocialLinks.astro';
 
 const person = await loadProfilePerson();
+const profileEmails = resolveProfileEmails(person);
+const hasSocialLinks = Boolean(person.linkedin || person.github || person.instagram);
 
 const bookingUrl = config.site.bookingUrl || null;
 const { heading: contactHeading, body: contactBody, scheduling } = config.site.contact;
@@ -44,24 +47,39 @@ const isDev = import.meta.env.DEV;
       }
 
       {
-        person.email && (
+        profileEmails.length > 0 && (
           <div class="mt-10">
-            <p class="mb-3 text-sm font-medium text-[var(--color-text-muted)]">Email</p>
-            <a
-              href={`mailto:${person.email}`}
-              class="text-base font-medium text-[var(--color-text-primary)] underline underline-offset-4 transition-colors hover:text-[var(--color-accent-primary)]"
-            >
-              {person.email}
-            </a>
+            <p class="mb-3 text-sm font-medium text-[var(--color-text-muted)]">
+              {profileEmails.length === 1 ? 'Email' : 'Email addresses'}
+            </p>
+            <div class="space-y-3">
+              {profileEmails.map((email) => (
+                <div>
+                  {email.label && (
+                    <p class="mb-1 text-xs font-medium uppercase tracking-wider text-[var(--color-accent-primary)]">
+                      {email.label}
+                    </p>
+                  )}
+                  <a
+                    href={`mailto:${email.address}`}
+                    class="text-base font-medium text-[var(--color-text-primary)] underline underline-offset-4 transition-colors hover:text-[var(--color-accent-primary)]"
+                  >
+                    {email.address}
+                  </a>
+                </div>
+              ))}
+            </div>
           </div>
         )
       }
 
+      {hasSocialLinks && <SocialLinks person={person} class="mt-8" />}
+
       {
-        !person.email && !hasConfiguredScheduling && !bookingUrl && isDev && (
+        profileEmails.length === 0 && !hasSocialLinks && !hasConfiguredScheduling && !bookingUrl && isDev && (
           <div class="rounded-2xl border border-dashed border-[var(--color-border-default)] bg-[var(--color-surface-wash)] px-8 py-10 text-center text-[var(--color-text-muted)]">
             <p class="text-sm">
-              [dev] No contact method configured. Add <code class="rounded bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))] px-1">email</code> to <code class="rounded bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))] px-1">profile/person.json</code> or configure <code class="rounded bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))] px-1">bookingUrl</code> in <code class="rounded bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))] px-1">site.json</code>.
+              [dev] No contact method configured. Add <code class="rounded bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))] px-1">email</code>, <code class="rounded bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))] px-1">emails</code>, or a social profile to <code class="rounded bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))] px-1">profile/person.json</code>; or configure <code class="rounded bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))] px-1">bookingUrl</code> in <code class="rounded bg-[color-mix(in_srgb,var(--color-text-primary)_5%,var(--color-surface-page))] px-1">site.json</code>.
             </p>
           </div>
         )

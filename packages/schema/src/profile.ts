@@ -10,6 +10,13 @@ const WorkingPrincipleSchema = z.object({
   body: z.string(),
 });
 
+export const ProfileEmailSchema = z
+  .object({
+    address: z.email(),
+    label: z.string().trim().min(1).optional(),
+  })
+  .strict();
+
 /**
  * Canonical `profile/person` shape. Biography copy uses only `shortBio`, `summary`, and `longBio`.
  * The old `bio` string is not accepted here — use `longBio` (paragraph array) instead.
@@ -27,7 +34,10 @@ export const ProfilePersonSchema = z
     values: z.array(ValueCardSchema).optional(),
     workingPrinciples: z.array(WorkingPrincipleSchema).optional(),
     credentials: z.array(z.string()).optional(),
+    /** Primary/backward-compatible email address. */
     email: z.string().optional(),
+    /** Additional public email addresses, optionally labeled by context. */
+    emails: z.array(ProfileEmailSchema).optional(),
     linkedin: z.url().optional(),
     github: z.url().optional(),
     instagram: z.url().optional(),
@@ -67,15 +77,14 @@ export const ProfileAwardSchema = z.object({
 
 export const ProfileCvSchema = z.object({
   selectedEvidence: z.array(z.string()).optional(),
-  technicalRange: z
-    .array(z.object({ heading: z.string(), items: z.array(z.string()) }))
-    .optional(),
+  technicalRange: z.array(z.object({ heading: z.string(), items: z.array(z.string()) })).optional(),
   experience: z.array(ProfileExperienceSchema).optional(),
   education: z.array(ProfileEducationSchema).optional(),
   awards: z.array(ProfileAwardSchema).optional(),
 });
 
 export type ProfilePerson = z.infer<typeof ProfilePersonSchema>;
+export type ProfileEmail = z.infer<typeof ProfileEmailSchema>;
 export type ProfileCv = z.infer<typeof ProfileCvSchema>;
 export type ProfileExperience = z.infer<typeof ProfileExperienceSchema>;
 export type ProfileEducation = z.infer<typeof ProfileEducationSchema>;
