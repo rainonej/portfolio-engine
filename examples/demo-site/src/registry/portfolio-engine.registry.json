@@ -35,6 +35,13 @@
       "label": "Contribute",
       "section": null,
       "visibility": "public"
+    },
+    {
+      "pattern": "/pdf-viewer",
+      "page": "pdf-viewer.astro",
+      "label": "PDF viewer",
+      "section": null,
+      "visibility": "public"
     }
   ]
 }
