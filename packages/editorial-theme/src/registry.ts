@@ -14,7 +14,15 @@ export const DEFAULT_ROUTE_REGISTRY: RouteRegistryEntry[] = [
   { pattern: '/writing', label: 'Writing', section: null, visibility: 'public', remappable: true, disableable: true },
   { pattern: '/writing/[slug]', label: 'Writing detail', section: null, visibility: 'hidden', remappable: true, disableable: true },
   { pattern: '/contact', label: 'Contact', section: null, visibility: 'public', remappable: true, disableable: true },
-  { pattern: '/resume', label: 'Résumé', section: null, visibility: 'public', remappable: true, disableable: true },
+  {
+    pattern: '/resume',
+    label: 'Résumé',
+    section: null,
+    visibility: 'public',
+    remappable: true,
+    disableable: true,
+    featureFlag: 'resumePage',
+  },
 ];
 
 export const DEFAULT_OVERRIDE_SURFACES: OverrideSurfaceEntry[] = [
