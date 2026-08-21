@@ -2,13 +2,20 @@
 import Layout from '../layouts/Layout.astro';
 import Reveal from '../components/Reveal.astro';
 import SectionIntro from '../components/SectionIntro.astro';
+import SocialLinks from '../components/SocialLinks.astro';
 import { getEntry } from 'astro:content';
 import { config } from '@portfolio-engine:config';
 import { getBase, resolveAssetUrl } from '../lib/utils';
-import { loadProfilePerson, resolveLongBioParagraphs } from '../lib/load-profile-person';
+import {
+  loadProfilePerson,
+  resolveLongBioParagraphs,
+  resolveProfileEmails,
+} from '../lib/load-profile-person';
 
 const base = getBase();
 const person = await loadProfilePerson();
+const profileEmails = resolveProfileEmails(person);
+const hasSocialLinks = Boolean(person.linkedin || person.github || person.instagram);
 const resumePdfUrl = resolveAssetUrl(config.site.resumePdfUrl, base);
 const resumePdfIsExternal = resumePdfUrl?.startsWith('https://') ?? false;
 
@@ -117,28 +124,18 @@ function formatExperienceDateRange(role: CvExperience): string | null {
           ))}
         </div>
       )}
-      {(person.email || person.linkedin) && (
+      {(profileEmails.length > 0 || hasSocialLinks) && (
         <div class="mt-8 flex flex-wrap gap-6">
-          {person.email && (
+          {profileEmails.map((email) => (
             <a
-              href={`mailto:${person.email}`}
+              href={`mailto:${email.address}`}
               class="flex items-center gap-2 text-sm font-medium text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
             >
-              <span class="text-[var(--color-accent-primary)]">✉</span>
-              {person.email}
+              <span aria-hidden="true" class="text-[var(--color-accent-primary)]">✉</span>
+              {email.label ? `${email.label}: ${email.address}` : email.address}
             </a>
-          )}
-          {person.linkedin && (
-            <a
-              href={person.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="flex items-center gap-2 text-sm font-medium text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
-            >
-              <span class="text-[var(--color-accent-primary)]">↗</span>
-              LinkedIn
-            </a>
-          )}
+          ))}
+          <SocialLinks person={person} />
         </div>
       )}
     </div>

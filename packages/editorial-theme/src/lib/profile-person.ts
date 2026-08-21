@@ -20,9 +20,37 @@ export type ProfilePerson = {
   credentials?: string[];
   photo?: string;
   email?: string;
+  emails?: ProfileEmail[];
   linkedin?: string;
+  github?: string;
   instagram?: string;
 };
+
+export type ProfileEmail = {
+  address: string;
+  label?: string;
+};
+
+/** Primary legacy email first, followed by unique labeled additional addresses. */
+export function resolveProfileEmails(person: ProfilePerson): ProfileEmail[] {
+  const resolved: ProfileEmail[] = [];
+  const seen = new Set<string>();
+
+  const addEmail = (email: ProfileEmail) => {
+    const address = email.address.trim();
+    if (!address) return;
+    const key = address.toLocaleLowerCase('en-US');
+    if (seen.has(key)) return;
+    seen.add(key);
+    const label = email.label?.trim();
+    resolved.push(label ? { address, label } : { address });
+  };
+
+  if (person.email) addEmail({ address: person.email });
+  person.emails?.forEach(addEmail);
+
+  return resolved;
+}
 
 /** Normalized paragraphs from `longBio` only (blank entries dropped). */
 export function resolveLongBioParagraphs(person: ProfilePerson): string[] {

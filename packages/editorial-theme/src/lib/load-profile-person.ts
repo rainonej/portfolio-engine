@@ -2,7 +2,11 @@ import { getEntry } from 'astro:content';
 import type { ProfilePerson } from './profile-person.js';
 
 export type { ProfilePerson } from './profile-person.js';
-export { resolveHeroBio, resolveLongBioParagraphs } from './profile-person.js';
+export {
+  resolveHeroBio,
+  resolveLongBioParagraphs,
+  resolveProfileEmails,
+} from './profile-person.js';
 
 export async function loadProfilePerson(): Promise<ProfilePerson> {
   const personEntry = await getEntry('profile', 'person');

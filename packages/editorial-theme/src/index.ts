@@ -9,7 +9,9 @@ export {
 export {
   resolveLongBioParagraphs,
   resolveHeroBio,
+  resolveProfileEmails,
   type ProfilePerson,
+  type ProfileEmail,
 } from './lib/profile-person.js';
 
 export { DEFAULT_OVERRIDE_SURFACES, DEFAULT_ROUTE_REGISTRY } from './registry.js';

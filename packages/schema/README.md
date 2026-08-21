@@ -7,6 +7,21 @@ Shared Zod schemas for portfolio-engine content and configuration:
 
 Consumed by both `engine-core` (for validation) and downstream consumer sites (for type safety).
 
+## Multiple public email addresses
+
+Keep the existing `email` field as the primary address and add labeled secondary
+addresses with `emails`:
+
+```jsonc
+{
+  "email": "name@institution.edu",
+  "emails": [{ "label": "Personal", "address": "name@example.com" }],
+}
+```
+
+The editorial theme keeps the primary address first and de-duplicates addresses
+case-insensitively.
+
 ## Résumé document and route
 
 Set a canonical public PDF in `config/site.json` and control the built-in route
