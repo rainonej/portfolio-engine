@@ -399,7 +399,7 @@ const wrapperClass = ['pdf-reader', 'pe-pdf-viewer', className].filter(Boolean).
     padding: 1rem;
   }
 
-  .pdf-reader__page {
+  :global(.pdf-reader__page) {
     position: relative;
     margin: 0 auto 1rem;
     overflow: hidden;
@@ -407,17 +407,17 @@ const wrapperClass = ['pdf-reader', 'pe-pdf-viewer', className].filter(Boolean).
     box-shadow: 0 0.3rem 1.4rem rgb(0 0 0 / 12%);
   }
 
-  .pdf-reader__page canvas,
-  .pdf-reader__page .textLayer {
+  :global(.pdf-reader__page canvas),
+  :global(.pdf-reader__page .textLayer) {
     position: absolute;
     inset: 0;
   }
 
-  .pdf-reader__page canvas {
+  :global(.pdf-reader__page canvas) {
     display: block;
   }
 
-  .textLayer {
+  :global(.textLayer) {
     overflow: hidden;
     line-height: 1;
     opacity: 1;
@@ -427,7 +427,7 @@ const wrapperClass = ['pdf-reader', 'pe-pdf-viewer', className].filter(Boolean).
     z-index: 2;
   }
 
-  .textLayer :is(span, br) {
+  :global(.textLayer :is(span, br)) {
     position: absolute;
     color: transparent;
     white-space: pre;
@@ -435,12 +435,12 @@ const wrapperClass = ['pdf-reader', 'pe-pdf-viewer', className].filter(Boolean).
     transform-origin: 0 0;
   }
 
-  .textLayer span.markedContent {
+  :global(.textLayer span.markedContent) {
     top: 0;
     height: 0;
   }
 
-  .textLayer ::selection {
+  :global(.textLayer ::selection) {
     color: transparent;
     background: color-mix(in srgb, var(--color-accent-primary) 38%, transparent);
   }

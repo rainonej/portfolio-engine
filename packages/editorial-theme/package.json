@@ -40,7 +40,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test": "node src/lib/collections.test.mjs && node src/lib/profile-person.test.mjs",
+    "test": "node src/lib/collections.test.mjs && node src/lib/profile-person.test.mjs && node src/components/pdf-viewer.test.mjs",
     "check": "tsc --noEmit && pnpm run test",
     "prepublishOnly": "pnpm run build"
   },
