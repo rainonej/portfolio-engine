@@ -200,6 +200,9 @@ jobs:
         run: pnpm release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # The workspace was built and dist/ verified above. Avoid concurrent package
+          # lifecycle rebuilds changing resolution while Changesets publishes siblings.
+          NPM_CONFIG_IGNORE_SCRIPTS: 'true'
 
       - name: Verify npm registry matches main package versions
         run: |
