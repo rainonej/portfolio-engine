@@ -53,7 +53,8 @@ export const SiteConfigSchema = z.object({
   resumePdfUrl: z
     .string()
     .refine(
-      (value) => value.startsWith('/') || value.startsWith('https://'),
+      (value) =>
+        (value.startsWith('/') && !value.startsWith('//')) || value.startsWith('https://'),
       'Resume PDF URL must be root-relative (for example /documents/resume.pdf) or an absolute https:// URL.',
     )
     .optional(),
